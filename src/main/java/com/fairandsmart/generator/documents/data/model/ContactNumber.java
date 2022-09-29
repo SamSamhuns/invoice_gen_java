@@ -100,28 +100,30 @@ public class ContactNumber {
 
     public static class Generator implements ModelGenerator<ContactNumber> {
 
-        private static final Map<String, String> formats_part1 = new LinkedHashMap<>();
-        private static final Map<String, String> formats_part2 = new LinkedHashMap<>();
+        private static final Map<String, String> phoneFormats = new LinkedHashMap<>();
+        private static final Map<String, String> faxFormats = new LinkedHashMap<>();
         private static final Map<String, String> phoneLabels = new LinkedHashMap<>();
         private static final Map<String, String> faxLabels = new LinkedHashMap<>();
 
         {
-            formats_part1.put("0[0-9]{1}[.][0-9]{2}[.][0-9]{2}[.]", "FR");
-            formats_part1.put("0[0-9]{1}[-][0-9]{2}[-][0-9]{2}[-]", "FR");
-            formats_part1.put("+33 (0) [0-9]{3} [0-9]{3} ", "FR");
-            formats_part1.put("+33 [(]0[)] [0-9]{1} [0-9]{2} [0-9]{2} ", "FR");
+            phoneFormats.put("0[0-9]{1}[.][0-9]{2}[.][0-9]{2}[.]", "FR");
+            phoneFormats.put("0[0-9]{1}[-][0-9]{2}[-][0-9]{2}[-]", "FR");
+            phoneFormats.put("+33 (0) [0-9]{3} [0-9]{3} ", "FR");
+            phoneFormats.put("+33 [(]0[)] [0-9]{1} [0-9]{2} [0-9]{2} ", "FR");
 
-            formats_part1.put("+1 [(]0[)] [0-9]{1} [0-9]{2} [0-9]{2} ", "US_west");
-            formats_part1.put("+971 [(]0[)] [0-9]{2} [0-9]{3} [0-9]{4} ", "AE_en");
+            phoneFormats.put("+1 [(]0[)] [0-9]{1} [0-9]{2} [0-9]{2} ", "US_west");
+
+            phoneFormats.put("+971 [(]0[)] [0-9]{2} [0-9]{3} [0-9]{4} ", "AE_en");
         }
         {
-            formats_part2.put("[0-9]{2}[.][0-9]{2}", "FR");
-            formats_part2.put("[0-9]{2}[-][0-9]{2}", "FR");
-            formats_part2.put("[0-9]{3}", "FR");
-            formats_part2.put("[0-9]{2} [0-9]{2}", "FR");
+            faxFormats.put("[0-9]{2}[.][0-9]{2}", "FR");
+            faxFormats.put("[0-9]{2}[-][0-9]{2}", "FR");
+            faxFormats.put("[0-9]{3}", "FR");
+            faxFormats.put("[0-9]{2} [0-9]{2}", "FR");
 
-            formats_part2.put("[0-9]{2} [0-9]{2}", "US_west");
-            formats_part2.put("[0-9]{5} [0-9]{4}", "AE_en");
+            faxFormats.put("[0-9]{2} [0-9]{2}", "US_west");
+
+            faxFormats.put("[0-9]{5} [0-9]{4}", "AE_en");
         }
         {
             phoneLabels.put("Tel:", "fr");
@@ -129,10 +131,9 @@ public class ContactNumber {
             phoneLabels.put("Numéro de Tel", "fr");
 
             phoneLabels.put("Phone", "en");
-            phoneLabels.put("Tel:", "en");
+            phoneLabels.put("Tel", "en");
             phoneLabels.put("Telephone", "en");
         }
-
         {
             faxLabels.put("Fax:", "fr");
             faxLabels.put("Télécopie", "fr");
@@ -144,22 +145,20 @@ public class ContactNumber {
 
         @Override
         public ContactNumber generate(GenerationContext ctx) {
-            List<String> localizedFormats1 = formats_part1.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedFormats2 = formats_part2.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
-            int idxF1 = ctx.getRandom().nextInt(localizedFormats1.size());
-            Generex generex1 = new Generex(localizedFormats1.get(idxF1));
-            String samePrefix = generex1.random();
+            List<String> phoneFormat = phoneFormats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> faxFormat = faxFormats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+            int idx1 = ctx.getRandom().nextInt(phoneFormat.size());
+            int idx2 = ctx.getRandom().nextInt(faxFormat.size());
+            Generex generex1 = new Generex(phoneFormat.get(idx1));
+            Generex generex2 = new Generex(faxFormat.get(idx2));
+            String phoneNumber = generex1.random();
+            String faxNumber = generex2.random();
 
-            int idxF2 = ctx.getRandom().nextInt(localizedFormats2.size());
-            Generex generex2 = new Generex(localizedFormats2.get(idxF2));
-            String phoneNumber = samePrefix + generex2.random();
-            String faxNumber = samePrefix + generex2.random();
-
-            List<String> localizedPLabels = phoneLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedFLabels = faxLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            int idxL = ctx.getRandom().nextInt(localizedPLabels.size());
-            int idxF = ctx.getRandom().nextInt(localizedFLabels.size());
-            return new ContactNumber(localizedPLabels.get(idxL), phoneNumber, localizedFLabels.get(idxF), faxNumber);
+            List<String> locPLabels = phoneLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> locFLabels = faxLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            int idxL = ctx.getRandom().nextInt(locPLabels.size());
+            int idxF = ctx.getRandom().nextInt(locFLabels.size());
+            return new ContactNumber(locPLabels.get(idxL), phoneNumber, locFLabels.get(idxF), faxNumber);
         }
     }
 

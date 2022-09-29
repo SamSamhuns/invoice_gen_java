@@ -81,9 +81,12 @@ public class BillingType {
         private static final Map<String, String> labels = new HashMap<>();
         {
             values.put("à domicile par Ducros", "fr");
+
+            labels.put("At home by Ducros", "en");
         }
         {
             labels.put("Méthode de livraison", "fr");
+
             labels.put("Delivery method", "en");
         }
 
