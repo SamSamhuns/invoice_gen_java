@@ -41,6 +41,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -54,9 +55,9 @@ public class Company {
     private Logo logo;
     private IDNumbers idNumbers;
     private String name;
+    private String industry;
     private Address address;
     private ContactNumber contact;
-    // TODO Company email and website needed, should correspond to company name
     private String email;
     private String website;
 
@@ -83,6 +84,14 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 
     public Address getAddress() {
@@ -123,6 +132,7 @@ public class Company {
                 "logo=" + logo +
                 ", idNumbers=" + idNumbers +
                 ", name='" + name + '\'' +
+                ", industry='" + industry + '\'' +
                 ", address=" + address +
                 ", contact=" + contact +
                 ", email='" + email + '\'' +
@@ -132,57 +142,43 @@ public class Company {
 
     public static class Generator implements ModelGenerator<Company> {
 
-        private static final String companiesFileAE = "common/company/companies_ae_en.csv";
+        private static final List<String> companiesFileList = Arrays.asList(
+                "common/company/companies_ae_en.csv",
+                "common/company/companies_fr.csv");
+        private static final List<String> companiesCountryList = Arrays.asList(
+                "AE_en",
+                "FR");
         private static Map<Company, String> companies = new HashMap<>();
         {
-            try {
-                Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(companiesFileAE));
-                Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
-                for (CSVRecord record : records) {
-                    String name = record.get("name");
-                    String adresseL1 = record.get("address1");
-                    String adresseL2 = record.get("address2");
-                    String postcode = record.get("postcode");
-                    String town = record.get("address1");
-                    String country = record.get("country");
-                    if ( name.length() > 3 ) {
-                        Company comp = new Company();
-                        comp.setName(name);
-                        Address companyAddress = new Address(adresseL1, adresseL2, "", postcode, town, country);
-                        comp.setAddress(companyAddress);
-                        companies.put(comp, "AE_en");
+            assert companiesFileList.size() == companiesCountryList.size();
+            for (int i=0; i<companiesFileList.size(); i++) {
+                String companiesFile = companiesFileList.get(i);
+                String companiesCountry = companiesCountryList.get(i);
+                try {
+                    Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(companiesFile));
+                    Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
+                    for (CSVRecord record : records) {
+                        String name = record.get("name");
+                        String website = record.get("domain");
+                        String industry = record.get("industry");
+                        String adresseL1 = record.get("address1");
+                        String adresseL2 = record.get("address2");
+                        String postcode = record.get("postcode");
+                        String town = record.get("town");
+                        String country = record.get("country");
+                        if ( name.length() > 3 ) {
+                            Company comp = new Company();
+                            comp.setName(name);
+                            Address companyAddress = new Address(adresseL1, adresseL2, "", postcode, town, country);
+                            comp.setAddress(companyAddress);
+                            companies.put(comp, companiesCountry);
+                        }
                     }
+                } catch ( Exception e ) {
+                    LOGGER.log(Level.SEVERE, "unable to parse csv source: " + companiesFile, e);
                 }
-            } catch ( Exception e ) {
-                LOGGER.log(Level.SEVERE, "unable to parse csv source: " + companiesFileAE, e);
             }
         }
-
-        // private static final String companiesFileFR = "common/company/companies_fr.csv";
-        // private static Map<Company, String> companies = new HashMap<>();
-        // {
-        //     try {
-        //         Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(companiesFileFR));
-        //         Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
-        //         for (CSVRecord record : records) {
-        //             String name = record.get("ENSEIGNE");
-        //             String adresseL1 = record.get("L4_NORMALISEE");
-        //             String adresseL2 = record.get("L5_NORMALISEE");
-        //             String postcode = record.get("CODPOS");
-        //             String town = record.get("LIBCOM");
-        //             String country = record.get("L7_NORMALISEE");
-        //             if ( name.length() > 3 ) {
-        //                 Company comp = new Company();
-        //                 comp.setName(name);
-        //                 Address companyAddress = new Address(adresseL1, adresseL2, "", postcode, town, country);
-        //                 comp.setAddress(companyAddress);
-        //                 companies.put(comp, "FR");
-        //             }
-        //         }
-        //     } catch ( Exception e ) {
-        //         LOGGER.log(Level.SEVERE, "unable to parse csv source: " + companiesFileFR, e);
-        //     }
-        // }
 
         @Override
         public Company generate(GenerationContext ctx) {
