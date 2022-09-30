@@ -222,16 +222,15 @@ public class Product {
 
     /*
       "price": "479.0",
-              "ean": "8806088499048",
-              "name": "Lave linge hublot Samsung ADD WASH WW90K4437YW",
-              "brand": "Samsung",
-              "sku": "000000000001079579",
-              "categories": [
-              "Gros électroménager",
-              "Lave-linge",
-              "Lave-linge hublot"
-              ]
-
+                    "ean": "8806088499048",
+                    "name": "Samsung ADD WASH WW90K4437YW porthole washing machine",
+                    "brand": "Samsung",
+                    "sku": "000000000001079579",
+                    "categories": [
+                    "Major Appliances",
+                    "Washing machine",
+                    "Porthole washing machine"
+                    ]
               */
 
 }

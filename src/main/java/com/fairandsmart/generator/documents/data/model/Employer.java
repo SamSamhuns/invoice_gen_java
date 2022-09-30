@@ -42,6 +42,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -57,7 +58,6 @@ public class Employer {
     private String name;
     private Address address;
     private ContactNumber contact;
-    // TODO Company email and website needed, should correspond to company name
     private String email;
     private String website;
 
@@ -133,32 +133,43 @@ public class Employer {
 
     public static class Generator implements ModelGenerator<Employer> {
 
-        private static final String employersFileFR = "common/company/companies_fr.csv";
+        private static final List<String> companiesFileList = Arrays.asList(
+                "common/company/companies_ae_en.csv",
+                "common/company/companies_fr.csv");
+        private static final List<String> companiesCountryList = Arrays.asList(
+                "AE_en",
+                "FR");
         private static Map<Employer, String> employers = new HashMap<>();
         {
-            try {
-                Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(employersFileFR));
-                Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
-                for (CSVRecord record : records) {
-                    String name = record.get("ENSEIGNE");
-                    String adresseL1 = record.get("L4_NORMALISEE");
-                    String adresseL2 = record.get("L5_NORMALISEE");
-                    String postcode = record.get("CODPOS");
-                    String town = record.get("LIBCOM");
-                    String country = record.get("L7_NORMALISEE");
-                    if ( name.length() > 3 ) {
-                        Employer emp = new Employer();
-                        emp.setName(name);
-                        Address companyAddress = new Address(adresseL1, adresseL2, "", postcode, town, country);
-                        emp.setAddress(companyAddress);
-                        employers.put(emp, "FR");
+            assert companiesFileList.size() == companiesCountryList.size();
+            for (int i=0; i<companiesFileList.size(); i++) {
+                String companiesFile = companiesFileList.get(i);
+                String companiesCountry = companiesCountryList.get(i);
+                try {
+                    Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(companiesFile));
+                    Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
+                    for (CSVRecord record : records) {
+                        String name = record.get("name");
+                        String website = record.get("domain");
+                        String industry = record.get("industry");
+                        String addressL1 = record.get("address1");
+                        String addressL2 = record.get("address2");
+                        String postcode = record.get("postcode");
+                        String town = record.get("town");
+                        String country = record.get("country");
+                        if ( name.length() > 3 ) {
+                            Employer emp = new Employer();
+                            emp.setName(name);
+                            Address companyAddress = new Address(addressL1, addressL2, "", postcode, town, country);
+                            emp.setAddress(companyAddress);
+                            employers.put(emp, companiesCountry);
+                        }
                     }
+                } catch ( Exception e ) {
+                    LOGGER.log(Level.SEVERE, "unable to parse csv source: " + companiesFile, e);
                 }
-            } catch ( Exception e ) {
-                LOGGER.log(Level.SEVERE, "unable to parse csv source: " + employersFileFR, e);
             }
         }
-
 
         @Override
         public Employer generate(GenerationContext ctx) {

@@ -332,7 +332,7 @@ public class EmployeeInformation {
     }
 
     public String getEmploymentLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Emploi :"));
+        List<String> labels = new ArrayList<String>(Arrays.asList("Job :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
@@ -519,11 +519,11 @@ public class EmployeeInformation {
             String assignment = String.format("%03d", rand.nextInt(999)+1);
 
             CategoryEmployee categorieEmp = CategoriesEmp.get(ctx.getRandom().nextInt(CategoriesEmp.size()));
-            List<Emploi> listEmp = categorieEmp.getList_emploi();
-            Emploi emp = listEmp.get(ctx.getRandom().nextInt(listEmp.size()));
+            List<Job> listEmp = categorieEmp.getList_job();
+            Job emp = listEmp.get(ctx.getRandom().nextInt(listEmp.size()));
             String categoryLabel = categorieEmp.getCategorie();
             String employeCode = emp.getCode();
-            String employment = emp.getLibelle();
+            String employment = emp.getLabel();
             /*  String arr[] = employment.split(" ", 4);
             if (arr.length>=3) employment = arr[0]+ " "+ arr[1] +" "+arr[2];
             else if (arr.length>=2 ) employment = arr[0]+ " "+ arr[1] ;

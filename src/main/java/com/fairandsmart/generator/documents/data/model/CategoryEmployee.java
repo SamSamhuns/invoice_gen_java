@@ -38,40 +38,40 @@ import java.util.List;
 
 public class CategoryEmployee {
 
-    private String code_categorie;
-    private String categorie;
-    List<Emploi> list_emploi;
+    private String category_code;
+    private String category;
+    List<Job> list_job;
 
     public CategoryEmployee() {
     }
 
-    public CategoryEmployee(String code_categorie, String categorie, List<Emploi> list_emploi) {
-        this.code_categorie = code_categorie;
-        this.categorie = categorie;
-        this.list_emploi = list_emploi;
+    public CategoryEmployee(String category_code, String category, List<Job> list_job) {
+        this.category_code = category_code;
+        this.category = category;
+        this.list_job = list_job;
     }
 
     public String getCode_categorie() {
-        return code_categorie;
+        return category_code;
     }
 
     public String getCategorie() {
-        return categorie;
+        return category;
     }
 
-    public List<Emploi> getList_emploi() {
-        return list_emploi;
+    public List<Job> getList_job() {
+        return list_job;
     }
 
-    public void setCode_categorie(String code_categorie) {
-        this.code_categorie = code_categorie;
+    public void setCode_categorie(String category_code) {
+        this.category_code = category_code;
     }
 
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
+    public void setCategorie(String category) {
+        this.category = category;
     }
 
-    public void setList_emploi(List<Emploi> list_emploi) {
-        this.list_emploi = list_emploi;
+    public void setList_job(List<Job> list_job) {
+        this.list_job = list_job;
     }
 }

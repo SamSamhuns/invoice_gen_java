@@ -161,15 +161,15 @@ public class Company {
                         String name = record.get("name");
                         String website = record.get("domain");
                         String industry = record.get("industry");
-                        String adresseL1 = record.get("address1");
-                        String adresseL2 = record.get("address2");
+                        String addressL1 = record.get("address1");
+                        String addressL2 = record.get("address2");
                         String postcode = record.get("postcode");
                         String town = record.get("town");
                         String country = record.get("country");
                         if ( name.length() > 3 ) {
                             Company comp = new Company();
                             comp.setName(name);
-                            Address companyAddress = new Address(adresseL1, adresseL2, "", postcode, town, country);
+                            Address companyAddress = new Address(addressL1, addressL2, "", postcode, town, country);
                             comp.setAddress(companyAddress);
                             companies.put(comp, companiesCountry);
                         }

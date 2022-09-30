@@ -389,13 +389,13 @@ public class ProductContainer {
             Float total = productContainer.getTotalWithTax();
             if(discountAvailable){
                 /// discount
-                Float discout =0.0f;
+                Float discount =0.0f;
                 /*if(ctx.getRandom().nextBoolean()){
-                    discout = ctx.getRandom().nextFloat()*0.4f*total;
+                    discount = ctx.getRandom().nextFloat()*0.4f*total;
                 }*/
-                String discountS = String.format("%.2f", discout);
-                productContainer.setTotalDiscount(discout);
-                total = total - discout;
+                String discountS = String.format("%.2f", discount);
+                productContainer.setTotalDiscount(discount);
+                total = total - discount;
                 productContainer.setTotalWithTax(total);
             }
             Boolean taxRateAvailable = ctx.getRandom().nextBoolean();

@@ -636,13 +636,13 @@ public class ProductReceiptContainer {
             /// Rounded
             if(discountAvailable){
                 /// discount
-                Float discout =0.0f;
+                Float discount =0.0f;
                 if(ctx.getRandom().nextBoolean()){
-                    discout = ctx.getRandom().nextFloat()*0.4f*total;
+                    discount = ctx.getRandom().nextFloat()*0.4f*total;
                 }
-                String discountS = String.format("%.2f", discout);
+                String discountS = String.format("%.2f", discount);
                 productContainer.setTotalDiscount(discountS);
-                total = total - discout;
+                total = total - discount;
             }
 
             /// Rounded

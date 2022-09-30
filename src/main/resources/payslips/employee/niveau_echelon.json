@@ -1,6 +1,6 @@
 
 [{ "niveau":"I",
-  "libelle": "emplois d'exécutant (pas de diplôme)",
+  "label": "executive jobs (no degree)",
   "echelon":[
     {"number" :1
     },{
@@ -9,7 +9,7 @@
   ]
 },
   { "niveau":"II",
-    "libelle": "emplois spécialisés (CAP)",
+    "label": "specialized jobs (CAP)",
     "echelon":[
       {"number" :1
       },{
@@ -18,7 +18,7 @@
     ]
   },
   { "niveau":"III" ,
-    "libelle": "emplois qualifiés (BEP)",
+    "label": "skilled jobs (BEP)",
     "echelon":[
       {"number" :1
       },{
@@ -27,7 +27,7 @@
     ]
   },
   { "niveau":"IV",
-    "libelle": "emplois hautement qualifiés (BAC/BTS/DUT)",
+    "label": "highly qualified jobs (BAC/BTS/DUT)",
     "echelon":[
       {"number" :1
       },{
@@ -36,7 +36,7 @@
     ]
   },
   { "niveau":"V",
-    "libelle": "cadres/ingénieurs/manager",
+    "label": "executives/engineers/manager",
     "echelon":[
       {"number" :1
       },{

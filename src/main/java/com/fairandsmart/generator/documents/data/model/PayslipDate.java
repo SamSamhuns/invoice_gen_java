@@ -151,35 +151,34 @@ public class PayslipDate {
         private static final Map<String, String> labelsEnd = new LinkedHashMap<>();
         private static final Map<String, String> labelsPayment = new LinkedHashMap<>();
         {
-            formatsDate.put(new SimpleDateFormat("MMM d, YYYY"), "en");
-            //  formats.put(new SimpleDateFormat("YYYY-MM-dd HH:mm:ss"), "en");
-            formatsDate.put(new SimpleDateFormat("d MMM, YYYY"), "en");
-
             formatsDate.put(new SimpleDateFormat("dd/MM/YY"), "fr");
             formatsDate.put(new SimpleDateFormat("d MMM YYYY"), "fr");
+
+            formatsDate.put(new SimpleDateFormat("MMM d, YYYY"), "en");
+            formatsDate.put(new SimpleDateFormat("d MMM, YYYY"), "en");
         }
         {
-            labels.put("Period", "en");
-
             labels.put("Période", "fr");
+
+            labels.put("Period", "en");
         }
         {
-            labelsStart.put("Start date", "en");
-
             labelsStart.put("Du", "fr");
             labelsStart.put("Début de période", "fr");
+
+            labelsStart.put("Start date", "en");
         }
         {
-            labelsEnd.put("End date", "en");
-
             labelsEnd.put("Au", "fr");
             labelsEnd.put("Fin de période", "fr");
+
+            labelsEnd.put("End date", "en");
         }
         {
-            labelsPayment.put("Payment date", "en");
-
             labelsPayment.put("Date de paiement", "fr");
             labelsPayment.put("Paiement le", "fr");
+
+            labelsPayment.put("Payment date", "en");
         }
 
 

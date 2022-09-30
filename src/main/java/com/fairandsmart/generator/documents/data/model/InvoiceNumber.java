@@ -134,7 +134,6 @@ public class InvoiceNumber {
             formatsInvoice.add("[4-9][0-9]{9}");
             formatsInvoice.add("FV201[0-7]00[0-9]{4}");
             formatsInvoice.add("00[0-9]{5}");
-            //formatsInvoice.add("#FA00[0-9]{4}"); Does not produce anything in Java, cause of no facture number error
             formatsInvoice.add("FC500[0-9]{3}");
             formatsInvoice.add("INV-[0-9]{4}");
             formatsInvoice.add("[0-9]{4}-7[0-9]{5}");
@@ -147,7 +146,6 @@ public class InvoiceNumber {
             formatsCommand.add("[4-9][0-9]{3}");
             formatsCommand.add("CD201[0-7]00[0-9]{1}");
             formatsCommand.add("99[0-9]{3}");
-           // formatsCommand.add("#CO00[0-9]{4}");
             formatsCommand.add("CM5[0-9]{3}");
             formatsCommand.add("COM-[0-9]{3}");
             formatsCommand.add("[0-9]{3}-9[0-9]{2}");
@@ -160,7 +158,6 @@ public class InvoiceNumber {
             formatsClient.add("[4-9][0-9]{4}");
             formatsClient.add("CL10[0-7]00[0-9]{2}");
             formatsClient.add("00[0-9]{4}");
-            // formatsClient.add("#CO00[0-9]{4}");
             formatsClient.add("CL55[0-9]{3}");
             formatsClient.add("CL-[0-9]{4}");
             formatsClient.add("[0-9]{3}-0[0-9]{3}");
