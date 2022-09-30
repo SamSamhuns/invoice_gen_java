@@ -56,6 +56,7 @@ public class Employer {
     private Logo logo;
     private IDNumbers idNumbers;
     private String name;
+    private String industry;
     private Address address;
     private ContactNumber contact;
     private String email;
@@ -84,6 +85,14 @@ public class Employer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 
     public Address getAddress() {
@@ -155,12 +164,14 @@ public class Employer {
                         String addressL1 = record.get("address1");
                         String addressL2 = record.get("address2");
                         String postcode = record.get("postcode");
-                        String town = record.get("town");
+                        String city = record.get("city");
                         String country = record.get("country");
                         if ( name.length() > 3 ) {
                             Employer emp = new Employer();
                             emp.setName(name);
-                            Address companyAddress = new Address(addressL1, addressL2, "", postcode, town, country);
+                            emp.setWebsite(website);
+                            emp.setIndustry(industry);
+                            Address companyAddress = new Address(addressL1, addressL2, "", postcode, city, country);
                             emp.setAddress(companyAddress);
                             employers.put(emp, companiesCountry);
                         }
@@ -175,7 +186,7 @@ public class Employer {
         public Employer generate(GenerationContext ctx) {
             List<Employer> goodEmployers = employers.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
             Employer employer = goodEmployers.get(ctx.getRandom().nextInt(goodEmployers.size()));
-            employer.setLogo(new Logo.Generator().generate(ctx));
+            employer.setLogo(new Logo(ctx, employer.getName()));
             employer.setIdNumbers(new IDNumbers.Generator().generate(ctx));
             employer.setContact(new ContactNumber.Generator().generate(ctx));
             return employer;

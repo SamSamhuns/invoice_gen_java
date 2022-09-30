@@ -35,15 +35,83 @@ package com.fairandsmart.generator.documents.layout;
  */
 
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
+import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
+import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
 import javax.xml.stream.XMLStreamWriter;
+import java.awt.image.BufferedImage;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public interface InvoiceLayout {
 
-    String name();
+  String name();
 
-    void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception;
+  public class pdType1FontPair {
+      private PDType1Font normalFont;
+      private PDType1Font boldFont;
+
+      public pdType1FontPair (PDType1Font normalFont, PDType1Font boldFont) {
+          this.normalFont = normalFont;
+          this.boldFont = boldFont;
+      }
+
+      public PDType1Font getNormalFont() {
+          return this.normalFont;
+      }
+
+      public void setNormalFont(PDType1Font font) {
+          this.normalFont = font;
+      }
+
+      public PDType1Font getBoldFont() {
+          return this.boldFont;
+      }
+
+      public void setBoldFont(PDType1Font font) {
+          this.boldFont = font;
+      }
+  }
+
+  void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception;
+
+  public static BufferedImage generateEAN13BarcodeImage(String barcodeText) {
+          // generates a barcode based on the String barcodeText
+          EAN13Bean barcodeGenerator = new EAN13Bean();
+          BitmapCanvasProvider canvas = new BitmapCanvasProvider(160, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+          barcodeGenerator.generateBarcode(canvas, barcodeText);
+          return canvas.getBufferedImage();
+  }
+
+  public static pdType1FontPair getRandomPDType1FontPair() {
+
+          Random rnd = new Random();
+          final List<PDType1Font> pdType1NormalFontList = Arrays.asList(
+                  PDType1Font.HELVETICA,
+                  PDType1Font.COURIER,
+                  PDType1Font.TIMES_ROMAN);
+                  // PDType1Font.COURIER_OBLIQUE,
+                  // PDType1Font.HELVETICA_OBLIQUE,
+                  // PDType1Font.TIMES_ITALIC);
+          final List<PDType1Font> pdType1BoldFontList = Arrays.asList(
+                  PDType1Font.HELVETICA_BOLD,
+                  PDType1Font.COURIER_BOLD,
+                  PDType1Font.TIMES_BOLD);
+                  // PDType1Font.COURIER_BOLD_OBLIQUE,
+                  // PDType1Font.HELVETICA_BOLD_OBLIQUE,
+                  // PDType1Font.TIMES_BOLD_ITALIC);
+          assert pdType1NormalFontList.size() == pdType1BoldFontList.size();
+          int fontIdx = rnd.nextInt(pdType1NormalFontList.size());
+
+          return new pdType1FontPair(
+                  pdType1NormalFontList.get(fontIdx),
+                  pdType1BoldFontList.get(fontIdx)
+                  );
+      }
 
 }

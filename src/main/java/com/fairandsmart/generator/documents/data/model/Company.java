@@ -72,7 +72,9 @@ public class Company {
         this.logo = logo;
     }
 
-    public IDNumbers getIdNumbers() { return idNumbers; }
+    public IDNumbers getIdNumbers() {
+        return idNumbers;
+    }
 
     public void setIdNumbers(IDNumbers idNumbers) {
         this.idNumbers = idNumbers;
@@ -164,12 +166,14 @@ public class Company {
                         String addressL1 = record.get("address1");
                         String addressL2 = record.get("address2");
                         String postcode = record.get("postcode");
-                        String town = record.get("town");
+                        String city = record.get("city");
                         String country = record.get("country");
                         if ( name.length() > 3 ) {
                             Company comp = new Company();
                             comp.setName(name);
-                            Address companyAddress = new Address(addressL1, addressL2, "", postcode, town, country);
+                            comp.setWebsite(website);
+                            comp.setIndustry(industry);
+                            Address companyAddress = new Address(addressL1, addressL2, "", postcode, city, country);
                             comp.setAddress(companyAddress);
                             companies.put(comp, companiesCountry);
                         }
@@ -184,7 +188,7 @@ public class Company {
         public Company generate(GenerationContext ctx) {
             List<Company> goodCompanies = companies.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
             Company company = goodCompanies.get(ctx.getRandom().nextInt(goodCompanies.size()));
-            company.setLogo(new Logo.Generator().generate(ctx));
+            company.setLogo(new Logo(ctx, company.getName()));
             company.setIdNumbers(new IDNumbers.Generator().generate(ctx));
             company.setContact(new ContactNumber.Generator().generate(ctx));
             return company;

@@ -51,9 +51,6 @@ public class Logo {
     private String fullPath;
     private String name;
 
-    public Logo() {
-    }
-
     public Logo(String fullPath, String name) {
         this.fullPath = fullPath;
         this.name = name;
@@ -83,12 +80,11 @@ public class Logo {
                 '}';
     }
 
-    public static class Generator implements ModelGenerator<Logo> {
-
-        private static final List<String> brandsFileList = Arrays.asList(
+    public static List<Logo> getLogoList() {
+        final List<String> brandsFileList = Arrays.asList(
                 "common/logo/ae_en/metadata.json",
                 "common/logo/fr/metadata.json");
-        private static List<Logo> logos = new ArrayList<Logo>();
+        List<Logo> logos = new ArrayList<Logo>();
         {
           for (String brandFile : brandsFileList) {
               Reader jsonReader = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(brandFile));
@@ -97,15 +93,21 @@ public class Logo {
               logos.addAll(gson.fromJson(jsonReader, collectionType));
           }
         }
+        return logos;
+    }
+
+    public static class Generator implements ModelGenerator<Logo> {
+
+        private static List<Logo> logos = getLogoList();
 
         @Override
         public Logo generate(GenerationContext ctx) {
             Logo electibleLogo;
-            // filter by brandname, default is .* so use all brands
-            List<Logo> electibleLogos = logos.stream().filter(logo -> logo.name.matches(ctx.getBrandName())).collect(Collectors.toList());
-            // filter by country based on directory name
-            electibleLogos = electibleLogos.stream().filter(logo -> logo.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)")).collect(Collectors.toList());
-
+            // filter by brandname, default is .* so use all brands and then filter by country
+            List<Logo> electibleLogos = logos.stream().filter(logo ->
+                    logo.name.matches(ctx.getBrandName()) &&
+                    logo.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)")
+                    ).collect(Collectors.toList());
             if ( electibleLogos.size() > 0 ) {
                 electibleLogo = electibleLogos.get(ctx.getRandom().nextInt(electibleLogos.size()));
             } else {
@@ -113,6 +115,26 @@ public class Logo {
             }
             return electibleLogo;
         }
+    }
+
+    public Logo(GenerationContext ctx, String companyName) {
+        List<Logo> logos = getLogoList();
+        Logo electibleLogo;
+
+        // filter by brandname (default: .* so use all brands) and by country and the company name
+        List<Logo> electibleLogos = logos.stream().filter(logo ->
+                logo.name.matches(ctx.getBrandName()) &&
+                logo.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)") &&
+                logo.name.matches(companyName)
+                ).collect(Collectors.toList());
+
+        if ( electibleLogos.size() > 0 ) {
+            electibleLogo = electibleLogos.get(0);
+        } else {
+            electibleLogo = logos.get(ctx.getRandom().nextInt(logos.size()));
+        }
+        this.fullPath = electibleLogo.fullPath;
+        this.name = electibleLogo.name;
     }
 
 }

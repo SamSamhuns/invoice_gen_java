@@ -101,7 +101,7 @@ Generating your own invoices and other SSDs with custom data.
             -   `address_l1`: Address line 1
             -   `address_l2`: Address line 2
             -   `postal_code`
-            -   `town` Town/Municipality where the establishment
+            -   `city` Town/Municipality where the establishment
             -   `country`: Country of the establishment
         -   `companies_ar.csv` and `companies_us.csv` generated from [7-million Company Dataset](https://www.kaggle.com/datasets/peopledatalabssf/free-7-million-company-dataset). Postcodes were randomly generated from the `Faker` library
         -   [The French Companies Sirene Dataset](https://www.sirene.fr/static-resources/doc/dessin_L2_description_complete.pdf?version=1.33.25) csv format requires the same fields as above but named `ENSEIGNE`, `L4_NORMALISEE`, `L5_NORMALISEE`, `CODPOS`, `LIBCOM`, `L7_NORMALISEE`,
