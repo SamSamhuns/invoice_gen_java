@@ -60,6 +60,7 @@ public class Company {
     private ContactNumber contact;
     private String email;
     private String website;
+    private Signature signature;
 
     public Company() {
     }
@@ -128,6 +129,14 @@ public class Company {
         this.website = website;
     }
 
+    public Signature getSignature() {
+        return signature;
+    }
+
+    public void setSignature(Signature signature) {
+        this.signature = signature;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
@@ -139,6 +148,7 @@ public class Company {
                 ", contact=" + contact +
                 ", email='" + email + '\'' +
                 ", website='" + website + '\'' +
+                ", signature='" + signature + '\'' +
                 '}';
     }
 
@@ -191,6 +201,7 @@ public class Company {
             company.setLogo(new Logo(ctx, company.getName()));
             company.setIdNumbers(new IDNumbers.Generator().generate(ctx));
             company.setContact(new ContactNumber.Generator().generate(ctx));
+            company.setSignature(new Signature.Generator().generate(ctx));
             return company;
         }
     }
