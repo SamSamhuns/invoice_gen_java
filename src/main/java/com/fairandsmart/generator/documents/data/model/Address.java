@@ -146,8 +146,9 @@ public class Address {
                         String street = record.get("STREET");
                         String city = record.get("CITY");
                         String postcode = record.get("POSTCODE");
+                        String country = record.get("COUNTRY");
                         if(street != null && !street.isEmpty()) {
-                            Address address = new Address(number + ", " + street, "", "", postcode, city, "UAE");
+                            Address address = new Address(number + ", " + street, "", "", postcode, city, country);
                             switch (addressFile) {
                                 case "common/address/france.csv":
                                     addresses.put(address, "FR");
@@ -181,7 +182,7 @@ public class Address {
         public Address generate(GenerationContext ctx) {
             List<Address> goodAddresses = addresses.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
             Address address = goodAddresses.get(ctx.getRandom().nextInt(goodAddresses.size()));
-            //TODO include a random line 3 with app n°2, etage 3...
+            //TODO include a random line 3 with app No 2, Stage 3...
             return address;
         }
     }
