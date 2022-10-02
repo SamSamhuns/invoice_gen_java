@@ -38,8 +38,8 @@ import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.github.javafaker.Faker;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -64,7 +64,9 @@ public class Client {
         this.shippingAddress = shippingAddress;
     }
 
-    public String getBillingHead() { return billingHead;  }
+    public String getBillingHead() {
+        return billingHead;
+    }
 
     public void setBillingHead(String billingHead) {
         this.billingHead = billingHead;
@@ -139,8 +141,6 @@ public class Client {
             billingHeads.put("Billed To", "en");
             billingHeads.put("Billing Address", "en");
             billingHeads.put("Sold To", "en");
-            billingHeads.put("Buyer", "en");
-            billingHeads.put("To", "en");
 
         }
 
@@ -156,9 +156,6 @@ public class Client {
             shippingHeads.put("Shipped To", "en");
             shippingHeads.put("Shipping Address", "en");
             shippingHeads.put("Send To", "en");
-            shippingHeads.put("Buyer", "en");
-            shippingHeads.put("To", "en");
-
         }
 
         @Override
@@ -169,22 +166,36 @@ public class Client {
             Address billingAddress = new Address.Generator().generate(ctx);
             Address shippingAddress = billingAddress;
 
-            int idxOtherAddress = ctx.getRandom().nextInt(25);
-            if ( idxOtherAddress > 20 ) {
+            // shippingAddress is different
+            if ( ctx.getRandom().nextInt(50) < 10 ) {
                 shippingAddress = new Address.Generator().generate(ctx);
             }
-
-            int idxOtherName = ctx.getRandom().nextInt(50);
-            if ( idxOtherName > 48 ) {
+            // shippingName is different
+            if ( ctx.getRandom().nextInt(50) < 5 ) {
                 shippingName = faker.name().fullName();
+            }
+            // shippingName is set to same as billing and Address is empty
+            if ( ctx.getRandom().nextInt(50) < 4 ) {
+                shippingName = "Same as Billing Address";
+                shippingAddress = new Address("", "", "", "", "", "");
             }
 
             // For Address Heads
             List<String> localizedBillHeads = billingHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localizedShipHeads = shippingHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            assert localizedBillHeads.size() == localizedShipHeads.size();
             int idxA = ctx.getRandom().nextInt(localizedBillHeads.size()); // Note: Only one index for both shipping & billing, to retrieve similar format heads!
-            return new Client(localizedBillHeads.get(idxA), billingName, billingAddress,
+            Client genClient = new Client(
+                    localizedBillHeads.get(idxA), billingName, billingAddress,
                     localizedShipHeads.get(idxA), shippingName, shippingAddress);
+
+            // shippingAddress is not present
+            if ( ctx.getRandom().nextInt(50) < 2 ) {
+                genClient.setShippingHead("");
+                genClient.setShippingName("");
+                genClient.setShippingAddress(new Address("", "", "", "", "", ""));
+            }
+            return genClient;
         }
     }
 }
