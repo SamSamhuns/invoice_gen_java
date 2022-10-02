@@ -35,15 +35,25 @@ package com.fairandsmart.generator.documents.layout;
  */
 
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+
+import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
+import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.util.Matrix;
 
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -51,6 +61,7 @@ import java.util.Random;
 public interface InvoiceLayout {
 
   String name();
+  Random rnd = new Random();
 
   public class pdType1FontPair {
       private PDType1Font normalFont;
@@ -80,7 +91,11 @@ public interface InvoiceLayout {
 
   void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception;
 
-  public static BufferedImage generateEAN13BarcodeImage(String barcodeText) {
+  public static Random getRandom() {
+      return rnd;
+  }
+
+  public static BufferedImage generateEAN13BarcodeImage(String barcodeText) throws Exception {
           // generates a barcode based on the String barcodeText
           EAN13Bean barcodeGenerator = new EAN13Bean();
           BitmapCanvasProvider canvas = new BitmapCanvasProvider(160, BufferedImage.TYPE_BYTE_BINARY, false, 0);
@@ -88,9 +103,7 @@ public interface InvoiceLayout {
           return canvas.getBufferedImage();
   }
 
-  public static pdType1FontPair getRandomPDType1FontPair() {
-
-          Random rnd = new Random();
+  public static pdType1FontPair getRandomPDType1FontPair() throws Exception {
           final List<PDType1Font> pdType1NormalFontList = Arrays.asList(
                   PDType1Font.HELVETICA,
                   PDType1Font.COURIER,
@@ -113,5 +126,61 @@ public interface InvoiceLayout {
                   pdType1BoldFontList.get(fontIdx)
                   );
       }
+
+  public static Color getRandomColor(int cSize) throws Exception {
+        final List<Color> colorsList = Arrays.asList(
+              Color.GRAY,
+              Color.LIGHT_GRAY,
+              Color.DARK_GRAY,
+              Color.WHITE,
+              Color.ORANGE,
+              Color.YELLOW,
+              Color.BLACK
+              // Color.RED,
+              // Color.GREEN,
+              // Color.BLUE,
+              // Color.MAGENTA,
+              // Color.CYAN,
+              );
+        return colorsList.get(rnd.nextInt(Math.min(cSize, colorsList.size())));
+  }
+
+  public static void addWatermarkText(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
+        try (PDPageContentStream cs = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
+                true)) {
+            final float fontHeight = 90 + rnd.nextInt(20); // arbitrary for short text
+            final float width = page.getMediaBox().getWidth();
+            final float height = page.getMediaBox().getHeight();
+            final float stringWidth = font.getStringWidth(text) / 1000 * fontHeight;
+            final float diagonalLength = (float) Math.sqrt(width * width + height * height);
+            final float angle = (float) Math.atan2(height, width) + (float) rnd.nextInt(5)/100;
+            final float x = (diagonalLength - stringWidth) / 2; // "horizontal" position in rotated world
+            final float y = -fontHeight / 4; // 4 is a trial-and-error thing, this lowers the text a bit
+            cs.transform(Matrix.getRotateInstance(angle, 0, 0));
+            cs.setFont(font, fontHeight);
+            if (rnd.nextInt(10) < 2) {
+                cs.setRenderingMode(RenderingMode.STROKE); // for "hollow" effect
+            }
+
+            final PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
+
+            float minA = 0.1f; float maxA = 0.3f;  // get uniform dist from minA to maxA in 0.01 diffs
+            float alpha = (float)(rnd.nextInt((int)((maxA-minA)*100+1))+minA*100) / 100.0f;
+            gs.setNonStrokingAlphaConstant(alpha);
+            gs.setStrokingAlphaConstant(alpha);
+            gs.setBlendMode(BlendMode.MULTIPLY);
+            gs.setLineWidth(3f);
+            cs.setGraphicsStateParameters(gs);
+
+            // Set color
+            cs.setNonStrokingColor(Color.red);
+            cs.setStrokingColor(Color.red);
+
+            cs.beginText();
+            cs.newLineAtOffset(x, y);
+            cs.showText(text);
+            cs.endText();
+        }
+    }
 
 }

@@ -3,9 +3,9 @@ package com.fairandsmart.generator.documents.element.table;
 /*-
  * #%L
  * FacoGen / A tool for annotated GEDI based invoice generation.
- * 
+ *
  * Authors:
- * 
+ *
  * Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
  * Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
  * Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
@@ -21,12 +21,12 @@ package com.fairandsmart.generator.documents.element.table;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -77,7 +77,7 @@ public class TableRowBox extends ElementBox {
         elements.add(element);
         element.setWidth(config[elements.size() - 1]);
 
-        //TODO : Add Center Right & Left Horizonatal alignment
+        //TODO : Add Center Right & Left Horizontal alignment
 
         if(!(element.getBoundingBox().getPosY()==0 && element.getBoundingBox().getPosX()!=0))
         {   // Translate only if x is not 0 and y is 0 which is in case of image center alignment
@@ -88,7 +88,6 @@ public class TableRowBox extends ElementBox {
         element.translate(box.getPosX() + this.getColumnOffsetX(elements.size()-1), box.getPosY() );
 
         if(center_align && elements.size()>1) {
-
             element.translate(element.getBoundingBox().getWidth()/3 , box.getPosY() );
         }
         if ( element.getBoundingBox().getHeight() > box.getHeight() ) {

@@ -114,6 +114,7 @@ public class ContactNumber {
             phoneFormats.put("+1 [(]0[)] [0-9]{1} [0-9]{2} [0-9]{2} ", "US_west");
 
             phoneFormats.put("+971 [(]0[)] [0-9]{2} [0-9]{3} [0-9]{4} ", "AE_en");
+            phoneFormats.put("+971 0[0-9]{2} [0-9]{3} [0-9]{4} ", "AE_en");
         }
         {
             faxFormats.put("[0-9]{2}[.][0-9]{2}", "FR");

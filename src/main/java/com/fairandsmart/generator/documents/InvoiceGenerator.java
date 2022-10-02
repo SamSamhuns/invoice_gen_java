@@ -103,6 +103,7 @@ public class InvoiceGenerator {
 
         // Export as PDF
         PDDocument document = new PDDocument();
+        // Build invoice layout and populate pdf
         layout.builtInvoice(model, document, xmlOut);
         document.save(pdf.toFile());
 
