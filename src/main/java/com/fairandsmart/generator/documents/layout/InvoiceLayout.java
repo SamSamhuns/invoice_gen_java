@@ -37,6 +37,7 @@ package com.fairandsmart.generator.documents.layout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
 import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -145,7 +146,36 @@ public interface InvoiceLayout {
         return colorsList.get(rnd.nextInt(Math.min(cSize, colorsList.size())));
   }
 
-  public static void addWatermarkText(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
+
+  public static void addWatermarkImagePDF(final PDDocument doc, final PDPage page, final PDImageXObject imgPDF) throws IOException {
+        try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
+                true)) {
+            contentStream.saveGraphicsState();
+            PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
+            pdExtGfxState.setBlendMode(BlendMode.MULTIPLY);
+
+            float minA = 0.08f; float maxA = 0.18f;
+            // get uniform dist from minA to maxA in 0.01 diffs
+            float alpha = (float)(rnd.nextInt((int)((maxA-minA)*100+1))+minA*100) / 100.0f;
+            pdExtGfxState.setNonStrokingAlphaConstant(alpha);
+            contentStream.setGraphicsStateParameters(pdExtGfxState);
+            // draw on document
+            float imgW = imgPDF.getWidth();
+            float imgH = imgPDF.getHeight();
+            float pageW = page.getMediaBox().getWidth();
+            float pageH = page.getMediaBox().getHeight();
+            // rescale img dims to be 1/2.5 of page dim
+            float nImgW = (1f/2.5f) * pageW;
+            float nimgH = (nImgW * imgH) / imgW;
+            float xoff = (pageW - nImgW) / 2;
+            float yoff = (pageH - nimgH) / 2;
+            contentStream.drawImage(imgPDF, xoff, yoff, nImgW, nimgH);
+            contentStream.restoreGraphicsState();
+            contentStream.close();
+        }
+    }
+
+  public static void addWatermarkTextPDF(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
         try (PDPageContentStream cs = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
                 true)) {
             final float fontHeight = 90 + rnd.nextInt(20); // arbitrary for short text
@@ -158,13 +188,14 @@ public interface InvoiceLayout {
             final float y = -fontHeight / 4; // 4 is a trial-and-error thing, this lowers the text a bit
             cs.transform(Matrix.getRotateInstance(angle, 0, 0));
             cs.setFont(font, fontHeight);
-            if (rnd.nextInt(10) < 2) {
+            if (rnd.nextInt(10) < 3) {
                 cs.setRenderingMode(RenderingMode.STROKE); // for "hollow" effect
             }
 
             final PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
 
-            float minA = 0.1f; float maxA = 0.3f;  // get uniform dist from minA to maxA in 0.01 diffs
+            float minA = 0.10f; float maxA = 0.25f;
+            // get uniform dist from minA to maxA in 0.01 diffs
             float alpha = (float)(rnd.nextInt((int)((maxA-minA)*100+1))+minA*100) / 100.0f;
             gs.setNonStrokingAlphaConstant(alpha);
             gs.setStrokingAlphaConstant(alpha);

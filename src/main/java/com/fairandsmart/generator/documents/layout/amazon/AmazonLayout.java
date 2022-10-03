@@ -44,11 +44,11 @@ import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.mifmif.common.regex.Generex;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 
@@ -57,6 +57,8 @@ import javax.xml.stream.XMLStreamWriter;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @ApplicationScoped
@@ -78,28 +80,38 @@ public class AmazonLayout implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        //Generate barCodeNum
+        // Set probability map, int value out of 100, 60 -> 60% proba
+        Map<String, Integer> genProb = new HashMap<>();
+        genProb.put("barcode_top", 60);
+        genProb.put("registered_address_info", 50);
+        genProb.put("barcode_bottom", 60);
+        genProb.put("logo_watermark", 9);
+        genProb.put("confidential_watermark", 40);
+
+        // Generate barCodeNum
         Generex barCodeNumGen = new Generex("[0-9]{12}");
         String barCodeNum = barCodeNumGen.random();
 
-        //Set fontFaces
+        // Set fontFaces
         InvoiceLayout.pdType1FontPair fontPair = InvoiceLayout.getRandomPDType1FontPair();
         PDType1Font normalFont = fontPair.getNormalFont();
         PDType1Font boldFont = fontPair.getBoldFont();
 
-        //Center or left alignment for items in table
+        // Center or left alignment for items in table
         boolean centerAlignItems = (InvoiceLayout.getRandom().nextInt(2) == 0) ? true: false;
 
         /* Build Page components now */
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
         new BorderBox(InvoiceLayout.getRandomColor(6), Color.WHITE, 4, 0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight()).build(contentStream, writer);
 
-        //Barcode top
-        BufferedImage barcodeTopImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
-        PDImageXObject pdBarcode = LosslessFactory.createFromImage(document, barcodeTopImage);
-        new ImageBox(pdBarcode, page.getMediaBox().getWidth() / 2, 810, pdBarcode.getWidth(), (float)(pdBarcode.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
+        // Barcode top
+        if (InvoiceLayout.getRandom().nextInt(100) < genProb.get("barcode_top")) {
+            BufferedImage barcodeTopImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
+            PDImageXObject pdBarcode = LosslessFactory.createFromImage(document, barcodeTopImage);
+            new ImageBox(pdBarcode, page.getMediaBox().getWidth() / 2, 810, pdBarcode.getWidth(), (float)(pdBarcode.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
+        }
 
-        //Text top
+        // Text top
         VerticalContainer infos = new VerticalContainer(25, 810, 500);
         infos.addElement(new SimpleTextBox(normalFont, 9, 0, 0, "Page 1 of 1, 1-1/1"));
         infos.addElement(new SimpleTextBox(normalFont, 9, 0, 0, "Invoice for "+model.getReference().getValue()+" "+model.getDate().getValue()));
@@ -229,8 +241,8 @@ public class AmazonLayout implements InvoiceLayout {
         verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, page.getMediaBox().getWidth()-(20*2), 0));
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
-        // Add registered address information, 50% prob
-        if (InvoiceLayout.getRandom().nextInt(100) < 50) {
+        // Add registered address information
+        if (InvoiceLayout.getRandom().nextInt(100) < genProb.get("registered_address_info")) {
               verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, page.getMediaBox().getWidth()-(20*2), 0));
               verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
@@ -277,7 +289,7 @@ public class AmazonLayout implements InvoiceLayout {
         }
 
         // Add footer line and info
-        new HorizontalLineBox(20,110, page.getMediaBox().getWidth()-(20*2), 0).build(contentStream, writer);
+        new HorizontalLineBox(20, 110, page.getMediaBox().getWidth()-(20*2), 0).build(contentStream, writer);
 
         VerticalContainer verticalFooterContainer = new VerticalContainer(25, 100, 450);
         String compEmail = ((model.getCompany().getWebsite() == null) ? "company.domain.com" :  model.getCompany().getWebsite());
@@ -291,19 +303,26 @@ public class AmazonLayout implements InvoiceLayout {
         // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
         URI logoUri = new URI(this.getClass().getClassLoader().getResource("common/logo/" + model.getCompany().getLogo().getFullPath()).getFile());
         String logoPath = logoUri.getPath();
-        PDImageXObject logoFooter = PDImageXObject.createFromFile(logoPath, document);
-        float ratio = logoFooter.getWidth() / logoFooter.getHeight();
-        contentStream.drawImage(logoFooter, 480, 10, 85, 85 / ((ratio == 0) ? 1 : ratio) - 5);
+        PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
+        float ratio = logoImg.getWidth() / logoImg.getHeight();
+        contentStream.drawImage(logoImg, 480, 10, 85, 85 / ((ratio == 0) ? 1 : ratio) - 5);
 
         // Barcode bottom
-        BufferedImage barcodeFooterImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
-        PDImageXObject barCodeFooter = LosslessFactory.createFromImage(document, barcodeFooterImage);
-        contentStream.drawImage(barCodeFooter, 25, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
+        if (InvoiceLayout.getRandom().nextInt(100) < genProb.get("barcode_bottom")) {
+            BufferedImage barcodeFooterImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
+            PDImageXObject barCodeFooter = LosslessFactory.createFromImage(document, barcodeFooterImage);
+            contentStream.drawImage(barCodeFooter, 25, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
+        }
         contentStream.close();
 
-        // Add confidential watermark, 9% prob
-        if (InvoiceLayout.getRandom().nextInt(100) < 9) {
-            InvoiceLayout.addWatermarkText(document, page, PDType1Font.HELVETICA, "Confidential");
+        // Add bg logo watermark or confidential stamp, but not both at once
+        if (InvoiceLayout.getRandom().nextInt(100) < genProb.get("logo_watermark")) {
+            // Add confidential watermark, 9% prob
+            InvoiceLayout.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
+        }
+        else if (InvoiceLayout.getRandom().nextInt(100) < genProb.get("confidential_watermark")) {
+            // Add watermarked background logo
+            InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
         }
 
         writer.writeEndElement();
