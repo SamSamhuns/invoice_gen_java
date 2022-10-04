@@ -148,28 +148,38 @@ public interface InvoiceLayout {
 
 
   public static void addWatermarkImagePDF(final PDDocument doc, final PDPage page, final PDImageXObject imgPDF) throws IOException {
+
+        float oImgW = imgPDF.getWidth();
+        float oImgH = imgPDF.getHeight();
+        float pageW = page.getMediaBox().getWidth();
+        float pageH = page.getMediaBox().getHeight();
+        // rescale img dims to be 1/2.5 of page dim
+        float nImgW = (1f/2.5f) * pageW;
+        float nimgH = (nImgW * oImgH) / oImgW;
+        float xoff = (pageW - nImgW) / 2;
+        float yoff = (pageH - nimgH) / 2;
+
+        float minImgAlpha = 0.08f;
+        float maxImgAlpha = 0.18f;
+        addWatermarkImagePDF(doc, page, imgPDF, xoff, yoff, nImgW, nimgH, minImgAlpha, maxImgAlpha);
+    }
+
+    public static void addWatermarkImagePDF(
+            final PDDocument doc, final PDPage page, final PDImageXObject imgPDF,
+            final float xPos, final float yPos, final float imgW, final float imgH,
+            final float minA, final float maxA) throws IOException {
         try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
                 true)) {
             contentStream.saveGraphicsState();
             PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
             pdExtGfxState.setBlendMode(BlendMode.MULTIPLY);
 
-            float minA = 0.08f; float maxA = 0.18f;
             // get uniform dist from minA to maxA in 0.01 diffs
             float alpha = (float)(rnd.nextInt((int)((maxA-minA)*100+1))+minA*100) / 100.0f;
             pdExtGfxState.setNonStrokingAlphaConstant(alpha);
             contentStream.setGraphicsStateParameters(pdExtGfxState);
             // draw on document
-            float imgW = imgPDF.getWidth();
-            float imgH = imgPDF.getHeight();
-            float pageW = page.getMediaBox().getWidth();
-            float pageH = page.getMediaBox().getHeight();
-            // rescale img dims to be 1/2.5 of page dim
-            float nImgW = (1f/2.5f) * pageW;
-            float nimgH = (nImgW * imgH) / imgW;
-            float xoff = (pageW - nImgW) / 2;
-            float yoff = (pageH - nimgH) / 2;
-            contentStream.drawImage(imgPDF, xoff, yoff, nImgW, nimgH);
+            contentStream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
             contentStream.restoreGraphicsState();
             contentStream.close();
         }

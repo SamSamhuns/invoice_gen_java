@@ -85,6 +85,7 @@ public class AmazonLayout implements InvoiceLayout {
         genProb.put("barcode_top", 60);
         genProb.put("registered_address_info", 50);
         genProb.put("barcode_bottom", 60);
+        genProb.put("stamp_bottom", 40);
         genProb.put("logo_watermark", 9);
         genProb.put("confidential_watermark", 40);
 
@@ -314,6 +315,28 @@ public class AmazonLayout implements InvoiceLayout {
             contentStream.drawImage(barCodeFooter, 25, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
         }
         contentStream.close();
+
+        // Add company stamp watermark, 40% prob
+        if (InvoiceLayout.getRandom().nextInt(100) < genProb.get("stamp_bottom")) {
+            // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
+            URI stampUri = new URI(this.getClass().getClassLoader().getResource("common/stamp/" + model.getCompany().getStamp().getFullPath()).getFile());
+            String stampPath = stampUri.getPath();
+            PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
+
+            float minAStamp = 0.6f; float maxAStamp = 0.8f;
+            float resDim = 90 + InvoiceLayout.getRandom().nextInt(20);
+            float xPosStamp; float yPosStamp;
+            // draw to lower right if signatire if present
+            if (InvoiceLayout.getRandom().nextInt(2) < 1 && model.getCompany().getSignature().getName() != null) {
+                xPosStamp = 390 + InvoiceLayout.getRandom().nextInt(10);
+                yPosStamp = 125 + InvoiceLayout.getRandom().nextInt(5);
+            }
+            else {  // draw to lower center
+                xPosStamp = page.getMediaBox().getWidth()/2 - (resDim/2);
+                yPosStamp = 125 + InvoiceLayout.getRandom().nextInt(5);
+            }
+            InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp, resDim, resDim, minAStamp, maxAStamp);
+        }
 
         // Add bg logo watermark or confidential stamp, but not both at once
         if (InvoiceLayout.getRandom().nextInt(100) < genProb.get("logo_watermark")) {

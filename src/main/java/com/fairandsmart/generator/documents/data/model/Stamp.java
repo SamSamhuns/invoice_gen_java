@@ -46,12 +46,12 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class Logo {
+public class Stamp {
 
     private String fullPath;
     private String name;
 
-    public Logo(String fullPath, String name) {
+    public Stamp(String fullPath, String name) {
         this.fullPath = fullPath;
         this.name = name;
     }
@@ -74,65 +74,65 @@ public class Logo {
 
     @Override
     public String toString() {
-        return "Logo{" +
+        return "Stamp{" +
                 "fullPath='" + fullPath + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }
 
-    public static List<Logo> getLogoList() {
+    public static List<Stamp> getLogoList() {
         final List<String> brandsFileList = Arrays.asList(
-                "common/logo/ae_en/metadata.json",
-                "common/logo/fr/metadata.json");
-        List<Logo> logos = new ArrayList<Logo>();
+                "common/stamp/ae_en/metadata.json");
+        List<Stamp> stamps = new ArrayList<Stamp>();
         {
           for (String brandFile : brandsFileList) {
-              Reader jsonReader = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(brandFile));
+              Reader jsonReader = new InputStreamReader(Stamp.class.getClassLoader().getResourceAsStream(brandFile));
               Gson gson = new Gson();
-              Type collectionType = new TypeToken<List<Logo>>(){}.getType();
-              logos.addAll(gson.fromJson(jsonReader, collectionType));
+              Type collectionType = new TypeToken<List<Stamp>>(){}.getType();
+              stamps.addAll(gson.fromJson(jsonReader, collectionType));
           }
         }
-        return logos;
+        return stamps;
     }
 
-    public static class Generator implements ModelGenerator<Logo> {
+    public static class Generator implements ModelGenerator<Stamp> {
 
-        private static List<Logo> logos = getLogoList();
+        private static List<Stamp> stamps = getLogoList();
 
         @Override
-        public Logo generate(GenerationContext ctx) {
-            Logo electibleLogo;
+        public Stamp generate(GenerationContext ctx) {
+            Stamp electibleLogo;
             // filter by brandname, default is .* so use all brands and then filter by country
-            List<Logo> electibleLogos = logos.stream().filter(logo ->
-                    logo.name.matches(ctx.getBrandName()) &&
-                    logo.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)")
+            List<Stamp> electibleLogos = stamps.stream().filter(stamp ->
+                    stamp.name.matches(ctx.getBrandName()) &&
+                    stamp.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)")
                     ).collect(Collectors.toList());
             if ( electibleLogos.size() > 0 ) {
                 electibleLogo = electibleLogos.get(ctx.getRandom().nextInt(electibleLogos.size()));
             } else {
-                electibleLogo = logos.get(ctx.getRandom().nextInt(logos.size()));
+                electibleLogo = stamps.get(ctx.getRandom().nextInt(stamps.size()));
             }
             return electibleLogo;
         }
     }
 
-    public Logo(GenerationContext ctx, String companyName) {
-        List<Logo> logos = getLogoList();
-        Logo electibleLogo;
+    public Stamp(GenerationContext ctx, String companyName) {
+        List<Stamp> stamps = getLogoList();
+        Stamp electibleLogo;
+        final String companyNameMod = companyName.replace(' ', '_').replace(".", "");
 
         // filter by brandname (default: .* so use all brands) and by country and the company name
-        List<Logo> electibleLogos = logos.stream().filter(logo ->
-                logo.name.matches(ctx.getBrandName()) &&
-                logo.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)") &&
-                logo.name.matches(companyName)
+        List<Stamp> electibleLogos = stamps.stream().filter(stamp ->
+                stamp.name.matches(ctx.getBrandName()) &&
+                stamp.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)") &&
+                stamp.name.matches(companyNameMod)
                 ).collect(Collectors.toList());
 
         if ( electibleLogos.size() > 0 ) {
             electibleLogo = electibleLogos.get(0);
         } else {
-            // if no mataches then use a random logo
-            electibleLogo = logos.get(ctx.getRandom().nextInt(logos.size()));
+            // if no mataches then use a random stamp
+            electibleLogo = stamps.get(ctx.getRandom().nextInt(stamps.size()));
         }
         this.fullPath = electibleLogo.fullPath;
         this.name = electibleLogo.name;

@@ -53,6 +53,7 @@ public class Company {
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
     private Logo logo;
+    private Stamp stamp;
     private IDNumbers idNumbers;
     private String name;
     private String industry;
@@ -71,6 +72,14 @@ public class Company {
 
     public void setLogo(Logo logo) {
         this.logo = logo;
+    }
+
+    public Stamp getStamp() {
+        return stamp;
+    }
+
+    public void setStamp(Stamp stamp) {
+        this.stamp = stamp;
     }
 
     public IDNumbers getIdNumbers() {
@@ -199,6 +208,7 @@ public class Company {
             List<Company> goodCompanies = companies.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
             Company company = goodCompanies.get(ctx.getRandom().nextInt(goodCompanies.size()));
             company.setLogo(new Logo(ctx, company.getName()));
+            company.setStamp(new Stamp(ctx, company.getName()));
             company.setIdNumbers(new IDNumbers.Generator().generate(ctx));
             company.setContact(new ContactNumber.Generator().generate(ctx));
             company.setSignature(new Signature.Generator().generate(ctx));

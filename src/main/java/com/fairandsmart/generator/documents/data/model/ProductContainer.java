@@ -389,7 +389,7 @@ public class ProductContainer {
             Float total = productContainer.getTotalWithTax();
             if(discountAvailable){
                 /// discount
-                Float discount =0.0f;
+                Float discount = 0.0f;
                 /*if(ctx.getRandom().nextBoolean()){
                     discount = ctx.getRandom().nextFloat()*0.4f*total;
                 }*/
