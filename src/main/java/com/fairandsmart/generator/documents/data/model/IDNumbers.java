@@ -114,12 +114,12 @@ public class IDNumbers {
         private static final Map<String, String> toaLabels = new HashMap<>();
 
         {
+            // specific to french invoices
             siretLabels.put("Siret", "fr");
             siretLabels.put("N° Siret", "fr");
 
             siretLabels.put("Siret", "en");
         }
-
         {
             toaLabels.put("Code APE", "fr");
             toaLabels.put("NAF", "fr");
@@ -128,15 +128,13 @@ public class IDNumbers {
             toaLabels.put("APE", "en");
             toaLabels.put("NAF", "en");
         }
-
-
         {
+            // specific to french invoices
             cidLabels.put("Siren", "fr");
             cidLabels.put("N° Siren", "fr");
 
             cidLabels.put("Siren", "en");
         }
-
         {
             vatLabels.put("Numéro de TVA", "fr");
             vatLabels.put("N° TVA Intracommunautaire", "fr");
@@ -150,23 +148,23 @@ public class IDNumbers {
             vatLabels.put("N° TVA", "fr");
 
             vatLabels.put("TRN No", "en");
-            // vatLabels.put("VAT Number", "en");
-            // vatLabels.put("VAT", "en");
-            // vatLabels.put("VAT/TIN Number", "en");
-
+            vatLabels.put("VAT Number", "en");
+            vatLabels.put("VAT", "en");
+            vatLabels.put("VAT/TIN Number", "en");
         }
-
         {
-            vatValues.put("[0-9]{14}", "AE_en");
+            vatValues.put("UAE[0-9]{14}", "AE_en");
+
+            vatValues.put("FR[0-9]{8}", "FR");
 
             vatValues.put("LU[0-9]{8}", "LU");
+
             vatValues.put("GB[0-9]{9}", "UK");
-            vatValues.put("GB[0-9]{3} [0-9]{4} [0-9]{2}", "UK");
             vatValues.put("GB[0-9]{9} [0-9]{3}", "UK");
+            vatValues.put("GB[0-9]{3} [0-9]{4} [0-9]{2}", "UK");
+
             vatValues.put("BE[0-9]{10}", "BE");
-
         }
-
 
         @Override
         public IDNumbers generate(GenerationContext ctx) {
@@ -205,7 +203,6 @@ public class IDNumbers {
                 }
             }
 
-
             List<String> localizedvatLabel = vatLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             int idxvL = ctx.getRandom().nextInt(localizedvatLabel.size());
             Generex generex2 = new Generex(localizedvatLabel.get(idxvL));
@@ -236,11 +233,10 @@ public class IDNumbers {
             String lineIn = null;
             Random random = new Random();
             int random_line = random.nextInt(1267 - 1 + 1) + 1;     // 1267 lines in file, each containg an ape code
-            String cwdPath = new File("").getAbsolutePath();       // current working directory
             try
             {
-                cwdPath = cwdPath.substring(0,cwdPath.lastIndexOf('/'));
-                fileReader = new FileReader(cwdPath+ "/src/main/resources/common/apecodes.txt" );
+                String codePath = this.getClass().getClassLoader().getResource("common/apecodes.txt").getFile();
+                fileReader = new FileReader(codePath);
                 reader = new BufferedReader(fileReader);
                 int i = 1;
                 while (((lineIn = reader.readLine()) !=null) && i!=random_line) {
@@ -249,7 +245,8 @@ public class IDNumbers {
 
             }
             catch(Exception e){
-                System.out.println("Cannot read from file");}
+                System.out.println(e);
+                System.out.println("Cannot read from apecodes.txt file");}
             finally{
                 if(lineIn != null)
                     reader.close();

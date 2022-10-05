@@ -344,13 +344,28 @@ public class ProductContainer {
             discountHeads.put("DISC", "en");
         }
 
-        private List<Product> products;
-        private static final String productsFile = "common/product/householdandmedia_en.json";
+        private List<Product> products = new ArrayList<Product>();
+        private List<String> productLangs = new ArrayList<String>();
+        private static final List<String> productsFileList = Arrays.asList(
+                "common/product/fr/householdandmedia_fr.json",
+                "common/product/en/householdandmedia_en.json");
+        private static final List<String> productsLangList = Arrays.asList(
+                "fr",
+                "en");
         {
-            Reader jsonReader = new InputStreamReader(ProductContainer.class.getClassLoader().getResourceAsStream(productsFile));
-            Gson gson = new Gson();
-            Type collectionType = new TypeToken<Collection<Product>>(){}.getType();
-            products = gson.fromJson(jsonReader, collectionType);
+            assert productsFileList.size() == productsLangList.size();
+            int currentListSize = 0;
+            for (int i = 0; i < productsFileList.size(); i++) {
+                Reader jsonReader = new InputStreamReader(ProductContainer.class.getClassLoader().getResourceAsStream(productsFileList.get(i)));
+                Gson gson = new Gson();
+                Type collectionType = new TypeToken<Collection<Product>>(){}.getType();
+                products.addAll(gson.fromJson(jsonReader, collectionType));
+
+                List<String> langList = Collections.nCopies(products.size() - currentListSize, productsLangList.get(i));
+                productLangs.addAll(langList);
+                currentListSize += products.size();
+            }
+            assert products.size() == productLangs.size();
         }
 
         @Override
@@ -368,17 +383,23 @@ public class ProductContainer {
             List<String> localSNHeads = snHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localdiscountHeads = discountHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
+            List<Product> productsCountryFiltered = new ArrayList<Product>();
+            for (int i = 0; i < products.size(); i++) {
+                if (productLangs.get(i) == ctx.getLanguage()) {
+                    productsCountryFiltered.add(products.get(i));
+                }
+            }
+
             int idxL = ctx.getRandom().nextInt(localqtyHeads.size());
             int idxD = ctx.getRandom().nextInt(localdiscountHeads.size());
 
-
-            int maxProduct = 6;
+            final int MAXPRODUCT = 6;
             ProductContainer productContainer = new ProductContainer(ctx.getCurrency(), localdescHeads.get(idxL), localqtyHeads.get(idxL),
                                                 localUPHeads.get(idxL), localtaxRateHeads.get(idxL), localtaxHeads.get(idxL), locallineTotalHeads.get(idxL),
                                                 localwithoutTaxTotalHeads.get(idxL), localTaxTotalHeads.get(idxL), localwithTaxTotalHeads.get(idxL), localSNHeads.get(idxL),localdiscountHeads.get(idxD));
-            for (int i = 0; i < ctx.getRandom().nextInt(maxProduct -1)+1; i++) {
+            for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
                 int maxQuantity = 5;
-                Product electibleProduct = products.get(ctx.getRandom().nextInt(products.size()));
+                Product electibleProduct = productsCountryFiltered.get(ctx.getRandom().nextInt(productsCountryFiltered.size()));
                 electibleProduct.setQuantity(ctx.getRandom().nextInt(maxQuantity -1) +1);
                 electibleProduct.setCurrency(ctx.getCurrency());
 
