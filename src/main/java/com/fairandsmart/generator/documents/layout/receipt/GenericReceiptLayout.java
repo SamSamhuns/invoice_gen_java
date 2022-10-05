@@ -169,8 +169,8 @@ public class GenericReceiptLayout implements SSDLayout {
         SimpleTextBox companyAddressline1 = new SimpleTextBox(fonts[0], fontSize, 0, 0, model.getCompany().getAddress().getLine1(), Color.BLACK, null, HAlign.CENTER, "SA");
         SimpleTextBox companyAddressline2 = new SimpleTextBox(fonts[0], fontSize, 0, 0, model.getCompany().getAddress().getZip() + " " +model.getCompany().getAddress().getCity(), Color.BLACK, null, HAlign.CENTER, "SA");
         SimpleTextBox companyAddressline3 = new SimpleTextBox(fonts[0], fontSize, 0, 0, model.getCompany().getAddress().getCountry(), Color.BLACK, null, HAlign.CENTER, "SA");
-        SimpleTextBox phone = new SimpleTextBox(fonts[0], 9, 0, 0, model.getCompany().getContact().getphoneLabel()+" "+model.getCompany().getContact().getphoneValue(), Color.BLACK, null, HAlign.CENTER);//, "SCN");
-        SimpleTextBox fax = new SimpleTextBox(fonts[0], 9, 0, 0, model.getCompany().getContact().getfaxLabel()+"  "+model.getCompany().getContact().getfaxValue());//,"SFAX");
+        SimpleTextBox phone = new SimpleTextBox(fonts[0], 9, 0, 0, model.getCompany().getContact().getPhoneLabel()+" "+model.getCompany().getContact().getPhoneValue(), Color.BLACK, null, HAlign.CENTER);//, "SCN");
+        SimpleTextBox fax = new SimpleTextBox(fonts[0], 9, 0, 0, model.getCompany().getContact().getFaxLabel()+"  "+model.getCompany().getContact().getFaxValue());//,"SFAX");
         SimpleTextBox reference = new SimpleTextBox(fonts[0], 9, 0, 0, "(" +this.model.getReference().getValueCommand() +")",Color.BLACK, null, HAlign.CENTER);//,"ONUM");
         firstPart = new TableRowBox(configRow1v1, 0, 0);
         HorizontalContainer b0 = new HorizontalContainer(0,0);

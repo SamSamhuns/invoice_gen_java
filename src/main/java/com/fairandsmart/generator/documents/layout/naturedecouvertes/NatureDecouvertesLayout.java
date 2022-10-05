@@ -79,8 +79,8 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         Address address = model.getCompany().getAddress();
 
         PDFont font = PDType1Font.HELVETICA;
-        PDFont fontBold = PDType1Font.HELVETICA_BOLD;
-        PDFont fontItalic = PDType1Font.HELVETICA_OBLIQUE;
+        PDFont fontBold1 = PDType1Font.HELVETICA_BOLD;
+        PDFont fontItalic1 = PDType1Font.HELVETICA_OBLIQUE;
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         String logo = this.getClass().getClassLoader().getResource("invoices/parts/amazon/barcode1.jpg").getFile();
@@ -96,16 +96,16 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         contentStream.drawImage(logoHeader, posLogoX, posLogoY, widthLogo,heightLogo);
 
         VerticalContainer headerContainer = new VerticalContainer(1282*ratioPage,page.getMediaBox().getHeight()-132*ratioPage,250);
-        headerContainer.addElement(new SimpleTextBox(fontBold,12,0,0,model.getCompany().getName(),"SN"));
+        headerContainer.addElement(new SimpleTextBox(fontBold1,12,0,0,model.getCompany().getName(),"SN"));
         headerContainer.addElement(new SimpleTextBox(font,10,0,0,model.getCompany().getAddress().getLine1(),"SA"));
         headerContainer.addElement(new SimpleTextBox(font,10,0,0,model.getCompany().getAddress().getZip()+" "+model.getCompany().getAddress().getCity(),"SA"));
         headerContainer.addElement(new SimpleTextBox(font,10,0,0,model.getCompany().getAddress().getCountry(),"SA"));
-        headerContainer.addElement(new SimpleTextBox(font,10,0,0,"Telephone : "+model.getCompany().getContact().getphoneValue(),"SA"));
+        headerContainer.addElement(new SimpleTextBox(font,10,0,0,"Telephone : "+model.getCompany().getContact().getPhoneValue(),"SA"));
         headerContainer.build(contentStream,writer);
 
         VerticalContainer shippingContainer = new VerticalContainer(147*ratioPage,page.getMediaBox().getHeight()-499*ratioPage,250);
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0,"Delivery address"));
-        shippingContainer.addElement(new SimpleTextBox(fontBold,11,0,0,model.getClient().getShippingName().toUpperCase(),"SHN"));
+        shippingContainer.addElement(new SimpleTextBox(fontBold1,11,0,0,model.getClient().getShippingName().toUpperCase(),"SHN"));
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getShippingAddress().getLine1().toUpperCase(),"SHA"));
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getShippingAddress().getZip()+" "+model.getClient().getShippingAddress().getCity().toUpperCase(),"SHA"));
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0, "Tel : 06"+(int)(1000000+(Math.random()*(99999999 - 1000000)))));
@@ -114,7 +114,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         VerticalContainer billingContainer = new VerticalContainer(1282*ratioPage,page.getMediaBox().getHeight()-499*ratioPage,250);
         billingContainer.addElement(new SimpleTextBox(font,10, 0,0,"Billing address"));
-        billingContainer.addElement(new SimpleTextBox(fontBold,11,0,0,model.getClient().getBillingName().toUpperCase(),"BN"));
+        billingContainer.addElement(new SimpleTextBox(fontBold1,11,0,0,model.getClient().getBillingName().toUpperCase(),"BN"));
         billingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getBillingAddress().getLine1().toUpperCase(),"BA"));
         billingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getBillingAddress().getZip()+" "+model.getClient().getBillingAddress().getCity().toUpperCase(),"BA"));
 
@@ -145,12 +145,12 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, idNumbers.getSiretValue(),"SSIRET"));
         infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, " - "+ idNumbers.getVatLabel() +" : "));
         infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, idNumbers.getVatValue(),"SVAT"));
-        infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, " - "+model.getCompany().getContact().getfaxLabel()+" : "));
-        infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getContact().getfaxValue(),"SFAX"));
+        infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, " - "+model.getCompany().getContact().getFaxLabel()+" : "));
+        infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getContact().getFaxValue(),"SFAX"));
 
         HorizontalContainer infoEntreprise3 = new HorizontalContainer(0,0);
-        infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getContact().getphoneLabel()+" : "));
-        infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getContact().getphoneValue(),"SCN"));
+        infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getContact().getPhoneLabel()+" : "));
+        infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getContact().getPhoneValue(),"SCN"));
 
         float millieuPageX = page.getMediaBox().getWidth()/2;
         infoEntreprise.translate(millieuPageX-infoEntreprise.getBoundingBox().getWidth()/2,58);
@@ -207,7 +207,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         verticalInvoiceItems.build(contentStream, writer);
 
         VerticalContainer paymentTypeContainer = new VerticalContainer(1476*ratioPage,page.getMediaBox().getHeight()-2479*ratioPage,250);
-        paymentTypeContainer.addElement(new SimpleTextBox(fontBold,11,0,0,"TOTAL T.T.C"));
+        paymentTypeContainer.addElement(new SimpleTextBox(fontBold1,11,0,0,"TOTAL T.T.C"));
         paymentTypeContainer.addElement(new SimpleTextBox(font,8,0,0,"Regulated by : "+model.getPaymentInfo().getLabelType(),"PT"));
         paymentTypeContainer.build(contentStream,writer);
 

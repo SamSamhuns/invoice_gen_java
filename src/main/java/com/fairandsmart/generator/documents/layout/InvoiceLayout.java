@@ -64,29 +64,39 @@ public interface InvoiceLayout {
   String name();
   Random rnd = new Random();
 
-  public class pdType1FontPair {
-      private PDType1Font normalFont;
-      private PDType1Font boldFont;
+  public class pdType1Fonts {
+      private PDFont fontNormal;
+      private PDFont fontBold;
+      private PDFont fontItalic;
 
-      public pdType1FontPair (PDType1Font normalFont, PDType1Font boldFont) {
-          this.normalFont = normalFont;
-          this.boldFont = boldFont;
+      public pdType1Fonts (PDFont fontNormal, PDFont fontBold, PDFont fontItalic) {
+          this.fontNormal = fontNormal;
+          this.fontBold = fontBold;
+          this.fontItalic = fontItalic;
       }
 
-      public PDType1Font getNormalFont() {
-          return this.normalFont;
+      public PDFont getFontNormal() {
+          return this.fontNormal;
       }
 
-      public void setNormalFont(PDType1Font font) {
-          this.normalFont = font;
+      public void setfontNormal(PDFont font) {
+          this.fontNormal = font;
       }
 
-      public PDType1Font getBoldFont() {
-          return this.boldFont;
+      public PDFont getFontBold() {
+          return this.fontBold;
       }
 
-      public void setBoldFont(PDType1Font font) {
-          this.boldFont = font;
+      public void setfontBold(PDFont font) {
+          this.fontBold = font;
+      }
+
+      public PDFont getFontItalic() {
+          return this.fontItalic;
+      }
+
+      public void setfontItalic(PDFont font) {
+          this.fontItalic = font;
       }
   }
 
@@ -104,28 +114,29 @@ public interface InvoiceLayout {
           return canvas.getBufferedImage();
   }
 
-  public static pdType1FontPair getRandomPDType1FontPair() throws Exception {
-          final List<PDType1Font> pdType1NormalFontList = Arrays.asList(
+  public static pdType1Fonts getRandomPDType1Fonts() throws Exception {
+          final List<PDFont> pd1fontNormalList = Arrays.asList(
                   PDType1Font.HELVETICA,
                   PDType1Font.COURIER,
                   PDType1Font.TIMES_ROMAN);
-                  // PDType1Font.COURIER_OBLIQUE,
-                  // PDType1Font.HELVETICA_OBLIQUE,
-                  // PDType1Font.TIMES_ITALIC);
-          final List<PDType1Font> pdType1BoldFontList = Arrays.asList(
+          final List<PDFont> pd1fontBoldList = Arrays.asList(
                   PDType1Font.HELVETICA_BOLD,
                   PDType1Font.COURIER_BOLD,
                   PDType1Font.TIMES_BOLD);
+          final List<PDFont> pd1fontItalicList = Arrays.asList(
+                  PDType1Font.HELVETICA_OBLIQUE,
+                  PDType1Font.COURIER_OBLIQUE,
+                  PDType1Font.TIMES_ITALIC);
                   // PDType1Font.COURIER_BOLD_OBLIQUE,
                   // PDType1Font.HELVETICA_BOLD_OBLIQUE,
                   // PDType1Font.TIMES_BOLD_ITALIC);
-          assert pdType1NormalFontList.size() == pdType1BoldFontList.size();
-          int fontIdx = rnd.nextInt(pdType1NormalFontList.size());
+          assert pd1fontNormalList.size() == pd1fontBoldList.size();
+          assert pd1fontNormalList.size() == pd1fontItalicList.size();
+          int fontIdx = rnd.nextInt(pd1fontNormalList.size());
 
-          return new pdType1FontPair(
-                  pdType1NormalFontList.get(fontIdx),
-                  pdType1BoldFontList.get(fontIdx)
-                  );
+          return new pdType1Fonts(pd1fontNormalList.get(fontIdx),
+                                  pd1fontBoldList.get(fontIdx),
+                                  pd1fontItalicList.get(fontIdx));
       }
 
   public static Color getRandomColor(int cSize) throws Exception {

@@ -170,14 +170,15 @@ public class InvoiceDate {
             labelsCommand.put("Commandé le", "fr");
             labelsCommand.put("Date de commande", "fr");
 
-            labelsCommand.put("Command date", "en");
+            labelsCommand.put("Order date", "en");
+            labelsCommand.put("Date of Order", "en");
         }
         {
             labelsExpedition.put("Expédié le", "fr");
             labelsExpedition.put("Date d'expédition", "fr");
 
-            labelsExpedition.put("Expedition date", "en");
-            labelsExpedition.put("Date of Expedition", "en");
+            labelsExpedition.put("Shipping date", "en");
+            labelsExpedition.put("Date of Shipment", "en");
         }
         {
             labelsPayment.put("Payé le", "fr");

@@ -148,12 +148,10 @@ public class InvoiceGenerator {
         int start = Integer.parseInt(args[1]);
         int stop = Integer.parseInt(args[2]);
         for ( int i=start; i<stop; i++) {
-            //String ts = "" + System.currentTimeMillis();
             Path pdf = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".pdf");
             Path xml = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
             Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".tiff");
             Path json = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".json");
-            // Path xmlEval = Paths.get("target/generated/" + args[0] + "/basicEval-"+ i + ".tiff");
 
             GenerationContext ctx = GenerationContext.generate();
             InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

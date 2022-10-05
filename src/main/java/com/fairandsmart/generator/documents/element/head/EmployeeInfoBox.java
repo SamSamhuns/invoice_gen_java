@@ -48,7 +48,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class EmployeeInfoBox extends ElementBox{
     private PDFont font;
-    private PDFont fontBold;
+    private PDFont fontBold1;
     private float fontSize;
     private PayslipModel model;
     private VerticalContainer container;
@@ -58,9 +58,9 @@ public class EmployeeInfoBox extends ElementBox{
     public EmployeeInfoBox( HorizontalContainer hcontainer){this.hcontainer = hcontainer;}
     public EmployeeInfoBox( VerticalContainer container){this.container = container;}
 
-    public EmployeeInfoBox(PDFont font, PDFont fontBold, float fontSize, PayslipModel model, PDDocument document) throws Exception {
+    public EmployeeInfoBox(PDFont font, PDFont fontBold1, float fontSize, PayslipModel model, PDDocument document) throws Exception {
         this.font = font;
-        this.fontBold = fontBold;
+        this.fontBold1 = fontBold1;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;
@@ -79,7 +79,7 @@ public class EmployeeInfoBox extends ElementBox{
     public VerticalContainer getEmployeeAddressBlock() throws Exception
     {
         VerticalContainer addContainer = new VerticalContainer(0,0,0);
-        SimpleTextBox name = new SimpleTextBox(fontBold, fontSize, 0, 0, model.getEmployee().getName(), "EN");
+        SimpleTextBox name = new SimpleTextBox(fontBold1, fontSize, 0, 0, model.getEmployee().getName(), "EN");
         //name.setEntityName("SN");
         addContainer.addElement(name);
         SimpleTextBox adresse1 = new SimpleTextBox(font, fontSize, 0, 0, model.getEmployee().getAddress().getLine1(), "EA");

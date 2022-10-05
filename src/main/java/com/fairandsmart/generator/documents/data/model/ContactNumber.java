@@ -56,35 +56,35 @@ public class ContactNumber {
         this.faxValue = faxValue;
     }
 
-    public String getphoneLabel() {
+    public String getPhoneLabel() {
         return phoneLabel;
     }
 
-    public void setphoneLabel(String phoneLabel) {
+    public void setPhoneLabel(String phoneLabel) {
         this.phoneLabel = phoneLabel;
     }
 
-    public String getphoneValue() {
+    public String getPhoneValue() {
         return phoneValue;
     }
 
-    public void setphoneValue(String phoneValue) {
+    public void setPhoneValue(String phoneValue) {
         this.phoneValue = phoneValue;
     }
 
-    public String getfaxLabel() {
+    public String getFaxLabel() {
         return faxLabel;
     }
 
-    public void setfaxLabel(String faxLabel) {
+    public void setFaxLabel(String faxLabel) {
         this.faxLabel = faxLabel;
     }
 
-    public String getfaxValue() {
+    public String getFaxValue() {
         return faxValue;
     }
 
-    public void setfaxValue(String faxValue) {
+    public void setFaxValue(String faxValue) {
         this.faxValue = faxValue;
     }
 

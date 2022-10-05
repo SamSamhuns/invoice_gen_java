@@ -49,16 +49,16 @@ import javax.xml.stream.XMLStreamWriter;
 public class ClientInfoBox extends ElementBox {
 
     private PDFont font;
-    private PDFont fontBold;
+    private PDFont fontBold1;
     private float fontSize;
     private InvoiceModel model;
     private VerticalContainer container;
     private PDDocument document;
     private String addressType;
 
-    public ClientInfoBox(PDFont font, PDFont fontBold, float fontSize, InvoiceModel model, PDDocument document, String addressType) throws Exception {
+    public ClientInfoBox(PDFont font, PDFont fontBold1, float fontSize, InvoiceModel model, PDDocument document, String addressType) throws Exception {
         this.font = font;
-        this.fontBold = fontBold;
+        this.fontBold1 = fontBold1;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;
@@ -84,16 +84,16 @@ public class ClientInfoBox extends ElementBox {
 
         if(addressType.equals("Billing") && noBillHeading>6)
         {
-            heading = new SimpleTextBox(fontBold, fontSize+2, 0,0, "");
+            heading = new SimpleTextBox(fontBold1, fontSize+2, 0,0, "");
         }
         else
-            heading = new SimpleTextBox(fontBold, fontSize+2, 0,0, model.callviaName(client_obj,"get"+addressType+"Head").toString());
+            heading = new SimpleTextBox(fontBold1, fontSize+2, 0,0, model.callviaName(client_obj,"get"+addressType+"Head").toString());
 
         container.addElement(heading);
 
         //container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
-        SimpleTextBox name = new SimpleTextBox(fontBold, fontSize, 0,0, model.callviaName(client_obj,"get"+addressType+"Name").toString());
+        SimpleTextBox name = new SimpleTextBox(fontBold1, fontSize, 0,0, model.callviaName(client_obj,"get"+addressType+"Name").toString());
         name.setEntityName(entityPrefix+"N");
         container.addElement(name);
 

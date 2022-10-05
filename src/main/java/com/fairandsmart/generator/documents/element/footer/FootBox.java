@@ -48,17 +48,17 @@ import javax.xml.stream.XMLStreamWriter;
 public class FootBox extends ElementBox {
 
     private PDFont font;
-    private PDFont fontBold;
-    private PDFont fontItalic;
+    private PDFont fontBold1;
+    private PDFont fontItalic1;
     private float fontSize;
     private InvoiceModel model;
     private VerticalContainer container;
     private PDDocument document;
 
-    public FootBox(PDFont font, PDFont fontBold, PDFont fontItalic, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
+    public FootBox(PDFont font, PDFont fontBold1, PDFont fontItalic1, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
         this.font = font;
-        this.fontBold = fontBold;
-        this.fontItalic = fontItalic;
+        this.fontBold1 = fontBold1;
+        this.fontItalic1 = fontItalic1;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;

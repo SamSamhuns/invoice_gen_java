@@ -55,7 +55,7 @@ import java.util.List;
 public class CompanyInfoBoxPayslip extends ElementBox {
 
     private PDFont font;
-    private PDFont fontBold;
+    private PDFont fontBold1;
     private float fontSize;
     private Model model;
     private VerticalContainer container;
@@ -81,9 +81,9 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     public CompanyInfoBoxPayslip(HorizontalContainer hcontainer){this.hcontainer = hcontainer;}
     public CompanyInfoBoxPayslip(VerticalContainer container){this.container = container;}
 
-    public CompanyInfoBoxPayslip(PDFont font, PDFont fontBold, float fontSize, Model model, PDDocument document) throws Exception {
+    public CompanyInfoBoxPayslip(PDFont font, PDFont fontBold1, float fontSize, Model model, PDDocument document) throws Exception {
         this.font = font;
-        this.fontBold = fontBold;
+        this.fontBold1 = fontBold1;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;
@@ -114,7 +114,7 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     public VerticalContainer getCompanyAddressBlock() throws Exception
     {
         VerticalContainer addContainer = new VerticalContainer(0,0,0);
-        SimpleTextBox name = new SimpleTextBox(fontBold, fontSize, 0, 0, model.getCompany().getName(), "SN");
+        SimpleTextBox name = new SimpleTextBox(fontBold1, fontSize, 0, 0, model.getCompany().getName(), "SN");
         //name.setEntityName("SN");
         addContainer.addElement(name);
         SimpleTextBox adresse1 = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getAddress().getLine1(), "SA");
@@ -154,7 +154,7 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     public HorizontalContainer getCompanyNameLine() throws Exception
     {
         HorizontalContainer companyNameContainer = new HorizontalContainer(0, 0);
-        SimpleTextBox name = new SimpleTextBox(fontBold, fontSize, 0, 0, model.getCompany().getName(),"SN");
+        SimpleTextBox name = new SimpleTextBox(fontBold1, fontSize, 0, 0, model.getCompany().getName(),"SN");
         //name.setEntityName("SN");
         companyNameContainer.addElement(name);
         return companyNameContainer;
@@ -215,12 +215,12 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     {
         VerticalContainer contactContainer = new VerticalContainer(0, 0, 0);
 
-        if (model.getCompany().getContact().getphoneValue() != null && model.getCompany().getContact().getphoneValue().length() > 0) {
+        if (model.getCompany().getContact().getPhoneValue() != null && model.getCompany().getContact().getPhoneValue().length() > 0) {
             HorizontalContainer phoneContainer = new HorizontalContainer(0, 0);
-            SimpleTextBox phoneLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getphoneLabel());
+            SimpleTextBox phoneLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getPhoneLabel());
             phoneLabel.setPadding(0, 0, 5, 0);
             phoneContainer.addElement(phoneLabel);
-            SimpleTextBox phoneValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getphoneValue(),"SCN");
+            SimpleTextBox phoneValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getPhoneValue(),"SCN");
             phoneValue.setPadding(5, 0, 0, 0);
             //phoneValue.setEntityName("SCN");
             phoneContainer.addElement(phoneValue);
@@ -228,12 +228,12 @@ public class CompanyInfoBoxPayslip extends ElementBox {
             contactContainer.addElement(phoneContainer);
         }
 
-        if (model.getCompany().getContact().getfaxValue() != null && model.getCompany().getContact().getfaxValue().length() > 0) {
+        if (model.getCompany().getContact().getFaxValue() != null && model.getCompany().getContact().getFaxValue().length() > 0) {
             HorizontalContainer faxContainer = new HorizontalContainer(0, 0);
-            SimpleTextBox faxLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getfaxLabel());
+            SimpleTextBox faxLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getFaxLabel());
             faxLabel.setPadding(0, 0, 5, 0);
             faxContainer.addElement(faxLabel);
-            SimpleTextBox faxValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getfaxValue(),"SFAX");
+            SimpleTextBox faxValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getFaxValue(),"SFAX");
             faxValue.setPadding(5, 0, 0, 0);
             //faxValue.setEntityName("SFAX");
             faxContainer.addElement(faxValue);
@@ -271,21 +271,21 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     {
         HorizontalContainer contactContainer = new HorizontalContainer( 0, 0);
 
-        if (model.getCompany().getContact().getphoneValue() != null && model.getCompany().getContact().getphoneValue().length() > 0) {
-            SimpleTextBox phoneLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getphoneLabel());
+        if (model.getCompany().getContact().getPhoneValue() != null && model.getCompany().getContact().getPhoneValue().length() > 0) {
+            SimpleTextBox phoneLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getPhoneLabel());
             phoneLabel.setPadding(0, 0, 2, 0);
             contactContainer.addElement(phoneLabel);
-            SimpleTextBox phoneValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getphoneValue(),"SCN");
+            SimpleTextBox phoneValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getPhoneValue(),"SCN");
             phoneValue.setPadding(2, 0, 4, 0);
             //phoneValue.setEntityName("SCN");
             contactContainer.addElement(phoneValue);
         }
 
-        if (model.getCompany().getContact().getfaxValue() != null && model.getCompany().getContact().getfaxValue().length() > 0) {
-            SimpleTextBox faxLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getfaxLabel());
+        if (model.getCompany().getContact().getFaxValue() != null && model.getCompany().getContact().getFaxValue().length() > 0) {
+            SimpleTextBox faxLabel = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getFaxLabel());
             faxLabel.setPadding(0, 0, 2, 0);
             contactContainer.addElement(faxLabel);
-            SimpleTextBox faxValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getfaxValue(),"SFAX");
+            SimpleTextBox faxValue = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getContact().getFaxValue(),"SFAX");
             faxValue.setPadding(2, 0, 0, 0);
             //faxValue.setEntityName("SFAX");
             contactContainer.addElement(faxValue);

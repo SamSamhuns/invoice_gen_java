@@ -57,7 +57,7 @@ public class SumUpSalaryPayslipBox extends ElementBox {
 
     private static DecimalFormat df = new DecimalFormat("0.00");
     private PDFont font;
-    private PDFont fontBold;
+    private PDFont fontBold1;
     private float fontSize;
     private PayslipModel model;
     private VerticalContainer container;
@@ -69,9 +69,9 @@ public class SumUpSalaryPayslipBox extends ElementBox {
     public SumUpSalaryPayslipBox(HorizontalContainer hcontainer){this.hcontainer = hcontainer;}
     public SumUpSalaryPayslipBox(VerticalContainer container){this.container = container;}
 
-    public SumUpSalaryPayslipBox(PDFont font, PDFont fontBold, float fontSize, PayslipModel model, PDDocument document) throws Exception {
+    public SumUpSalaryPayslipBox(PDFont font, PDFont fontBold1, float fontSize, PayslipModel model, PDDocument document) throws Exception {
         this.font = font;
-        this.fontBold = fontBold;
+        this.fontBold1 = fontBold1;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;

@@ -58,7 +58,7 @@ public class ReceiptGSTSammury extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
     private PDFont font;
-    private PDFont fontBold;
+    private PDFont fontBold1;
     private float fontSize;
     private Color headBackgroundColor;
     private Color bodyBackgroundColor;
@@ -89,11 +89,11 @@ public class ReceiptGSTSammury extends ElementBox {
         return rnd;
     }
 
-    public ReceiptGSTSammury(float posX, float posY, ProductReceiptContainer productContainer, PDFont font, PDFont fontBold, float fontSize) throws Exception {
+    public ReceiptGSTSammury(float posX, float posY, ProductReceiptContainer productContainer, PDFont font, PDFont fontBold1, float fontSize) throws Exception {
         container = new VerticalContainer(posX, posY, 0);
         this.productContainer = productContainer;
         this.font = font;
-        this.fontBold = fontBold;
+        this.fontBold1 = fontBold1;
         this.fontSize = fontSize;
         this.init();
     }
@@ -138,7 +138,7 @@ public class ReceiptGSTSammury extends ElementBox {
 
         for(String colname: chosenFormat)
         {
-            head.addElement(new SimpleTextBox(fontBold, fontSize+1, 0, 0, headLabels.get(colname), Color.BLACK, null, HAlign.CENTER), false);
+            head.addElement(new SimpleTextBox(fontBold1, fontSize+1, 0, 0, headLabels.get(colname), Color.BLACK, null, HAlign.CENTER), false);
         }
         container.addElement(head);
 

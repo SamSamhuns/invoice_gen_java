@@ -105,7 +105,7 @@ public class LDLCLayout implements InvoiceLayout {
 
         HorizontalContainer infoEntreprise2 = new HorizontalContainer(0,0);
         infoEntreprise2.addElement(new SimpleTextBox(font,6,0,0, "Non-surcharged Customer Service number : "));
-        infoEntreprise2.addElement(new SimpleTextBox(font,6,0,0, model.getCompany().getContact().getphoneValue(),"SCN"));
+        infoEntreprise2.addElement(new SimpleTextBox(font,6,0,0, model.getCompany().getContact().getPhoneValue(),"SCN"));
 
         HorizontalContainer infoEntreprise3 = new HorizontalContainer(0,0);
         infoEntreprise3.addElement(new SimpleTextBox(font,6,0,0, "Find all of our contact details on our website. "));
@@ -273,7 +273,7 @@ public class LDLCLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getTotalPriceWithoutTax()*(reduc/100)) ), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, "PIE"), false);
             VAT = randomProduct.getTaxRate()*1000;
-
+            // TODO fix hardcoded tax value checks
             switch ((int)VAT){
                 case 200 :
                     TVACode = "4";
@@ -290,7 +290,6 @@ public class LDLCLayout implements InvoiceLayout {
                     tabTVA[0][w] = TVACode;
                     tabTVA[1][w] = Float.toString(randomProduct.getTotalPriceWithoutTax());
                     break;
-
                 case 21 :
                     TVACode = "1";
                     tabTVA[0][w] = TVACode;
@@ -328,7 +327,6 @@ public class LDLCLayout implements InvoiceLayout {
         float totalTVA3 = 0 ;
         float totalTVA2 = 0 ;
         float totalTVA1 = 0 ;
-
         for(int i=0; i<tabTVA[0].length; i++) {
             switch (tabTVA[0][i]){
                 case "4" :

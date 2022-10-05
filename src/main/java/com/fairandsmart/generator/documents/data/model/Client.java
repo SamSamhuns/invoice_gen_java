@@ -51,17 +51,23 @@ public class Client {
     private String billingHead;
     private String billingName;
     private Address billingAddress;
+    private ContactNumber billingContactNumber;
+
     private String shippingHead;
     private String shippingName;
     private Address shippingAddress;
+    private ContactNumber shippingContactNumber;
 
-    public Client(String billingHead, String billingName, Address billingAddress, String shippingHead,String shippingName, Address shippingAddress) {
+    public Client(String billingHead, String billingName, Address billingAddress, ContactNumber billingContactNumber,
+                  String shippingHead, String shippingName, Address shippingAddress, ContactNumber shippingContactNumber) {
         this.billingHead = billingHead;
         this.billingName = billingName;
         this.billingAddress = billingAddress;
+        this.billingContactNumber = billingContactNumber;
         this.shippingHead = shippingHead;
         this.shippingName = shippingName;
         this.shippingAddress = shippingAddress;
+        this.shippingContactNumber = shippingContactNumber;
     }
 
     public String getBillingHead() {
@@ -88,6 +94,14 @@ public class Client {
         this.billingAddress = billingAddress;
     }
 
+    public ContactNumber getBillingContactNumber() {
+        return billingContactNumber;
+    }
+
+    public void setBillingContactNumber(ContactNumber billingContactNumber) {
+        this.billingContactNumber = billingContactNumber;
+    }
+
     public String getShippingHead() {
         return shippingHead;
     }
@@ -112,15 +126,25 @@ public class Client {
         this.shippingAddress = shippingAddress;
     }
 
+    public ContactNumber getShippingContactNumber() {
+        return shippingContactNumber;
+    }
+
+    public void setShippingContactNumber(ContactNumber shippingContactNumber) {
+        this.shippingContactNumber = shippingContactNumber;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
                 "billingHead='" + billingHead + '\'' +
                 ", billingName=" + billingName +
                 ", billingAddress=" + billingAddress +
+                ", billingContactNumber=" + billingContactNumber +
                 "shippingHead='" + shippingHead + '\'' +
                 ", shippingName=" + shippingName +
                 ", shippingAddress=" + shippingAddress +
+                ", shippingContactNumber=" + shippingContactNumber +
                 '}';
     }
 
@@ -165,10 +189,13 @@ public class Client {
             String shippingName = billingName;
             Address billingAddress = new Address.Generator().generate(ctx);
             Address shippingAddress = billingAddress;
+            ContactNumber billingContactNumber = new ContactNumber.Generator().generate(ctx);
+            ContactNumber shippingContactNumber = billingContactNumber;
 
-            // shippingAddress is different
+            // shippingAddress & shippingContactNumber is different
             if ( ctx.getRandom().nextInt(50) < 10 ) {
                 shippingAddress = new Address.Generator().generate(ctx);
+                shippingContactNumber = new ContactNumber.Generator().generate(ctx);
             }
             // shippingName is different
             if ( ctx.getRandom().nextInt(50) < 5 ) {
@@ -178,6 +205,7 @@ public class Client {
             if ( ctx.getRandom().nextInt(50) < 4 ) {
                 shippingName = "Same as Billing Address";
                 shippingAddress = new Address("", "", "", "", "", "");
+                shippingContactNumber = new ContactNumber("", "", "", "");
             }
 
             // For Address Heads
@@ -186,14 +214,15 @@ public class Client {
             assert localizedBillHeads.size() == localizedShipHeads.size();
             int idxA = ctx.getRandom().nextInt(localizedBillHeads.size()); // Note: Only one index for both shipping & billing, to retrieve similar format heads!
             Client genClient = new Client(
-                    localizedBillHeads.get(idxA), billingName, billingAddress,
-                    localizedShipHeads.get(idxA), shippingName, shippingAddress);
+                    localizedBillHeads.get(idxA), billingName, billingAddress, billingContactNumber,
+                    localizedShipHeads.get(idxA), shippingName, shippingAddress, shippingContactNumber);
 
             // shippingAddress is not present
             if ( ctx.getRandom().nextInt(50) < 2 ) {
                 genClient.setShippingHead("");
                 genClient.setShippingName("");
                 genClient.setShippingAddress(new Address("", "", "", "", "", ""));
+                genClient.setShippingContactNumber(new ContactNumber("", "", "", ""));
             }
             return genClient;
         }

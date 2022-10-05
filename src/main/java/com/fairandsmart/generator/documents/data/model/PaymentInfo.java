@@ -140,7 +140,7 @@ public class PaymentInfo {
         }
         {
             valuesType.put("Paypal", "en");
-            valuesType.put("Credit card", "en");
+            valuesType.put("Credit Card", "en");
             valuesType.put("Bank Transfer", "en");
             valuesType.put("Cheque", "en");
 

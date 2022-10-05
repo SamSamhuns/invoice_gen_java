@@ -75,10 +75,10 @@ public class TestProductBox implements InvoiceLayout {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
         PDFont font = PDType1Font.HELVETICA;
-        PDFont fontBold = PDType1Font.HELVETICA_BOLD;
+        PDFont fontBold1 = PDType1Font.HELVETICA_BOLD;
         float fontSize = 10;
 
-        ProductBox products = new ProductBox(30, 500, model.getProductContainer(), font, fontBold, fontSize);
+        ProductBox products = new ProductBox(30, 500, model.getProductContainer(), font, fontBold1, fontSize);
         products.build(contentStream, writer);
 
         contentStream.close();
