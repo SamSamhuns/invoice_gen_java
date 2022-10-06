@@ -99,7 +99,8 @@ public class BDmobilierLayout implements InvoiceLayout {
         PDFont fontItalic1 = fontPair.getFontItalic();
 
         float leftMarginX = 10;
-        PDFont companyNameFontFace = (rnd.nextInt(2) == 1) ? fontNormal1 : fontBold1;
+        float middlePageX = page.getMediaBox().getWidth()/2;
+        PDFont normalOrBoldFont = (rnd.nextInt(2) == 1) ? fontNormal1 : fontBold1;
         Color grayishFontColor = InvoiceLayout.getRandomColor(3);
 
         /* Build Page components now */
@@ -120,10 +121,8 @@ public class BDmobilierLayout implements InvoiceLayout {
         if (rnd.nextInt(100) < genProb.get("switch_bill_ship_addresses")) {
             float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
         }
-        float billX = leftAddrX;
-        float billY = page.getMediaBox().getHeight()-121;
-        float shipX = rightAddrX;
-        float shipY = page.getMediaBox().getHeight()-121;
+        float billX = leftAddrX; float billY = page.getMediaBox().getHeight()-121;
+        float shipX = rightAddrX; float shipY = page.getMediaBox().getHeight()-121;
 
         // Billing Address
         VerticalContainer billingContainer = new VerticalContainer(billX,billY,250);
@@ -149,7 +148,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Top right company info
         VerticalContainer headerContainer = new VerticalContainer(420, page.getMediaBox().getHeight()-9,250);
-        headerContainer.addElement(new SimpleTextBox(companyNameFontFace,10,0,0,model.getCompany().getName(),"SN"));
+        headerContainer.addElement(new SimpleTextBox(normalOrBoldFont,10,0,0,model.getCompany().getName(),"SN"));
         headerContainer.addElement(new SimpleTextBox(fontNormal1,10,0,0,model.getDate().getValue(),grayishFontColor,Color.WHITE,"IDATE"));
 
         HorizontalContainer numFact = new HorizontalContainer(0,0);
@@ -162,13 +161,13 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Left top info
         VerticalContainer infoCommande = new VerticalContainer(leftMarginX,page.getMediaBox().getHeight()-211,76);
-        infoCommande.addElement(new SimpleTextBox(fontNormal1,8, 0,0,model.getReference().getLabelCommand()));
+        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8, 0,0,model.getReference().getLabelCommand()));
         infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getReference().getValueCommand(),"ONUM"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-        infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getDate().getLabelCommand()));
+        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getDate().getLabelCommand()));
         infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getDate().getValueCommand(),"IDATE"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-        infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getPaymentInfo().getLabelType()));
+        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getPaymentInfo().getLabelType()));
         infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getPaymentInfo().getValueType(),"PMODE"));
         infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TTX"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
@@ -216,16 +215,16 @@ public class BDmobilierLayout implements InvoiceLayout {
         TableRowBox lineDelivery = new TableRowBox(configRow, 0, 0);
         String currency = model.getProductContainer().getCurrency();
         lineDelivery.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, "Shipping Cost",Color.BLACK,Color.LIGHT_GRAY), false);
-        lineDelivery.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, "0,00 "+currency,Color.BLACK,Color.LIGHT_GRAY), false);
+        lineDelivery.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, "0.00 "+currency,Color.BLACK,Color.LIGHT_GRAY), false);
         lineDelivery.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, "--",Color.BLACK,Color.LIGHT_GRAY), false);
         lineDelivery.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, "1",Color.BLACK,Color.LIGHT_GRAY), false);
-        lineDelivery.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, "0,00",Color.BLACK,Color.LIGHT_GRAY), false);
+        lineDelivery.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, "0.00",Color.BLACK,Color.LIGHT_GRAY), false);
 
         verticalInvoiceItems.addElement(lineDelivery);
 
         verticalInvoiceItems.build(contentStream,writer);
 
-        ProductContainer pc= model.getProductContainer();
+        ProductContainer pc = model.getProductContainer();
 
         float posYTotal = verticalInvoiceItems.getBoundingBox().getPosY()-verticalInvoiceItems.getBoundingBox().getHeight()-13;
         new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal,158,13).build(contentStream,writer);
@@ -242,9 +241,9 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Footer company info
         int footerFontSize = 7 + rnd.nextInt(3);
         HorizontalContainer infoEntreprise = new HorizontalContainer(0,0);
-        infoEntreprise.addElement(new SimpleTextBox(companyNameFontFace,footerFontSize,0,0, model.getCompany().getName(),"SN"));
-        infoEntreprise.addElement(new SimpleTextBox(companyNameFontFace,footerFontSize,0,0, " - "));
-        infoEntreprise.addElement(new SimpleTextBox(companyNameFontFace,footerFontSize,0,0, address.getCountry(),"SA"));
+        infoEntreprise.addElement(new SimpleTextBox(normalOrBoldFont,footerFontSize,0,0, model.getCompany().getName(),"SN"));
+        infoEntreprise.addElement(new SimpleTextBox(normalOrBoldFont,footerFontSize,0,0, " - "));
+        infoEntreprise.addElement(new SimpleTextBox(normalOrBoldFont,footerFontSize,0,0, address.getCountry(),"SA"));
 
         HorizontalContainer infoEntreprise2 = new HorizontalContainer(0,0);
         infoEntreprise2.addElement(new SimpleTextBox(fontNormal1,footerFontSize,0,0, address.getLine1()+" ","SA"));
@@ -263,7 +262,6 @@ public class BDmobilierLayout implements InvoiceLayout {
         infoEntreprise3.addElement(new SimpleTextBox(fontNormal1,footerFontSize,0,0, model.getCompany().getContact().getPhoneLabel()+" : "));
         infoEntreprise3.addElement(new SimpleTextBox(fontNormal1,footerFontSize,0,0, model.getCompany().getContact().getPhoneValue(),"SCN"));
 
-        float middlePageX = page.getMediaBox().getWidth()/2;
         infoEntreprise.translate(middlePageX-infoEntreprise.getBoundingBox().getWidth()/2,61);
         infoEntreprise2.translate(middlePageX-infoEntreprise2.getBoundingBox().getWidth()/2,53);
         infoEntreprise3.translate(middlePageX-infoEntreprise3.getBoundingBox().getWidth()/2,45);
@@ -319,6 +317,14 @@ public class BDmobilierLayout implements InvoiceLayout {
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp, resDim, resDim, minAStamp, maxAStamp);
+        }
+        // if no signature and no logo, add a footer note
+        else if (model.getCompany().getSignature().getName() == null) {
+            String noStampSignMsg = "*This document is computer generated and does not require a signature or the Company's stamp in order to be considered valid";
+            SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontNormal1, footerFontSize-1, 0, 80, noStampSignMsg, "Footnote");
+            // align the text to the center
+            noStampSignMsgBox.getBoundingBox().setPosX(middlePageX - noStampSignMsgBox.getBoundingBox().getWidth()/2);
+            noStampSignMsgBox.build(contentStream, writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
