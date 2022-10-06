@@ -33,6 +33,7 @@ package com.fairandsmart.generator.documents.layout.amazon;
  * #L%
  */
 
+import com.fairandsmart.generator.documents.data.model.Helper;
 import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -48,6 +49,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
@@ -81,16 +83,17 @@ public class AmazonLayout implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        Random rnd = InvoiceLayout.getRandom();
+        Random rnd = Helper.getRandom();
 
         // Set probability map, int value out of 100, 60 -> 60% proba
         Map<String, Integer> genProb = new HashMap<>();
         genProb.put("barcode_top", 60);
+        genProb.put("switch_bill_ship_addresses", 10);
         genProb.put("registered_address_info", 50);
         genProb.put("barcode_bottom", 60);
-        genProb.put("stamp_bottom", 40);
-        genProb.put("logo_watermark", 9);
-        genProb.put("confidential_watermark", 40);
+        genProb.put("stamp_bottom", 45);
+        genProb.put("logo_watermark", 15);
+        genProb.put("confidential_watermark", 6);
 
         // Generate barCodeNum
         Generex barCodeNumGen = new Generex("[0-9]{12}");
@@ -138,8 +141,19 @@ public class AmazonLayout implements InvoiceLayout {
         contentStream.lineTo( page.getMediaBox().getWidth()-(20*2), 650);
         contentStream.stroke();
 
+        // check if billing and shipping addresses should be switched
+        float leftAddrX = 25;
+        float rightAddrX = page.getMediaBox().getWidth()/2 + rnd.nextInt(5);
+        if (rnd.nextInt(100) < genProb.get("switch_bill_ship_addresses")) {
+            float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
+        }
+        float billX = leftAddrX;
+        float billY = 630;
+        float shipX = rightAddrX;
+        float shipY = 630;
+
         // Billing Address
-        VerticalContainer verticalAddressContainer = new VerticalContainer(25, 630, 250);
+        VerticalContainer verticalAddressContainer = new VerticalContainer(billX, billY, 250);
         verticalAddressContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getClient().getBillingHead()));
         verticalAddressContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalAddressContainer.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getBillingName(), "BN" ));
@@ -149,7 +163,7 @@ public class AmazonLayout implements InvoiceLayout {
         verticalAddressContainer.build(contentStream, writer);
 
         // Shipping Address
-        VerticalContainer verticalAddressContainer2 = new VerticalContainer(page.getMediaBox().getWidth()/2 + rnd.nextInt(5), 630, 250 );
+        VerticalContainer verticalAddressContainer2 = new VerticalContainer(shipX, shipY, 250);
         verticalAddressContainer2.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getClient().getShippingHead()));
         verticalAddressContainer2.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getShippingName(), "SHN" ));
@@ -191,7 +205,7 @@ public class AmazonLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, ""), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedTotalPriceWithoutTax(), "PTWTX" ), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, ""), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, Float.toString(randomProduct.getTaxRate() * 100)+"%", "TXR"), centerAlignItems);
+            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, Float.toString(Helper.round(randomProduct.getTaxRate() * 100, 2))+"%", "TXR"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedTotalTax() ), centerAlignItems);
 
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
@@ -338,7 +352,7 @@ public class AmazonLayout implements InvoiceLayout {
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             else {  // draw to lower center
-                xPosStamp = page.getMediaBox().getWidth()/2 - (resDim/2);
+                xPosStamp = page.getMediaBox().getWidth()/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp, resDim, resDim, minAStamp, maxAStamp);
@@ -347,7 +361,7 @@ public class AmazonLayout implements InvoiceLayout {
         // Add bg logo watermark or confidential stamp, but not both at once
         if (rnd.nextInt(100) < genProb.get("logo_watermark")) {
             // Add confidential watermark, 9% prob
-            InvoiceLayout.addWatermarkTextPDF(document, page, fontNormal1, "Confidential");
+            InvoiceLayout.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
         }
         else if (rnd.nextInt(100) < genProb.get("confidential_watermark")) {
             // Add watermarked background logo
