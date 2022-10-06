@@ -114,7 +114,8 @@ public class Signature {
         }
 
         private static final List<String> signaturesFileList = Arrays.asList(
-            "common/signature/kaggle_real_forged/metadata.json");
+            "common/signature/kaggle_real_forged/metadata.json",
+            "common/signature/multi_script_handwritten_signature/metadata.json");
         private static List<Signature> signatures = new ArrayList<Signature>();
         {
             for (String signatureFile : signaturesFileList) {

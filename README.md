@@ -113,7 +113,8 @@ Generating your own invoices and other SSDs with custom data.
     -   [Logo Generation](src/main/java/com/fairandsmart/generator/documents/data/model/Logo.java)
         -   JSON file
     -   [Product Item Fields](src/main/java/com/fairandsmart/generator/documents/data/model/ProductContainer.java)
-    -   Signatures datase from [Kaggle](https://www.kaggle.com/datasets/divyanshrai/handwritten-signatures)
+    -   1st Signatures dataset from [Kaggle](https://www.kaggle.com/datasets/divyanshrai/handwritten-signatures)
+    -   2nd Signatures dataset from [IEEE dataport](https://ieee-dataport.org/open-access/multi-script-handwritten-signature-roman-devanagari)
 
 -   Payslip Specific
 
