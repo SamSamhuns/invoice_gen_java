@@ -49,7 +49,7 @@ public class Product {
     private float taxRate;
     private String currency;
 
-    //Added
+    // Added later
     private float discount;
     private float ecoParticipationWithoutTax;
     private int taxReference;
@@ -108,6 +108,10 @@ public class Product {
         return priceWithTax;
     }
 
+    public String getFormatedPriceWithTax() {
+        return String.format("%.2f", this.getPriceWithTax()) + " " + currency;
+    }
+
     public void setPriceWithTax(float priceWithTax) {
         this.priceWithTax = priceWithTax;
     }
@@ -153,17 +157,26 @@ public class Product {
     }
 
     public String getFormatedTotalPriceWithTax() {
-
         return String.format("%.2f", this.getTotalPriceWithTax()) + " " + currency;
     }
-
 
     public float getTotalPriceWithoutTax() {
         return priceWithoutTax * quantity;
     }
 
-    public String getFormatedTotalPriceWithoutTax() {
+    public float getDiscount() {
+        return discount;
+    }
 
+    public String getFormatedDiscount() {
+        return String.format("%.2f", this.getDiscount()) + " " + currency;
+    }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
+    }
+
+    public String getFormatedTotalPriceWithoutTax() {
         return String.format("%.2f", this.getTotalPriceWithoutTax()) + " " + currency;
     }
 
@@ -173,14 +186,6 @@ public class Product {
 
     public String getFormatedTotalTax() {
         return String.format("%.2f", this.getTotalTax()) + " " + currency;
-    }
-
-    public float getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(float discount) {
-        this.discount = discount;
     }
 
     public float getEcoParticipationWithoutTax() {
@@ -213,7 +218,6 @@ public class Product {
                 ", quantity=" + quantity +
                 ", taxRate=" + taxRate +
                 ", currency='" + currency + '\'' +
-                ", discount=" + discount +
                 ", ecoParticipationWithoutTax=" + ecoParticipationWithoutTax +
                 ", taxReference=" + taxReference +
                 ", deliveryType='" + deliveryType + '\'' +
@@ -222,15 +226,15 @@ public class Product {
 
     /*
       "price": "479.0",
-                    "ean": "8806088499048",
-                    "name": "Samsung ADD WASH WW90K4437YW porthole washing machine",
-                    "brand": "Samsung",
-                    "sku": "000000000001079579",
-                    "categories": [
-                    "Major Appliances",
-                    "Washing machine",
-                    "Porthole washing machine"
-                    ]
-              */
+      "ean": "8806088499048",
+      "name": "Samsung ADD WASH WW90K4437YW porthole washing machine",
+      "brand": "Samsung",
+      "sku": "000000000001079579",
+      "categories": [
+      "Major Appliances",
+      "Washing machine",
+      "Porthole washing machine"
+      ]
+    */
 
 }

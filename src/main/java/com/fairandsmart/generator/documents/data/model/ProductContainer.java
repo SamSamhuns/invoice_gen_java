@@ -87,7 +87,7 @@ public class ProductContainer {
         this.taxTotalHead = taxTotalHead;
         this.withTaxTotalHead = withTaxTotalHead;
         this.snHead = snHead;
-        this.discountHead =discountHead;
+        this.discountHead = discountHead;
     }
 
     public void addProduct(Product product) {
@@ -397,27 +397,34 @@ public class ProductContainer {
             ProductContainer productContainer = new ProductContainer(ctx.getCurrency(), localdescHeads.get(idxL), localqtyHeads.get(idxL),
                                                 localUPHeads.get(idxL), localtaxRateHeads.get(idxL), localtaxHeads.get(idxL), locallineTotalHeads.get(idxL),
                                                 localwithoutTaxTotalHeads.get(idxL), localTaxTotalHeads.get(idxL), localwithTaxTotalHeads.get(idxL), localSNHeads.get(idxL),localdiscountHeads.get(idxD));
+
+            Boolean discountAvailable = ctx.getRandom().nextBoolean();
+            productContainer.setDiscountAvailable(discountAvailable);
+            float aggDiscount = 0f;
+            int maxQuantity = 5;
+            // TODO fix proper discount calculations
             for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
-                int maxQuantity = 5;
                 Product electibleProduct = productsCountryFiltered.get(ctx.getRandom().nextInt(productsCountryFiltered.size()));
-                electibleProduct.setQuantity(ctx.getRandom().nextInt(maxQuantity -1) +1);
+                electibleProduct.setQuantity(ctx.getRandom().nextInt(maxQuantity - 1) + 1);
                 electibleProduct.setCurrency(ctx.getCurrency());
+                // add discounts for each item
+                float itemDiscount = 0;
+                if (discountAvailable) {
+                    float priceWithoutTax = electibleProduct.getPriceWithoutTax();
+                    itemDiscount = ctx.getRandom().nextFloat() * 0.2f * priceWithoutTax;
+                    itemDiscount = Helper.round(itemDiscount, 2);  // round to 2 dec places
+                    aggDiscount += itemDiscount;
+                }
+                electibleProduct.setDiscount(itemDiscount);
 
                 productContainer.addProduct(electibleProduct);
             }
-            Boolean discountAvailable = ctx.getRandom().nextBoolean();
-            productContainer.setDiscountAvailable(discountAvailable);
-            Float total = productContainer.getTotalWithTax();
-            if(discountAvailable){
-                /// discount
-                Float discount = 0.0f;
-                /*if(ctx.getRandom().nextBoolean()){
-                    discount = ctx.getRandom().nextFloat()*0.4f*total;
-                }*/
-                String discountS = String.format("%.2f", discount);
-                productContainer.setTotalDiscount(discount);
-                total = total - discount;
-                productContainer.setTotalWithTax(total);
+
+            if (discountAvailable) {
+                productContainer.setTotalDiscount(aggDiscount);
+
+                float total = productContainer.getTotalWithTax();
+                productContainer.setTotalWithTax(total - aggDiscount);
             }
             Boolean taxRateAvailable = ctx.getRandom().nextBoolean();
             productContainer.setTaxRateAvailable(taxRateAvailable);
