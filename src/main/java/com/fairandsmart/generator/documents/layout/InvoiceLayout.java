@@ -35,6 +35,7 @@ package com.fairandsmart.generator.documents.layout;
  */
 
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.data.model.Helper;
 
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -101,10 +102,6 @@ public interface InvoiceLayout {
   }
 
   void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception;
-
-  public static Random getRandom() {
-      return rnd;
-  }
 
   public static BufferedImage generateEAN13BarcodeImage(String barcodeText) throws Exception {
           // generates a barcode based on the String barcodeText
@@ -185,8 +182,7 @@ public interface InvoiceLayout {
             PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
             pdExtGfxState.setBlendMode(BlendMode.MULTIPLY);
 
-            // get uniform dist from minA to maxA in 0.01 diffs
-            float alpha = (float)(rnd.nextInt((int)((maxA-minA)*100+1))+minA*100) / 100.0f;
+            float alpha = Helper.rand_uniform(minA, maxA);
             pdExtGfxState.setNonStrokingAlphaConstant(alpha);
             contentStream.setGraphicsStateParameters(pdExtGfxState);
             // draw on document
@@ -215,9 +211,7 @@ public interface InvoiceLayout {
 
             final PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
 
-            float minA = 0.10f; float maxA = 0.25f;
-            // get uniform dist from minA to maxA in 0.01 diffs
-            float alpha = (float)(rnd.nextInt((int)((maxA-minA)*100+1))+minA*100) / 100.0f;
+            float alpha = Helper.rand_uniform(0.10f, 0.25f);
             gs.setNonStrokingAlphaConstant(alpha);
             gs.setStrokingAlphaConstant(alpha);
             gs.setBlendMode(BlendMode.MULTIPLY);

@@ -52,6 +52,8 @@ import javax.xml.stream.XMLStreamWriter;
 import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
+
 
 public class TestHorizontalContainer implements InvoiceLayout {
 
@@ -101,11 +103,17 @@ public class TestHorizontalContainer implements InvoiceLayout {
 
     @Test
     public void test() throws Exception {
+
+        Path dir = Paths.get("target/texthorizontal");
+        if ( !Files.exists(dir) ) {
+                Files.createDirectories(dir);
+        }
+
         String ts = "" + System.currentTimeMillis();
-        Path pdf = Paths.get("target/texthorizontal-"+ ts + ".pdf");
-        Path xml = Paths.get("target/texthorizontal-"+ ts + ".xml");
-        Path img = Paths.get("target/texthorizontal-"+ ts + ".tiff");
-        Path json = Paths.get("target/texthorizontal-"+ ts + ".json");
+        Path pdf = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".pdf");
+        Path xml = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".xml");
+        Path img = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".tiff");
+        Path json = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".json");
 
         GenerationContext ctx = GenerationContext.generate();
         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

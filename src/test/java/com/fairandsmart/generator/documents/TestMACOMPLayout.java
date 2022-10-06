@@ -42,15 +42,26 @@ import org.junit.Test;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Arrays;
+
 
 public class TestMACOMPLayout {
 
 @Test
 public void test() throws Exception {
 
-        Path macomp = Paths.get("target/macomp");
-        if ( !Files.exists(macomp) ) {
-                Files.createDirectories(macomp);
+        List<String> artefact_dirs = Arrays.asList(
+                "target/macomp/pdf",
+                "target/macomp/xml",
+                "target/macomp/tiff",
+                "target/macomp/json");
+
+        for (String dirs : artefact_dirs) {
+                Path dir = Paths.get(dirs);
+                if ( !Files.exists(dir) ) {
+                        Files.createDirectories(dir);
+                }
         }
 
         // get ntests var from cli, with mvn test -Dntests=NUM, otherwise use 5
@@ -58,10 +69,10 @@ public void test() throws Exception {
         int ntests = ((ntests_env == null) ? 5 : Integer.parseInt(ntests_env));
 
         for(int i=1; i<=ntests; i++) {
-                Path pdf = Paths.get("target/macomp-"+ i + ".pdf");
-                Path xml = Paths.get("target/macomp-"+ i + ".xml");
-                Path img = Paths.get("target/macomp-"+ i + ".tiff");
-                Path json = Paths.get("target/macomp-"+ i + ".json");
+                Path pdf = Paths.get("target/macomp/pdf/macomp-"+ i + ".pdf");
+                Path xml = Paths.get("target/macomp/xml/macomp-"+ i + ".xml");
+                Path img = Paths.get("target/macomp/tiff/macomp-"+ i + ".tiff");
+                Path json = Paths.get("target/macomp/json/macomp-"+ i + ".json");
 
                 GenerationContext ctx = GenerationContext.generate();
                 InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

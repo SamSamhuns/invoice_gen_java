@@ -54,6 +54,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 
 @RunWith(JUnit4.class)
 public class TestVerticalContainer implements InvoiceLayout {
@@ -104,11 +105,16 @@ public class TestVerticalContainer implements InvoiceLayout {
 
     @Test
     public void test() throws Exception {
+        Path dir = Paths.get("target/textvertical");
+        if ( !Files.exists(dir) ) {
+                Files.createDirectories(dir);
+        }
+
         String ts = "" + System.currentTimeMillis();
-        Path pdf = Paths.get("target/textvertical-"+ ts + ".pdf");
-        Path xml = Paths.get("target/textvertical-"+ ts + ".xml");
-        Path img = Paths.get("target/textvertical-"+ ts + ".tiff");
-        Path json = Paths.get("target/textvertical-"+ ts + ".json");
+        Path pdf = Paths.get("target/textvertical/textvertical-"+ ts + ".pdf");
+        Path xml = Paths.get("target/textvertical/textvertical-"+ ts + ".xml");
+        Path img = Paths.get("target/textvertical/textvertical-"+ ts + ".tiff");
+        Path json = Paths.get("target/textvertical/textvertical-"+ ts + ".json");
 
         GenerationContext ctx = GenerationContext.generate();
         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
