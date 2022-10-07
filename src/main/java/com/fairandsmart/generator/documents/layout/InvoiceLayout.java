@@ -38,6 +38,7 @@ import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Helper;
 
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
 import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
@@ -169,24 +170,32 @@ public interface InvoiceLayout {
 
         float minImgAlpha = 0.08f;
         float maxImgAlpha = 0.18f;
-        addWatermarkImagePDF(doc, page, imgPDF, xoff, yoff, nImgW, nimgH, minImgAlpha, maxImgAlpha);
+        double rotAngle = 0;
+        addWatermarkImagePDF(doc, page, imgPDF, xoff, yoff, nImgW, nimgH, minImgAlpha, maxImgAlpha, rotAngle);
     }
 
     public static void addWatermarkImagePDF(
             final PDDocument doc, final PDPage page, final PDImageXObject imgPDF,
             final float xPos, final float yPos, final float imgW, final float imgH,
-            final float minA, final float maxA) throws IOException {
+            final float minAlpha, final float maxAlpha, final double rotAngle) throws IOException {
         try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
                 true)) {
             contentStream.saveGraphicsState();
-            PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
+            final PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
             pdExtGfxState.setBlendMode(BlendMode.MULTIPLY);
-
-            float alpha = Helper.rand_uniform(minA, maxA);
+            float alpha = Helper.rand_uniform(minAlpha, maxAlpha);
             pdExtGfxState.setNonStrokingAlphaConstant(alpha);
             contentStream.setGraphicsStateParameters(pdExtGfxState);
-            // draw on document
-            contentStream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
+
+            // draw on document,check if rotation is required or not
+            if (rotAngle != 0.0) {
+                BufferedImage imgBuf = Helper.getRotatedImage(imgPDF.getImage(), rotAngle);
+                PDImageXObject imgPDFRot = LosslessFactory.createFromImage(doc, imgBuf);
+                contentStream.drawImage(imgPDFRot, xPos, yPos, imgW, imgH);
+            }
+            else {
+                contentStream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
+            }
             contentStream.restoreGraphicsState();
             contentStream.close();
         }
@@ -208,7 +217,6 @@ public interface InvoiceLayout {
             if (rnd.nextInt(10) < 3) {
                 cs.setRenderingMode(RenderingMode.STROKE); // for "hollow" effect
             }
-
             final PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
 
             float alpha = Helper.rand_uniform(0.10f, 0.25f);
@@ -218,7 +226,6 @@ public interface InvoiceLayout {
             gs.setLineWidth(3f);
             cs.setGraphicsStateParameters(gs);
 
-            // Set color
             cs.setNonStrokingColor(Color.red);
             cs.setStrokingColor(Color.red);
 

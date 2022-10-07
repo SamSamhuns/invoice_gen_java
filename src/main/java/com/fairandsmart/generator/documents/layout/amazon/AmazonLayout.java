@@ -301,7 +301,7 @@ public class AmazonLayout implements InvoiceLayout {
               String signaturePath = signatureUri.getPath();
               PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
               int signatureWidth = 120;
-              int signatureHeight = 60;
+              int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
               // align signature to center of singatureText bbox
               float signatureXPos = singatureText.getBoundingBox().getPosX() + singatureText.getBoundingBox().getWidth()/2 - signatureWidth/2;
               float signatureYPos = 140;
@@ -354,7 +354,7 @@ public class AmazonLayout implements InvoiceLayout {
                 xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = 125 + rnd.nextInt(5);
             }
-            InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp, resDim, resDim, minAStamp, maxAStamp);
+            InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp, resDim, resDim, minAStamp, maxAStamp, 0.0);
         }
         // if no signature and no logo, add a footer note
         else if (model.getCompany().getSignature().getName() == null) {
@@ -363,14 +363,15 @@ public class AmazonLayout implements InvoiceLayout {
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
-        if (rnd.nextInt(100) < genProb.get("logo_watermark")) {
-            // Add confidential watermark, 9% prob
+        if (rnd.nextInt(100) < genProb.get("confidential_watermark")) {
+            // Add confidential watermark
             InvoiceLayout.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
         }
-        else if (rnd.nextInt(100) < genProb.get("confidential_watermark")) {
+        else if (rnd.nextInt(100) < genProb.get("logo_watermark")) {
             // Add watermarked background logo
-            InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
+            // InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
         }
+        InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
 
         contentStream.close();
         writer.writeEndElement();

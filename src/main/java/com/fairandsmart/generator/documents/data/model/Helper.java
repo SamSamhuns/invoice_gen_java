@@ -33,9 +33,13 @@ package com.fairandsmart.generator.documents.data.model;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+
 import java.math.BigDecimal;
 import java.util.Random;
-
 
 public class Helper {
 
@@ -63,5 +67,35 @@ public class Helper {
         // get uniform dist from minA to maxA in steps differences
         float steps = (float)(1 / diff);
         return (float)(rnd.nextInt((int)((maxA - minA) * steps + 1)) + minA * steps) / steps;
+    }
+
+    public static BufferedImage getRotatedImage(BufferedImage buffImage, double angle) {
+        // Stackoverflow https://stackoverflow.com/a/66189875
+        double radian = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(radian));
+        double cos = Math.abs(Math.cos(radian));
+
+        int width = buffImage.getWidth();
+        int height = buffImage.getHeight();
+
+        int nWidth = (int) Math.floor((double) width * cos + (double) height * sin);
+        int nHeight = (int) Math.floor((double) height * cos + (double) width * sin);
+
+        BufferedImage rotatedImage = new BufferedImage(
+                nWidth, nHeight, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D graphics = rotatedImage.createGraphics();
+
+        graphics.setRenderingHint(
+                RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
+        graphics.translate((nWidth - width) / 2, (nHeight - height) / 2);
+        // rotation around the center point
+        graphics.rotate(radian, (double) (width / 2), (double) (height / 2));
+        graphics.drawImage(buffImage, 0, 0, null);
+        graphics.dispose();
+
+        return rotatedImage;
     }
 }
