@@ -308,7 +308,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             float resDim = 100 + rnd.nextInt(20);
             float xPosStamp; float yPosStamp;
             // draw to lower right if signature if present
-            if (rnd.nextInt(2) == 1 && model.getCompany().getSignature().getName() != null) {
+            if (rnd.nextInt(3) < 2 && model.getCompany().getSignature().getName() != null) {
                 xPosStamp = 400 + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
             }
@@ -316,7 +316,7 @@ public class BDmobilierLayout implements InvoiceLayout {
                 xPosStamp = page.getMediaBox().getWidth()/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = 125 + rnd.nextInt(5);
             }
-            double rotAngle = 45 + rnd.nextInt(30);
+            double rotAngle = 10 + rnd.nextInt(80);
             float stampWidth = resDim;
             float stampHeight = resDim;
             if (model.getCompany().getStamp().getName().matches("(.*)" + "_rect")) {

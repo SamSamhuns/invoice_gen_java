@@ -354,7 +354,7 @@ public class AmazonLayout implements InvoiceLayout {
                 xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = 125 + rnd.nextInt(5);
             }
-            double rotAngle = 45 + rnd.nextInt(30);
+            double rotAngle = 10 + rnd.nextInt(80);
             float stampWidth = resDim;
             float stampHeight = resDim;
             if (model.getCompany().getStamp().getName().matches("(.*)" + "_rect")) {
