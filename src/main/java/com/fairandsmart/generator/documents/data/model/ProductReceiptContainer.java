@@ -116,7 +116,7 @@ public class ProductReceiptContainer {
     public void addProduct(Product product) {
         products.add(product);
         totalWithTax = totalWithTax + ( product.getQuantity() * product.getPriceWithTax());
-        totalWithoutTax = totalWithoutTax + ( product.getQuantity() * product.getPriceWithoutTax());
+        totalWithoutTax = totalWithoutTax + ( product.getQuantity() * product.getPrice());
         totalItems +=1;
         totalQty += product.getQuantity();
         totalTaxRate = (totalTaxRate+product.getTaxRate())/2;

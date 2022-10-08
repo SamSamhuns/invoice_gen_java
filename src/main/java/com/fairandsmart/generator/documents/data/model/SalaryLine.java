@@ -129,8 +129,8 @@ public class SalaryLine {
 
 
 /*
-    public String getFormatedPriceWithoutTax() {
-        return String.format("%.2f", this.getPriceWithoutTax()) + " " + currency;
+    public String getFormatedPrice() {
+        return String.format("%.2f", this.getPrice()) + " " + currency;
     }*/
 
 

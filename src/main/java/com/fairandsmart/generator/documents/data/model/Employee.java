@@ -194,7 +194,7 @@ public class Employee{
     }
 
     public static class Generator implements ModelGenerator<Employee> {
-//TODO LISTS DE HEADS ET DE CONTENU
+//TODO HEADS AND CONTENT LISTS
         private static final Map<String, String> billingHeads = new LinkedHashMap<>();
         private static final Map<String, String> shippingHeads = new LinkedHashMap<>();
 

@@ -43,15 +43,19 @@ public class Product {
     private String ean;
     private String sku;
     private String brand;
-    private float priceWithTax;
-    private float priceWithoutTax;
-    private int quantity;
-    private float taxRate;
+    private String language;
     private String currency;
 
+    private float price;
+    // assigned during generation
+    private int quantity;
+    private float taxRate;
+    private float discountRate;
+    private float priceWithTax;
+    private float priceWithDiscount;
+    private float priceWithTaxAndDiscount;
+
     // Added later
-    private float discount;
-    private float ecoParticipationWithoutTax;
     private int taxReference;
     private String deliveryType;
 
@@ -104,6 +108,76 @@ public class Product {
         this.brand = brand;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public String getFormatedPrice() {
+        return String.format("%.2f", this.getPrice()) + " " + currency;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getTaxReference() {
+        return taxReference;
+    }
+
+    public void setTaxReference(int taxReference) {
+        this.taxReference = taxReference;
+    }
+
+    public String getDeliveryType() {
+        return deliveryType;
+    }
+
+    public void setDeliveryType(String deliveryType) {
+        this.deliveryType = deliveryType;
+    }
+
+    public float getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(float taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    public float getDiscountRate() {
+        return discountRate;
+    }
+
+    public void setDiscountRate(float discountRate) {
+        this.discountRate = discountRate;
+    }
+
+    // Price with Tax
+
     public float getPriceWithTax() {
         return priceWithTax;
     }
@@ -116,42 +190,46 @@ public class Product {
         this.priceWithTax = priceWithTax;
     }
 
-    public float getPriceWithoutTax() {
-        return priceWithoutTax;
+    // Price with Discount
+
+    public float getPriceWithDiscount() {
+        return priceWithDiscount;
     }
 
-    public String getFormatedPriceWithoutTax() {
-        return String.format("%.2f", this.getPriceWithoutTax()) + " " + currency;
+    public String getFormatedPriceWithDiscount() {
+        return String.format("%.2f", this.getPriceWithDiscount()) + " " + currency;
     }
 
-    public void setPriceWithoutTax(float priceWithoutTax) {
-        this.priceWithoutTax = priceWithoutTax;
+    public void setPriceWithDiscount(float priceWithDiscount) {
+        this.priceWithDiscount = priceWithDiscount;
     }
 
-    public int getQuantity() {
-        return quantity;
+    // Price with Tax and Discount
+
+    public float getPriceWithTaxAndDiscount() {
+        return priceWithTaxAndDiscount;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public String getFormatedPriceWithTaxAndDiscount() {
+        return String.format("%.2f", this.getPriceWithTaxAndDiscount()) + " " + currency;
     }
 
-    public float getTaxRate() {
-        return taxRate;
+    public void setPriceWithTaxAndDiscount(float priceWithTaxAndDiscount) {
+        this.priceWithTaxAndDiscount = priceWithTaxAndDiscount;
     }
 
-    public void setTaxRate(float taxRate) {
-        this.taxRate = taxRate;
+    /* getter methods that calculate from existing params */
+
+    // Total Price
+    public float getTotalPrice() {
+        return price * quantity;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getFormatedTotalPrice() {
+        return String.format("%.2f", this.getTotalPrice()) + " " + currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
+    // Total Price with Tax
     public float getTotalPriceWithTax() {
         return priceWithTax * quantity;
     }
@@ -160,67 +238,61 @@ public class Product {
         return String.format("%.2f", this.getTotalPriceWithTax()) + " " + currency;
     }
 
-    public float getTotalPriceWithoutTax() {
-        return priceWithoutTax * quantity;
+    // Total Price with Discount
+    public float getTotalPriceWithDiscount() {
+        return priceWithDiscount * quantity;
     }
 
-    public float getDiscount() {
-        return discount;
+    public String getFormatedTotalPriceWithDiscount() {
+        return String.format("%.2f", this.getTotalPriceWithDiscount()) + " " + currency;
     }
 
-    public String getFormatedDiscount() {
-        return String.format("%.2f", this.getDiscount()) + " " + currency;
+    // Total Price with Tax and Discount (FINAL)
+    public float getTotalPriceWithTaxAndDiscount() {
+        return priceWithTaxAndDiscount * quantity;
     }
 
-    public void setDiscount(float discount) {
-        this.discount = discount;
+    public String getFormatedTotalPriceWithTaxAndDDiscount() {
+        return String.format("%.2f", this.getTotalPriceWithTaxAndDiscount()) + " " + currency;
     }
 
-    public String getFormatedTotalPriceWithoutTax() {
-        return String.format("%.2f", this.getTotalPriceWithoutTax()) + " " + currency;
-    }
-
+    // Total Tax
     public float getTotalTax() {
-        return this.getTotalPriceWithTax() - this.getTotalPriceWithoutTax();
+        return this.getTotalPriceWithTax() - this.getTotalPrice();
     }
 
     public String getFormatedTotalTax() {
         return String.format("%.2f", this.getTotalTax()) + " " + currency;
     }
 
-    public float getEcoParticipationWithoutTax() {
-        return ecoParticipationWithoutTax;
+    // Total Discount
+    public float getTotalDiscount() {
+        return this.getTotalPrice() - this.getTotalPriceWithDiscount();
     }
 
-    public void setEcoParticipationWithoutTax(float ecoParticipationWithoutTax) {
-        this.ecoParticipationWithoutTax = ecoParticipationWithoutTax;
-    }
-
-    public int getTaxReference() {
-        return taxReference;
-    }
-
-    public void setTaxReference(int taxReference) {
-        this.taxReference = taxReference;
+    public String getFormatedTotalDiscount() {
+        return String.format("%.2f", this.getTotalDiscount()) + " " + currency;
     }
 
     @Override
     public String toString() {
         return "Product{" +
                 "description='" + description + '\'' +
-                ", taxType='" + taxType + '\'' +
                 ", name='" + name + '\'' +
                 ", ean='" + ean + '\'' +
                 ", sku='" + sku + '\'' +
                 ", brand='" + brand + '\'' +
-                ", priceWithTax=" + priceWithTax +
-                ", priceWithoutTax=" + priceWithoutTax +
+                ", taxType='" + taxType + '\'' +
+                ", taxReference=" + taxReference +
+                ", currency='" + currency + '\'' +
+                ", deliveryType='" + deliveryType + '\'' +
+                ", price=" + price +
                 ", quantity=" + quantity +
                 ", taxRate=" + taxRate +
-                ", currency='" + currency + '\'' +
-                ", ecoParticipationWithoutTax=" + ecoParticipationWithoutTax +
-                ", taxReference=" + taxReference +
-                ", deliveryType='" + deliveryType + '\'' +
+                ", discountRate=" + discountRate +
+                ", priceWithTax=" + priceWithTax +
+                ", priceWithDiscount=" + priceWithDiscount +
+                ", priceWithTaxAndDiscount=" + priceWithTaxAndDiscount +
                 '}';
     }
 

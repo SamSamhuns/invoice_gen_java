@@ -447,7 +447,7 @@ public class EmployeeInformation {
     }
 
     public static class Generator implements ModelGenerator<EmployeeInformation> {
-//TODO LISTS DE HEADS ET DE CONTENU
+//TODO HEADS AND CONTENT LISTS
 
         private List<DepartCommune> DepartsComm;
         private static final String DepartCommFile = "payslips/employee/commonCodeInsee.json";

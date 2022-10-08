@@ -35,7 +35,7 @@ package com.fairandsmart.generator.documents.data.model;
  */
 
 
-
+import com.fairandsmart.generator.documents.data.model.Helper;
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.google.gson.Gson;
@@ -70,8 +70,6 @@ public class ProductContainer {
     private float totalDiscount;
     private String totalDiscountFomated;
     //Added
-    private float totalEcoParticipation;
-    //private float totalDiscount;
     private float totalDeliveryCost;
 
     public ProductContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String taxRateHead,
@@ -93,7 +91,7 @@ public class ProductContainer {
     public void addProduct(Product product) {
         products.add(product);
         totalWithTax = totalWithTax + ( product.getQuantity() * product.getPriceWithTax());
-        totalWithoutTax = totalWithoutTax + ( product.getQuantity() * product.getPriceWithoutTax());
+        totalWithoutTax = totalWithoutTax + ( product.getQuantity() * product.getPrice());
     }
 
     public List<Product> getProducts() {
@@ -200,12 +198,8 @@ public class ProductContainer {
         this.totalDiscount = totalDiscount;
     }
 
-    public String getTotalDiscountFomated() {
+    public String getTotalDiscountFormated() {
         return String.format("%.2f", this.getTotalDiscount()) + " " + currency;
-    }
-
-    public void setTotalDiscountFomated(String totalDiscountFomated) {
-        this.totalDiscountFomated = totalDiscountFomated;
     }
 
     public String getDiscountHead() {
@@ -345,7 +339,6 @@ public class ProductContainer {
         }
 
         private List<Product> products = new ArrayList<Product>();
-        private List<String> productLangs = new ArrayList<String>();
         private static final List<String> productsFileList = Arrays.asList(
                 "common/product/fr/householdandmedia_fr.json",
                 "common/product/en/householdandmedia_en.json");
@@ -355,17 +348,17 @@ public class ProductContainer {
         {
             assert productsFileList.size() == productsLangList.size();
             int currentListSize = 0;
-            for (int i = 0; i < productsFileList.size(); i++) {
+            for (int i=0; i < productsFileList.size(); i++) {
                 Reader jsonReader = new InputStreamReader(ProductContainer.class.getClassLoader().getResourceAsStream(productsFileList.get(i)));
                 Gson gson = new Gson();
                 Type collectionType = new TypeToken<Collection<Product>>(){}.getType();
                 products.addAll(gson.fromJson(jsonReader, collectionType));
 
-                List<String> langList = Collections.nCopies(products.size() - currentListSize, productsLangList.get(i));
-                productLangs.addAll(langList);
+                for (int j=currentListSize; j<products.size(); j++) {
+                    products.get(j).setLanguage(productsLangList.get(i));
+                }
                 currentListSize += products.size();
             }
-            assert products.size() == productLangs.size();
         }
 
         @Override
@@ -383,41 +376,59 @@ public class ProductContainer {
             List<String> localSNHeads = snHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localdiscountHeads = discountHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
-            List<Product> productsCountryFiltered = new ArrayList<Product>();
+            List<Product> productsLangFiltered = new ArrayList<Product>();
             for (int i = 0; i < products.size(); i++) {
-                if (productLangs.get(i) == ctx.getLanguage()) {
-                    productsCountryFiltered.add(products.get(i));
+                if (products.get(i).getLanguage() == ctx.getLanguage()) {
+                    productsLangFiltered.add(products.get(i));
                 }
             }
-
             int idxL = ctx.getRandom().nextInt(localqtyHeads.size());
             int idxD = ctx.getRandom().nextInt(localdiscountHeads.size());
 
             final int MAXPRODUCT = 6;
+            final int MAXQTYPERPRODUCT = 5;
             ProductContainer productContainer = new ProductContainer(ctx.getCurrency(), localdescHeads.get(idxL), localqtyHeads.get(idxL),
                                                 localUPHeads.get(idxL), localtaxRateHeads.get(idxL), localtaxHeads.get(idxL), locallineTotalHeads.get(idxL),
                                                 localwithoutTaxTotalHeads.get(idxL), localTaxTotalHeads.get(idxL), localwithTaxTotalHeads.get(idxL), localSNHeads.get(idxL),localdiscountHeads.get(idxD));
 
-            Boolean discountAvailable = ctx.getRandom().nextBoolean();
+            Boolean discountAvailable = false;ctx.getRandom().nextBoolean();
             productContainer.setDiscountAvailable(discountAvailable);
-            float aggDiscount = 0f;
-            int maxQuantity = 5;
+
+            float price = 0;
+            float taxRate = 0;
+            float discountRate = 0;
+            float priceWithTax = 0;
+            float priceWithDiscount = 0;
+            float priceWithTaxAndDiscount = 0;
+            float aggDiscount = 0;
+            float productDiscount = 0;
             // TODO fix proper discount calculations
             for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
-                Product electibleProduct = productsCountryFiltered.get(ctx.getRandom().nextInt(productsCountryFiltered.size()));
-                electibleProduct.setQuantity(ctx.getRandom().nextInt(maxQuantity - 1) + 1);
-                electibleProduct.setCurrency(ctx.getCurrency());
-                // add discounts for each item
-                float itemDiscount = 0;
-                if (discountAvailable) {
-                    float priceWithoutTax = electibleProduct.getPriceWithoutTax();
-                    itemDiscount = ctx.getRandom().nextFloat() * 0.2f * priceWithoutTax;
-                    itemDiscount = Helper.round(itemDiscount, 2);  // round to 2 dec places
-                    aggDiscount += itemDiscount;
-                }
-                electibleProduct.setDiscount(itemDiscount);
+                Product product = productsLangFiltered.get(ctx.getRandom().nextInt(productsLangFiltered.size()));
+                product.setQuantity(ctx.getRandom().nextInt(MAXQTYPERPRODUCT - 1) + 1);
+                product.setCurrency(ctx.getCurrency());
 
-                productContainer.addProduct(electibleProduct);
+                price = product.getPrice();
+                taxRate = Helper.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
+                priceWithTax = Helper.round(price * (1 + taxRate), 2);
+
+                // add discounts for each item if discountAvailable
+                if (discountAvailable) {
+                    discountRate = Helper.rand_uniform(0.05f, 0.15f);  // discountRate from 0% to 10%
+                    priceWithDiscount = Helper.round(price * (1 - discountRate), 2);
+
+                    productDiscount = priceWithDiscount - price;
+                    aggDiscount += productDiscount;
+                }
+                priceWithTaxAndDiscount = price * (1 + taxRate - discountRate);
+
+                product.setTaxRate(taxRate);
+                product.setDiscountRate(discountRate);
+                product.setPriceWithTax(priceWithTax);
+                product.setPriceWithDiscount(priceWithDiscount);
+                product.setPriceWithTaxAndDiscount(priceWithTaxAndDiscount);
+
+                productContainer.addProduct(product);
             }
 
             if (discountAvailable) {
