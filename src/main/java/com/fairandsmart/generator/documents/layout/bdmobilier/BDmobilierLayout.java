@@ -85,7 +85,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         genProb.put("switch_bill_ship_addresses", 10);
         genProb.put("stamp_bottom", 45);
         genProb.put("logo_watermark", 15);
-        genProb.put("confidential_watermark", 6);
+        genProb.put("confidential_watermark", 4);
 
         IDNumbers idNumbers = model.getCompany().getIdNumbers();
         Address address = model.getCompany().getAddress();
@@ -309,14 +309,24 @@ public class BDmobilierLayout implements InvoiceLayout {
             float xPosStamp; float yPosStamp;
             // draw to lower right if signature if present
             if (rnd.nextInt(2) == 1 && model.getCompany().getSignature().getName() != null) {
-                xPosStamp = 390 + rnd.nextInt(10);
+                xPosStamp = 400 + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             else {  // draw to lower center
                 xPosStamp = page.getMediaBox().getWidth()/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = 125 + rnd.nextInt(5);
             }
-            InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp, resDim, resDim, minAStamp, maxAStamp, 0.0);
+            double rotAngle = 45 + rnd.nextInt(30);
+            float stampWidth = resDim;
+            float stampHeight = resDim;
+            if (model.getCompany().getStamp().getName().matches("(.*)" + "_rect")) {
+                // For Rectangular stamps, set rotation angle to 0 and
+                // resize stamp maintaining aspect ratio
+                rotAngle = 0;
+                stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
+            }
+            InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
+                                               stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
         }
         // if no signature and no logo, add a footer note
         else if (model.getCompany().getSignature().getName() == null) {
