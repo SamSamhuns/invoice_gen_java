@@ -80,12 +80,12 @@ public class Stamp {
                 '}';
     }
 
-    public static List<Stamp> getLogoList() {
-        final List<String> brandsFileList = Arrays.asList(
+    public static List<Stamp> getStampList() {
+        final List<String> stampsFileList = Arrays.asList(
                 "common/stamp/ae_en/metadata.json");
         List<Stamp> stamps = new ArrayList<Stamp>();
         {
-          for (String brandFile : brandsFileList) {
+          for (String brandFile : stampsFileList) {
               Reader jsonReader = new InputStreamReader(Stamp.class.getClassLoader().getResourceAsStream(brandFile));
               Gson gson = new Gson();
               Type collectionType = new TypeToken<List<Stamp>>(){}.getType();
@@ -97,45 +97,45 @@ public class Stamp {
 
     public static class Generator implements ModelGenerator<Stamp> {
 
-        private static List<Stamp> stamps = getLogoList();
+        private static List<Stamp> stamps = getStampList();
 
         @Override
         public Stamp generate(GenerationContext ctx) {
-            Stamp electibleLogo;
-            // filter by brandname, default is .* so use all brands and then filter by country
-            List<Stamp> electibleLogos = stamps.stream().filter(stamp ->
+            Stamp electibleStamp;
+            // filter by brandname, default is .* so use all stamps and then filter by country
+            List<Stamp> electibleStamps = stamps.stream().filter(stamp ->
                     stamp.name.matches(ctx.getBrandName()) &&
                     stamp.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)")
                     ).collect(Collectors.toList());
-            if ( electibleLogos.size() > 0 ) {
-                electibleLogo = electibleLogos.get(ctx.getRandom().nextInt(electibleLogos.size()));
+            if ( electibleStamps.size() > 0 ) {
+                electibleStamp = electibleStamps.get(ctx.getRandom().nextInt(electibleStamps.size()));
             } else {
-                electibleLogo = stamps.get(ctx.getRandom().nextInt(stamps.size()));
+                electibleStamp = stamps.get(ctx.getRandom().nextInt(stamps.size()));
             }
-            return electibleLogo;
+            return electibleStamp;
         }
     }
 
     public Stamp(GenerationContext ctx, String companyName) {
-        List<Stamp> stamps = getLogoList();
-        Stamp electibleLogo;
-        final String companyNameMod = companyName.replace(' ', '_').replace(".", "");
+        List<Stamp> stamps = getStampList();
+        Stamp electibleStamp;
+        final String companyNameMod = companyName.replace(' ', '_').replace(".", "").replace(",", "");
 
-        // filter by brandname (default: .* so use all brands) and by country and the company name
-        List<Stamp> electibleLogos = stamps.stream().filter(stamp ->
+        // filter by brandname (default: .* so use all stamps) and by country and the company name
+        List<Stamp> electibleStamps = stamps.stream().filter(stamp ->
                 stamp.name.matches(ctx.getBrandName()) &&
                 stamp.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)") &&
-                stamp.name.matches(companyNameMod)
+                stamp.name.matches(companyNameMod + "(.*)")
                 ).collect(Collectors.toList());
 
-        if ( electibleLogos.size() > 0 ) {
-            electibleLogo = electibleLogos.get(0);
+        if ( electibleStamps.size() > 0 ) {
+            electibleStamp = electibleStamps.get(ctx.getRandom().nextInt(electibleStamps.size()));
         } else {
             // if no mataches then use a random stamp
-            electibleLogo = stamps.get(ctx.getRandom().nextInt(stamps.size()));
+            electibleStamp = stamps.get(ctx.getRandom().nextInt(stamps.size()));
         }
-        this.fullPath = electibleLogo.fullPath;
-        this.name = electibleLogo.name;
+        this.fullPath = electibleStamp.fullPath;
+        this.name = electibleStamp.name;
     }
 
 }

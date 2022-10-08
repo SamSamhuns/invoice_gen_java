@@ -81,12 +81,12 @@ public class Logo {
     }
 
     public static List<Logo> getLogoList() {
-        final List<String> brandsFileList = Arrays.asList(
+        final List<String> logosFileList = Arrays.asList(
                 "common/logo/ae_en/metadata.json",
                 "common/logo/fr/metadata.json");
         List<Logo> logos = new ArrayList<Logo>();
         {
-          for (String brandFile : brandsFileList) {
+          for (String brandFile : logosFileList) {
               Reader jsonReader = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(brandFile));
               Gson gson = new Gson();
               Type collectionType = new TypeToken<List<Logo>>(){}.getType();
@@ -103,7 +103,7 @@ public class Logo {
         @Override
         public Logo generate(GenerationContext ctx) {
             Logo electibleLogo;
-            // filter by brandname, default is .* so use all brands and then filter by country
+            // filter by brandname, default is .* so use all logos and then filter by country
             List<Logo> electibleLogos = logos.stream().filter(logo ->
                     logo.name.matches(ctx.getBrandName()) &&
                     logo.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)")
@@ -121,15 +121,15 @@ public class Logo {
         List<Logo> logos = getLogoList();
         Logo electibleLogo;
 
-        // filter by brandname (default: .* so use all brands) and by country and the company name
+        // filter by brandname (default: .* so use all logos) and by country and the company name
         List<Logo> electibleLogos = logos.stream().filter(logo ->
                 logo.name.matches(ctx.getBrandName()) &&
                 logo.fullPath.matches(ctx.getCountry().toLowerCase() + "(.*)") &&
-                logo.name.matches(companyName)
+                logo.name.matches(companyName + "(.*)")
                 ).collect(Collectors.toList());
 
         if ( electibleLogos.size() > 0 ) {
-            electibleLogo = electibleLogos.get(0);
+            electibleLogo = electibleLogos.get(ctx.getRandom().nextInt(electibleLogos.size()));
         } else {
             // if no mataches then use a random logo
             electibleLogo = logos.get(ctx.getRandom().nextInt(logos.size()));
