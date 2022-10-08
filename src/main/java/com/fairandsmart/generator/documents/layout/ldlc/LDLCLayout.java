@@ -266,11 +266,11 @@ public class LDLCLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getEan(), "SNO"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, (randomProduct.getName()!=null)?randomProduct.getName().toUpperCase():"", "PD"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getPriceWithoutTax()), "UP"), false);
-            reduc = randomProduct.getDiscount();
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getPrice()), "UP"), false);
+            reduc = randomProduct.getTotalDiscount();
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(reduc)), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getTotalPriceWithoutTax()), "PTWTX" ), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getTotalPriceWithoutTax()*(reduc/100)) ), false);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getTotalPrice()), "PTWTX" ), false);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getTotalPrice()*(reduc/100)) ), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, "PIE"), false);
             VAT = randomProduct.getTaxRate()*1000;
             // TODO fix hardcoded tax value checks
@@ -278,22 +278,22 @@ public class LDLCLayout implements InvoiceLayout {
                 case 200 :
                     TVACode = "4";
                     tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPriceWithoutTax());
+                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
                     break;
                 case 100 :
                     TVACode = "3";
                     tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPriceWithoutTax());
+                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
                     break;
                 case 55 :
                     TVACode ="2";
                     tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPriceWithoutTax());
+                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
                     break;
                 case 21 :
                     TVACode = "1";
                     tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPriceWithoutTax());
+                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
                     break;
             }
             productLine.addElement(new SimpleTextBox(font, 8, 0, 0, TVACode), false);

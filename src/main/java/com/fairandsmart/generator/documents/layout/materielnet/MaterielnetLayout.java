@@ -174,8 +174,8 @@ public class MaterielnetLayout implements InvoiceLayout {
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPriceWithoutTax(), "UP"), true);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithoutTax(), "PTWTX"), true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "UP"), true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), true);
 
 
             verticalInvoiceItems.addElement(productLine);

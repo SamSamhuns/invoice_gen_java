@@ -196,8 +196,8 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getTaxRate() * 100 + "%", "TXR"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPriceWithoutTax(), "PTWTX"), false);
-            float puttc = (float)(int)((randomProduct.getPriceWithoutTax() + randomProduct.getPriceWithoutTax() * randomProduct.getTaxRate())*100)/100;
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "PTWTX"), false);
+            float puttc = (float)(int)((randomProduct.getPrice() + randomProduct.getPrice() * randomProduct.getTaxRate())*100)/100;
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, puttc + "", "UP"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax(), "PTTX"), false);
 

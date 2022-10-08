@@ -102,13 +102,13 @@ public class ProductBox extends ElementBox {
                 break;
             case "QTY":  productElement = Integer.toString(product.getQuantity());
                 break;
-            case "UP":  productElement = product.getFormatedPriceWithoutTax();
+            case "UP":  productElement = product.getFormatedPrice();
                 break;
             case "TXR":  productElement = Float.toString(product.getTaxRate() * 100)+"%";
                 break;
-            case "PTWTX":  productElement = product.getFormatedTotalPriceWithoutTax();
+            case "PTWTX":  productElement = product.getFormatedTotalPrice();
                 break;
-//            case "sn":  productElement = product.getFormatedTotalPriceWithoutTax();
+//            case "sn":  productElement = product.getFormatedTotalPrice();
 //                break;
 
             default: return "Invalid Product Name";

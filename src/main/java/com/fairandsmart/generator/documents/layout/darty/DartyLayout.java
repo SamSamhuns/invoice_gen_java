@@ -218,7 +218,7 @@ public class DartyLayout implements InvoiceLayout {
             }
 
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0,dateGarantie ), true);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithoutTax(), "PTWTX"), true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalTax(),"TXR"),true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax()+"","undefined"),true);
 

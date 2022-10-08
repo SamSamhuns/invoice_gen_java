@@ -272,8 +272,8 @@ public class CdiscountLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getEan(), "SNO"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPriceWithoutTax(), "UP"), false);
-            float puttcR = (float)(int)((randomProduct.getPriceWithoutTax() + randomProduct.getPriceWithoutTax() * randomProduct.getTaxRate())*100)/100;
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "UP"), false);
+            float puttcR = (float)(int)((randomProduct.getPrice() + randomProduct.getPrice() * randomProduct.getTaxRate())*100)/100;
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, puttcR + "", "undefined"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax(), "undefined"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getTaxRate() * 100 + "%", "TXR"), false);
@@ -389,7 +389,7 @@ public class CdiscountLayout implements InvoiceLayout {
             Product randomProduct = model.getProductContainer().getProducts().get(tailleTab2);
 
             new SimpleTextBox(font, 8, 155, posMsgY-123-13*tailleTab2, randomProduct.getEan(), "SNO").build(contentStream,writer);
-            new SimpleTextBox(font, 8, 283, posMsgY-123-13*tailleTab2, randomProduct.getEcoParticipationWithoutTax()+"").build(contentStream,writer);
+            new SimpleTextBox(font, 8, 283, posMsgY-123-13*tailleTab2, "EcoTac TODO remove later").build(contentStream,writer);
         }
 
         contentStream.close();

@@ -203,11 +203,11 @@ public class BDmobilierLayout implements InvoiceLayout {
 
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             productLine.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, randomProduct.getName(), "PD"), false);
-            productLine.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, randomProduct.getFormatedPriceWithoutTax(), "UP"), false);
-            discount = (randomProduct.getDiscount() == 0.0) ? "--": randomProduct.getFormatedDiscount();
+            productLine.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, randomProduct.getFormatedPrice(), "UP"), false);
+            discount = (randomProduct.getDiscountRate() == 0.0) ? "--": randomProduct.getFormatedTotalDiscount();
             productLine.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, discount, "undefined"), false);
             productLine.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, (int)(randomProduct.getQuantity())+"", "QTY"), false);
-            productLine.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, randomProduct.getFormatedTotalPriceWithoutTax(), "PTWTX"), false);
+            productLine.addElement(new SimpleTextBox(fontNormal1, 9, 2, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), false);
 
             verticalInvoiceItems.addElement(productLine);
         }

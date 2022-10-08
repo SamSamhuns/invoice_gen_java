@@ -201,9 +201,9 @@ public class AmazonLayout implements InvoiceLayout {
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
             productLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, randomProduct.getName(), "PD"), false);
-            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedPriceWithoutTax(), "UP"), centerAlignItems);
+            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedPrice(), "UP"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, ""), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedTotalPriceWithoutTax(), "PTWTX" ), centerAlignItems);
+            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedTotalPrice(), "PTWTX" ), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, ""), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, Float.toString(Helper.round(randomProduct.getTaxRate() * 100, 2))+"%", "TXR"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedTotalTax() ), centerAlignItems);

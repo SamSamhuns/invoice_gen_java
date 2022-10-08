@@ -107,9 +107,9 @@ public class ReceiptProductBox extends ElementBox {
                 break;
             case "QTY":  productElement = Integer.toString(product.getQuantity());
                 break;
-            case "UP":  productElement = product.getFormatedPriceWithoutTax();
+            case "UP":  productElement = product.getFormatedPrice();
                 break;
-            case "PTWTX":  productElement = product.getFormatedTotalPriceWithoutTax();
+            case "PTWTX":  productElement = product.getFormatedTotalPrice();
                 break;
 
             default: return "Invalid Product Name";
