@@ -51,47 +51,67 @@ import java.util.stream.Collectors;
 public class ProductContainer {
 
     private List<Product> products = new ArrayList<Product>();
+    private float total;
     private float totalWithTax;
-    private float totalWithoutTax;
+    private float totalWithDiscount;
+    private float totalWithTaxAndDiscount;
+
     private String currency;
+    private Boolean discountAvailable;
+    private Boolean taxRateAvailable;
+    // display field heads, must be set in constructor //
     private String descHead;
     private String qtyHead;
     private String unitPriceHead;
-    private String taxRateHead;
-    private String taxHead;
     private String lineTotalHead;
-    private String withoutTaxTotalHead;
-    private String taxTotalHead;
-    private String withTaxTotalHead;
     private String snHead;
+    // tax & discount rate & total heads
+    private String taxHead;
+    private String taxRateHead;
+    private String taxTotalHead;
     private String discountHead;
-    private Boolean discountAvailable;
-    private Boolean taxRateAvailable;
-    private float totalDiscount;
-    private String totalDiscountFomated;
-    //Added
+    private String discountRateHead;
+    private String discountTotalHead;
+    // totals with tax, discount and both
+    private String totalHead;
+    private String withTaxTotalHead;
+    private String withDiscountTotalHead;
+    private String withTaxAndDiscountTotalHead;
+
+    // Added later
     private float totalDeliveryCost;
 
-    public ProductContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String taxRateHead,
-                            String taxHead, String lineTotalHead, String withoutTaxTotalHead, String taxTotalHead, String withTaxTotalHead, String snHead, String discountHead) {
+    public ProductContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String lineTotalHead, String snHead,
+                            String taxHead, String taxRateHead, String taxTotalHead,
+                            String discountHead, String discountRateHead, String discountTotalHead,
+                            String totalHead, String withTaxTotalHead, String withDiscountTotalHead, String withTaxAndDiscountTotalHead) {
         this.setCurrency(currency);
         this.descHead = descHead;
         this.qtyHead = qtyHead;
         this.unitPriceHead = unitPriceHead;
-        this.taxRateHead = taxRateHead;
-        this.taxHead = taxHead;
         this.lineTotalHead = lineTotalHead;
-        this.withoutTaxTotalHead = withoutTaxTotalHead;
-        this.taxTotalHead = taxTotalHead;
-        this.withTaxTotalHead = withTaxTotalHead;
         this.snHead = snHead;
+
+        this.taxHead = taxHead;
+        this.taxRateHead = taxRateHead;
+        this.taxTotalHead = taxTotalHead;
+
         this.discountHead = discountHead;
+        this.discountRateHead = discountRateHead;
+        this.discountTotalHead = discountTotalHead;
+
+        this.totalHead = totalHead;
+        this.withTaxTotalHead = withTaxTotalHead;
+        this.withDiscountTotalHead = withDiscountTotalHead;
+        this.withTaxAndDiscountTotalHead = withTaxAndDiscountTotalHead;
     }
 
     public void addProduct(Product product) {
         products.add(product);
-        totalWithTax = totalWithTax + ( product.getQuantity() * product.getPriceWithTax());
-        totalWithoutTax = totalWithoutTax + ( product.getQuantity() * product.getPrice());
+        total = total + (product.getQuantity() * product.getPrice());
+        totalWithTax = totalWithTax + (product.getQuantity() * product.getPriceWithTax());
+        totalWithDiscount = totalWithDiscount + (product.getQuantity() * product.getPriceWithDiscount());
+        totalWithTaxAndDiscount = totalWithTaxAndDiscount + (product.getQuantity() * product.getPriceWithTaxAndDiscount());
     }
 
     public List<Product> getProducts() {
@@ -101,6 +121,52 @@ public class ProductContainer {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    // get only field heads
+
+    public String getDescHead() {
+        return descHead;
+    }
+
+    public String getQtyHead() {
+        return qtyHead;
+    }
+
+    public String getUPHead() {
+      return unitPriceHead;
+    }
+
+    public String getLineTotalHead() {
+        return lineTotalHead;
+    }
+
+    public String getsnHead() {
+        return snHead;
+    }
+
+    // Total base
+
+    public float getTotal() {
+        return total;
+    }
+
+    public String getFormatedTotal() {
+        return String.format("%.2f", this.getTotal()) + " " + currency;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    // Total with tax
 
     public float getTotalWithTax() {
         return totalWithTax;
@@ -114,101 +180,125 @@ public class ProductContainer {
         this.totalWithTax = totalWithTax;
     }
 
-    public float getTotalWithoutTax() {
-        return totalWithoutTax;
+    // Total with discount
+
+    public float getTotalWithDiscount() {
+        return totalWithDiscount;
     }
 
-    public String getFormatedTotalWithoutTax() {
-        return String.format("%.2f", this.getTotalWithoutTax()) + " " + currency;
+    public String getFormatedTotalWithDiscount() {
+        return String.format("%.2f", this.getTotalWithDiscount()) + " " + currency;
     }
 
-    public String getCurrency() {
-        return currency;
+    public void setTotalWithDiscount(float totalWithTax) {
+        this.totalWithDiscount = totalWithDiscount;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    // Total with tax and discount
+
+    public float getTotalWithTaxAndDiscount() {
+        return totalWithTaxAndDiscount;
     }
 
-    public void setTotalWithoutTax(float totalWithoutTax) {
-        this.totalWithoutTax = totalWithoutTax;
+    public String getFormatedTotalWithTaxAndDiscount() {
+        return String.format("%.2f", this.getTotalWithTaxAndDiscount()) + " " + currency;
     }
+
+    public void setTotalWithTaxAndDiscount(float totalWithTaxAndTax) {
+        this.totalWithTaxAndDiscount = totalWithTaxAndDiscount;
+    }
+
+    // delivery cost
+
+    public float gettotalDeliveryCost() {
+        return totalDeliveryCost;
+    }
+
+    public String getFormatedTotalDeliveryCost() {
+        return String.format("%.2f", this.gettotalDeliveryCost()) + " " + currency;
+    }
+
+    public void setTotalDeliveryCost(float totalDeliveryCost) {
+        this.totalDeliveryCost = totalDeliveryCost;
+    }
+
+    // tax calc from existing values
 
     public float getTotalTax() {
-        return totalWithTax - totalWithoutTax;
+        return totalWithTax - total;
     }
 
     public String getFormatedTotalTax() {
         return String.format("%.2f", this.getTotalTax()) + " " + currency;
     }
 
-    public String getDescHead() {
-        return descHead;
+    // discount calc from existing values
+
+    public float getTotalDiscount() {
+        return totalWithDiscount - total;
     }
 
-    public String getQtyHead() {
-        return qtyHead;
+    public String getFormatedTotalDiscount() {
+        return String.format("%.2f", this.getTotalDiscount()) + " " + currency;
     }
 
-    public String getUPHead() {
-        return unitPriceHead;
+    // tax getter heads //
+
+    public String getTaxHead() {
+      return taxHead;
     }
 
     public String getTaxRateHead() {
         return taxRateHead;
     }
 
-    public String getTaxHead() {
-        return taxHead;
-    }
-
-    public String getsnHead() {
-        return snHead;
-    }
-
-    public String getLineTotalHead() {
-        return lineTotalHead;
-    }
-
-    public String getTotalWithoutTaxHead() {
-        return withoutTaxTotalHead;
-    }
-
-    public String getTotalTaxHead() {
+    public String getTaxTotalHead() {
         return taxTotalHead;
     }
 
-    public String getTotalAmountHead() {
+    // discount getter heads //
+
+    public String getDiscountHead() {
+        return discountHead;
+    }
+
+    public String getDiscountRateHead() {
+        return discountRateHead;
+    }
+
+    public String getDiscountTotalHead() {
+        return discountTotalHead;
+    }
+
+    // total, total+tax, total+discount, total+tax+discount getter heads //
+
+    public String getTotalHead() {
+        return totalHead;
+    }
+
+    public String getWithTaxTotalHead() {
         return withTaxTotalHead;
+    }
+
+    public String getWithDiscountTotalHead() {
+        return withDiscountTotalHead;
+    }
+
+    public String getWithTaxAndDiscountTotalHead() {
+        return withTaxAndDiscountTotalHead;
+    }
+
+    // discount available boolean
+
+    public Boolean getDiscountAvailable() {
+        return discountAvailable;
     }
 
     public void setDiscountAvailable(Boolean discountAvailable) {
         this.discountAvailable = discountAvailable;
     }
 
-    public Boolean getDiscountAvailable() {
-        return discountAvailable;
-    }
-
-    public float getTotalDiscount() {
-        return totalDiscount;
-    }
-
-    public void setTotalDiscount(float totalDiscount) {
-        this.totalDiscount = totalDiscount;
-    }
-
-    public String getTotalDiscountFormated() {
-        return String.format("%.2f", this.getTotalDiscount()) + " " + currency;
-    }
-
-    public String getDiscountHead() {
-        return discountHead;
-    }
-
-    public String getTaxTotalHead() {
-        return taxTotalHead;
-    }
+    // tax available boolean
 
     public Boolean getTaxRateAvailable() {
         return taxRateAvailable;
@@ -222,8 +312,10 @@ public class ProductContainer {
     public String toString() {
         return "ProductContainer{" +
                 "products=" + products +
+                ", total=" + total +
                 ", totalWithTax=" + totalWithTax +
-                ", totalWithoutTax=" + totalWithoutTax +
+                ", totalWithDiscount=" + totalWithDiscount +
+                ", totalWithTaxAndDiscount=" + totalWithTaxAndDiscount +
                 '}';
     }
 
@@ -232,15 +324,23 @@ public class ProductContainer {
         private static final Map<String, String> descHeads = new LinkedHashMap<>();
         private static final Map<String, String> qtyHeads = new LinkedHashMap<>();
         private static final Map<String, String> unitPriceHeads = new LinkedHashMap<>();
-        private static final Map<String, String> taxRateHeads = new LinkedHashMap<>();
-        private static final Map<String, String> taxHeads = new LinkedHashMap<>();
         private static final Map<String, String> lineTotalHeads = new LinkedHashMap<>();
         private static final Map<String, String> snHeads = new LinkedHashMap<>();
-        private static final Map<String, String> withoutTaxTotalHeads = new LinkedHashMap<>();
-        private static final Map<String, String> taxTotalHeads = new LinkedHashMap<>();
-        private static final Map<String, String> withTaxTotalHeads = new LinkedHashMap<>();
-        private static final Map<String, String> discountHeads = new LinkedHashMap<>();
 
+        private static final Map<String, String> taxHeads = new LinkedHashMap<>();
+        private static final Map<String, String> taxRateHeads = new LinkedHashMap<>();
+        private static final Map<String, String> taxTotalHeads = new LinkedHashMap<>();
+
+        private static final Map<String, String> discountHeads = new LinkedHashMap<>();
+        private static final Map<String, String> discountRateHeads = new LinkedHashMap<>();
+        private static final Map<String, String> discountTotalHeads = new LinkedHashMap<>();
+
+        private static final Map<String, String> totalHeads = new LinkedHashMap<>();
+        private static final Map<String, String> withTaxTotalHeads = new LinkedHashMap<>();
+        private static final Map<String, String> withDiscountTotalHeads = new LinkedHashMap<>();
+        private static final Map<String, String> withTaxAndDiscountTotalHeads = new LinkedHashMap<>();
+
+        // Primary heads //
         {
             descHeads.put("Désignation", "fr");
             descHeads.put("Description", "fr");
@@ -249,17 +349,6 @@ public class ProductContainer {
             descHeads.put("Descriptions", "en");
             descHeads.put("Product Description", "en");
         }
-
-        {
-            snHeads.put("Non.", "fr");
-            snHeads.put("S.Non.", "fr");
-            snHeads.put("Numéro de série", "fr");
-
-            snHeads.put("No.", "en");
-            snHeads.put("S.No.", "en");
-            snHeads.put("Serial Number", "en");
-        }
-
         {
             qtyHeads.put("Qté", "fr");
             qtyHeads.put("Quantité", "fr");
@@ -267,7 +356,6 @@ public class ProductContainer {
             qtyHeads.put("Qty", "en");
             qtyHeads.put("Quantity", "en");
         }
-
         {
             unitPriceHeads.put("UP", "fr");
             unitPriceHeads.put("Prix Unitaire", "fr");
@@ -278,23 +366,6 @@ public class ProductContainer {
             unitPriceHeads.put("Unit Price", "en");
             unitPriceHeads.put("Price per unit", "en");
         }
-
-        {
-            taxRateHeads.put("TVA", "fr");
-            taxRateHeads.put("Taux de TVA", "fr");
-
-            taxRateHeads.put("VAT", "en");
-            taxRateHeads.put("VAT Rate", "en");
-        }
-
-        {
-            taxHeads.put("TVA", "fr");
-            taxHeads.put("Montant TVA", "fr");
-
-            taxHeads.put("VAT", "en");
-            taxHeads.put("VAT Amount", "en");
-        }
-
         {
             lineTotalHeads.put("Montant H.T.", "fr");
             lineTotalHeads.put("Montant HT", "fr");
@@ -302,16 +373,30 @@ public class ProductContainer {
             lineTotalHeads.put("Amount", "en");
             lineTotalHeads.put("Total", "en");
         }
-
         {
-            withoutTaxTotalHeads.put("Montant H.T.", "fr");
-            withoutTaxTotalHeads.put("Montant HT", "fr");
+            snHeads.put("Non.", "fr");
+            snHeads.put("S.Non.", "fr");
+            snHeads.put("Numéro de série", "fr");
 
-            withoutTaxTotalHeads.put("Amount", "en");
-            withoutTaxTotalHeads.put("Total", "en");
-            withoutTaxTotalHeads.put("Total without tax", "en");
+            snHeads.put("No.", "en");
+            snHeads.put("S.No.", "en");
+            snHeads.put("Serial Number", "en");
         }
+        // tax heads //
+        {
+            taxHeads.put("TVA", "fr");
+            taxHeads.put("Montant TVA", "fr");
 
+            taxHeads.put("VAT", "en");
+            taxHeads.put("VAT Amount", "en");
+        }
+        {
+            taxRateHeads.put("TVA", "fr");
+            taxRateHeads.put("Taux de TVA", "fr");
+
+            taxRateHeads.put("VAT", "en");
+            taxRateHeads.put("VAT Rate", "en");
+        }
         {
             taxTotalHeads.put("Montant TVA", "fr");
             taxTotalHeads.put("TVA", "fr");
@@ -320,16 +405,7 @@ public class ProductContainer {
             taxTotalHeads.put("Tax Amount", "en");
             taxTotalHeads.put("Total Tax", "en");
         }
-
-        {
-            withTaxTotalHeads.put("Montant TTC", "fr");
-            withTaxTotalHeads.put("Total TTC", "fr");
-            withTaxTotalHeads.put("Net à payer", "fr");
-
-            withTaxTotalHeads.put("Total Amount", "en");
-            withTaxTotalHeads.put("Amount to pay", "en");
-            withTaxTotalHeads.put("Total Net", "en");
-        }
+        // discount heads //
         {
             discountHeads.put("TOTAL REMISE IMMEDIATE", "fr");
 
@@ -337,6 +413,53 @@ public class ProductContainer {
             discountHeads.put("Discount", "en");
             discountHeads.put("DISC", "en");
         }
+        {
+            discountRateHeads.put("TODO", "fr");
+
+            discountRateHeads.put("Remise", "en");
+            discountRateHeads.put("Disc. Rate", "en");
+            discountRateHeads.put("Discount Rate", "en");
+        }
+        {
+            discountTotalHeads.put("Montant de la remise", "fr");
+
+            discountTotalHeads.put("Discount Amount", "en");
+            discountTotalHeads.put("Total Discount", "en");
+        }
+        // total, total+tax, total+discount, total+tax+discount heads //
+        {
+            totalHeads.put("Montant H.T.", "fr");
+            totalHeads.put("Montant HT", "fr");
+
+            totalHeads.put("Amount", "en");
+            totalHeads.put("Total", "en");
+            totalHeads.put("Total without tax", "en");
+        }
+        {
+            withTaxTotalHeads.put("Montant TTC", "fr");
+
+            withTaxTotalHeads.put("Total Amount with Tax", "en");
+            withTaxTotalHeads.put("Amount with Tax", "en");
+            withTaxTotalHeads.put("Total with Tax", "en");
+        }
+        {
+            withDiscountTotalHeads.put("Montant avec remise", "fr");
+
+            withDiscountTotalHeads.put("Total Amount with Discount", "en");
+            withDiscountTotalHeads.put("Amount with Discount", "en");
+            withDiscountTotalHeads.put("Total with Discount", "en");
+        }
+        {
+            withTaxTotalHeads.put("Montant TTC", "fr");
+            withTaxTotalHeads.put("Total TTC", "fr");
+            withTaxTotalHeads.put("Net à payer", "fr");
+
+            withTaxAndDiscountTotalHeads.put("Amount to pay", "en");
+            withTaxAndDiscountTotalHeads.put("Total Amount", "en");
+            withTaxAndDiscountTotalHeads.put("Final Amount", "en");
+            withTaxAndDiscountTotalHeads.put("Total Net", "en");
+        }
+
 
         private List<Product> products = new ArrayList<Product>();
         private static final List<String> productsFileList = Arrays.asList(
@@ -364,17 +487,24 @@ public class ProductContainer {
         @Override
         public ProductContainer generate(GenerationContext ctx) {
 
-            List<String> localdescHeads = descHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localqtyHeads = qtyHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localDescHeads = descHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localQtyHeads = qtyHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localUPHeads = unitPriceHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localtaxRateHeads = taxRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localtaxHeads = taxHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> locallineTotalHeads = lineTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localwithoutTaxTotalHeads = withoutTaxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localTaxTotalHeads = taxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localwithTaxTotalHeads = withTaxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localLineTotalHeads = lineTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localSNHeads = snHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localdiscountHeads = discountHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+
+            List<String> localTaxHeads = taxHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localTaxRateHeads = taxRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localTaxTotalHeads = taxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+
+            List<String> localDiscountHeads = discountHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localDiscountRateHeads = discountRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localDiscountTotalHeads = discountTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+
+            List<String> localTotalHeads = totalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localWithTaxTotalHeads = withTaxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localWithDiscountTotalHeads = withDiscountTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localWithTaxAndDiscountTotalHeads = withTaxAndDiscountTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
             List<Product> productsLangFiltered = new ArrayList<Product>();
             for (int i = 0; i < products.size(); i++) {
@@ -382,14 +512,27 @@ public class ProductContainer {
                     productsLangFiltered.add(products.get(i));
                 }
             }
-            int idxL = ctx.getRandom().nextInt(localqtyHeads.size());
-            int idxD = ctx.getRandom().nextInt(localdiscountHeads.size());
-
             final int MAXPRODUCT = 6;
             final int MAXQTYPERPRODUCT = 5;
-            ProductContainer productContainer = new ProductContainer(ctx.getCurrency(), localdescHeads.get(idxL), localqtyHeads.get(idxL),
-                                                localUPHeads.get(idxL), localtaxRateHeads.get(idxL), localtaxHeads.get(idxL), locallineTotalHeads.get(idxL),
-                                                localwithoutTaxTotalHeads.get(idxL), localTaxTotalHeads.get(idxL), localwithTaxTotalHeads.get(idxL), localSNHeads.get(idxL),localdiscountHeads.get(idxD));
+
+            ProductContainer productContainer = new ProductContainer(
+                    ctx.getCurrency(),
+                    localDescHeads.get(ctx.getRandom().nextInt(localDescHeads.size())),
+                    localQtyHeads.get(ctx.getRandom().nextInt(localQtyHeads.size())),
+                    localUPHeads.get(ctx.getRandom().nextInt(localUPHeads.size())),
+                    localLineTotalHeads.get(ctx.getRandom().nextInt(localLineTotalHeads.size())),
+                    localSNHeads.get(ctx.getRandom().nextInt(localSNHeads.size())),
+                    localTaxHeads.get(ctx.getRandom().nextInt(localTaxHeads.size())),
+                    localTaxRateHeads.get(ctx.getRandom().nextInt(localTaxRateHeads.size())),
+                    localTaxTotalHeads.get(ctx.getRandom().nextInt(localTaxTotalHeads.size())),
+                    localDiscountHeads.get(ctx.getRandom().nextInt(localDiscountHeads.size())),
+                    localDiscountRateHeads.get(ctx.getRandom().nextInt(localDiscountRateHeads.size())),
+                    localDiscountTotalHeads.get(ctx.getRandom().nextInt(localDiscountTotalHeads.size())),
+                    localTotalHeads.get(ctx.getRandom().nextInt(localTotalHeads.size())),
+                    localWithTaxTotalHeads.get(ctx.getRandom().nextInt(localWithTaxTotalHeads.size())),
+                    localWithDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithDiscountTotalHeads.size())),
+                    localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))
+                    );
 
             Boolean discountAvailable = false;ctx.getRandom().nextBoolean();
             productContainer.setDiscountAvailable(discountAvailable);
@@ -400,8 +543,6 @@ public class ProductContainer {
             float priceWithTax = 0;
             float priceWithDiscount = 0;
             float priceWithTaxAndDiscount = 0;
-            float aggDiscount = 0;
-            float productDiscount = 0;
             // TODO fix proper discount calculations
             for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
                 Product product = productsLangFiltered.get(ctx.getRandom().nextInt(productsLangFiltered.size()));
@@ -409,6 +550,7 @@ public class ProductContainer {
                 product.setCurrency(ctx.getCurrency());
 
                 price = product.getPrice();
+
                 taxRate = Helper.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
                 priceWithTax = Helper.round(price * (1 + taxRate), 2);
 
@@ -416,9 +558,6 @@ public class ProductContainer {
                 if (discountAvailable) {
                     discountRate = Helper.rand_uniform(0.05f, 0.15f);  // discountRate from 0% to 10%
                     priceWithDiscount = Helper.round(price * (1 - discountRate), 2);
-
-                    productDiscount = priceWithDiscount - price;
-                    aggDiscount += productDiscount;
                 }
                 priceWithTaxAndDiscount = price * (1 + taxRate - discountRate);
 
@@ -431,12 +570,6 @@ public class ProductContainer {
                 productContainer.addProduct(product);
             }
 
-            if (discountAvailable) {
-                productContainer.setTotalDiscount(aggDiscount);
-
-                float total = productContainer.getTotalWithTax();
-                productContainer.setTotalWithTax(total - aggDiscount);
-            }
             Boolean taxRateAvailable = ctx.getRandom().nextBoolean();
             productContainer.setTaxRateAvailable(taxRateAvailable);
 

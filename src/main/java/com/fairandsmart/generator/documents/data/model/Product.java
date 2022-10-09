@@ -247,7 +247,7 @@ public class Product {
         return String.format("%.2f", this.getTotalPriceWithDiscount()) + " " + currency;
     }
 
-    // Total Price with Tax and Discount (FINAL)
+    // Total Price with Tax and Discount (FINAL price)
     public float getTotalPriceWithTaxAndDiscount() {
         return priceWithTaxAndDiscount * quantity;
     }
