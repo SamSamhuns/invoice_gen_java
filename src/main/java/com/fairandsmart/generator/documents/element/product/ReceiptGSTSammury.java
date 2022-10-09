@@ -111,7 +111,7 @@ public class ReceiptGSTSammury extends ElementBox {
                 break;
             case "VAT":  tableElement = productContainer.getFormatedTotalTax();
                 break;
-            case "HT":  tableElement = productContainer.getFormatedTotalWithoutTax();
+            case "HT":  tableElement = productContainer.getFormatedTotal();
                 break;
             default: return "Invalid element name Name";
         }
@@ -123,9 +123,9 @@ public class ReceiptGSTSammury extends ElementBox {
         {
             headLabels.put("CODE", productContainer.getGSTHead());
             headLabels.put("TAUX", productContainer.getTaxRateHead());
-            headLabels.put("TTC", productContainer.getTotalAmountHead());
-            headLabels.put("VAT", productContainer.getTotalTaxHead());
-            headLabels.put("HT", productContainer.getTotalWithoutTaxHead());
+            headLabels.put("TTC", productContainer.getWithTaxTotalHead());
+            headLabels.put("VAT", productContainer.getTaxTotalHead());
+            headLabels.put("HT", productContainer.getTotalHead());
         }
 
 
