@@ -268,7 +268,7 @@ public class DartyLayout implements InvoiceLayout {
         HorizontalContainer totaux = new HorizontalContainer(250,posMsgY+39-3);
         totaux.addElement(new SimpleTextBox(fontBold1,9,0,0,"Total invoice : "));
         totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
-        SimpleTextBox stb = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalWithoutTax()+"","TWTX");
+        SimpleTextBox stb = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotal()+"","TWTX");
         totaux.addElement(stb);
         totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,70-stb.getBoundingBox().getWidth(),0));
         SimpleTextBox stb2 = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalTax()+"","TTX");

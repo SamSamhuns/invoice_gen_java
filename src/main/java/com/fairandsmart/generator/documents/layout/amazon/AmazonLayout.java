@@ -249,7 +249,7 @@ public class AmazonLayout implements InvoiceLayout {
         TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
         totalInvoice1.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, ""), false);
         totalInvoice1.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, ""), false);
-        totalInvoice1.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getProductContainer().getFormatedTotalWithoutTax(), "TWTX" ), centerAlignItems);
+        totalInvoice1.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getProductContainer().getFormatedTotal(), "TWTX" ), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, ""), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getProductContainer().getFormatedTotalWithTax(), "TA" ), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, (upperCap ? "VAT@": "vat@")), centerAlignItems);

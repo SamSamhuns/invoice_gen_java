@@ -313,7 +313,7 @@ public class CdiscountLayout implements InvoiceLayout {
 
 
         VerticalContainer labelTotal = new VerticalContainer(380,posTab-2,250);
-        labelTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getTotalAmountHead().toUpperCase()));
+        labelTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getWithTaxTotalHead().toUpperCase()));
         labelTotal.addElement(new BorderBox(gris,gris,0,5,0,0,4));
         labelTotal.addElement(new SimpleTextBox(font,8,0,0,"Credit/Gift Card"));
         labelTotal.addElement(new BorderBox(gris,gris,0,0,0,0,4));
@@ -323,9 +323,9 @@ public class CdiscountLayout implements InvoiceLayout {
         labelTotal.addElement(new BorderBox(gris,gris,0,0,0,0,4));
         labelTotal.addElement(new SimpleTextBox(font,8,0,0,"TOTAL NET TTC"));
         labelTotal.addElement(new BorderBox(gris,gris,0,0,0,0,4));
-        labelTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getTotalTaxHead().toUpperCase()));
+        labelTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getTaxTotalHead().toUpperCase()));
         labelTotal.addElement(new BorderBox(gris,gris,0,0,0,0,4));
-        labelTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getTotalWithoutTaxHead().toUpperCase()));
+        labelTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getTotalHead().toUpperCase()));
         labelTotal.build(contentStream,writer);
 
         VerticalContainer valeurTotal = new VerticalContainer(480,posTab-2,250);
@@ -341,7 +341,7 @@ public class CdiscountLayout implements InvoiceLayout {
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,4));
         valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFormatedTotalTax(),"TTX"));
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,4));
-        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFormatedTotalWithoutTax(),"TWTX"));
+        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFormatedTotal(),"TWTX"));
         valeurTotal.build(contentStream,writer);
 
         new SimpleTextBox(fontItalic1,9,170,posMsgY-76,"No discount will be applied in case of early payment").build(contentStream,writer);

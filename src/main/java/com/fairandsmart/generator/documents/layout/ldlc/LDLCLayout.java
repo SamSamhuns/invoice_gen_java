@@ -272,30 +272,12 @@ public class LDLCLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getTotalPrice()), "PTWTX" ), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getTotalPrice()*(reduc/100)) ), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, "PIE"), false);
-            VAT = randomProduct.getTaxRate()*1000;
             // TODO fix hardcoded tax value checks
-            switch ((int)VAT){
-                case 200 :
-                    TVACode = "4";
-                    tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
-                    break;
-                case 100 :
-                    TVACode = "3";
-                    tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
-                    break;
-                case 55 :
-                    TVACode ="2";
-                    tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
-                    break;
-                case 21 :
-                    TVACode = "1";
-                    tabTVA[0][w] = TVACode;
-                    tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
-                    break;
-            }
+            // VAT = randomProduct.getTaxRate()*1000;
+            VAT = 200;
+            TVACode = "1";
+            tabTVA[0][w] = TVACode;
+            tabTVA[1][w] = Float.toString(randomProduct.getTotalPrice());
             productLine.addElement(new SimpleTextBox(font, 8, 0, 0, TVACode), false);
 
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
@@ -323,47 +305,10 @@ public class LDLCLayout implements InvoiceLayout {
 
         new HorizontalLineBox(25,190, 250, 0).build(contentStream,writer);
 
-        float totalTVA4 = 0 ;
-        float totalTVA3 = 0 ;
-        float totalTVA2 = 0 ;
         float totalTVA1 = 0 ;
-        for(int i=0; i<tabTVA[0].length; i++) {
-            switch (tabTVA[0][i]){
-                case "4" :
-                    totalTVA4 += Float.parseFloat(tabTVA[1][i]);
-                    break;
-                case "3" :
-                    totalTVA2 +=  Float.parseFloat(tabTVA[1][i]);
-                    break;
-                case "2" :
-                    totalTVA2 +=  Float.parseFloat(tabTVA[1][i]);
-                    break;
-                case "1" :
-                    totalTVA1 +=  Float.parseFloat(tabTVA[1][i]);
-                    break;
-            }
-        }
+        totalTVA1 +=  Float.parseFloat(tabTVA[1][0]);
 
         TableRowBox TVALine = new TableRowBox(configRowTVA, 0, 0);
-
-        if(totalTVA4 != 0){
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "4"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "20", "TXR"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, totalTVA4+"","TTX"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, (float)((int)(totalTVA4*0.2*1000))/1000 +""), true);
-        }
-        if(totalTVA3 != 0){
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "3"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "10", "TXR"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, totalTVA3+"", "TTX"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, (float)((int)(totalTVA3*0.1*1000))/1000 +""), true);
-        }
-        if(totalTVA2 != 0){
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "2"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "5,5", "TXR"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, totalTVA2+"", "TTX"), true);
-            TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, (float)((int)(totalTVA2*0.055*1000))/1000 +""), true);
-        }
         if(totalTVA1 != 0){
             TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "1"), true);
             TVALine.addElement(new SimpleTextBox(font, 8, 2, 0, "2,1", "TXR"), true);
@@ -383,17 +328,17 @@ public class LDLCLayout implements InvoiceLayout {
         VerticalContainer verticalTotaux = new VerticalContainer(posTotauxX+2, posTotauxY+85-2, 250 );
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Discount amount"));
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Postage amount"));
-        verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getProductContainer().getTotalWithoutTaxHead()));
+        verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getProductContainer().getTotalHead()));
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Of which eco-participation"));
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getProductContainer().getTaxRateHead()));
-        verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getProductContainer().getTotalAmountHead()));
+        verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getProductContainer().getWithTaxTotalHead()));
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0,"Your payment"));
         verticalTotaux.build(contentStream, writer);
 
         VerticalContainer verticalTotaux2 = new VerticalContainer(posTotauxX+190, posTotauxY+85-2, 250 );
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, "0,00"));
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, "0,00"));
-        verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, (float)((int)model.getProductContainer().getTotalWithoutTax()*100)/100+"","TWTX"));
+        verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, (float)((int)model.getProductContainer().getTotal()*100)/100+"","TWTX"));
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, "0,00"));
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, (float)((int)model.getProductContainer().getTotalTax()*100)/100+"", "TTX"));
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, (float)((int)model.getProductContainer().getTotalWithTax()*100)/100+"","TA"));

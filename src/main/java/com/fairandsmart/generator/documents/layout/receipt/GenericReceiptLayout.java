@@ -399,16 +399,16 @@ public class GenericReceiptLayout implements SSDLayout {
         VerticalContainer a6 = new VerticalContainer(0,0,300f);
         if(this.model.getProductReceiptContainer().getTotaltaxAvailable()) {
             HorizontalContainer totalHT = new HorizontalContainer(0, 0);
-            totalHT.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getTotalWithoutTaxHead(), Color.BLACK, null, HAlign.LEFT));
+            totalHT.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getTotalHead(), Color.BLACK, null, HAlign.LEFT));
             totalHT.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 5, 0));
-            totalHT.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotalWithoutTax(), Color.BLACK, null, HAlign.CENTER));//, "TWTX"));
+            totalHT.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotal(), Color.BLACK, null, HAlign.CENTER));//, "TWTX"));
             a6.addElement(totalHT);
             if(modeEval) {
                 pos_element++;
                 new SimpleTextBoxForEvaluation("totalHT", pos_element).build(writerEval);
             }
             HorizontalContainer totalTax = new HorizontalContainer(0, 0);
-            totalTax.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getTotalTaxHead(), Color.BLACK, null, HAlign.LEFT));
+            totalTax.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT));
             totalTax.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 5, 0));
             totalTax.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotalTax(), Color.BLACK, null, HAlign.CENTER));//, "TTX"));
             //totalTax.setHeight(5);
@@ -419,7 +419,7 @@ public class GenericReceiptLayout implements SSDLayout {
             }
         }
         HorizontalContainer totalTTC = new HorizontalContainer(0,0);
-        totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize+1, 0, 0, this.model.getProductReceiptContainer().getTotalAmountHead(), Color.BLACK, null, HAlign.LEFT));
+        totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize+1, 0, 0, this.model.getProductReceiptContainer().getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT));
         totalTTC.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 5, 0));
         if(this.model.getProductReceiptContainer().getRoundAvailable()) {
             totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotalWithTax(), Color.BLACK, null, HAlign.CENTER));

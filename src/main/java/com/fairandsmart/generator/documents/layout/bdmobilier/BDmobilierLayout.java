@@ -231,11 +231,11 @@ public class BDmobilierLayout implements InvoiceLayout {
         new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal-13,158,13).build(contentStream,writer);
 
         // Totals and Taxes calculations
-        new SimpleTextBox(fontNormal1, 9, 435, posYTotal+11, pc.getTotalWithoutTaxHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
-        new SimpleTextBox(fontNormal1, 9, 508, posYTotal+11, pc.getFormatedTotalWithoutTax(),Color.WHITE,Color.BLACK,"TWTX").build(contentStream,writer);
-        new SimpleTextBox(fontNormal1, 9, 435, posYTotal-2, pc.getTotalTaxHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
+        new SimpleTextBox(fontNormal1, 9, 435, posYTotal+11, pc.getTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
+        new SimpleTextBox(fontNormal1, 9, 508, posYTotal+11, pc.getFormatedTotal(),Color.WHITE,Color.BLACK,"TWTX").build(contentStream,writer);
+        new SimpleTextBox(fontNormal1, 9, 435, posYTotal-2, pc.getTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
         new SimpleTextBox(fontNormal1, 9, 508, posYTotal-2, pc.getFormatedTotalTax(),Color.WHITE,Color.BLACK,"TTX").build(contentStream,writer);
-        new SimpleTextBox(fontNormal1, 9, 435, posYTotal-16, pc.getTotalAmountHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
+        new SimpleTextBox(fontNormal1, 9, 435, posYTotal-16, pc.getWithTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
         new SimpleTextBox(fontNormal1, 9, 508, posYTotal-16, pc.getFormatedTotalWithTax(),Color.WHITE,Color.BLACK,"TA").build(contentStream,writer);
 
         // Footer company info

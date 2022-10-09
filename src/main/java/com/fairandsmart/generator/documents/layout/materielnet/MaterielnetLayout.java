@@ -193,18 +193,18 @@ public class MaterielnetLayout implements InvoiceLayout {
         VerticalContainer totalContainer = new VerticalContainer(416,269,250);
 
         HorizontalContainer baseHT = new HorizontalContainer(0,0);
-        baseHT.addElement(new SimpleTextBox(fontBold1,9,0,0,model.getProductContainer().getTotalWithoutTaxHead()));
+        baseHT.addElement(new SimpleTextBox(fontBold1,9,0,0,model.getProductContainer().getTotalHead()));
         baseHT.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
-        baseHT.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalWithoutTax(),"TWTX"));
+        baseHT.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotal(),"TWTX"));
 
         HorizontalContainer taxeTVA = new HorizontalContainer(0,0);
-        taxeTVA.addElement(new SimpleTextBox(fontBold1,9,0,0,model.getProductContainer().getTotalTaxHead()));
+        taxeTVA.addElement(new SimpleTextBox(fontBold1,9,0,0,model.getProductContainer().getTaxTotalHead()));
         taxeTVA.addElement(new SimpleTextBox(fontBold1,9,0,0," 20%"));
         taxeTVA.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
         taxeTVA.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalTax(),"TTX"));
 
         HorizontalContainer totalTTC = new HorizontalContainer(0,0);
-        totalTTC.addElement(new SimpleTextBox(fontBold1,9,0,0,model.getProductContainer().getTotalAmountHead()));
+        totalTTC.addElement(new SimpleTextBox(fontBold1,9,0,0,model.getProductContainer().getWithTaxTotalHead()));
         totalTTC.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
         totalTTC.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TA"));
 

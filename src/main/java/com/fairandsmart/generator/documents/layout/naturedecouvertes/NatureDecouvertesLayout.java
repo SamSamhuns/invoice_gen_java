@@ -83,7 +83,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         PDFont fontItalic1 = PDType1Font.HELVETICA_OBLIQUE;
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-        String logo = this.getClass().getClassLoader().getResource("invoices/parts/amazon/barcode1.jpg").getFile();
+        String logo = this.getClass().getClassLoader().getResource("invoices/parts/ldlc/barcode.jpg").getFile();
         PDImageXObject logoHeader = PDImageXObject.createFromFile(logo, document);
         float ratioPage = page.getMediaBox().getWidth()/2480;
         float ratioLogo = (float)logoHeader.getWidth() / (float)logoHeader.getHeight();
@@ -218,7 +218,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         VerticalContainer backContainer = new VerticalContainer(343*ratioPage, page.getMediaBox().getHeight()-2840*ratioPage, 636*ratioPage);
         backContainer.addElement(new SimpleTextBox(font,10,0,0,"Label to stick on your package in case of return. "));
         backContainer.build(contentStream,writer);
-        String barcode = this.getClass().getClassLoader().getResource("invoices/parts/amazon/barcode1.jpg").getFile();
+        String barcode = this.getClass().getClassLoader().getResource("invoices/parts/ldlc/barcode.jpg").getFile();
         PDImageXObject pdBarcode = PDImageXObject.createFromFile(barcode, document);
         new ImageBox(pdBarcode, 343*ratioPage,page.getMediaBox().getHeight()-2940*ratioPage , pdBarcode.getWidth()*ratioPage, pdBarcode.getHeight()*ratioPage, model.getReference().getValueCommand()).build(contentStream,writer);
         backContainer = new VerticalContainer(370*ratioPage, page.getMediaBox().getHeight()-3050*ratioPage, 636*ratioPage);
@@ -243,7 +243,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         TableRowBox taxContent = new TableRowBox(row, 0, -20);
         taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, "1", Color.BLACK,null), true);
-        taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, model.getProductContainer().getFormatedTotalWithoutTax(), Color.BLACK, null), true);
+        taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, model.getProductContainer().getFormatedTotal(), Color.BLACK, null), true);
         taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, ""+model.getProductContainer().getProducts().get(0).getTaxRate(), Color.BLACK, null), true);
         taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, model.getProductContainer().getFormatedTotalTax(), Color.BLACK, null), true);
         tax.addElement(taxContent);

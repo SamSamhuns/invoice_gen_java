@@ -390,15 +390,15 @@ public class InvoiceSSDLayout implements SSDLayout {
             HorizontalContainer totalDiscount = new HorizontalContainer(0, 0);
             totalDiscount.addElement(new SimpleTextBox(font, fontSize + 1, 0, 0, model.getProductContainer().getDiscountHead(), Color.BLACK, null, HAlign.LEFT));
             totalDiscount.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 5, 0));
-            totalDiscount.addElement(new SimpleTextBox(font, fontSize, 0, 0, model.getProductContainer().getTotalDiscountFormated(), Color.BLACK, null, HAlign.CENTER));
+            totalDiscount.addElement(new SimpleTextBox(font, fontSize, 0, 0, model.getProductContainer().getFormatedTotalDiscount(), Color.BLACK, null, HAlign.CENTER));
             totalsContainer.addElement(totalDiscount);
             pos_element++;
             new SimpleTextBoxForEvaluation("discount",pos_element).build(writerEval);
         }
         HorizontalContainer totalHT = new HorizontalContainer(0,0);
-        totalHT.addElement(new SimpleTextBox(font, fontSize+1, 0, 0, model.getProductContainer().getTotalWithoutTaxHead(), Color.BLACK, null, HAlign.LEFT));
+        totalHT.addElement(new SimpleTextBox(font, fontSize+1, 0, 0, model.getProductContainer().getTotalHead(), Color.BLACK, null, HAlign.LEFT));
         totalHT.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 10, 0));
-        totalHT.addElement(new SimpleTextBox(font, fontSize, 0, 0, model.getProductContainer().getFormatedTotalWithoutTax(), Color.BLACK, null, HAlign.CENTER , "TWTX"));
+        totalHT.addElement(new SimpleTextBox(font, fontSize, 0, 0, model.getProductContainer().getFormatedTotal(), Color.BLACK, null, HAlign.CENTER , "TWTX"));
         totalsContainer.addElement(totalHT);
         pos_element++;
         new SimpleTextBoxForEvaluation("TWTX",pos_element).build(writerEval);
@@ -412,14 +412,14 @@ public class InvoiceSSDLayout implements SSDLayout {
             new SimpleTextBoxForEvaluation("TXR",pos_element).build(writerEval);
         }
         HorizontalContainer totalTax = new HorizontalContainer(0,0);
-        totalTax.addElement(new SimpleTextBox(font, fontSize+1, 0, 0, model.getProductContainer().getTotalTaxHead(), Color.BLACK, null, HAlign.LEFT));
+        totalTax.addElement(new SimpleTextBox(font, fontSize+1, 0, 0, model.getProductContainer().getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT));
         totalTax.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 10, 0));
         totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, model.getProductContainer().getFormatedTotalTax(), Color.BLACK, null, HAlign.CENTER , "TTX"));
         totalsContainer.addElement(totalTax);
         pos_element++;
         new SimpleTextBoxForEvaluation("TTX",pos_element).build(writerEval);
         HorizontalContainer totalTTC = new HorizontalContainer(0,0);
-        totalTTC.addElement(new SimpleTextBox(font, fontSize+1, 0, 0, model.getProductContainer().getTotalAmountHead(), Color.BLACK, null, HAlign.LEFT));
+        totalTTC.addElement(new SimpleTextBox(font, fontSize+1, 0, 0, model.getProductContainer().getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT));
         totalTTC.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 10, 0));
         totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, model.getProductContainer().getFormatedTotalWithTax(), Color.BLACK, null, HAlign.CENTER,"TA" ));
         totalsContainer.addElement(totalTTC);
