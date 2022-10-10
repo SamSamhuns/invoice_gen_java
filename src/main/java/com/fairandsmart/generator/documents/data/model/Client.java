@@ -181,6 +181,10 @@ public class Client {
             shippingHeads.put("Shipping Address", "en");
             shippingHeads.put("Send To", "en");
         }
+        {
+          // billingHeads and shippingHeads must have the same number of corresponding values
+          assert billingHeads.size() == shippingHeads.size();
+        }
 
         @Override
         public Client generate(GenerationContext ctx) {

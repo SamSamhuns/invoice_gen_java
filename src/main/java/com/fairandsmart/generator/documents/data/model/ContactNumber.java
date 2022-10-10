@@ -131,17 +131,18 @@ public class ContactNumber {
             phoneLabels.put("Téléphone", "fr");
             phoneLabels.put("Numéro de Tel", "fr");
 
-            phoneLabels.put("Phone", "en");
-            phoneLabels.put("Tel", "en");
-            phoneLabels.put("Telephone", "en");
+            phoneLabels.put("Phone:", "en");
+            phoneLabels.put("Phone Number:", "en");
+            phoneLabels.put("Tel:", "en");
+            phoneLabels.put("Telephone:", "en");
         }
         {
             faxLabels.put("Fax:", "fr");
             faxLabels.put("Télécopie", "fr");
             faxLabels.put("Numéro de Fax", "fr");
 
-            faxLabels.put("Fax", "en");
-            faxLabels.put("Fax Number", "en");
+            faxLabels.put("Fax:", "en");
+            faxLabels.put("Fax Number:", "en");
         }
 
         @Override
