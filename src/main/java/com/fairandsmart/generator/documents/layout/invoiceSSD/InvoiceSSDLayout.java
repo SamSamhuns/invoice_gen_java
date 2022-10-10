@@ -535,10 +535,10 @@ public class InvoiceSSDLayout implements SSDLayout {
 
     private HorizontalContainer getInvoiceNum() throws Exception{
         HorizontalContainer iNumContainer = new HorizontalContainer(0, 0);
-        SimpleTextBox iNumLabel = new SimpleTextBox(fonts[1], fontSize+2, 0, 0, model.getReference().getLabel());
+        SimpleTextBox iNumLabel = new SimpleTextBox(fonts[1], fontSize+2, 0, 0, model.getReference().getLabelInvoice());
         iNumLabel.setPadding(0,0,5,0);
         iNumContainer.addElement(iNumLabel);
-        SimpleTextBox iNumValue = new SimpleTextBox(fonts[2], fontSize+1, 0, 0, model.getReference().getValue(), "IN");
+        SimpleTextBox iNumValue = new SimpleTextBox(fonts[2], fontSize+1, 0, 0, model.getReference().getValueInvoice(), "IN");
         iNumValue.setPadding(5,0,0,0);
         iNumContainer.addElement(iNumValue);
         return iNumContainer;
@@ -546,10 +546,10 @@ public class InvoiceSSDLayout implements SSDLayout {
 
     private HorizontalContainer getIDate() throws Exception{
         HorizontalContainer iDateContainer = new HorizontalContainer(0, 0);
-        SimpleTextBox dateLabel = new SimpleTextBox(fonts[1], fontSize+2, 0, 0, model.getDate().getLabel());
+        SimpleTextBox dateLabel = new SimpleTextBox(fonts[1], fontSize+2, 0, 0, model.getDate().getLabelInvoice());
         dateLabel.setPadding(0,0,5,0);
         iDateContainer.addElement(dateLabel);
-        SimpleTextBox dateValue = new SimpleTextBox(fonts[2], fontSize+1, 0, 0, model.getDate().getValue(), "IDATE");
+        SimpleTextBox dateValue = new SimpleTextBox(fonts[2], fontSize+1, 0, 0, model.getDate().getValueInvoice(), "IDATE");
         dateValue.setPadding(5,0,0,0);
         iDateContainer.addElement(dateValue);
         return  iDateContainer;
@@ -560,14 +560,14 @@ public class InvoiceSSDLayout implements SSDLayout {
         leftInfoClasses = new ArrayList<String>();
         if(iNumNeeded && this.invoiceNumAvailable!=-1)
         {
-            invoiceInfo.addElement(getInfoAsLabelValue(model.getReference().getLabel(), model.getReference().getValue(), "IN"));
+            invoiceInfo.addElement(getInfoAsLabelValue(model.getReference().getLabelInvoice(), model.getReference().getValueInvoice(), "IN"));
             invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
             this.invoiceNumAvailable = -1;
             leftInfoClasses.add("InvoiceNum");
         }
         if(iDateNeeded && this.iDateAvailable!=-1)
         {
-            invoiceInfo.addElement(getInfoAsLabelValue(model.getDate().getLabel(), model.getDate().getValue(), "IDATE"));
+            invoiceInfo.addElement(getInfoAsLabelValue(model.getDate().getLabelInvoice(), model.getDate().getValueInvoice(), "IDATE"));
             invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
             this.iDateAvailable= -1;
             leftInfoClasses.add("IDate");
@@ -581,7 +581,7 @@ public class InvoiceSSDLayout implements SSDLayout {
         }
         if(oNumDesired && this.oNumAvailable==1)
         {
-            invoiceInfo.addElement(getInfoAsLabelValue(model.getReference().getLabelCommand(), model.getReference().getValueCommand(), "ONUM"));
+            invoiceInfo.addElement(getInfoAsLabelValue(model.getReference().getLabelOrder(), model.getReference().getValueOrder(), "ONUM"));
             invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
             this.oNumAvailable = -1;
             leftInfoClasses.add("Onum");

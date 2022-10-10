@@ -142,16 +142,16 @@ public class DartyLayout implements InvoiceLayout {
 
         HorizontalContainer HorizontalNumDateContainer = new HorizontalContainer(42+240/4, posRectGris-25 );
         HorizontalNumDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, "N°"));
-        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getReference().getValue(), "IN" ));
+        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getReference().getValueInvoice(), "IN" ));
         HorizontalNumDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, " du " ));
-        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getDate().getValue(), "IDATE" ));
+        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getDate().getValueInvoice(), "IDATE" ));
         HorizontalNumDateContainer.build(contentStream,writer);
 
         HorizontalContainer HorizontalComDateContainer = new HorizontalContainer(42, 595 );
-        HorizontalComDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getReference().getLabelCommand()+" "));
-        HorizontalComDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getReference().getValueCommand(),"ONUM" ));
+        HorizontalComDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getReference().getLabelOrder()+" "));
+        HorizontalComDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getReference().getValueOrder(),"ONUM" ));
         HorizontalComDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, " du " ));
-        HorizontalComDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getDate().getValue(), "IDATE" ));
+        HorizontalComDateContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getDate().getValueInvoice(), "IDATE" ));
         HorizontalComDateContainer.build(contentStream,writer);
 
         float[] configRow = {56f, 22f, 141f, 80f, 62f, 90f, 51f};
@@ -203,18 +203,18 @@ public class DartyLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
 
-            String anneeGarantie = model.getDate().getValue().substring(model.getDate().getValue().length()-4,model.getDate().getValue().length());
+            String anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-4,model.getDate().getValueInvoice().length());
             int nouvAnnee;
             String dateGarantie;
 
             if(anneeGarantie.contains("/")){
                 nouvAnnee = Integer.parseInt(anneeGarantie.substring(anneeGarantie.length()-2,anneeGarantie.length()))+2;
-                anneeGarantie = model.getDate().getValue().substring(model.getDate().getValue().length()-2,model.getDate().getValue().length());
-                dateGarantie = model.getDate().getValue().replace(anneeGarantie,nouvAnnee+"");
+                anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-2,model.getDate().getValueInvoice().length());
+                dateGarantie = model.getDate().getValueInvoice().replace(anneeGarantie,nouvAnnee+"");
             }
             else {
                 nouvAnnee = Integer.parseInt(anneeGarantie) + 2;
-                dateGarantie = model.getDate().getValue().replace(anneeGarantie,nouvAnnee+"");
+                dateGarantie = model.getDate().getValueInvoice().replace(anneeGarantie,nouvAnnee+"");
             }
 
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0,dateGarantie ), true);

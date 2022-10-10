@@ -346,8 +346,10 @@ public class ProductContainer {
             descHeads.put("Description", "fr");
             descHeads.put("Désignation du Produit", "fr");
 
-            descHeads.put("Descriptions", "en");
+            descHeads.put("Item", "en");
+            descHeads.put("Description", "en");
             descHeads.put("Product Description", "en");
+            descHeads.put("Description of Goods", "en");
         }
         {
             qtyHeads.put("Qté", "fr");
@@ -372,14 +374,19 @@ public class ProductContainer {
 
             lineTotalHeads.put("Amount", "en");
             lineTotalHeads.put("Total", "en");
+            lineTotalHeads.put("Gross", "en");
+            lineTotalHeads.put("Net Amount", "en");
         }
         {
             snHeads.put("Non.", "fr");
             snHeads.put("S.Non.", "fr");
             snHeads.put("Numéro de série", "fr");
 
+            snHeads.put("#", "en");
             snHeads.put("No.", "en");
+            snHeads.put("SN.", "en");
             snHeads.put("S.No.", "en");
+            snHeads.put("SI No.", "en");
             snHeads.put("Serial Number", "en");
         }
         // tax heads //
@@ -387,14 +394,21 @@ public class ProductContainer {
             taxHeads.put("TVA", "fr");
             taxHeads.put("Montant TVA", "fr");
 
+            taxHeads.put("Tax", "en");
+            taxHeads.put("TAX", "en");
+            taxHeads.put("Vat", "en");
             taxHeads.put("VAT", "en");
+            taxHeads.put("VAT Tax", "en");
             taxHeads.put("VAT Amount", "en");
         }
         {
             taxRateHeads.put("TVA", "fr");
             taxRateHeads.put("Taux de TVA", "fr");
 
-            taxRateHeads.put("VAT", "en");
+            taxRateHeads.put("Tax %", "en");
+            taxRateHeads.put("TAX %", "en");
+            taxRateHeads.put("Vat %", "en");
+            taxRateHeads.put("VAT %", "en");
             taxRateHeads.put("VAT Rate", "en");
         }
         {
@@ -404,6 +418,7 @@ public class ProductContainer {
             taxTotalHeads.put("VAT Amount", "en");
             taxTotalHeads.put("Tax Amount", "en");
             taxTotalHeads.put("Total Tax", "en");
+            taxTotalHeads.put("Sales Tax", "en");
         }
         // discount heads //
         {
@@ -411,12 +426,11 @@ public class ProductContainer {
 
             discountHeads.put("@DISC", "en");
             discountHeads.put("Discount", "en");
-            discountHeads.put("DISC", "en");
+            discountHeads.put("Disc %", "en");
         }
         {
-            discountRateHeads.put("TODO", "fr");
+            discountRateHeads.put("Remise", "fr");
 
-            discountRateHeads.put("Remise", "en");
             discountRateHeads.put("Disc. Rate", "en");
             discountRateHeads.put("Discount Rate", "en");
         }
@@ -434,6 +448,8 @@ public class ProductContainer {
             totalHeads.put("Amount", "en");
             totalHeads.put("Total", "en");
             totalHeads.put("Total without tax", "en");
+            totalHeads.put("Total (Excl.Tax)", "en");
+            totalHeads.put("Total (Excl.VAT)", "en");
         }
         {
             withTaxTotalHeads.put("Montant TTC", "fr");
@@ -458,6 +474,7 @@ public class ProductContainer {
             withTaxAndDiscountTotalHeads.put("Total Amount", "en");
             withTaxAndDiscountTotalHeads.put("Final Amount", "en");
             withTaxAndDiscountTotalHeads.put("Total Net", "en");
+            withTaxAndDiscountTotalHeads.put("Total", "en");
         }
 
 

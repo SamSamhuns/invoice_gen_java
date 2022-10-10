@@ -77,7 +77,7 @@ public class DemoTextBox implements InvoiceLayout {
                 12,
                 20,
                 750,
-                model.getReference().getLabel(),
+                model.getReference().getLabelInvoice(),
                 "HEAD");
         stb.build(contentStream, writer);
         SimpleTextBox stb2 = new SimpleTextBox(
@@ -85,7 +85,7 @@ public class DemoTextBox implements InvoiceLayout {
                 12,
                 20 + stb.getBoundingBox().getWidth() + 5,
                 750,
-                model.getReference().getValue(),
+                model.getReference().getValueInvoice(),
                 "IN");
         stb2.build(contentStream, writer);
 

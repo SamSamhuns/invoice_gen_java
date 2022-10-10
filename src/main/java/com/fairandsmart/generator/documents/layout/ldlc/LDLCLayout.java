@@ -166,14 +166,14 @@ public class LDLCLayout implements InvoiceLayout {
         new SimpleTextBox(font, 9, posRefX+5, posRefY+48, "Reference to remember when paying").build(contentStream, writer);
         VerticalContainer verticalREF1 = new VerticalContainer(posRefX+5, posRefY+38, 250 );
         verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelClient()));
-        verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabel()));
-        verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getLabel()));
+        verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelInvoice()));
+        verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getLabelInvoice()));
         verticalREF1.build(contentStream, writer);
 
         VerticalContainer verticalREF2 = new VerticalContainer(posRefX+100, posRefY+38, 250 );
         verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueClient(),"CNUM"));
-        verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValue(),"IN"));
-        verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getDate().getValue(),"IDATE"));
+        verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueInvoice(),"IN"));
+        verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getDate().getValueInvoice(),"IDATE"));
         verticalREF2.build(contentStream, writer);
 
         //Numero et Ref
@@ -183,13 +183,13 @@ public class LDLCLayout implements InvoiceLayout {
         BorderBox bdNumRef = new BorderBox(Color.BLACK, Color.WHITE, 1,posNumRefX, posNumRefY, wSH-10,hNumRef);
         bdNumRef.build(contentStream, writer);
         VerticalContainer verticalNumREF = new VerticalContainer(posNumRefX+5, posRefY-10, 250 );
-        verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabel()));
+        verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelInvoice()));
         verticalNumREF.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
-        verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getLabel()));
+        verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getLabelInvoice()));
         verticalNumREF.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelClient()));
         verticalNumREF.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
-        verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelCommand()));
+        verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelOrder()));
         verticalNumREF.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, "Ref Client : "));
         verticalNumREF.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
@@ -201,13 +201,13 @@ public class LDLCLayout implements InvoiceLayout {
         verticalNumREF.build(contentStream, writer);
 
         VerticalContainer verticalNumREF2 = new VerticalContainer(verticalNumREF.getBoundingBox().getPosX()+verticalNumREF.getBoundingBox().getWidth()+15, posRefY-10, 250 );
-        verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValue(),"IN"));
+        verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueInvoice(),"IN"));
         verticalNumREF2.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
-        verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getDate().getValue(),"IDATE"));
+        verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getDate().getValueInvoice(),"IDATE"));
         verticalNumREF2.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalNumREF2.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getValueClient(),"CNUM"));
         verticalNumREF2.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
-        verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueCommand(),"ONUM"));
+        verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueOrder(),"ONUM"));
         verticalNumREF2.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalNumREF2.addElement(new SimpleTextBox(font, 9, 0, 0, ""));
         verticalNumREF2.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
@@ -215,7 +215,7 @@ public class LDLCLayout implements InvoiceLayout {
         verticalNumREF2.build(contentStream, writer);
 
         //num facture ss code barre
-        new SimpleTextBox(font, 9, posBarcodeX+tailleBarcode/2-model.getReference().getValue().length()*2, posBarcodeY-tailleBarcode/ratioBarcode, model.getReference().getValue(),"IN").build(contentStream,writer);
+        new SimpleTextBox(font, 9, posBarcodeX+tailleBarcode/2-model.getReference().getValueInvoice().length()*2, posBarcodeY-tailleBarcode/ratioBarcode, model.getReference().getValueInvoice(),"IN").build(contentStream,writer);
 
         //ligne garantie + nb page
         int posGarantieY = (int) (posBHY-3);
@@ -353,7 +353,7 @@ public class LDLCLayout implements InvoiceLayout {
 
         VerticalContainer verticalNet2 = new VerticalContainer(posTotauxX+170, posTotauxY-5, 250 );
         verticalNet2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "0,00 "));
-        verticalNet2.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getValue(),"IDATE"));
+        verticalNet2.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getValueInvoice(),"IDATE"));
         verticalNet2.build(contentStream, writer);
 
         new SimpleTextBox(fontBold, 9, 30, 182, "Our invoices are denominated in Euros.").build(contentStream,writer);

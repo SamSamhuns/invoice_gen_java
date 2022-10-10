@@ -82,7 +82,7 @@ public class BillingType {
         {
             values.put("à domicile par Ducros", "fr");
 
-            labels.put("At home by Ducros", "en");
+            values.put("At home by Shipper", "en");
         }
         {
             labels.put("Méthode de livraison", "fr");

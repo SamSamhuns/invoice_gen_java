@@ -112,14 +112,14 @@ public class MaterielnetLayout implements InvoiceLayout {
         VerticalContainer numContainer = new VerticalContainer(274, page.getMediaBox().getHeight()-45, 250 );
 
         HorizontalContainer numFact = new HorizontalContainer(0,0);
-        numFact.addElement(new SimpleTextBox(font,9,0,0,model.getReference().getLabel()+" "));
-        numFact.addElement(new SimpleTextBox(font,9,0,0, model.getReference().getValue(), "IN"));
+        numFact.addElement(new SimpleTextBox(font,9,0,0,model.getReference().getLabelInvoice()+" "));
+        numFact.addElement(new SimpleTextBox(font,9,0,0, model.getReference().getValueInvoice(), "IN"));
         numFact.addElement(new SimpleTextBox(font,9,0,0, " - "));
-        numFact.addElement(new SimpleTextBox(font,9,0,0, model.getDate().getValue(), "IDATE"));
+        numFact.addElement(new SimpleTextBox(font,9,0,0, model.getDate().getValueInvoice(), "IDATE"));
 
         HorizontalContainer dateFact = new HorizontalContainer(0,0);
         dateFact.addElement(new SimpleTextBox(font,9,0,0, address.getCity()+" , "));
-        dateFact.addElement(new SimpleTextBox(font,9,0,0,model.getDate().getValueExpedition()));
+        dateFact.addElement(new SimpleTextBox(font,9,0,0,model.getDate().getValueShipping()));
 
         numContainer.addElement(numFact);
         numContainer.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2));
@@ -130,8 +130,8 @@ public class MaterielnetLayout implements InvoiceLayout {
         VerticalContainer numComContainer = new VerticalContainer(22, page.getMediaBox().getHeight()-133, 250 );
 
         HorizontalContainer numCom = new HorizontalContainer(0,0);
-        numCom.addElement(new SimpleTextBox(font,9,0,0,model.getReference().getLabelCommand()+" "));
-        numCom.addElement(new SimpleTextBox(font,9,0,0,model.getReference().getValueCommand()));
+        numCom.addElement(new SimpleTextBox(font,9,0,0,model.getReference().getLabelOrder()+" "));
+        numCom.addElement(new SimpleTextBox(font,9,0,0,model.getReference().getValueOrder()));
 
         numComContainer.addElement(numCom);
         numComContainer.addElement(new SimpleTextBox(fontItalic1,8,0,0,"Delivery by Chronopost"));

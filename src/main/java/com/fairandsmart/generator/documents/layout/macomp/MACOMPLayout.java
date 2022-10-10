@@ -86,8 +86,8 @@ public class MACOMPLayout implements InvoiceLayout {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         // Invoice No. 123
-        new SimpleTextBox(fonts[1], fontSize+2, 310, 748, model.getReference().getLabel()+" : "+ model.getReference().getValue()).build(contentStream, writer);
-       // new SimpleTextBox(fonts[1], fontSize+2, 310, 730, model.getReference().getLabelCommand()+" : "+ model.getReference().getValueCommand()).build(contentStream, writer);
+        new SimpleTextBox(fonts[1], fontSize+2, 310, 748, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream, writer);
+       // new SimpleTextBox(fonts[1], fontSize+2, 310, 730, model.getReference().getLabelOrder()+" : "+ model.getReference().getValueOrder()).build(contentStream, writer);
         //new SimpleTextBox(fonts[1], fontSize+2, 310, 712, model.getReference().getLabelClient()+" : "+ model.getReference().getValueClient()).build(contentStream, writer);
 
         // Company Info Box
@@ -112,9 +112,9 @@ public class MACOMPLayout implements InvoiceLayout {
 
         float[] configRow = {150f, 200f};
         TableRowBox elementInfoContainer = new TableRowBox(configRow, 0, 0);
-        SimpleTextBox Label = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getDate().getLabel(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Label = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getDate().getLabelInvoice(),Color.BLACK, null, HAlign.LEFT);
         elementInfoContainer.addElement(Label, false);
-        SimpleTextBox Value = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getDate().getValue());
+        SimpleTextBox Value = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getDate().getValueInvoice());
         elementInfoContainer.addElement(Value, false);
         invoiceInfo.addElement(elementInfoContainer);
         invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
@@ -128,9 +128,9 @@ public class MACOMPLayout implements InvoiceLayout {
         invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
         TableRowBox elementInfoContainer2 = new TableRowBox(configRow,0, 0);
-        SimpleTextBox Label2 = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getReference().getLabelCommand(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Label2 = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getReference().getLabelOrder(),Color.BLACK, null, HAlign.LEFT);
         elementInfoContainer2.addElement(Label2, false);
-        SimpleTextBox Value2 = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getReference().getValueCommand(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Value2 = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getReference().getValueOrder(),Color.BLACK, null, HAlign.LEFT);
         elementInfoContainer2.addElement(Value2, false);
         invoiceInfo.addElement(elementInfoContainer2);
         invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));

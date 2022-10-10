@@ -123,7 +123,7 @@ public class AmazonLayout implements InvoiceLayout {
         // Text top
         VerticalContainer infos = new VerticalContainer(25, 810, 500);
         infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Page 1 of 1" + ((rnd.nextInt(2) == 1) ? ", 1-1/1": ".")));
-        infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Invoice for "+model.getReference().getValue()+" "+model.getDate().getValue()));
+        infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Invoice for "+model.getReference().getValueInvoice()+" "+model.getDate().getValueInvoice()));
         infos.addElement(new SimpleTextBox(fontBold1, 10, 0, 0, ((rnd.nextInt(2) == 1) ? "Retail" : "Institution") + " / Tax Invoice / Cash Memorandum"));
         infos.build(contentStream, writer);
 
@@ -137,7 +137,7 @@ public class AmazonLayout implements InvoiceLayout {
             new SimpleTextBox(fontNormal1, 9, 25, 690, "CST Number: "+model.getCompany().getIdNumbers().getVatValue(), "SVAT").build(contentStream, writer);
         }
         new SimpleTextBox(fontNormal1, 9, 25, 680, vatSentence, "SVAT").build(contentStream, writer);
-        new SimpleTextBox(fontNormal1, 9, pageWidth/2, 680, ((rnd.nextInt(10) < 5) ? "Invoice No. ": "") + model.getReference().getValue()).build(contentStream, writer);
+        new SimpleTextBox(fontNormal1, 9, pageWidth/2, 680, ((rnd.nextInt(10) < 5) ? "Invoice No. ": "") + model.getReference().getValueInvoice()).build(contentStream, writer);
 
         contentStream.moveTo(20, 650);
         contentStream.lineTo( pageWidth-(20*2), 650);

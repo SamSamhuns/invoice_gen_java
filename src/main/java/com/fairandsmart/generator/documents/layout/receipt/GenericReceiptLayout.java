@@ -3,9 +3,9 @@ package com.fairandsmart.generator.documents.layout.receipt;
 /*-
  * #%L
  * FacoGen / A tool for annotated GEDI based invoice generation.
- * 
+ *
  * Authors:
- * 
+ *
  * Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
  * Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
  * Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
@@ -22,12 +22,12 @@ package com.fairandsmart.generator.documents.layout.receipt;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -171,7 +171,7 @@ public class GenericReceiptLayout implements SSDLayout {
         SimpleTextBox companyAddressline3 = new SimpleTextBox(fonts[0], fontSize, 0, 0, model.getCompany().getAddress().getCountry(), Color.BLACK, null, HAlign.CENTER, "SA");
         SimpleTextBox phone = new SimpleTextBox(fonts[0], 9, 0, 0, model.getCompany().getContact().getPhoneLabel()+" "+model.getCompany().getContact().getPhoneValue(), Color.BLACK, null, HAlign.CENTER);//, "SCN");
         SimpleTextBox fax = new SimpleTextBox(fonts[0], 9, 0, 0, model.getCompany().getContact().getFaxLabel()+"  "+model.getCompany().getContact().getFaxValue());//,"SFAX");
-        SimpleTextBox reference = new SimpleTextBox(fonts[0], 9, 0, 0, "(" +this.model.getReference().getValueCommand() +")",Color.BLACK, null, HAlign.CENTER);//,"ONUM");
+        SimpleTextBox reference = new SimpleTextBox(fonts[0], 9, 0, 0, "(" +this.model.getReference().getValueOrder() +")",Color.BLACK, null, HAlign.CENTER);//,"ONUM");
         firstPart = new TableRowBox(configRow1v1, 0, 0);
         HorizontalContainer b0 = new HorizontalContainer(0,0);
         if(logo_available){
@@ -305,15 +305,15 @@ public class GenericReceiptLayout implements SSDLayout {
             }
             if (receiptNumberAvailable){
                 HorizontalContainer recNumH= new HorizontalContainer(0,0);
-                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getLabel() +" : ",Color.BLACK, null, HAlign.CENTER ));
-                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getValue(),Color.BLACK, null, HAlign.CENTER ));
+                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getLabelInvoice() +" : ",Color.BLACK, null, HAlign.CENTER ));
+                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getValueInvoice(),Color.BLACK, null, HAlign.CENTER ));
                 infolist.add(recNumH);
                 infolistForEval.add("reference");
             }
             if(orderNumAvailable){
                 HorizontalContainer recNumH= new HorizontalContainer(0,0);
-                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getLabelCommand() +" : ",Color.BLACK, null, HAlign.CENTER ));
-                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getValueCommand(),Color.BLACK, null, HAlign.CENTER ));
+                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getLabelOrder() +" : ",Color.BLACK, null, HAlign.CENTER ));
+                recNumH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getValueOrder(),Color.BLACK, null, HAlign.CENTER ));
                 infolist.add(recNumH);
                 infolistForEval.add("orderNumber");
             }
@@ -516,7 +516,7 @@ public class GenericReceiptLayout implements SSDLayout {
             dateH.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 5, 0));
             dateH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getDate().getTime(),Color.BLACK, null, HAlign.CENTER ));
             dateH.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 5, 0));
-            dateH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getValueCommand(),Color.BLACK, null, HAlign.CENTER ));
+            dateH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getValueOrder(),Color.BLACK, null, HAlign.CENTER ));
             dateTime.addElement(dateH);
             dateTime.alignElements("LEFT",300);
             receiptPage.addElement(dateTime);

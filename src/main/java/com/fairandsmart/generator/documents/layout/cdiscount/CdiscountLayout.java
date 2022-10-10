@@ -133,12 +133,12 @@ public class CdiscountLayout implements InvoiceLayout {
         new BorderBox(gris,gris,1,posHeaderX,posHeaderY-14-2,252,14).build(contentStream,writer);
 
         HorizontalContainer numFac = new HorizontalContainer(posHeaderX+68,posHeaderY+12);
-        numFac.addElement(new SimpleTextBox(fontBold1,9,0,0, model.getReference().getLabel()+" "));
-        numFac.addElement(new SimpleTextBox(fontBold1,9,0,0, model.getReference().getValue(), "IN"));
+        numFac.addElement(new SimpleTextBox(fontBold1,9,0,0, model.getReference().getLabelInvoice()+" "));
+        numFac.addElement(new SimpleTextBox(fontBold1,9,0,0, model.getReference().getValueInvoice(), "IN"));
 
         HorizontalContainer containerDate = new HorizontalContainer(posHeaderX+252/3,posHeaderY-4);
         containerDate.addElement(new SimpleTextBox(fontBold1,9,0,0, "du "));
-        containerDate.addElement(new SimpleTextBox(fontBold1,9,0,0, model.getDate().getValue(), "IDATE"));
+        containerDate.addElement(new SimpleTextBox(fontBold1,9,0,0, model.getDate().getValueInvoice(), "IDATE"));
 
         numFac.build(contentStream,writer);
         containerDate.build(contentStream,writer);
@@ -185,7 +185,7 @@ public class CdiscountLayout implements InvoiceLayout {
         VerticalContainer labelInfoClient = new VerticalContainer(88,page.getMediaBox().getHeight()-227,250);
         labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,"e-mail address"));
         labelInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getLabelCommand()));
+        labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getLabelOrder()));
         labelInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getPaymentInfo().getLabelType()+""));
         labelInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
@@ -196,7 +196,7 @@ public class CdiscountLayout implements InvoiceLayout {
         VerticalContainer valueInfoClient = new VerticalContainer(175,page.getMediaBox().getHeight()-227,250);
         valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,"companie@gmail.com"));
         valueInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getValueCommand(),"ONUM"));
+        valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getValueOrder(),"ONUM"));
         valueInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getPaymentInfo().getValueType(),"PMODE"));
         valueInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
@@ -218,13 +218,13 @@ public class CdiscountLayout implements InvoiceLayout {
         VerticalContainer labelInfoClient2 = new VerticalContainer(321,page.getMediaBox().getHeight()-227,250);
         labelInfoClient2.addElement(new SimpleTextBox(font,8,0,0,"ID Client"));
         labelInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        labelInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getLabelCommand()));
+        labelInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getLabelOrder()));
         labelInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         labelInfoClient2.addElement(new SimpleTextBox(font,8,0,0,"Date of validation"));
         labelInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         labelInfoClient2.addElement(new SimpleTextBox(font,8,0,0,"Date of Sending"));
         labelInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        labelInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getValue()));
+        labelInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getValueInvoice()));
 
         labelInfoClient2.build(contentStream,writer);
 
@@ -233,9 +233,9 @@ public class CdiscountLayout implements InvoiceLayout {
         VerticalContainer valeurInfoClient2 = new VerticalContainer(397,page.getMediaBox().getHeight()-227,250);
         valeurInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getValueClient(),"CNUM"));
         valeurInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        valeurInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getValueCommand(),"IDATE"));
+        valeurInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getValueOrder(),"IDATE"));
         valeurInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        valeurInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getValueCommand()));
+        valeurInfoClient2.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getValueOrder()));
         valeurInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         valeurInfoClient2.addElement(new SimpleTextBox(font,8,0,0,"No of Parcels"));
         valeurInfoClient2.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));

@@ -121,6 +121,7 @@ public class IDNumbers {
             siretLabels.put("Siret", "en");
         }
         {
+            // specific to french invoices
             toaLabels.put("Code APE", "fr");
             toaLabels.put("NAF", "fr");
             toaLabels.put("N.A.F.", "fr");
@@ -150,7 +151,8 @@ public class IDNumbers {
             vatLabels.put("TRN No", "en");
             vatLabels.put("VAT Number", "en");
             vatLabels.put("VAT", "en");
-            vatLabels.put("VAT/TIN Number", "en");
+            vatLabels.put("Tax Number", "en");
+            vatLabels.put("TIN Number", "en");
         }
         {
             vatValues.put("UAE[0-9]{14}", "AE_en");

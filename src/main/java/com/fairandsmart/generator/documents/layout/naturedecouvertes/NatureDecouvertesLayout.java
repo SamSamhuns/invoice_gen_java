@@ -121,15 +121,15 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         billingContainer.build(contentStream,writer);
 
         HorizontalContainer infoCommande = new HorizontalContainer(147*ratioPage, page.getMediaBox().getHeight()-866*ratioPage);
-        infoCommande.addElement(new SimpleTextBox(PDType1Font.TIMES_BOLD,15, 0,0,"Order number "+model.getReference().getValueCommand(),"ONUM"));
+        infoCommande.addElement(new SimpleTextBox(PDType1Font.TIMES_BOLD,15, 0,0,"Order number "+model.getReference().getValueOrder(),"ONUM"));
         infoCommande.build(contentStream,writer);
 
         HorizontalContainer infoInvoice = new HorizontalContainer(1357*ratioPage, page.getMediaBox().getHeight()-875*ratioPage);
-        infoInvoice.addElement(new SimpleTextBox(PDType1Font.TIMES_BOLD,12, 0,300,"Invoice No "+model.getReference().getValue(),"IN"));
+        infoInvoice.addElement(new SimpleTextBox(PDType1Font.TIMES_BOLD,12, 0,300,"Invoice No "+model.getReference().getValueInvoice(),"IN"));
         infoInvoice.build(contentStream,writer);
 
         HorizontalContainer dateInvoice = new HorizontalContainer(2000*ratioPage, page.getMediaBox().getHeight()-875*ratioPage);
-        dateInvoice.addElement(new SimpleTextBox(PDType1Font.TIMES_BOLD,12, 0,300,"Le "+model.getDate().getValueCommand(),"IDATE"));
+        dateInvoice.addElement(new SimpleTextBox(PDType1Font.TIMES_BOLD,12, 0,300,"Le "+model.getDate().getValueOrder(),"IDATE"));
         dateInvoice.build(contentStream,writer);
 
         HorizontalContainer infoEntreprise = new HorizontalContainer(0,0);
@@ -220,9 +220,9 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         backContainer.build(contentStream,writer);
         String barcode = this.getClass().getClassLoader().getResource("invoices/parts/ldlc/barcode.jpg").getFile();
         PDImageXObject pdBarcode = PDImageXObject.createFromFile(barcode, document);
-        new ImageBox(pdBarcode, 343*ratioPage,page.getMediaBox().getHeight()-2940*ratioPage , pdBarcode.getWidth()*ratioPage, pdBarcode.getHeight()*ratioPage, model.getReference().getValueCommand()).build(contentStream,writer);
+        new ImageBox(pdBarcode, 343*ratioPage,page.getMediaBox().getHeight()-2940*ratioPage , pdBarcode.getWidth()*ratioPage, pdBarcode.getHeight()*ratioPage, model.getReference().getValueOrder()).build(contentStream,writer);
         backContainer = new VerticalContainer(370*ratioPage, page.getMediaBox().getHeight()-3050*ratioPage, 636*ratioPage);
-        backContainer.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getValueCommand()));
+        backContainer.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getValueOrder()));
         backContainer.build(contentStream,writer);
 
         float[] row = {190*ratioPage,254*ratioPage,144*ratioPage,268*ratioPage};

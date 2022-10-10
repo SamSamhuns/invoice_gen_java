@@ -149,11 +149,11 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Top right company info
         VerticalContainer headerContainer = new VerticalContainer(420, page.getMediaBox().getHeight()-9,250);
         headerContainer.addElement(new SimpleTextBox(normalOrBoldFont,10,0,0,model.getCompany().getName(),"SN"));
-        headerContainer.addElement(new SimpleTextBox(fontNormal1,10,0,0,model.getDate().getValue(),grayishFontColor,Color.WHITE,"IDATE"));
+        headerContainer.addElement(new SimpleTextBox(fontNormal1,10,0,0,model.getDate().getValueInvoice(),grayishFontColor,Color.WHITE,"IDATE"));
 
         HorizontalContainer numFact = new HorizontalContainer(0,0);
-        numFact.addElement(new SimpleTextBox(fontNormal1,10,0,0,model.getReference().getLabel()+" ",grayishFontColor,Color.WHITE));
-        numFact.addElement(new SimpleTextBox(fontNormal1,10,0,0,model.getReference().getValue(),grayishFontColor,Color.WHITE,"IN"));
+        numFact.addElement(new SimpleTextBox(fontNormal1,10,0,0,model.getReference().getLabelInvoice()+" ",grayishFontColor,Color.WHITE));
+        numFact.addElement(new SimpleTextBox(fontNormal1,10,0,0,model.getReference().getValueInvoice(),grayishFontColor,Color.WHITE,"IN"));
 
         headerContainer.addElement(numFact);
 
@@ -161,11 +161,11 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Left top info
         VerticalContainer infoCommande = new VerticalContainer(leftMarginX,page.getMediaBox().getHeight()-211,76);
-        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8, 0,0,model.getReference().getLabelCommand()));
-        infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getReference().getValueCommand(),"ONUM"));
+        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8, 0,0,model.getReference().getLabelOrder()));
+        infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getReference().getValueOrder(),"ONUM"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getDate().getLabelCommand()));
-        infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getDate().getValueCommand(),"IDATE"));
+        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getDate().getLabelOrder()));
+        infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getDate().getValueOrder(),"IDATE"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
         infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getPaymentInfo().getLabelType()));
         infoCommande.addElement(new SimpleTextBox(fontNormal1,8,0,0,model.getPaymentInfo().getValueType(),"PMODE"));

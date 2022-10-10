@@ -104,8 +104,8 @@ public class ReceiptDate {
         private static final Map<SimpleDateFormat, String> formatsDate = new LinkedHashMap<>();
         private static final Map<SimpleDateFormat, String> formatsTime = new LinkedHashMap<>();
         private static final Map<String, String> labels = new LinkedHashMap<>();
-        private static final Map<String, String> labelsCommand = new LinkedHashMap<>();
-        private static final Map<String, String> labelsExpedition = new LinkedHashMap<>();
+        private static final Map<String, String> labelsOrder = new LinkedHashMap<>();
+        private static final Map<String, String> labelsShipping = new LinkedHashMap<>();
         private static final Map<String, String> labelsPayment = new LinkedHashMap<>();
         private static final Map<String, String> labelsTime = new LinkedHashMap<>();
         private static final Map<String, String> labelsPrintedDate = new LinkedHashMap<>();
@@ -133,16 +133,16 @@ public class ReceiptDate {
             labels.put("Dated", "en");
         }
         {
-            labelsCommand.put("Commandé le", "fr");
-            labelsCommand.put("Date de commande", "fr");
+            labelsOrder.put("Commandé le", "fr");
+            labelsOrder.put("Date de commande", "fr");
 
-            labelsCommand.put("Command date", "en");
+            labelsOrder.put("Order date", "en");
         }
         {
-            labelsExpedition.put("Expédié le", "fr");
-            labelsExpedition.put("Date d'expédition", "fr");
+            labelsShipping.put("Expédié le", "fr");
+            labelsShipping.put("Date d'expédition", "fr");
 
-            labelsExpedition.put("Expedition date", "en");
+            labelsShipping.put("Expedition date", "en");
         }
         {
             labelsPayment.put("Payé le", "fr");
@@ -175,15 +175,15 @@ public class ReceiptDate {
 
 
             List<String> localizedLabels = labels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsCommand = labelsCommand.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsExpedition = labelsExpedition.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabelsShipping = labelsShipping.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localizedLabelsPayment = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localizedLabelsTime = labelsTime.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localizedLabelPrintedDate = labelsPrintedDate.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
             int idxL = ctx.getRandom().nextInt(localizedLabels.size());
-            int idxLC = ctx.getRandom().nextInt(localizedLabelsCommand.size());
-            int idxLE = ctx.getRandom().nextInt(localizedLabelsExpedition.size());
+            int idxLC = ctx.getRandom().nextInt(localizedLabelsOrder.size());
+            int idxLE = ctx.getRandom().nextInt(localizedLabelsShipping.size());
             int idxLP = ctx.getRandom().nextInt(localizedLabelsPayment.size());
             int idxLT = ctx.getRandom().nextInt(localizedLabelsTime.size());
             int idxLPR = ctx.getRandom().nextInt(localizedLabelPrintedDate.size());

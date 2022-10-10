@@ -42,74 +42,74 @@ import java.util.stream.Collectors;
 
 public class InvoiceDate {
 
-    private String label;
-    private String value;
-    private String labelCommand;
-    private String valueCommand;
-    private String labelExpedition;
-    private String valueExpedition;
+    private String labelInvoice;
+    private String valueInvoice;
+    private String labelOrder;
+    private String valueOrder;
+    private String labelShipping;
+    private String valueShipping;
     private String labelPayment;
     private String valuePayment;
 
 
-    public InvoiceDate(String label, String value, String labelCommand, String valueCommand, String labelExpedition, String valueExpedition, String labelPayment, String valuePayment
+    public InvoiceDate(String labelInvoice, String valueInvoice, String labelOrder, String valueOrder, String labelShipping, String valueShipping, String labelPayment, String valuePayment
     ) {
-        this.label = label;
-        this.value = value;
-        this.labelCommand = labelCommand;
-        this.valueCommand = valueCommand;
-        this.labelExpedition = labelExpedition;
-        this.valueExpedition = valueExpedition;
+        this.labelInvoice = labelInvoice;
+        this.valueInvoice = valueInvoice;
+        this.labelOrder = labelOrder;
+        this.valueOrder = valueOrder;
+        this.labelShipping = labelShipping;
+        this.valueShipping = valueShipping;
         this.labelPayment = labelPayment;
         this.valuePayment = valuePayment;
     }
 
-    public String getValue() {
-        return value;
+    public String getValueInvoice() {
+        return valueInvoice;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValueInvoice(String valueInvoice) {
+        this.valueInvoice = valueInvoice;
     }
 
-    public String getLabel() {
-        return label;
+    public String getLabelInvoice() {
+        return labelInvoice;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setLabelInvoice(String labelInvoice) {
+        this.labelInvoice = labelInvoice;
     }
 
-    public String getLabelCommand() {
-        return labelCommand;
+    public String getLabelOrder() {
+        return labelOrder;
     }
 
-    public void setLabelCommand(String labelCommand) {
-        this.labelCommand = labelCommand;
+    public void setLabelOrder(String labelOrder) {
+        this.labelOrder = labelOrder;
     }
 
-    public String getValueCommand() {
-        return valueCommand;
+    public String getValueOrder() {
+        return valueOrder;
     }
 
-    public void setValueCommand(String valueCommand) {
-        this.valueCommand = valueCommand;
+    public void setValueOrder(String valueOrder) {
+        this.valueOrder = valueOrder;
     }
 
-    public String getLabelExpedition() {
-        return labelExpedition;
+    public String getLabelShipping() {
+        return labelShipping;
     }
 
-    public void setLabelExpedition(String labelExpedition) {
-        this.labelExpedition = labelExpedition;
+    public void setLabelShipping(String labelShipping) {
+        this.labelShipping = labelShipping;
     }
 
-    public String getValueExpedition() {
-        return valueExpedition;
+    public String getValueShipping() {
+        return valueShipping;
     }
 
-    public void setValueExpedition(String valueExpedition) {
-        this.valueExpedition = valueExpedition;
+    public void setValueShipping(String valueShipping) {
+        this.valueShipping = valueShipping;
     }
 
     public String getLabelPayment() {
@@ -131,12 +131,12 @@ public class InvoiceDate {
     @Override
     public String toString() {
         return "InvoiceDate{" +
-                "label='" + label + '\'' +
-                ", value='" + value + '\'' +
-                ", labelCommand='" + labelCommand + '\'' +
-                ", valueCommand='" + valueCommand + '\'' +
-                ", labelExpedition='" + labelExpedition + '\'' +
-                ", valueExpedition='" + valueExpedition + '\'' +
+                "labelInvoice='" + labelInvoice + '\'' +
+                ", valueInvoice='" + valueInvoice + '\'' +
+                ", labelOrder='" + labelOrder + '\'' +
+                ", valueOrder='" + valueOrder + '\'' +
+                ", labelShipping='" + labelShipping + '\'' +
+                ", valueShipping='" + valueShipping + '\'' +
                 ", labelPayment='" + labelPayment + '\'' +
                 ", valuePayment='" + valuePayment + '\'' +
                 '}';
@@ -147,38 +147,38 @@ public class InvoiceDate {
         private static final long from = 252493200;
         private static final long to = System.currentTimeMillis() / 1000;
         private static final Map<SimpleDateFormat, String> formats = new LinkedHashMap<>();
-        private static final Map<String, String> labels = new LinkedHashMap<>();
-        private static final Map<String, String> labelsCommand = new LinkedHashMap<>();
-        private static final Map<String, String> labelsExpedition = new LinkedHashMap<>();
+        private static final Map<String, String> labelsInvoice = new LinkedHashMap<>();
+        private static final Map<String, String> labelsOrder = new LinkedHashMap<>();
+        private static final Map<String, String> labelsShipping = new LinkedHashMap<>();
         private static final Map<String, String> labelsPayment = new LinkedHashMap<>();
         {
             formats.put(new SimpleDateFormat("MMM d, YYYY"), "en");
-          //  formats.put(new SimpleDateFormat("YYYY-MM-dd HH:mm:ss"), "en");
+            // formats.put(new SimpleDateFormat("YYYY-MM-dd HH:mm:ss"), "en");
             formats.put(new SimpleDateFormat("dd/MM/YY"), "fr");
             formats.put(new SimpleDateFormat("d MMM, YYYY"), "en");
             formats.put(new SimpleDateFormat("d MMM YYYY"), "fr");
         }
         {
-            labels.put("Du", "fr");
-            labels.put("Date de la facture", "fr");
+            labelsInvoice.put("Du", "fr");
+            labelsInvoice.put("Date de la facture", "fr");
 
-            labels.put("Invoice Date", "en");
-            labels.put("Date", "en");
-            labels.put("Dated", "en");
+            labelsInvoice.put("Invoice Date", "en");
+            labelsInvoice.put("Date", "en");
+            labelsInvoice.put("Dated", "en");
         }
         {
-            labelsCommand.put("Commandé le", "fr");
-            labelsCommand.put("Date de commande", "fr");
+            labelsOrder.put("Commandé le", "fr");
+            labelsOrder.put("Date de commande", "fr");
 
-            labelsCommand.put("Order date", "en");
-            labelsCommand.put("Date of Order", "en");
+            labelsOrder.put("Order date", "en");
+            labelsOrder.put("Date of Order", "en");
         }
         {
-            labelsExpedition.put("Expédié le", "fr");
-            labelsExpedition.put("Date d'expédition", "fr");
+            labelsShipping.put("Expédié le", "fr");
+            labelsShipping.put("Date d'expédition", "fr");
 
-            labelsExpedition.put("Shipping date", "en");
-            labelsExpedition.put("Date of Shipment", "en");
+            labelsShipping.put("Shipping date", "en");
+            labelsShipping.put("Date of Shipment", "en");
         }
         {
             labelsPayment.put("Payé le", "fr");
@@ -194,28 +194,28 @@ public class InvoiceDate {
             long date = (ctx.getRandom().nextInt((int)(to-from)) + from) * 1000;
             ctx.setDate(date);
             List<SimpleDateFormat> localizedFormats = formats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            int idxF = ctx.getRandom().nextInt(localizedFormats.size());
 
-            List<String> localizedLabels = labels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsCommand = labelsCommand.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsExpedition = labelsExpedition.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabels = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabelsShipping = labelsShipping.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localizedLabelsPayment = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            int idxL = ctx.getRandom().nextInt(localizedLabels.size());
-            int idxLC = ctx.getRandom().nextInt(localizedLabelsCommand.size());
-            int idxLE = ctx.getRandom().nextInt(localizedLabelsExpedition.size());
-            int idxLP = ctx.getRandom().nextInt(localizedLabelsPayment.size());
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date);
             Date invoiceDate = calendar.getTime();
-            Date expeditionDate = calendar.getTime();
+            Date shippingDate = calendar.getTime();
             calendar.add(Calendar.DAY_OF_WEEK, -4);
-            Date commandDate = calendar.getTime();
+            Date orderDate = calendar.getTime();
             Date paymentDate = calendar.getTime();
-            return new InvoiceDate(localizedLabels.get(idxL), localizedFormats.get(idxF).format(invoiceDate),
-                    localizedLabelsCommand.get(idxLC), localizedFormats.get(idxF).format(commandDate),
-                    localizedLabelsExpedition.get(idxLE), localizedFormats.get(idxF).format(expeditionDate),
-                    localizedLabelsPayment.get(idxLP), localizedFormats.get(idxF).format(paymentDate)
+            return new InvoiceDate(
+                    localizedLabels.get(ctx.getRandom().nextInt(localizedLabels.size())),
+                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(invoiceDate),
+                    localizedLabelsOrder.get(ctx.getRandom().nextInt(localizedLabelsOrder.size())),
+                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(orderDate),
+                    localizedLabelsShipping.get(ctx.getRandom().nextInt(localizedLabelsShipping.size())),
+                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(shippingDate),
+                    localizedLabelsPayment.get(ctx.getRandom().nextInt(localizedLabelsPayment.size())),
+                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(paymentDate)
             );
         }
 

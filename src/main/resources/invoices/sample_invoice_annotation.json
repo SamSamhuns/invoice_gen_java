@@ -1,0 +1,39 @@
+{
+  "invoice": {
+    "invoice_date": "Invoice Date",
+    "invoice_id": "Invoice Id",
+    "invoice_order_id": "Purchase Order",
+    "invoice_due_date": "Due Date"
+  },
+  "vendor": {
+    "vendor_name": "Vendor Name",
+    "vendor_recipient": "Vendor Address Recipient",
+    "vendor_addr": "Vendor Address",
+    "vendor_tax_id": "Vendor TaxId"
+  },
+  "customer": {
+    "customer_recipient": "Customer Address Recipient",
+    "customer_addr": "Customer Address"
+  },
+  "shipto": {
+    "shipto_recipient": "Shipping Address Recipient",
+    "shipto_addr": "Shipping Address"
+  },
+  "items": [{
+    "Description": "Item Description",
+    "Quantity": "Item Quantity",
+    "Unit": "Item unit i.e. hours, lbs, kgs",
+    "UnitPrice": "Price per unit i.e. 5$ per Gallon",
+    "VAT": "VAT Percentage",
+    "Tax": "Tax Amount",
+    "Amount": "Total of Item i.e. Quantity x UnitPrice"
+  }],
+  "total": {
+    "subtotal_price": "SubTotal",
+    "tax_price": "Total Tax / Total VAT",
+    "total_price": "Invoice Total / Amount Due"
+  },
+  "terms": {
+    "payment_term": "Payment Term"
+  }
+}
