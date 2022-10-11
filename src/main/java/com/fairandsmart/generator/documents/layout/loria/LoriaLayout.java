@@ -35,7 +35,6 @@ package com.fairandsmart.generator.documents.layout.loria;
 
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
-import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -43,7 +42,6 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.xml.stream.XMLStreamWriter;
 
 //@ApplicationScoped

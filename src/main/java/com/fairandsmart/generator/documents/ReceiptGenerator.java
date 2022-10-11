@@ -39,9 +39,7 @@ import com.fairandsmart.generator.documents.data.model.ReceiptModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
 import javax.imageio.ImageIO;
 import javax.xml.stream.XMLOutputFactory;

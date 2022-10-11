@@ -35,23 +35,19 @@ package com.fairandsmart.generator.documents.element.head;
  */
 
 import com.fairandsmart.generator.documents.data.model.IDNumbers;
-import com.fairandsmart.generator.documents.data.model.Model;
 import com.fairandsmart.generator.documents.data.model.PayslipModel;
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBoxV2;
 import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
-import com.fairandsmart.generator.documents.element.textbox.SimpleTextBoxForEvaluation;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.*;

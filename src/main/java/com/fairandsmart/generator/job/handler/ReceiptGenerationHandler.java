@@ -37,8 +37,6 @@ package com.fairandsmart.generator.job.handler;
 import com.fairandsmart.generator.documents.ReceiptGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.ReceiptModel;
-import com.fairandsmart.generator.documents.layout.ReceiptLayout;
-import com.fairandsmart.generator.documents.layout.payslip.GenericPayslipLayout;
 import com.fairandsmart.generator.documents.layout.receipt.GenericReceiptLayout;
 import com.fairandsmart.generator.job.JobManager;
 import com.fairandsmart.generator.job.JobNotFoundException;

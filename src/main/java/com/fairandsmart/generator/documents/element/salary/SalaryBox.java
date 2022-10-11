@@ -34,8 +34,6 @@ package com.fairandsmart.generator.documents.element.salary;
  * #L%
  */
 
-import com.fairandsmart.generator.documents.data.model.Product;
-import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.SalaryCotisationTable;
 import com.fairandsmart.generator.documents.data.model.SalaryLine;
 import com.fairandsmart.generator.documents.element.BoundingBox;

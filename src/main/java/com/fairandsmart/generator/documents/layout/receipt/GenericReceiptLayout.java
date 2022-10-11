@@ -41,7 +41,6 @@ import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.head.CompanyInfoBoxPayslip;
-import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.product.ReceiptGSTSammury;
 import com.fairandsmart.generator.documents.element.product.ReceiptProductBox;

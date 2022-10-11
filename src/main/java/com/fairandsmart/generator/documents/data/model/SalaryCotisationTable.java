@@ -36,7 +36,6 @@ package com.fairandsmart.generator.documents.data.model;
 
 
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

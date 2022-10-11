@@ -34,10 +34,7 @@ package com.fairandsmart.generator.documents.element.textbox;
  * #L%
  */
 
-import com.fairandsmart.generator.documents.common.VerifCharEncoding;
 import com.fairandsmart.generator.documents.element.*;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.*;

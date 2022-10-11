@@ -36,8 +36,6 @@ package com.fairandsmart.generator.documents.data.model;
 
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 
 import java.io.InputStreamReader;
 import java.io.Reader;

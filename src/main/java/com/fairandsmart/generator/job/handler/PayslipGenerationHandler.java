@@ -38,7 +38,6 @@ import com.fairandsmart.generator.documents.PayslipGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.PayslipModel;
 
-import com.fairandsmart.generator.documents.layout.PayslipLayout;
 import com.fairandsmart.generator.documents.layout.payslip.GenericPayslipLayout;
 import com.fairandsmart.generator.job.JobManager;
 import com.fairandsmart.generator.job.JobNotFoundException;

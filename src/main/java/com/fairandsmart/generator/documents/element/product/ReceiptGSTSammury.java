@@ -34,7 +34,6 @@ package com.fairandsmart.generator.documents.element.product;
  * #L%
  */
 
-import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.ProductReceiptContainer;
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;

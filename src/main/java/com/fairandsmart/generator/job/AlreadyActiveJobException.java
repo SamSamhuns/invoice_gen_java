@@ -33,8 +33,6 @@ package com.fairandsmart.generator.job;
  * #L%
  */
 
-import com.fairandsmart.generator.job.entity.Job;
-
 public class AlreadyActiveJobException extends Exception {
 
     public AlreadyActiveJobException(String owner) {

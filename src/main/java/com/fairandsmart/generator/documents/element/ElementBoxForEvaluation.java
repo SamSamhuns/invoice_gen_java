@@ -34,8 +34,6 @@ package com.fairandsmart.generator.documents.element;
  * #L%
  */
 
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 

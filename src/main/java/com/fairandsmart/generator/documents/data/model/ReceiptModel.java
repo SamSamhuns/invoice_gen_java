@@ -36,7 +36,6 @@ package com.fairandsmart.generator.documents.data.model;
 
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
-import com.fairandsmart.generator.documents.element.product.ReceiptProductBox;
 import com.mifmif.common.regex.Generex;
 
 import java.util.*;
