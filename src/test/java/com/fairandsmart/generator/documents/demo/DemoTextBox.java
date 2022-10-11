@@ -100,11 +100,10 @@ public class DemoTextBox implements InvoiceLayout {
                 Files.createDirectories(dir);
         }
 
-        String ts = "" + System.currentTimeMillis();
-        Path pdf = Paths.get("target/demotextbox/demotextbox-"+ ts + ".pdf");
-        Path xml = Paths.get("target/demotextbox/demotextbox-"+ ts + ".xml");
-        Path img = Paths.get("target/demotextbox/demotextbox-"+ ts + ".tiff");
-        Path json = Paths.get("target/demotextbox/demotextbox-"+ ts + ".json");
+        Path pdf = Paths.get("target/demotextbox/demotextbox.pdf");
+        Path xml = Paths.get("target/demotextbox/demotextbox.xml");
+        Path img = Paths.get("target/demotextbox/demotextbox.tiff");
+        Path json = Paths.get("target/demotextbox/demotextbox.json");
 
         GenerationContext ctx = GenerationContext.generate();
         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

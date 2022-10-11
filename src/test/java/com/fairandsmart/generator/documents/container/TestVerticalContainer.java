@@ -110,11 +110,10 @@ public class TestVerticalContainer implements InvoiceLayout {
                 Files.createDirectories(dir);
         }
 
-        String ts = "" + System.currentTimeMillis();
-        Path pdf = Paths.get("target/textvertical/textvertical-"+ ts + ".pdf");
-        Path xml = Paths.get("target/textvertical/textvertical-"+ ts + ".xml");
-        Path img = Paths.get("target/textvertical/textvertical-"+ ts + ".tiff");
-        Path json = Paths.get("target/textvertical/textvertical-"+ ts + ".json");
+        Path pdf = Paths.get("target/textvertical/textvertical.pdf");
+        Path xml = Paths.get("target/textvertical/textvertical.xml");
+        Path img = Paths.get("target/textvertical/textvertical.tiff");
+        Path json = Paths.get("target/textvertical/textvertical.json");
 
         GenerationContext ctx = GenerationContext.generate();
         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

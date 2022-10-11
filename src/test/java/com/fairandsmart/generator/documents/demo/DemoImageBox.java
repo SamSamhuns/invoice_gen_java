@@ -50,6 +50,8 @@ import org.junit.runners.JUnit4;
 import javax.xml.stream.XMLStreamWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
+
 
 @RunWith(JUnit4.class)
 public class DemoImageBox implements InvoiceLayout {
@@ -81,11 +83,15 @@ public class DemoImageBox implements InvoiceLayout {
 
     @Test
     public void test() throws Exception {
-        String ts = "" + System.currentTimeMillis();
-        Path pdf = Paths.get("target/demoimgbox-"+ ts + ".pdf");
-        Path xml = Paths.get("target/demoimgbox-"+ ts + ".xml");
-        Path img = Paths.get("target/demoimgbox-"+ ts + ".tiff");
-        Path json = Paths.get("target/demoimgbox-"+ ts + ".json");
+        Path dir = Paths.get("target/demoimgbox");
+        if ( !Files.exists(dir) ) {
+                Files.createDirectories(dir);
+        }
+
+        Path pdf = Paths.get("target/demoimgbox/demoimgbox.pdf");
+        Path xml = Paths.get("target/demoimgbox/demoimgbox.xml");
+        Path img = Paths.get("target/demoimgbox/demoimgbox.tiff");
+        Path json = Paths.get("target/demoimgbox/demoimgbox.json");
 
         GenerationContext ctx = GenerationContext.generate();
         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

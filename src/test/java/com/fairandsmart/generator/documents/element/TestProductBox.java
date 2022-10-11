@@ -51,6 +51,7 @@ import org.junit.runners.JUnit4;
 import javax.xml.stream.XMLStreamWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 
 
 @RunWith(JUnit4.class)
@@ -88,15 +89,20 @@ public class TestProductBox implements InvoiceLayout {
 
     @Test
     public void test() throws Exception {
+        Path dir = Paths.get("target/productbox");
+        if ( !Files.exists(dir) ) {
+                Files.createDirectories(dir);
+        }
+
         // get ntests var from cli, with mvn test -Dntests=NUM, otherwise use 5
         String ntests_env = System.getProperty("ntests");
         int ntests = ((ntests_env == null) ? 5 : Integer.parseInt(ntests_env));
 
         for (int i = 0; i < ntests; i++) {
-            Path pdf = Paths.get("target/productbox-" + i + ".pdf");
-            Path xml = Paths.get("target/productbox-" + i + ".xml");
-            Path img = Paths.get("target/productbox-" + i + ".tiff");
-            Path json = Paths.get("target/productbox-" + i + ".json");
+            Path pdf = Paths.get("target/productbox/productbox-" + i + ".pdf");
+            Path xml = Paths.get("target/productbox/productbox-" + i + ".xml");
+            Path img = Paths.get("target/productbox/productbox-" + i + ".tiff");
+            Path json = Paths.get("target/productbox/productbox-" + i + ".json");
 
             GenerationContext ctx = GenerationContext.generate();
             InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

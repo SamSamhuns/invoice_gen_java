@@ -109,11 +109,10 @@ public class TestHorizontalContainer implements InvoiceLayout {
                 Files.createDirectories(dir);
         }
 
-        String ts = "" + System.currentTimeMillis();
-        Path pdf = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".pdf");
-        Path xml = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".xml");
-        Path img = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".tiff");
-        Path json = Paths.get("target/texthorizontal/texthorizontal-"+ ts + ".json");
+        Path pdf = Paths.get("target/texthorizontal/texthorizontal.pdf");
+        Path xml = Paths.get("target/texthorizontal/texthorizontal.xml");
+        Path img = Paths.get("target/texthorizontal/texthorizontal.tiff");
+        Path json = Paths.get("target/texthorizontal/texthorizontal.json");
 
         GenerationContext ctx = GenerationContext.generate();
         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

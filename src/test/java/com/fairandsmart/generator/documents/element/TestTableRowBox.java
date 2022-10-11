@@ -140,11 +140,10 @@ public class TestTableRowBox implements InvoiceLayout {
                 Files.createDirectories(dir);
         }
 
-        String ts = "" + System.currentTimeMillis();
-        Path pdf = Paths.get("target/tablerow/tablerow-"+ ts + ".pdf");
-        Path xml = Paths.get("target/tablerow/tablerow-"+ ts + ".xml");
-        Path img = Paths.get("target/tablerow/tablerow-"+ ts + ".tiff");
-        Path json = Paths.get("target/tablerow/tablerow-"+ ts + ".json");
+        Path pdf = Paths.get("target/tablerow/tablerow.pdf");
+        Path xml = Paths.get("target/tablerow/tablerow.xml");
+        Path img = Paths.get("target/tablerow/tablerow.tiff");
+        Path json = Paths.get("target/tablerow/tablerow.json");
 
         GenerationContext ctx = GenerationContext.generate();
         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
