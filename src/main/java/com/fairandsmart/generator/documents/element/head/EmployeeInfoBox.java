@@ -116,9 +116,9 @@ public class EmployeeInfoBox extends ElementBox{
         return addContainer;
     }
 
-    public VerticalContainer concatContainersVertically(ElementBox parts[]) throws  Exception
+    public VerticalContainer concatContainersVertically(ElementBox[] parts) throws  Exception
     {   int x = 1;
-        VerticalContainer result = new VerticalContainer(0,0,0);;
+        VerticalContainer result = new VerticalContainer(0,0,0);
         for (ElementBox part: parts)
         {
             result.addElement(part);

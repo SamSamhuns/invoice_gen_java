@@ -49,12 +49,12 @@ import java.util.stream.Collectors;
 
 public class IDNumbers {
 
-    private String cidLabel;                  // Company ID (like Siren Number)
-    private String cidValue;
-    private String siretLabel;               // Particular to french invoice
-    private String siretValue;               // 14 digits unique company center id Siren + Nic(5 digits)
-    private String toaLabel;                 // Type of activity eg: APE code / NAF Code for an enterprise
-    private String toaValue;
+    private final String cidLabel;                  // Company ID (like Siren Number)
+    private final String cidValue;
+    private final String siretLabel;               // Particular to french invoice
+    private final String siretValue;               // 14 digits unique company center id Siren + Nic(5 digits)
+    private final String toaLabel;                 // Type of activity eg: APE code / NAF Code for an enterprise
+    private final String toaValue;
     private String vatLabel;
     private String vatValue;
 
@@ -188,7 +188,7 @@ public class IDNumbers {
                 Generex gensiren = new Generex("[0-9]{9}"); // For Siren Number
                 cidValue = gensiren.random();
                 int siren = Integer.parseInt(cidValue);
-                String cidVal[] = cidValue.split("(?<=\\G...)"); // For breaking string at every 3rd position
+                String[] cidVal = cidValue.split("(?<=\\G...)"); // For breaking string at every 3rd position
                 cidValue = cidVal[0] + space + cidVal[1] + space + cidVal[2];
 
                 Generex gennic = new Generex("[0-9]{5}");

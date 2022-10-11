@@ -145,7 +145,7 @@ public class ReceiptGenerator {
         }
     }
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
 
 
         Path generated = Paths.get("target/generated/" + args[0]);

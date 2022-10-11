@@ -60,23 +60,23 @@ public class ProductContainer {
     private Boolean discountAvailable;
     private Boolean taxRateAvailable;
     // display field heads, must be set in constructor //
-    private String descHead;
-    private String qtyHead;
-    private String unitPriceHead;
-    private String lineTotalHead;
-    private String snHead;
+    private final String descHead;
+    private final String qtyHead;
+    private final String unitPriceHead;
+    private final String lineTotalHead;
+    private final String snHead;
     // tax & discount rate & total heads
-    private String taxHead;
-    private String taxRateHead;
-    private String taxTotalHead;
-    private String discountHead;
-    private String discountRateHead;
-    private String discountTotalHead;
+    private final String taxHead;
+    private final String taxRateHead;
+    private final String taxTotalHead;
+    private final String discountHead;
+    private final String discountRateHead;
+    private final String discountTotalHead;
     // totals with tax, discount and both
-    private String totalHead;
-    private String withTaxTotalHead;
-    private String withDiscountTotalHead;
-    private String withTaxAndDiscountTotalHead;
+    private final String totalHead;
+    private final String withTaxTotalHead;
+    private final String withDiscountTotalHead;
+    private final String withTaxAndDiscountTotalHead;
 
     // Added later
     private float totalDeliveryCost;
@@ -478,7 +478,7 @@ public class ProductContainer {
         }
 
 
-        private List<Product> products = new ArrayList<Product>();
+        private final List<Product> products = new ArrayList<Product>();
         private static final List<String> productsFileList = Arrays.asList(
                 "common/product/fr/householdandmedia_fr.json",
                 "common/product/en/householdandmedia_en.json");

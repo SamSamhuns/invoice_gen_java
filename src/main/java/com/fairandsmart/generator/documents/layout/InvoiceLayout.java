@@ -66,7 +66,7 @@ public interface InvoiceLayout {
   String name();
   Random rnd = new Random();
 
-  public class pdType1Fonts {
+  class pdType1Fonts {
       private PDFont fontNormal;
       private PDFont fontBold;
       private PDFont fontItalic;
@@ -104,7 +104,7 @@ public interface InvoiceLayout {
 
   void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception;
 
-  public static BufferedImage generateEAN13BarcodeImage(String barcodeText) throws Exception {
+  static BufferedImage generateEAN13BarcodeImage(String barcodeText) throws Exception {
           // generates a barcode based on the String barcodeText
           EAN13Bean barcodeGenerator = new EAN13Bean();
           BitmapCanvasProvider canvas = new BitmapCanvasProvider(160, BufferedImage.TYPE_BYTE_BINARY, false, 0);
@@ -112,7 +112,7 @@ public interface InvoiceLayout {
           return canvas.getBufferedImage();
   }
 
-  public static pdType1Fonts getRandomPDType1Fonts() throws Exception {
+  static pdType1Fonts getRandomPDType1Fonts() throws Exception {
           final List<PDFont> pd1fontNormalList = Arrays.asList(
                   PDType1Font.HELVETICA,
                   PDType1Font.COURIER,
@@ -137,7 +137,7 @@ public interface InvoiceLayout {
                                   pd1fontItalicList.get(fontIdx));
       }
 
-  public static Color getRandomColor(int cSize) throws Exception {
+  static Color getRandomColor(int cSize) throws Exception {
         final List<Color> colorsList = Arrays.asList(
               Color.GRAY,
               Color.LIGHT_GRAY,
@@ -156,7 +156,7 @@ public interface InvoiceLayout {
   }
 
 
-  public static void addWatermarkImagePDF(final PDDocument doc, final PDPage page, final PDImageXObject imgPDF) throws IOException {
+  static void addWatermarkImagePDF(final PDDocument doc, final PDPage page, final PDImageXObject imgPDF) throws IOException {
 
         float oImgW = imgPDF.getWidth();
         float oImgH = imgPDF.getHeight();
@@ -174,7 +174,7 @@ public interface InvoiceLayout {
         addWatermarkImagePDF(doc, page, imgPDF, xoff, yoff, nImgW, nimgH, minImgAlpha, maxImgAlpha, rotAngle);
     }
 
-    public static void addWatermarkImagePDF(
+    static void addWatermarkImagePDF(
             final PDDocument doc, final PDPage page, final PDImageXObject imgPDF,
             final float xPos, final float yPos, final float imgW, final float imgH,
             final float minAlpha, final float maxAlpha, final double rotAngle) throws IOException {
@@ -201,7 +201,7 @@ public interface InvoiceLayout {
         }
     }
 
-  public static void addWatermarkTextPDF(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
+  static void addWatermarkTextPDF(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
         try (PDPageContentStream cs = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
                 true)) {
             final float fontHeight = 90 + rnd.nextInt(20); // arbitrary for short text

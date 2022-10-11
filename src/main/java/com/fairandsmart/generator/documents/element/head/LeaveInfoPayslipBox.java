@@ -61,7 +61,7 @@ public class LeaveInfoPayslipBox extends ElementBox {
     private HorizontalContainer hcontainer;
     private PDDocument document;
     private IDNumbers idnumObj;
-    private String idNames[];
+    private String[] idNames;
 
     public LeaveInfoPayslipBox(HorizontalContainer hcontainer){this.hcontainer = hcontainer;}
     public LeaveInfoPayslipBox(VerticalContainer container){this.container = container;}
@@ -122,9 +122,9 @@ public class LeaveInfoPayslipBox extends ElementBox {
     }
 
 
-    public VerticalContainer concatContainersVertically(ElementBox parts[]) throws  Exception
+    public VerticalContainer concatContainersVertically(ElementBox[] parts) throws  Exception
     {   int x = 1;
-        VerticalContainer result = new VerticalContainer(0,0,0);;
+        VerticalContainer result = new VerticalContainer(0,0,0);
         for (ElementBox part: parts)
         {
             result.addElement(part);

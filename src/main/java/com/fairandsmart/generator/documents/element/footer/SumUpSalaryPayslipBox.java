@@ -55,7 +55,7 @@ import java.text.DecimalFormat;
 
 public class SumUpSalaryPayslipBox extends ElementBox {
 
-    private static DecimalFormat df = new DecimalFormat("0.00");
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     private PDFont font;
     private PDFont fontBold1;
     private float fontSize;
@@ -64,7 +64,7 @@ public class SumUpSalaryPayslipBox extends ElementBox {
     private HorizontalContainer hcontainer;
     private PDDocument document;
     private IDNumbers idnumObj;
-    private String idNames[];
+    private String[] idNames;
 
     public SumUpSalaryPayslipBox(HorizontalContainer hcontainer){this.hcontainer = hcontainer;}
     public SumUpSalaryPayslipBox(VerticalContainer container){this.container = container;}
@@ -334,9 +334,9 @@ public class SumUpSalaryPayslipBox extends ElementBox {
         return idContainer;
     }
 
-    public VerticalContainer concatContainersVertically(ElementBox parts[]) throws  Exception
+    public VerticalContainer concatContainersVertically(ElementBox[] parts) throws  Exception
     {   int x = 1;
-        VerticalContainer result = new VerticalContainer(0,0,0);;
+        VerticalContainer result = new VerticalContainer(0,0,0);
         for (ElementBox part: parts)
         {
             result.addElement(part);

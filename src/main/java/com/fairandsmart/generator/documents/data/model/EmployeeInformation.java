@@ -55,8 +55,8 @@ import java.util.logging.Logger;
 public class EmployeeInformation {
 
     private static final Logger LOGGER = Logger.getLogger(EmployeeInformation.class.getName());
-    private static DecimalFormat dfd = new DecimalFormat("0.00");
-    private Random random= new Random();
+    private static final DecimalFormat dfd = new DecimalFormat("0.00");
+    private final Random random= new Random();
     private String employeCode;
     private String registrationNumber; // Matricule
     private String socialSecurityNumber;
@@ -449,7 +449,7 @@ public class EmployeeInformation {
     public static class Generator implements ModelGenerator<EmployeeInformation> {
 //TODO HEADS AND CONTENT LISTS
 
-        private List<DepartCommune> DepartsComm;
+        private final List<DepartCommune> DepartsComm;
         private static final String DepartCommFile = "payslips/employee/commonCodeInsee.json";
         {
             Reader jsonReader = new InputStreamReader(EmployeeInformation.class.getClassLoader().getResourceAsStream(DepartCommFile));
@@ -458,7 +458,7 @@ public class EmployeeInformation {
             DepartsComm = gson.fromJson(jsonReader, collectionType);
         }
 
-        private List<CategoryEmployee> CategoriesEmp;
+        private final List<CategoryEmployee> CategoriesEmp;
         private static final String CategoriesEmpFile = "payslips/employee/employeeCode.json";
         {
             Reader jsonReader = new InputStreamReader(EmployeeInformation.class.getClassLoader().getResourceAsStream(CategoriesEmpFile));
@@ -467,7 +467,7 @@ public class EmployeeInformation {
             CategoriesEmp = gson.fromJson(jsonReader, collectionType);
         }
 
-        private List<CategorieCoef> CategorieCoef;
+        private final List<CategorieCoef> CategorieCoef;
         private static final String CategoriesCoefFile = "payslips/employee/categorie_coeff.json";
         {
             Reader jsonReader = new InputStreamReader(EmployeeInformation.class.getClassLoader().getResourceAsStream(CategoriesCoefFile));
@@ -476,7 +476,7 @@ public class EmployeeInformation {
             CategorieCoef = gson.fromJson(jsonReader, collectionType);
         }
 
-        private List<ConventionCollec> ConvColl;
+        private final List<ConventionCollec> ConvColl;
         private static final String ConvCollFile = "payslips/employee/conventions_list.json";
         {
             Reader jsonReader = new InputStreamReader(EmployeeInformation.class.getClassLoader().getResourceAsStream(ConvCollFile));
@@ -485,7 +485,7 @@ public class EmployeeInformation {
             ConvColl = gson.fromJson(jsonReader, collectionType);
         }
 
-        private List<CoeffSalary> CoefSalary;
+        private final List<CoeffSalary> CoefSalary;
         private static final String CoefSalaryFile = "payslips/employee/coeff_salary_min.json";
         {
             Reader jsonReader = new InputStreamReader(EmployeeInformation.class.getClassLoader().getResourceAsStream(CoefSalaryFile));

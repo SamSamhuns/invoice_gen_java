@@ -128,7 +128,7 @@ public class InvoiceGenerator {
 
     }
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         List<InvoiceLayout> availablesLayout = new ArrayList<>();
         availablesLayout.add(new AmazonLayout());
         availablesLayout.add(new BDmobilierLayout());

@@ -41,9 +41,9 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class VerticalLineBox extends ElementBox {
 
-    private float targetX;
-    private float targetY;
-    private BoundingBox box;
+    private final float targetX;
+    private final float targetY;
+    private final BoundingBox box;
 
     public VerticalLineBox(float posX, float posY, float targetX, float targetY) {
         this.targetX = targetX;

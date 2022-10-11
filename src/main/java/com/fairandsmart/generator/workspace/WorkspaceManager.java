@@ -79,7 +79,7 @@ public class WorkspaceManager {
         if ( home.startsWith("~") ) {
             home = home.replaceFirst("\\~", Paths.get(System.getProperty("user.home")).toString());
         }
-        this.root = Paths.get(home, WORKSPACES_HOME);
+        root = Paths.get(home, WORKSPACES_HOME);
         LOGGER.log(Level.INFO, "Initializing service with root folder: " + root);
         try {
             Files.createDirectories(root);

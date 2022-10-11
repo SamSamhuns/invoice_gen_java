@@ -39,11 +39,11 @@ import java.util.Random;
 
 public class GenerationContext {
 
-    private static List<String> countries = new ArrayList<>();
-    private static List<String> languages = new ArrayList<>();
-    private static List<String> locales = new ArrayList<>();
-    private static List<String> currencies = new ArrayList<>();
-    private static Random rnd = new Random();
+    private static final List<String> countries = new ArrayList<>();
+    private static final List<String> languages = new ArrayList<>();
+    private static final List<String> locales = new ArrayList<>();
+    private static final List<String> currencies = new ArrayList<>();
+    private static final Random rnd = new Random();
     {
         // countries.add("FR");
         // countries.add("LU");

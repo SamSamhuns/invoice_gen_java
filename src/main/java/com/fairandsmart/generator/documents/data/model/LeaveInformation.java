@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 public class LeaveInformation {
 
     private static final Logger LOGGER = Logger.getLogger(LeaveInformation.class.getName());
-    private Random random= new Random();
+    private final Random random= new Random();
     private double amount;
     private Date date;
     private int[] cpNMinus1;

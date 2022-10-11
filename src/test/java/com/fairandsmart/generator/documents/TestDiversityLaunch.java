@@ -79,7 +79,7 @@ public class TestDiversityLaunch {
         JOptionPane.showMessageDialog(null, result, "Diversity evaluation scores", JOptionPane.PLAIN_MESSAGE);
     }
 
-    public static void main(String args[]){
+    public static void main(String[] args){
 
         JFrame frame = new JFrame("Diversity Evaluation");
 

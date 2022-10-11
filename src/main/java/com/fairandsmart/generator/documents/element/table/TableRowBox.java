@@ -49,11 +49,11 @@ public class TableRowBox extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
 
-    private float[] config;
+    private final float[] config;
     private Color backgroundColor;
-    private BoundingBox box;
-    private List<ElementBox> elements;
-    private VAlign valign;
+    private final BoundingBox box;
+    private final List<ElementBox> elements;
+    private final VAlign valign;
 
     public TableRowBox(float[] config, float posX, float posY) {
         this(config, posX, posY, VAlign.TOP);

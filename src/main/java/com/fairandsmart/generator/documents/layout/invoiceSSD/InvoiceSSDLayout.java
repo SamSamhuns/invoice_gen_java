@@ -68,7 +68,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InvoiceSSDLayout implements SSDLayout {
-    private float fontSize = 10;
+    private final float fontSize = 10;
     private PDFont[] fonts;
     private PDFont font;
     InvoiceModel model;
@@ -150,7 +150,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                     compElements.put(2, companyAddress);
                     compElements.put(3, companyContact);
                 }
-                int list[] = getRandomList(3);
+                int[] list = getRandomList(3);
                 for(int i =0; i < list.length; i++)
                 firstPart.addElement(compElements.get(list[i]), false);
 
@@ -187,7 +187,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                     new SimpleTextBoxForEvaluation(companyInfoBox.getContactOptClasses().get(i), pos_element).build(writerEval);
                 }
 
-                int list[] = getRandomList(compElements.size());
+                int[] list = getRandomList(compElements.size());
                 if(list[0]==1)
                     firstPart = new TableRowBox(configRow2v1, 0, 0);
                 else
@@ -237,7 +237,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                     compElements.put(1, iInfor);
                     compElements.put(2, companyLogoAddCont);
                 }
-                int list[] = getRandomList(compElements.size());
+                int[] list = getRandomList(compElements.size());
                 for(int i =0; i < list.length; i++)
                     firstPart.addElement(compElements.get(list[i]), true);
                 this.compContactAvailable = -1;
@@ -279,7 +279,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                         compElements.put(1, iInfor);
                         compElements.put(2, companyLogoAddCont);
                     }
-                    int list[] = getRandomList(compElements.size());
+                    int[] list = getRandomList(compElements.size());
                     boolean center_align = false;
                     for(int i =0; i < list.length; i++) {
                         if (compElements.get(list[i]) == iInfor) {
@@ -316,7 +316,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                 clientElements.put(1, billingInfoBox);
                 clientElements.put(2, shippingInfoBox);
             }
-            int list[] = getRandomList(clientElements.size());
+            int[] list = getRandomList(clientElements.size());
             for (int i = 0; i < list.length; i++)
                 secondPart.addElement(clientElements.get(list[i]), true);
             pos_element++;
@@ -336,7 +336,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                 pos_element++;
                 new SimpleTextBoxForEvaluation(clientInfosOptCl.get(i), pos_element).build(writerEval);
             }
-            int list2[] = getRandomList(clientInfos.size());
+            int[] list2 = getRandomList(clientInfos.size());
             for (int i = 0; i < list2.length; i++)
                 thirdPart.addElement(clientInfos.get(list2[i]), true);
             }
@@ -353,7 +353,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                 clientElements.put(2, clientInfo);
             }
 
-            int list[] = getRandomList(clientElements.size());
+            int[] list = getRandomList(clientElements.size());
             for (int i = 0; i < list.length; i++)
                 secondPart.addElement(clientElements.get(list[i]), true);
             }
@@ -441,7 +441,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                 payInfos.put(1, randomClientInfo);
                 payInfos.put(2, emptyBox);
             }
-            int list[] = getRandomList(payInfos.size());
+            int[] list = getRandomList(payInfos.size());
             for (int i = 0; i < list.length; i++)
                 fourthPart.addElement(payInfos.get(list[i]), true);
             invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 40));
@@ -513,7 +513,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                 compElements.put(1, companyAddress);
                 compElements.put(2, companyIDs);
             }
-            int list[] = getRandomList(compElements.size());
+            int[] list = getRandomList(compElements.size());
             for(int i =0; i < list.length; i++)
                 fifthPart.addElement(compElements.get(list[i]), false);
             invoicePage.addElement(fifthPart);

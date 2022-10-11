@@ -47,8 +47,8 @@ public class HorizontalContainer extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
 
-    private List<ElementBox> elements;
-    private BoundingBox box;
+    private final List<ElementBox> elements;
+    private final BoundingBox box;
     private Color backgroundColor;
 
     public HorizontalContainer(float posX, float posY) {

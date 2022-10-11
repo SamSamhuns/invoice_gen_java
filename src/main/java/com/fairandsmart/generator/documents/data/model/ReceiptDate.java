@@ -46,8 +46,8 @@ public class ReceiptDate {
     private String label;
     private String value;
     private String time;
-    private String timeLabel;
-    private String printedDateLabel;
+    private final String timeLabel;
+    private final String printedDateLabel;
 
     public ReceiptDate(String label,String timeLabel, String printedDateLabel, String value, String time ) {
         this.label = label;

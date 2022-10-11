@@ -287,7 +287,7 @@ public class DartyLayout implements InvoiceLayout {
         HorizontalContainer infoEntreprise = new HorizontalContainer(0,0);
         infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getName(),"SN"));
         infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, " - "));
-        infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, "SNC with a capital of "+(int)(100000+(Math.random()*(9999999 - 100000)))+" Eur - "));
+        infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, "SNC with a capital of "+ (100000+(Math.random()*(9999999 - 100000))) +" Eur - "));
         infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, " "+idNumbers.getSiretLabel()+" "));
         infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, idNumbers.getSiretValue(),"SSIRET"));
         infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, " - "+idNumbers.getToaLabel()+" "));

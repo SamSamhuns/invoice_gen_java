@@ -251,7 +251,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         infoEntreprise2.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getWebsite()));
 
         HorizontalContainer infoEntreprise3 = new HorizontalContainer(0,0);
-        infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, "SAS with capital of"+(int)(100000+(Math.random()*(9999999 - 100000)))+" Eur - "));
+        infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, "SAS with capital of"+ (100000+(Math.random()*(9999999 - 100000))) +" Eur - "));
         infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, idNumbers.getSiretLabel()+" "));
         infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, idNumbers.getSiretValue(),"SSIRET"));
         infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, " - "+ idNumbers.getToaLabel()));

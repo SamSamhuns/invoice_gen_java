@@ -105,7 +105,7 @@ public class AmazonLayout implements InvoiceLayout {
         PDFont fontBold1 = fontPair.getFontBold();
 
         // Center or left alignment for items in table
-        boolean centerAlignItems = (rnd.nextInt(2) == 0) ? true: false;
+        boolean centerAlignItems = rnd.nextInt(2) == 0;
 
         float pageWidth = page.getMediaBox().getWidth();
 

@@ -58,24 +58,24 @@ public class ProductReceiptContainer {
     private int totalQty;
     private float total;
     private String currency;
-    private String descHead;
-    private String qtyHead;
-    private String unitPriceHead;
-    private String taxRateHead;
-    private String taxHead;
-    private String lineTotalHead;
-    private String totalHead;
-    private String taxTotalHead;
-    private String withTaxTotalHead;
-    private String snHead;
+    private final String descHead;
+    private final String qtyHead;
+    private final String unitPriceHead;
+    private final String taxRateHead;
+    private final String taxHead;
+    private final String lineTotalHead;
+    private final String totalHead;
+    private final String taxTotalHead;
+    private final String withTaxTotalHead;
+    private final String snHead;
     private String discountHead;
     private String roundedHead;
     private String roundingHead;
     private String cashHead;
     private String changeHead;
-    private String qtyTotalHead;
-    private String itemsTotalHead;
-    private String GSTHead;
+    private final String qtyTotalHead;
+    private final String itemsTotalHead;
+    private final String GSTHead;
     private Boolean roundAvailable;
     private Boolean discountAvailable;
     private Boolean totaltaxAvailable;
@@ -563,7 +563,7 @@ public class ProductReceiptContainer {
             GSTHeads.put("GST", "en");
         }
 
-        private List<Product> products;
+        private final List<Product> products;
         private static final String productsFile = "common/product/en/householdandmedia_en.json";
         {
             Reader jsonReader = new InputStreamReader(ProductReceiptContainer.class.getClassLoader().getResourceAsStream(productsFile));

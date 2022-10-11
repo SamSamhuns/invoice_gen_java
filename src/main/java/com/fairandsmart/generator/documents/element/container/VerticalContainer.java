@@ -47,10 +47,10 @@ public class VerticalContainer extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
 
-    private List<ElementBox> elements;
-    private BoundingBox box;
+    private final List<ElementBox> elements;
+    private final BoundingBox box;
     private Color backgroundColor;
-    private float maxWidth;
+    private final float maxWidth;
 
     public VerticalContainer(float posX, float posY, float maxWidth) {
         this.elements = new ArrayList<>();

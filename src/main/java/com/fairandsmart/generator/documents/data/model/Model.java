@@ -41,7 +41,7 @@ public class Model {
     private Company company;
     private Client client;
     private ProductContainer productContainer;
-    private static Random rnd = new Random();
+    private static final Random rnd = new Random();
 
     public Model() {
     }

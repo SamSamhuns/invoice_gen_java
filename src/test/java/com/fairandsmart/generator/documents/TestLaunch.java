@@ -95,7 +95,7 @@ public class TestLaunch {
 
     }
 
-    public static void main(String args[]){
+    public static void main(String[] args){
 
         JFrame frame = new JFrame("SSD generation");
 
@@ -150,7 +150,7 @@ public class TestLaunch {
         spinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                number = (Integer)spinnerEditor.getModel().getNumber();;
+                number = (Integer)spinnerEditor.getModel().getNumber();
             }
         });
         saisie2.add(spinner);

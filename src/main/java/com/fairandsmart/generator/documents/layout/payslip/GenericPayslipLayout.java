@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class GenericPayslipLayout implements SSDLayout {
-    private float fontSize = 9.5f;
+    private final float fontSize = 9.5f;
     private PDFont[] fonts;
     PayslipModel model;
 
@@ -202,25 +202,22 @@ public class GenericPayslipLayout implements SSDLayout {
         if(employeUnderCmp){
             EmployeeInfoPayslipBox employeeInfo;
             int ran= model.getRandom().nextInt(2);
-            switch (ran){
-                case 1:
-                    employeeInfo  = new EmployeeInfoPayslipBox(employeeInfoPayslipBox.getEmployeeInformationTable1());
-                    for(int i=0;i<employeeInfoPayslipBox.getListOptClasses().size();i++){
-                        if(modeEval) {
-                            pos_element++;
-                            new SimpleTextBoxForEvaluation(employeeInfoPayslipBox.getListOptClasses().get(i), pos_element).build(writerEval);
-                        }
+            if (ran == 1) {
+                employeeInfo = new EmployeeInfoPayslipBox(employeeInfoPayslipBox.getEmployeeInformationTable1());
+                for (int i = 0; i < employeeInfoPayslipBox.getListOptClasses().size(); i++) {
+                    if (modeEval) {
+                        pos_element++;
+                        new SimpleTextBoxForEvaluation(employeeInfoPayslipBox.getListOptClasses().get(i), pos_element).build(writerEval);
                     }
-                    break;
-                default:
-                    employeeInfo  = new EmployeeInfoPayslipBox(employeeInfoPayslipBox.getEmployeeInformationTable2());
-                    for(int i=0;i<employeeInfoPayslipBox.getListOptClasses().size();i++){
-                        if(modeEval) {
-                            pos_element++;
-                            new SimpleTextBoxForEvaluation(employeeInfoPayslipBox.getListOptClasses().get(i), pos_element).build(writerEval);
-                        }
+                }
+            } else {
+                employeeInfo = new EmployeeInfoPayslipBox(employeeInfoPayslipBox.getEmployeeInformationTable2());
+                for (int i = 0; i < employeeInfoPayslipBox.getListOptClasses().size(); i++) {
+                    if (modeEval) {
+                        pos_element++;
+                        new SimpleTextBoxForEvaluation(employeeInfoPayslipBox.getListOptClasses().get(i), pos_element).build(writerEval);
                     }
-                    break;
+                }
             }
             companyInfoEmplFinal = new CompanyInfoBoxPayslip(companyInfoBox.concatContainersVertically
                     (new ElementBox[]{companyInfoFinal,emptyBox, employeeInfo }));//emptyBox
@@ -284,7 +281,7 @@ public class GenericPayslipLayout implements SSDLayout {
             compElements.put(1, companyInfoEmplFinal); //companyAddIDCont);
             compElements.put(2, iInfor); // title
         }
-        int list[] = getRandomList(compElements.size());
+        int[] list = getRandomList(compElements.size());
         secondPart = new TableRowBox(configRow2v2, 0, 0);
         for(int i =0; i < compElements.size(); i++)
             secondPart.addElement(compElements.get(i+1), false);

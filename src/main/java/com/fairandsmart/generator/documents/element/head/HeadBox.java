@@ -46,13 +46,13 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class HeadBox extends ElementBox {
 
-    private PDFont font;
-    private PDFont fontBold1;
-    private PDFont fontItalic1;
-    private float fontSize;
-    private InvoiceModel model;
+    private final PDFont font;
+    private final PDFont fontBold1;
+    private final PDFont fontItalic1;
+    private final float fontSize;
+    private final InvoiceModel model;
     private VerticalContainer container;
-    private PDDocument document;
+    private final PDDocument document;
 
     public HeadBox(PDFont font, PDFont fontBold1, PDFont fontItalic1, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
         this.font = font;

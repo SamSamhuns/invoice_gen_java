@@ -43,7 +43,7 @@ import java.util.Random;
 
 public class Helper {
 
-    private static Random rnd = new Random();
+    private static final Random rnd = new Random();
 
     public static Random getRandom() {
         return rnd;
@@ -65,7 +65,7 @@ public class Helper {
 
     public static float rand_uniform(float minA, float maxA, float diff) {
         // get uniform dist from minA to maxA in steps differences
-        float steps = (float)(1 / diff);
+        float steps = 1 / diff;
         return (float)(rnd.nextInt((int)((maxA - minA) * steps + 1)) + minA * steps) / steps;
     }
 

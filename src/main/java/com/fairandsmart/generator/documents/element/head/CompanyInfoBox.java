@@ -64,7 +64,7 @@ public class CompanyInfoBox extends ElementBox {
     private String logoFile;
     private PDImageXObject logo;
     private IDNumbers idnumObj;
-    private String idNames[];
+    private String[] idNames;
     private List<String> contactOptClasses;
     private static final List<String[]> idNumbersOrder = new ArrayList<>();
     {
@@ -162,7 +162,7 @@ public class CompanyInfoBox extends ElementBox {
     }
 
     public HorizontalContainer getCompanyAddLine() throws Exception {
-        String separators[] = {", " , "", " - "};
+        String[] separators = {", " , "", " - "};
         String separator = separators[model.getRandom().nextInt(separators.length)];
         HorizontalContainer address = new HorizontalContainer(0, 0);
         SimpleTextBox adresse1 = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getAddress().getLine1(),"SA");
@@ -404,9 +404,9 @@ public class CompanyInfoBox extends ElementBox {
         return companyIDContainer;
     }
 
-    public VerticalContainer concatContainersVertically(ElementBox parts[]) throws  Exception
+    public VerticalContainer concatContainersVertically(ElementBox[] parts) throws  Exception
     {   int x = 1;
-        VerticalContainer result = new VerticalContainer(0,0,0);;
+        VerticalContainer result = new VerticalContainer(0,0,0);
         for (ElementBox part: parts)
         {
             result.addElement(part);

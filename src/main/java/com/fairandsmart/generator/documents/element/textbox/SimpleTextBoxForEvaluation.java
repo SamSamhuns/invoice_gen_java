@@ -50,8 +50,8 @@ public class SimpleTextBoxForEvaluation {
 
     private static final Logger LOGGER = Logger.getLogger(SimpleTextBoxForEvaluation.class.getName());
 
-    private String optionalClass;
-    private int orderPos;
+    private final String optionalClass;
+    private final int orderPos;
 
 
     public  SimpleTextBoxForEvaluation( String optionalClass, int orderPos)  {

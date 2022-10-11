@@ -95,7 +95,7 @@ public class CdiscountLayout implements InvoiceLayout {
         VerticalContainer verticalHeaderContainer = new VerticalContainer(34, page.getMediaBox().getHeight()-34-tailleLogo/ratioLogo/2+15, 250 );
         verticalHeaderContainer.addElement(new SimpleTextBox(font, 9, 0, 0, model.getCompany().getName()+"","SN"));
         verticalHeaderContainer.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,3));
-        verticalHeaderContainer.addElement(new SimpleTextBox(font, 9, 0, 0, "Capital de " + (int)(100000+(Math.random()*(9999999 - 100000))) +" euros"));
+        verticalHeaderContainer.addElement(new SimpleTextBox(font, 9, 0, 0, "Capital de " + (100000+(Math.random()*(9999999 - 100000))) +" euros"));
         verticalHeaderContainer.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,3));
         verticalHeaderContainer.addElement(new SimpleTextBox(font, 9, 0, 0, model.getCompany().getAddress().getLine1(),"SA"));
         verticalHeaderContainer.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,3));

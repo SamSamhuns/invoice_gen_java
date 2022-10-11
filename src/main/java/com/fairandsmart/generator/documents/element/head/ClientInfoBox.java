@@ -52,7 +52,7 @@ public class ClientInfoBox extends ElementBox {
     private PDFont fontBold1;
     private float fontSize;
     private InvoiceModel model;
-    private VerticalContainer container;
+    private final VerticalContainer container;
     private PDDocument document;
     private String addressType;
 

@@ -97,7 +97,7 @@ public class Stamp {
 
     public static class Generator implements ModelGenerator<Stamp> {
 
-        private static List<Stamp> stamps = getStampList();
+        private static final List<Stamp> stamps = getStampList();
 
         @Override
         public Stamp generate(GenerationContext ctx) {

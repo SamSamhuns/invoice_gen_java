@@ -135,7 +135,7 @@ public class Address {
 
         private static final String[] addressFiles = new String[] {
           "common/address/france.csv", "common/address/luxembourg.csv", "common/address/belgium.csv", "common/address/germany.csv", "common/address/ae_dubai_en.csv", "common/address/us_west.csv"};
-        private static Map<Address, String> addresses = new HashMap<>();
+        private static final Map<Address, String> addresses = new HashMap<>();
         {
             for ( String addressFile : addressFiles ) {
                 try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(addressFile)) {

@@ -60,17 +60,17 @@ import java.text.DecimalFormat;
 
 public class SalaryBox extends ElementBox {
 
-    private static DecimalFormat df = new DecimalFormat("0.00");
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
-    private PDFont font;
-    private PDFont fontBold1;
-    private float fontSize;
+    private final PDFont font;
+    private final PDFont fontBold1;
+    private final float fontSize;
     private Color headBackgroundColor;
     private Color bodyBackgroundColor;
-    private VerticalContainer container;
-    private SalaryCotisationTable salaryContainer;
+    private final VerticalContainer container;
+    private final SalaryCotisationTable salaryContainer;
     private String [] chosenFormatForEval;
-    private static Random rnd = new Random();
+    private static final Random rnd = new Random();
 
     private static final List<String[]> tableFormat = new ArrayList<>();
     {

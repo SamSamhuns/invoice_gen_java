@@ -148,7 +148,7 @@ public class Employer {
         private static final List<String> companiesCountryList = Arrays.asList(
                 "AE_en",
                 "FR");
-        private static Map<Employer, String> employers = new HashMap<>();
+        private static final Map<Employer, String> employers = new HashMap<>();
         {
             assert companiesFileList.size() == companiesCountryList.size();
             for (int i=0; i<companiesFileList.size(); i++) {

@@ -43,10 +43,10 @@ import java.awt.*;
 
 public class ImageBox extends ElementBox {
 
-    private PDImageXObject image;
+    private final PDImageXObject image;
     private Color backgroundColor;
-    private String text;
-    private BoundingBox box;
+    private final String text;
+    private final BoundingBox box;
 
     public ImageBox(PDImageXObject image, float posX, float posY, String text) {
         this(image, posX, posY, image.getWidth(), image.getHeight(), text);

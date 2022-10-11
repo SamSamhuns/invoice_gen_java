@@ -46,8 +46,8 @@ public class LayeredContainer extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(LayeredContainer.class.getName());
 
-    private Map<Integer, ElementBox> elements;
-    private BoundingBox box;
+    private final Map<Integer, ElementBox> elements;
+    private final BoundingBox box;
 
     //TODO manage aligment and padding
     public LayeredContainer(float posX, float posY, float width, float height) {

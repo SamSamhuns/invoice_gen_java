@@ -42,10 +42,10 @@ import java.awt.*;
 
 public class BorderBox extends ElementBox {
 
-    private Color borderColor;
-    private Color color;
-    private int thick;
-    private BoundingBox box;
+    private final Color borderColor;
+    private final Color color;
+    private final int thick;
+    private final BoundingBox box;
 
     public BorderBox(Color borderColor, Color color, int thick, float posX, float posY, float width, float height) {
         this.borderColor = borderColor;

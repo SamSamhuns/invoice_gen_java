@@ -41,10 +41,10 @@ import javax.xml.stream.XMLStreamWriter;
 public abstract class ElementBox {
 
     private static int cpt = 0;
-    private static float srcDpi = 72;
-    private static float destDpi = 300;
-    private static float maxX = 595;
-    private static float maxY = 842;
+    private static final float srcDpi = 72;
+    private static final float destDpi = 300;
+    private static final float maxX = 595;
+    private static final float maxY = 842;
 
 
     public int nextElementId() {

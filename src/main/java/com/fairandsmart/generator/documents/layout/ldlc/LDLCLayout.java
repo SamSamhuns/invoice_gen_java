@@ -378,7 +378,7 @@ public class LDLCLayout implements InvoiceLayout {
 
         HorizontalContainer infoFooter1 = new HorizontalContainer(0,0);
         infoFooter1.addElement(new SimpleTextBox(font,6,0,0, model.getCompany().getName()+" ","SN"));
-        infoFooter1.addElement(new SimpleTextBox(font,6,0,0, " - SA with management board and supervisory board with a capital of "+(int)(100000+(Math.random()*(9999999 - 100000)))+" Eur - "));
+        infoFooter1.addElement(new SimpleTextBox(font,6,0,0, " - SA with management board and supervisory board with a capital of "+ (100000+(Math.random()*(9999999 - 100000))) +" Eur - "));
         infoFooter1.addElement(new SimpleTextBox(font,6,0,0, idNumbers.getCidValue(),"SCID"));
 
 

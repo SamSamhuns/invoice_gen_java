@@ -98,7 +98,7 @@ public class Logo {
 
     public static class Generator implements ModelGenerator<Logo> {
 
-        private static List<Logo> logos = getLogoList();
+        private static final List<Logo> logos = getLogoList();
 
         @Override
         public Logo generate(GenerationContext ctx) {

@@ -58,14 +58,14 @@ import java.util.logging.Logger;
 public class ReceiptProductBox extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
-    private PDFont font;
-    private PDFont fontBold1;
-    private float fontSize;
+    private final PDFont font;
+    private final PDFont fontBold1;
+    private final float fontSize;
     private Color headBackgroundColor;
     private Color bodyBackgroundColor;
-    private VerticalContainer container;
-    private ProductReceiptContainer productContainer;
-    private static Random rnd = new Random();
+    private final VerticalContainer container;
+    private final ProductReceiptContainer productContainer;
+    private static final Random rnd = new Random();
     private boolean qtyTotalAvailabel;
     private boolean headersAvailable;
     private boolean itemsTotalAvailable;

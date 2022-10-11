@@ -144,7 +144,7 @@ public class ReceiptGenerationHandler implements JobHandler {
                     GenerationContext ctx = GenerationContext.generate();
                     ReceiptModel model = new ReceiptModel.Generator().generate(ctx);
                     ReceiptGenerator.getInstance().generateReceipt(new GenericReceiptLayout(), model, pdf, xml, img,xmlEval);
-                    manager.progress(jobId, (long)((i-start)*100)/qty);
+                    manager.progress(jobId, (long)((i-start)* 100L)/qty);
                 }
                 report.append("All receipts generated");
                 LOGGER.log(Level.INFO, "All receipts generated");

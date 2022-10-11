@@ -169,7 +169,7 @@ public class Company {
         private static final List<String> companiesCountryList = Arrays.asList(
                 "AE_en",
                 "FR");
-        private static Map<Company, String> companies = new HashMap<>();
+        private static final Map<Company, String> companies = new HashMap<>();
         {
             assert companiesFileList.size() == companiesCountryList.size();
             for (int i=0; i<companiesFileList.size(); i++) {

@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 public class SumUpSalary {
 
     private static final Logger LOGGER = Logger.getLogger(SumUpSalary.class.getName());
-    private Random random= new Random();
+    private final Random random= new Random();
     private double netApayer;
     private double netImposable;
     private double brut;

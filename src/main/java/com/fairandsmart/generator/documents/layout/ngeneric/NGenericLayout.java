@@ -66,7 +66,7 @@ import java.util.Map;
 
 @ApplicationScoped
 public class NGenericLayout implements InvoiceLayout {
-    private float fontSize = 10;
+    private final float fontSize = 10;
     private PDFont[] fonts;
     InvoiceModel model;
     // 1 available, 0 not available, -1 used
@@ -138,7 +138,7 @@ public class NGenericLayout implements InvoiceLayout {
                     compElements.put(2, companyAddress);
                     compElements.put(3, companyContact);
                 }
-                int list[] = getRandomList(3);
+                int[] list = getRandomList(3);
                 for(int i =0; i < list.length; i++)
                 firstPart.addElement(compElements.get(list[i]), false);
                 this.compContactAvailable = -1;
@@ -153,7 +153,7 @@ public class NGenericLayout implements InvoiceLayout {
                     compElements.put(1, companyLogo);
                     compElements.put(2, companyAddIDCont);
                 }
-                int list[] = getRandomList(compElements.size());
+                int[] list = getRandomList(compElements.size());
                 if(list[0]==1)
                     firstPart = new TableRowBox(configRow2v1, 0, 0);
                 else
@@ -195,7 +195,7 @@ public class NGenericLayout implements InvoiceLayout {
                     compElements.put(1, iInfor);
                     compElements.put(2, companyLogoAddCont);
                 }
-                int list[] = getRandomList(compElements.size());
+                int[] list = getRandomList(compElements.size());
                 for(int i =0; i < list.length; i++)
                     firstPart.addElement(compElements.get(list[i]), true);
                 this.compContactAvailable = -1;
@@ -228,7 +228,7 @@ public class NGenericLayout implements InvoiceLayout {
                         compElements.put(1, iInfor);
                         compElements.put(2, companyLogoAddCont);
                     }
-                    int list[] = getRandomList(compElements.size());
+                    int[] list = getRandomList(compElements.size());
                     boolean center_align = false;
                     for(int i =0; i < list.length; i++) {
                         if (compElements.get(list[i]) == iInfor) {
@@ -266,7 +266,7 @@ public class NGenericLayout implements InvoiceLayout {
                 clientElements.put(1, billingInfoBox);
                 clientElements.put(2, shippingInfoBox);
             }
-            int list[] = getRandomList(clientElements.size());
+            int[] list = getRandomList(clientElements.size());
             for (int i = 0; i < list.length; i++)
                 secondPart.addElement(clientElements.get(list[i]), true);
 
@@ -276,7 +276,7 @@ public class NGenericLayout implements InvoiceLayout {
                 clientInfos.put(1, clientInfo);
                 clientInfos.put(2, clientOtherInfo);
             }
-            int list2[] = getRandomList(clientInfos.size());
+            int[] list2 = getRandomList(clientInfos.size());
             for (int i = 0; i < list2.length; i++)
                 thirdPart.addElement(clientInfos.get(list2[i]), true);
 
@@ -296,7 +296,7 @@ public class NGenericLayout implements InvoiceLayout {
                 clientElements.put(2, clientInfo);
             }
 
-            int list[] = getRandomList(clientElements.size());
+            int[] list = getRandomList(clientElements.size());
             for (int i = 0; i < list.length; i++)
                 secondPart.addElement(clientElements.get(list[i]), true);
 
@@ -325,7 +325,7 @@ public class NGenericLayout implements InvoiceLayout {
                 payInfos.put(1, randomClientInfo);
                 payInfos.put(2, emptyBox);
             }
-            int list[] = getRandomList(payInfos.size());
+            int[] list = getRandomList(payInfos.size());
             for (int i = 0; i < list.length; i++)
                 fourthPart.addElement(payInfos.get(list[i]), true);
             invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 40));
@@ -377,7 +377,7 @@ public class NGenericLayout implements InvoiceLayout {
             }
 
 
-            int list[] = getRandomList(compElements.size());
+            int[] list = getRandomList(compElements.size());
             for(int i =0; i < list.length; i++)
                 fifthPart.addElement(compElements.get(list[i]), false);
             invoicePage.addElement(fifthPart);

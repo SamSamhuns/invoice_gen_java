@@ -63,7 +63,7 @@ import java.util.*;
 
 @ApplicationScoped
 public class GenericReceiptLayout implements SSDLayout {
-    private float fontSize = 9.5f;
+    private final float fontSize = 9.5f;
     private PDFont[] fonts;
     ReceiptModel model;
     private boolean timeAvailable;
