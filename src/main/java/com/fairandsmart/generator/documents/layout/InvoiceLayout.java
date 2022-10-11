@@ -207,7 +207,7 @@ public interface InvoiceLayout {
             final float fontHeight = 90 + rnd.nextInt(20); // arbitrary for short text
             final float width = page.getMediaBox().getWidth();
             final float height = page.getMediaBox().getHeight();
-            final float stringWidth = font.getStringWidth(text) / 1000 * fontHeight;
+            final float stringWidth = font.getStringWidth(text) / 1000 * fontHeight;  /// mult by fontSize to get width as well
             final float diagonalLength = (float) Math.sqrt(width * width + height * height);
             final float angle = (float) Math.atan2(height, width) + (float) rnd.nextInt(5)/100;
             final float x = (diagonalLength - stringWidth) / 2; // "horizontal" position in rotated world

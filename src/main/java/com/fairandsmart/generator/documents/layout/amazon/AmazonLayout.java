@@ -278,15 +278,15 @@ public class AmazonLayout implements InvoiceLayout {
         if (genProb.get("signature_bottom")) {
               String compSignatureName = model.getCompany().getName();
               compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
-              SimpleTextBox singatureText = new SimpleTextBox(
+              SimpleTextBox singatureTextBox = new SimpleTextBox(
                       fontNormal1, 8, 0, 130,
                       model.getCompany().getSignature().getLabel()+" "+compSignatureName, "Signature");
-              float singatureTextxPos = pageWidth - singatureText.getBoundingBox().getWidth() - 50;
-              singatureText.getBoundingBox().setPosX(singatureTextxPos);
-              singatureText.build(contentStream, writer);
+              float singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
+              singatureTextBox.getBoundingBox().setPosX(singatureTextxPos);
+              singatureTextBox.build(contentStream, writer);
               new HorizontalLineBox(
                       singatureTextxPos - 10, 135,
-                      singatureTextxPos + singatureText.getBoundingBox().getWidth() + 10, 135
+                      singatureTextxPos + singatureTextBox.getBoundingBox().getWidth() + 10, 135
                       ).build(contentStream, writer);
 
               // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
@@ -295,8 +295,8 @@ public class AmazonLayout implements InvoiceLayout {
               PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
               int signatureWidth = 120;
               int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
-              // align signature to center of singatureText bbox
-              float signatureXPos = singatureText.getBoundingBox().getPosX() + singatureText.getBoundingBox().getWidth()/2 - signatureWidth/2;
+              // align signature to center of singatureTextBox bbox
+              float signatureXPos = singatureTextBox.getBoundingBox().getPosX() + singatureTextBox.getBoundingBox().getWidth()/2 - signatureWidth/2;
               float signatureYPos = 140;
               contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
         }
@@ -336,11 +336,11 @@ public class AmazonLayout implements InvoiceLayout {
             PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
 
             float minAStamp = 0.6f; float maxAStamp = 0.8f;
-            float resDim = 90 + rnd.nextInt(20);
+            float resDim = 105 + rnd.nextInt(20);
             float xPosStamp; float yPosStamp;
             // draw to lower right if signature if present
-            if (rnd.nextInt(2) == 1 && model.getCompany().getSignature().getName() != null) {
-                xPosStamp = 400 + rnd.nextInt(10);
+            if (rnd.nextInt(2) == 1 && genProb.get("signature_bottom")) {
+                xPosStamp = 405 + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             else {  // draw to lower center
@@ -355,6 +355,11 @@ public class AmazonLayout implements InvoiceLayout {
                 // resize stamp maintaining aspect ratio
                 rotAngle = 0;
                 stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
+            }
+            else if (genProb.get("stamp_elongated")) {
+                // elongate stamps if the stamp is a not a Rectangular one
+                stampWidth = stampWidth + 50;
+                stampHeight = stampHeight - 10;
             }
             InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
                                                stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
