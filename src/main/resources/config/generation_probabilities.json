@@ -1,13 +1,14 @@
 [{
     "layout": "Amazon",
     "probability": {
-      "barcode_top": 60,
+      "barcode_top": 50,
       "switch_bill_ship_addresses": 10,
       "registered_address_info": 50,
-      "barcode_bottom": 60,
+      "barcode_bottom": 50,
       "signature_bottom": 65,
+      "signature_bottom_left": 20,
       "stamp_bottom": 45,
-      "stamp_elongated": 30,
+      "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
       "confidential_watermark": 3
     }
@@ -17,8 +18,9 @@
     "probability": {
       "switch_bill_ship_addresses": 10,
       "signature_bottom": 65,
+      "signature_bottom_left": 20,
       "stamp_bottom": 45,
-      "stamp_elongated": 30,
+      "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
       "confidential_watermark": 3
     }

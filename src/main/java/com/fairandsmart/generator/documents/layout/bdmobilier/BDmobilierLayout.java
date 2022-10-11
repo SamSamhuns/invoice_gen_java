@@ -95,7 +95,8 @@ public class BDmobilierLayout implements InvoiceLayout {
         PDFont fontItalic1 = fontPair.getFontItalic();
 
         float leftMarginX = 10;
-        float middlePageX = page.getMediaBox().getWidth()/2;
+        float pageWidth = page.getMediaBox().getWidth();
+        float middlePageX = pageWidth/2;
         PDFont normalOrBoldFont = (rnd.nextInt(2) == 1) ? fontNormal1 : fontBold1;
         Color grayishFontColor = InvoiceLayout.getRandomColor(3);
 
@@ -273,7 +274,14 @@ public class BDmobilierLayout implements InvoiceLayout {
               SimpleTextBox singatureTextBox = new SimpleTextBox(
                       fontNormal1, 8, 0, 130,
                       model.getCompany().getSignature().getLabel()+" "+compSignatureName, "Signature");
-              float singatureTextxPos = page.getMediaBox().getWidth() - singatureTextBox.getBoundingBox().getWidth() - 50;
+
+              float singatureTextxPos;
+              if (genProb.get("signature_bottom_left")) {  // bottom left
+                  singatureTextxPos = leftMarginX + 25;
+              } else {                                     // bottom right
+                  singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
+              }
+
               singatureTextBox.getBoundingBox().setPosX(singatureTextxPos);
               singatureTextBox.build(contentStream, writer);
               new HorizontalLineBox(
@@ -304,8 +312,8 @@ public class BDmobilierLayout implements InvoiceLayout {
             float resDim = 105 + rnd.nextInt(20);
             float xPosStamp; float yPosStamp;
             // draw to lower right if signature if present
-            if (rnd.nextInt(3) < 2 && genProb.get("signature_bottom")) {
-                xPosStamp = 405 + rnd.nextInt(10);
+            if (genProb.get("signature_bottom") && rnd.nextInt(3) < 2) {
+                xPosStamp = ((genProb.get("signature_bottom_left")) ? leftMarginX + 5 : 405) + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             else {  // draw to lower center
@@ -321,8 +329,10 @@ public class BDmobilierLayout implements InvoiceLayout {
                 rotAngle = 0;
                 stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
             }
-            else if (genProb.get("stamp_elongated")) {
+            else if (genProb.get("stamp_bottom_elongated")) {
                 // elongate stamps if the stamp is a not a Rectangular one
+                // and set rotation to 0
+                rotAngle = 0;
                 stampWidth = stampWidth + 50;
                 stampHeight = stampHeight - 10;
             }

@@ -101,6 +101,7 @@ public class AmazonLayout implements InvoiceLayout {
         boolean centerAlignItems = rnd.nextInt(2) == 0;
 
         float pageWidth = page.getMediaBox().getWidth();
+        float leftPageMargin = 25;
 
         /* Build Page components now */
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
@@ -114,22 +115,22 @@ public class AmazonLayout implements InvoiceLayout {
         }
 
         // Text top
-        VerticalContainer infos = new VerticalContainer(25, 810, 500);
+        VerticalContainer infos = new VerticalContainer(leftPageMargin, 810, 500);
         infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Page 1 of 1" + ((rnd.nextInt(2) == 1) ? ", 1-1/1": ".")));
         infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Invoice for "+model.getReference().getValueInvoice()+" "+model.getDate().getValueInvoice()));
         infos.addElement(new SimpleTextBox(fontBold1, 10, 0, 0, ((rnd.nextInt(2) == 1) ? "Retail" : "Institution") + " / Tax Invoice / Cash Memorandum"));
         infos.build(contentStream, writer);
 
         // invoice / TRN number
-        new SimpleTextBox(fontBold1, 10, 25, 761, "Sold By").build(contentStream, writer);
-        new SimpleTextBox(fontNormal1, 9, 25, 750, model.getCompany().getLogo().getName(), "SN").build(contentStream, writer);
-        new SimpleTextBox(fontNormal1, 9, 25, 740, model.getCompany().getAddress().getLine1(), "SA" ).build(contentStream, writer);
-        new SimpleTextBox(fontNormal1, 9, 25, 730, model.getCompany().getAddress().getZip()+" "+model.getCompany().getAddress().getCity(), "SA").build(contentStream, writer);
+        new SimpleTextBox(fontBold1, 10, leftPageMargin, 761, "Sold By").build(contentStream, writer);
+        new SimpleTextBox(fontNormal1, 9, leftPageMargin, 750, model.getCompany().getLogo().getName(), "SN").build(contentStream, writer);
+        new SimpleTextBox(fontNormal1, 9, leftPageMargin, 740, model.getCompany().getAddress().getLine1(), "SA" ).build(contentStream, writer);
+        new SimpleTextBox(fontNormal1, 9, leftPageMargin, 730, model.getCompany().getAddress().getZip()+" "+model.getCompany().getAddress().getCity(), "SA").build(contentStream, writer);
         String vatSentence = model.getCompany().getIdNumbers().getVatLabel()+" "+model.getCompany().getIdNumbers().getVatValue();
         if (rnd.nextInt(2) == 1) {
-            new SimpleTextBox(fontNormal1, 9, 25, 690, "CST Number: "+model.getCompany().getIdNumbers().getVatValue(), "SVAT").build(contentStream, writer);
+            new SimpleTextBox(fontNormal1, 9, leftPageMargin, 690, "CST Number: "+model.getCompany().getIdNumbers().getVatValue(), "SVAT").build(contentStream, writer);
         }
-        new SimpleTextBox(fontNormal1, 9, 25, 680, vatSentence, "SVAT").build(contentStream, writer);
+        new SimpleTextBox(fontNormal1, 9, leftPageMargin, 680, vatSentence, "SVAT").build(contentStream, writer);
         new SimpleTextBox(fontNormal1, 9, pageWidth/2, 680, ((rnd.nextInt(10) < 5) ? "Invoice No. ": "") + model.getReference().getValueInvoice()).build(contentStream, writer);
 
         contentStream.moveTo(20, 650);
@@ -137,7 +138,7 @@ public class AmazonLayout implements InvoiceLayout {
         contentStream.stroke();
 
         // check if billing and shipping addresses should be switched
-        float leftAddrX = 25;
+        float leftAddrX = leftPageMargin;
         float rightAddrX = pageWidth/2 + rnd.nextInt(5);
         if (genProb.get("switch_bill_ship_addresses")) {
             float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
@@ -165,7 +166,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         verticalAddressContainer2.build(contentStream, writer);
 
-        SimpleTextBox box1 = new SimpleTextBox(fontBold1, 9, 25, 560, (rnd.nextInt(2) == 0) ? "Nature of Transaction: Sale": "Transaction: Sale");
+        SimpleTextBox box1 = new SimpleTextBox(fontBold1, 9, leftPageMargin, 560, (rnd.nextInt(2) == 0) ? "Nature of Transaction: Sale": "Transaction: Sale");
         box1.build(contentStream, writer);
 
         boolean upperCap = rnd.nextInt(2) == 1;
@@ -182,7 +183,7 @@ public class AmazonLayout implements InvoiceLayout {
         firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "TAX RATE": "Tax Rate"), Color.BLACK, tableHdrBgColor), centerAlignItems);
         firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "TAX AMOUNT": "Tax Amount"), Color.BLACK, tableHdrBgColor), centerAlignItems);
 
-        VerticalContainer verticalInvoiceItems = new VerticalContainer(25, 550, 600);
+        VerticalContainer verticalInvoiceItems = new VerticalContainer(leftPageMargin, 550, 600);
         verticalInvoiceItems.addElement(firstLine);
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
         verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-(20*2), 0));
@@ -281,7 +282,14 @@ public class AmazonLayout implements InvoiceLayout {
               SimpleTextBox singatureTextBox = new SimpleTextBox(
                       fontNormal1, 8, 0, 130,
                       model.getCompany().getSignature().getLabel()+" "+compSignatureName, "Signature");
-              float singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
+
+              float singatureTextxPos;
+              if (genProb.get("signature_bottom_left")) {  // bottom left
+                  singatureTextxPos = leftPageMargin + 25;
+              } else {                                     // bottom right
+                  singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
+              }
+
               singatureTextBox.getBoundingBox().setPosX(singatureTextxPos);
               singatureTextBox.build(contentStream, writer);
               new HorizontalLineBox(
@@ -304,7 +312,7 @@ public class AmazonLayout implements InvoiceLayout {
         // Add footer line and info
         new HorizontalLineBox(20, 110, pageWidth-(20*2), 0).build(contentStream, writer);
 
-        VerticalContainer verticalFooterContainer = new VerticalContainer(25, 100, 450);
+        VerticalContainer verticalFooterContainer = new VerticalContainer(leftPageMargin, 100, 450);
         String compEmail = ((model.getCompany().getWebsite() == null) ? "company.domain.com" :  model.getCompany().getWebsite());
         verticalFooterContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, String.format("To return an item, visit %s/returns", compEmail)));
         String infoText = (rnd.nextInt(2) == 1) ? "For more information on your orders, visit http://": "For queries on orders, visit http://";
@@ -325,7 +333,7 @@ public class AmazonLayout implements InvoiceLayout {
         if (genProb.get("barcode_bottom")) {
             BufferedImage barcodeFooterImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
             PDImageXObject barCodeFooter = LosslessFactory.createFromImage(document, barcodeFooterImage);
-            contentStream.drawImage(barCodeFooter, 25, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
+            contentStream.drawImage(barCodeFooter, leftPageMargin, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
         }
 
         // Add company stamp watermark, 40% prob
@@ -338,9 +346,9 @@ public class AmazonLayout implements InvoiceLayout {
             float minAStamp = 0.6f; float maxAStamp = 0.8f;
             float resDim = 105 + rnd.nextInt(20);
             float xPosStamp; float yPosStamp;
-            // draw to lower right if signature if present
-            if (rnd.nextInt(2) == 1 && genProb.get("signature_bottom")) {
-                xPosStamp = 405 + rnd.nextInt(10);
+            // draw to lower right if signature in bottom or lower left if signature in bottom left
+            if (genProb.get("signature_bottom") && rnd.nextInt(3) < 2) {
+                xPosStamp = ((genProb.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             else {  // draw to lower center
@@ -356,8 +364,10 @@ public class AmazonLayout implements InvoiceLayout {
                 rotAngle = 0;
                 stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
             }
-            else if (genProb.get("stamp_elongated")) {
+            else if (genProb.get("stamp_bottom_elongated")) {
                 // elongate stamps if the stamp is a not a Rectangular one
+                // and set rotation to 0
+                rotAngle = 0;
                 stampWidth = stampWidth + 50;
                 stampHeight = stampHeight - 10;
             }
