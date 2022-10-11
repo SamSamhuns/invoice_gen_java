@@ -80,12 +80,8 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         Random rnd = Helper.getRandom();
 
-        // Set probability map, int value out of 100, 60 -> 60% proba
-        Map<String, Integer> genProb = new HashMap<>();
-        genProb.put("switch_bill_ship_addresses", 10);
-        genProb.put("stamp_bottom", 45);
-        genProb.put("logo_watermark", 15);
-        genProb.put("confidential_watermark", 4);
+        // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
+        Map<String, Integer> genProb = Helper.getMatchedProbConfigMap(model.getConfigMaps(), this.name());
 
         IDNumbers idNumbers = model.getCompany().getIdNumbers();
         Address address = model.getCompany().getAddress();

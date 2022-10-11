@@ -61,6 +61,7 @@ import java.net.URI;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.List;
 import java.util.Map;
 
 
@@ -84,16 +85,8 @@ public class AmazonLayout implements InvoiceLayout {
         writer.writeAttribute("height", "3508");
 
         Random rnd = Helper.getRandom();
-
-        // Set probability map, int value out of 100, 60 -> 60% proba
-        Map<String, Integer> genProb = new HashMap<>();
-        genProb.put("barcode_top", 60);
-        genProb.put("switch_bill_ship_addresses", 10);
-        genProb.put("registered_address_info", 50);
-        genProb.put("barcode_bottom", 60);
-        genProb.put("stamp_bottom", 45);
-        genProb.put("logo_watermark", 15);
-        genProb.put("confidential_watermark", 4);
+        // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
+        Map<String, Integer> genProb = Helper.getMatchedProbConfigMap(model.getConfigMaps(), this.name());
 
         // Generate barCodeNum
         Generex barCodeNumGen = new Generex("[0-9]{12}");

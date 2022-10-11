@@ -86,6 +86,7 @@ public class InvoiceModel extends Model{
             model.setCompany(new Company.Generator().generate(ctx));
             model.setClient(new Client.Generator().generate(ctx));
             model.setProductContainer(new ProductContainer.Generator().generate(ctx));
+            model.setConfigMaps(ctx.getConfigMaps());
             return model;
         }
     }

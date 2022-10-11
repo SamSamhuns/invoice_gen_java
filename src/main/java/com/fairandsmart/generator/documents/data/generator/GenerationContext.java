@@ -32,18 +32,33 @@ package com.fairandsmart.generator.documents.data.generator;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
+import java.util.Map;
 import java.util.List;
 import java.util.Random;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class GenerationContext {
+
+    private static final Logger LOGGER = Logger.getLogger(GenerationContext.class.getName());
 
     private static final List<String> countries = new ArrayList<>();
     private static final List<String> languages = new ArrayList<>();
     private static final List<String> locales = new ArrayList<>();
     private static final List<String> currencies = new ArrayList<>();
     private static final Random rnd = new Random();
+    private static List<Map<String, Object>> configMaps;
+
     {
         // countries.add("FR");
         // countries.add("LU");
@@ -149,6 +164,14 @@ public class GenerationContext {
         this.languagePayslip = languagePayslip;
     }
 
+    public List<Map<String, Object>> getConfigMaps() {
+        return configMaps;
+    }
+
+    public void setConfigMaps(List<Map<String, Object>> configMaps) {
+        this.configMaps = configMaps;
+    }
+
     @Override
     public String toString() {
         return "GenerationContext{" +
@@ -159,6 +182,22 @@ public class GenerationContext {
                 ", currency='" + currency + '\'' +
                 ", date=" + date +
                 '}';
+    }
+
+    // load configuration files //
+    {
+      final String genProbConfigFile = "config/generation_probabilities.json";
+      {
+          configMaps = new ArrayList<Map<String, Object>>();
+          try {
+              Reader jsonReader = new InputStreamReader(GenerationContext.class.getClassLoader().getResourceAsStream(genProbConfigFile));
+              Gson gson = new Gson();
+              Type collectionType = new TypeToken<List<Map<String, Object>>>(){}.getType();
+              configMaps.addAll(gson.fromJson(jsonReader, collectionType));
+          } catch ( Exception e ) {
+              LOGGER.log(Level.SEVERE, "unable to parse json source: " + genProbConfigFile, e);
+          }
+      }
     }
 
     public static GenerationContext generate() {
@@ -173,6 +212,7 @@ public class GenerationContext {
         ctx.setLocale(locale);
         ctx.setLanguagePayslip(lang);
         ctx.setCurrency(currency);
+        ctx.setConfigMaps(configMaps);
         return ctx;
     }
 }

@@ -38,8 +38,18 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.stream.Collectors;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.List;
+import java.util.Map;
+
 
 public class Helper {
 
@@ -97,5 +107,20 @@ public class Helper {
         graphics.dispose();
 
         return rotatedImage;
+    }
+
+    public static Map<String, Integer> getMatchedProbConfigMap(List<Map<String, Object>> configMaps, String layout) throws Exception {
+      List<Map<String, Object>> matchedConfigs = configMaps.stream()
+                                                            .filter(cfg -> cfg.get("layout").equals(layout))
+                                                            .collect(Collectors.toList());
+      if (matchedConfigs.size() == 0) {
+          throw new Exception("No matching layout was found for " + layout + " in existing layout config list.");
+      }
+      // convert probability Object to String -> Float map
+      Object cfg = matchedConfigs.get(0).get("probability");
+      Type type = new TypeToken<Map<String, Integer>>(){}.getType();
+      Map<String, Integer> probMap = new Gson().fromJson(cfg.toString(), type);
+
+      return probMap;
     }
 }

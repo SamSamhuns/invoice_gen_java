@@ -1,0 +1,50 @@
+[{
+    "layout": "Amazon",
+    "probability": {
+      "barcode_top": 60,
+      "switch_bill_ship_addresses": 10,
+      "registered_address_info": 50,
+      "barcode_bottom": 60,
+      "stamp_bottom": 45,
+      "logo_watermark": 15,
+      "confidential_watermark": 4
+    }
+  },
+  {
+    "layout": "BDMobilier",
+    "probability": {
+      "switch_bill_ship_addresses": 10,
+      "stamp_bottom": 45,
+      "logo_watermark": 15,
+      "confidential_watermark": 4
+    }
+  },
+  {
+    "layout": "Cdiscount",
+    "probability": {}
+  },
+  {
+    "layout": "Darty",
+    "probability": {}
+  },
+  {
+    "layout": "InvoiceSSD",
+    "probability": {}
+  },
+  {
+    "layout": "LDLC",
+    "probability": {}
+  },
+  {
+    "layout": "MACOMP",
+    "probability": {}
+  },
+  {
+    "layout": "Materielnet",
+    "probability": {}
+  },
+  {
+    "layout": "NGeneric",
+    "probability": {}
+  }
+]
