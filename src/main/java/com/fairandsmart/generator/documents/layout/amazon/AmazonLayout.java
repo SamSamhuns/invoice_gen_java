@@ -86,7 +86,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         Random rnd = Helper.getRandom();
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
-        Map<String, Integer> genProb = Helper.getMatchedProbConfigMap(model.getConfigMaps(), this.name());
+        Map<String, Boolean> genProb = Helper.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
         // Generate barCodeNum
         Generex barCodeNumGen = new Generex("[0-9]{12}");
@@ -107,7 +107,7 @@ public class AmazonLayout implements InvoiceLayout {
         new BorderBox(InvoiceLayout.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, page.getMediaBox().getHeight()).build(contentStream, writer);
 
         // Barcode top
-        if (rnd.nextInt(100) < genProb.get("barcode_top")) {
+        if (genProb.get("barcode_top")) {
             BufferedImage barcodeTopImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
             PDImageXObject pdBarcode = LosslessFactory.createFromImage(document, barcodeTopImage);
             new ImageBox(pdBarcode, pageWidth / 2, 810, pdBarcode.getWidth(), (float)(pdBarcode.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
@@ -139,7 +139,7 @@ public class AmazonLayout implements InvoiceLayout {
         // check if billing and shipping addresses should be switched
         float leftAddrX = 25;
         float rightAddrX = pageWidth/2 + rnd.nextInt(5);
-        if (rnd.nextInt(100) < genProb.get("switch_bill_ship_addresses")) {
+        if (genProb.get("switch_bill_ship_addresses")) {
             float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
         }
         float billX = leftAddrX; float billY = 630;
@@ -255,7 +255,7 @@ public class AmazonLayout implements InvoiceLayout {
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
         // Add registered address information
-        if (rnd.nextInt(100) < genProb.get("registered_address_info")) {
+        if (genProb.get("registered_address_info")) {
               verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-(20*2), 0));
               verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
@@ -274,8 +274,8 @@ public class AmazonLayout implements InvoiceLayout {
         }
         verticalInvoiceItems.build(contentStream, writer);
 
-        // Add Signature if it is not null
-        if (model.getCompany().getSignature().getName() != null) {
+        // Add Signature at bottom
+        if (genProb.get("signature_bottom")) {
               String compSignatureName = model.getCompany().getName();
               compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
               SimpleTextBox singatureText = new SimpleTextBox(
@@ -322,14 +322,14 @@ public class AmazonLayout implements InvoiceLayout {
         contentStream.drawImage(logoImg, 480, 10, 85, 85 / ((ratio == 0) ? 1 : ratio) - 5);
 
         // Barcode bottom
-        if (rnd.nextInt(100) < genProb.get("barcode_bottom")) {
+        if (genProb.get("barcode_bottom")) {
             BufferedImage barcodeFooterImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
             PDImageXObject barCodeFooter = LosslessFactory.createFromImage(document, barcodeFooterImage);
             contentStream.drawImage(barCodeFooter, 25, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
         }
 
         // Add company stamp watermark, 40% prob
-        if (rnd.nextInt(100) < genProb.get("stamp_bottom")) {
+        if (genProb.get("stamp_bottom")) {
             // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
             URI stampUri = new URI(this.getClass().getClassLoader().getResource("common/stamp/" + model.getCompany().getStamp().getFullPath()).getFile());
             String stampPath = stampUri.getPath();
@@ -359,18 +359,18 @@ public class AmazonLayout implements InvoiceLayout {
             InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
                                                stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
         }
-        // if no signature and no logo, add a footer note
-        else if (model.getCompany().getSignature().getName() == null) {
+        // if no signature and no stamp, then add a footer note
+        else if (!genProb.get("signature_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
             new SimpleTextBox(fontNormal1, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream, writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
-        if (rnd.nextInt(100) < genProb.get("confidential_watermark")) {
+        if (genProb.get("confidential_watermark")) {
             // Add confidential watermark
             InvoiceLayout.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
         }
-        else if (rnd.nextInt(100) < genProb.get("logo_watermark")) {
+        else if (genProb.get("logo_watermark")) {
             // Add watermarked background logo
             InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
         }

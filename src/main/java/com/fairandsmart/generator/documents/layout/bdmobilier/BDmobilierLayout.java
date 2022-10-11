@@ -81,7 +81,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         Random rnd = Helper.getRandom();
 
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
-        Map<String, Integer> genProb = Helper.getMatchedProbConfigMap(model.getConfigMaps(), this.name());
+        Map<String, Boolean> genProb = Helper.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
         IDNumbers idNumbers = model.getCompany().getIdNumbers();
         Address address = model.getCompany().getAddress();
@@ -114,7 +114,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // check if billing and shipping addresses should be switched
         float leftAddrX = 120 + rnd.nextInt(15);
         float rightAddrX = 335 + rnd.nextInt(15);
-        if (rnd.nextInt(100) < genProb.get("switch_bill_ship_addresses")) {
+        if (genProb.get("switch_bill_ship_addresses")) {
             float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
         }
         float billX = leftAddrX; float billY = page.getMediaBox().getHeight()-121;
@@ -294,7 +294,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         }
 
         // Add company stamp watermark, 40% prob
-        if (rnd.nextInt(100) < genProb.get("stamp_bottom")) {
+        if (genProb.get("stamp_bottom")) {
             // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
             URI stampUri = new URI(this.getClass().getClassLoader().getResource("common/stamp/" + model.getCompany().getStamp().getFullPath()).getFile());
             String stampPath = stampUri.getPath();
@@ -324,8 +324,8 @@ public class BDmobilierLayout implements InvoiceLayout {
             InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
                                                stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
         }
-        // if no signature and no logo, add a footer note
-        else if (model.getCompany().getSignature().getName() == null) {
+        // if no signature and no stamp, then add a footer note
+        else if (!genProb.get("signature_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or the Company's stamp in order to be considered valid";
             SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontNormal1, footerFontSize-1, 0, 80, noStampSignMsg, "Footnote");
             // align the text to the center
@@ -334,11 +334,11 @@ public class BDmobilierLayout implements InvoiceLayout {
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
-        if (rnd.nextInt(100) < genProb.get("confidential_watermark")) {
+        if (genProb.get("confidential_watermark")) {
             // Add confidential watermark
             InvoiceLayout.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
         }
-        else if (rnd.nextInt(100) < genProb.get("logo_watermark")) {
+        else if (genProb.get("logo_watermark")) {
             // Add watermarked background logo
             InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
         }

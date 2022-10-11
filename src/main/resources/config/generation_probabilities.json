@@ -5,18 +5,20 @@
       "switch_bill_ship_addresses": 10,
       "registered_address_info": 50,
       "barcode_bottom": 60,
+      "signature_bottom": 65,
       "stamp_bottom": 45,
       "logo_watermark": 15,
-      "confidential_watermark": 4
+      "confidential_watermark": 3
     }
   },
   {
     "layout": "BDMobilier",
     "probability": {
       "switch_bill_ship_addresses": 10,
+      "signature_bottom": 65,
       "stamp_bottom": 45,
       "logo_watermark": 15,
-      "confidential_watermark": 4
+      "confidential_watermark": 3
     }
   },
   {

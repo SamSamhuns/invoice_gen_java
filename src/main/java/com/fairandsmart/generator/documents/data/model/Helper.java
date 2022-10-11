@@ -109,7 +109,14 @@ public class Helper {
         return rotatedImage;
     }
 
-    public static Map<String, Integer> getMatchedProbConfigMap(List<Map<String, Object>> configMaps, String layout) throws Exception {
+    /**
+    * Returns an HashMap object
+    * that states whether the component (key) should be used in the layout generation
+    * @param  configMaps  an absolute URL giving the base location of the image
+    * @param  layout       the location of the image, relative to the url argument
+    * @return      HashMap linking keys to booleans
+    */
+    public static Map<String, Boolean> getMatchedConfigMap(List<Map<String, Object>> configMaps, String layout) throws Exception {
       List<Map<String, Object>> matchedConfigs = configMaps.stream()
                                                             .filter(cfg -> cfg.get("layout").equals(layout))
                                                             .collect(Collectors.toList());
@@ -120,7 +127,12 @@ public class Helper {
       Object cfg = matchedConfigs.get(0).get("probability");
       Type type = new TypeToken<Map<String, Integer>>(){}.getType();
       Map<String, Integer> probMap = new Gson().fromJson(cfg.toString(), type);
+      // convert probability map into a boolean use or not use map
+      // int value out of 100, 60 -> 60% proba
+      Map<String, Boolean> genMap = new HashMap<String, Boolean>();
+      for (Map.Entry<String, Integer> entry : probMap.entrySet())
+         genMap.put(entry.getKey(), rnd.nextInt(100) < entry.getValue());
 
-      return probMap;
+      return genMap;
     }
 }

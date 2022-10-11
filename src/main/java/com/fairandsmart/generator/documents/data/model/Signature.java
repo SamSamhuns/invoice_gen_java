@@ -132,8 +132,6 @@ public class Signature {
             List<String> sigLabels = signatureLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             int idxS = ctx.getRandom().nextInt(sigLabels.size());
             signatureObj.setLabel(sigLabels.get(idxS));
-            // 50% prob to have empty signature
-            signatureObj = ctx.getRandom().nextInt(2) < 1 ? signatureObj: new Signature();
             return signatureObj;
         }
     }
