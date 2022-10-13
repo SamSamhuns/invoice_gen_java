@@ -35,6 +35,8 @@ package com.fairandsmart.generator.documents;
 
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.layout.InvoiceLayout;
+import com.fairandsmart.generator.documents.layout.loria.LoriaLayout;
 import org.junit.Test;
 
 import java.nio.file.Files;
@@ -68,8 +70,8 @@ public void test() throws Exception {
                 ctx.setCountry("AE_en");
                 ctx.setLanguage("en");
                 InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
-                //InvoiceLayout layout = new LoriaLayout();
-                //InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);
+                InvoiceLayout layout = new LoriaLayout();
+                InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);
         }
 }
 }

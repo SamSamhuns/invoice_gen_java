@@ -174,32 +174,32 @@ public interface InvoiceLayout {
         addWatermarkImagePDF(doc, page, imgPDF, xoff, yoff, nImgW, nimgH, minImgAlpha, maxImgAlpha, rotAngle);
     }
 
-    static void addWatermarkImagePDF(
-            final PDDocument doc, final PDPage page, final PDImageXObject imgPDF,
-            final float xPos, final float yPos, final float imgW, final float imgH,
-            final float minAlpha, final float maxAlpha, final double rotAngle) throws IOException {
-        try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
-                true)) {
-            contentStream.saveGraphicsState();
-            final PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
-            pdExtGfxState.setBlendMode(BlendMode.MULTIPLY);
-            float alpha = Helper.rand_uniform(minAlpha, maxAlpha);
-            pdExtGfxState.setNonStrokingAlphaConstant(alpha);
-            contentStream.setGraphicsStateParameters(pdExtGfxState);
+  static void addWatermarkImagePDF(
+          final PDDocument doc, final PDPage page, final PDImageXObject imgPDF,
+          final float xPos, final float yPos, final float imgW, final float imgH,
+          final float minAlpha, final float maxAlpha, final double rotAngle) throws IOException {
+      try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
+              true)) {
+          contentStream.saveGraphicsState();
+          final PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
+          pdExtGfxState.setBlendMode(BlendMode.MULTIPLY);
+          float alpha = Helper.rand_uniform(minAlpha, maxAlpha);
+          pdExtGfxState.setNonStrokingAlphaConstant(alpha);
+          contentStream.setGraphicsStateParameters(pdExtGfxState);
 
-            // draw on document,check if rotation is required or not
-            if (rotAngle != 0.0) {
-                BufferedImage imgBuf = Helper.getRotatedImage(imgPDF.getImage(), rotAngle);
-                PDImageXObject imgPDFRot = LosslessFactory.createFromImage(doc, imgBuf);
-                contentStream.drawImage(imgPDFRot, xPos, yPos, imgW, imgH);
-            }
-            else {
-                contentStream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
-            }
-            contentStream.restoreGraphicsState();
-            contentStream.close();
-        }
-    }
+          // draw on document,check if rotation is required or not
+          if (rotAngle != 0.0) {
+              BufferedImage imgBuf = Helper.getRotatedImage(imgPDF.getImage(), rotAngle);
+              PDImageXObject imgPDFRot = LosslessFactory.createFromImage(doc, imgBuf);
+              contentStream.drawImage(imgPDFRot, xPos, yPos, imgW, imgH);
+          }
+          else {
+              contentStream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
+          }
+          contentStream.restoreGraphicsState();
+          contentStream.close();
+      }
+  }
 
   static void addWatermarkTextPDF(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
         try (PDPageContentStream cs = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,

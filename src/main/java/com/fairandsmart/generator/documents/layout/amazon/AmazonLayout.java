@@ -117,21 +117,22 @@ public class AmazonLayout implements InvoiceLayout {
         // Text top
         VerticalContainer infos = new VerticalContainer(leftPageMargin, 810, 500);
         infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Page 1 of 1" + ((rnd.nextInt(2) == 1) ? ", 1-1/1": ".")));
-        infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Invoice for "+model.getReference().getValueInvoice()+" "+model.getDate().getValueInvoice()));
-        infos.addElement(new SimpleTextBox(fontBold1, 10, 0, 0, ((rnd.nextInt(2) == 1) ? "Retail" : "Institution") + " / Tax Invoice / Cash Memorandum"));
+        infos.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, "Invoice for "+model.getReference().getValueInvoice()+" "+model.getDate().getValueInvoice(), "Invoice Number"));
+        infos.addElement(new SimpleTextBox(fontBold1, 10, 0, 0, ((rnd.nextInt(2) == 1) ? "Retail" : "Institution") + ((rnd.nextInt(2) == 1) ? " / Tax Invoice / Cash Memorandum": " / Invoice") ));
         infos.build(contentStream, writer);
 
         // invoice / TRN number
-        new SimpleTextBox(fontBold1, 10, leftPageMargin, 761, "Sold By").build(contentStream, writer);
+        new SimpleTextBox(fontBold1, 10, leftPageMargin, 761, model.getCompany().getAddressHeader(), "SH").build(contentStream, writer);
         new SimpleTextBox(fontNormal1, 9, leftPageMargin, 750, model.getCompany().getLogo().getName(), "SN").build(contentStream, writer);
         new SimpleTextBox(fontNormal1, 9, leftPageMargin, 740, model.getCompany().getAddress().getLine1(), "SA" ).build(contentStream, writer);
         new SimpleTextBox(fontNormal1, 9, leftPageMargin, 730, model.getCompany().getAddress().getZip()+" "+model.getCompany().getAddress().getCity(), "SA").build(contentStream, writer);
         String vatSentence = model.getCompany().getIdNumbers().getVatLabel()+" "+model.getCompany().getIdNumbers().getVatValue();
-        if (rnd.nextInt(2) == 1) {
-            new SimpleTextBox(fontNormal1, 9, leftPageMargin, 690, "CST Number: "+model.getCompany().getIdNumbers().getVatValue(), "SVAT").build(contentStream, writer);
+        // Purchase Order Number
+        if (genProb.get("order_number_top")) {
+            new SimpleTextBox(fontNormal1, 9, leftPageMargin, 690, model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder(), "LO").build(contentStream, writer);
         }
         new SimpleTextBox(fontNormal1, 9, leftPageMargin, 680, vatSentence, "SVAT").build(contentStream, writer);
-        new SimpleTextBox(fontNormal1, 9, pageWidth/2, 680, ((rnd.nextInt(10) < 5) ? "Invoice No. ": "") + model.getReference().getValueInvoice()).build(contentStream, writer);
+        new SimpleTextBox(fontNormal1, 9, pageWidth/2, 680, ((rnd.nextInt(10) < 5) ? "Invoice No. ": "") + model.getReference().getValueInvoice(), "Invoice Number").build(contentStream, writer);
 
         contentStream.moveTo(20, 650);
         contentStream.lineTo( pageWidth-(20*2), 650);
@@ -148,21 +149,27 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Billing Address
         VerticalContainer verticalAddressContainer = new VerticalContainer(billX, billY, 250);
-        verticalAddressContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getClient().getBillingHead()));
-        verticalAddressContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        verticalAddressContainer.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getClient().getBillingHead(), "BH" ));
         verticalAddressContainer.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getBillingName(), "BN" ));
         verticalAddressContainer.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getBillingAddress().getLine1(), "BA" ));
         verticalAddressContainer.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getBillingAddress().getZip() + " "+model.getClient().getBillingAddress().getCity(), "BA" ));
+        if (genProb.get("add_borders_bill_ship_addresses") & model.getClient().getBillingHead().length() > 0) {
+            verticalAddressContainer.setBorderColor(Color.BLACK);
+            verticalAddressContainer.setBorderThickness(0.5f);
+        }
 
         verticalAddressContainer.build(contentStream, writer);
 
         // Shipping Address
         VerticalContainer verticalAddressContainer2 = new VerticalContainer(shipX, shipY, 250);
-        verticalAddressContainer2.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getClient().getShippingHead()));
-        verticalAddressContainer2.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        verticalAddressContainer2.addElement(new SimpleTextBox(fontBold1, 9, 0, 0, model.getClient().getShippingHead(), "SHH" ));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getShippingName(), "SHN" ));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getShippingAddress().getLine1(), "SHA" ));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontNormal1, 9, 0, 0, model.getClient().getShippingAddress().getZip() + " " + model.getClient().getShippingAddress().getCity(), "SHA" ));
+        if (genProb.get("add_borders_bill_ship_addresses") & model.getClient().getShippingHead().length() > 0) {
+            verticalAddressContainer2.setBorderColor(Color.BLACK);
+            verticalAddressContainer2.setBorderThickness(0.5f);
+        }
 
         verticalAddressContainer2.build(contentStream, writer);
 
@@ -174,14 +181,23 @@ public class AmazonLayout implements InvoiceLayout {
         TableRowBox firstLine = new TableRowBox(configRow, 0, 0);
         Color tableHdrBgColor = InvoiceLayout.getRandomColor(1);
         firstLine.setBackgroundColor(tableHdrBgColor);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "QTY": "Qty"), Color.BLACK, tableHdrBgColor), false);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "DESCRIPTION" : "Description" ), Color.BLACK, tableHdrBgColor), false);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "UNIT PRICE" : "Unit Price"), Color.BLACK, tableHdrBgColor), centerAlignItems);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "DISCOUNT" : "Discount"), Color.BLACK, tableHdrBgColor), centerAlignItems);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "TOTAL WITHOUT TAX": "Total without Tax"), Color.BLACK, tableHdrBgColor), centerAlignItems);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "TAX TYPE": "Tax Type"), Color.BLACK, tableHdrBgColor), centerAlignItems);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "TAX RATE": "Tax Rate"), Color.BLACK, tableHdrBgColor), centerAlignItems);
-        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? "TAX AMOUNT": "Tax Amount"), Color.BLACK, tableHdrBgColor), centerAlignItems);
+
+        String qtyHead = model.getProductContainer().getQtyHead();
+        String descHead = model.getProductContainer().getDescHead();
+        String unitPriceHead = model.getProductContainer().getUPHead();
+        String discountHead = model.getProductContainer().getDiscountHead();
+        String totalWithoutTaxHead = model.getProductContainer().getTotalHead();
+        String taxTypeHead = model.getProductContainer().getTaxHead() + " Type";
+        String taxRateHead = model.getProductContainer().getTaxRateHead();
+        String taxTotalHead = model.getProductContainer().getTaxTotalHead();
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? qtyHead.toUpperCase() : qtyHead), Color.BLACK, tableHdrBgColor), false);
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? descHead.toUpperCase() : descHead ), Color.BLACK, tableHdrBgColor), false);
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? unitPriceHead.toUpperCase() : unitPriceHead), Color.BLACK, tableHdrBgColor), centerAlignItems);
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? discountHead.toUpperCase() : discountHead), Color.BLACK, tableHdrBgColor), centerAlignItems);
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? totalWithoutTaxHead.toUpperCase() : totalWithoutTaxHead), Color.BLACK, tableHdrBgColor), centerAlignItems);
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? taxTypeHead.toUpperCase() : taxTypeHead), Color.BLACK, tableHdrBgColor), centerAlignItems);
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? taxRateHead.toUpperCase() : taxRateHead), Color.BLACK, tableHdrBgColor), centerAlignItems);
+        firstLine.addElement(new SimpleTextBox(fontBold1, 8, 0, 0, (upperCap ? taxTotalHead.toUpperCase() : taxTotalHead), Color.BLACK, tableHdrBgColor), centerAlignItems);
 
         VerticalContainer verticalInvoiceItems = new VerticalContainer(leftPageMargin, 550, 600);
         verticalInvoiceItems.addElement(firstLine);

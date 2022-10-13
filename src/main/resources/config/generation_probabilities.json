@@ -2,7 +2,9 @@
     "layout": "Amazon",
     "probability": {
       "barcode_top": 50,
+      "order_number_top": 50,
       "switch_bill_ship_addresses": 10,
+      "add_borders_bill_ship_addresses": 100,
       "registered_address_info": 50,
       "barcode_bottom": 50,
       "signature_bottom": 65,

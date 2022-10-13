@@ -3,9 +3,9 @@ package com.fairandsmart.generator.documents.element.line;
 /*-
  * #%L
  * FacoGen / A tool for annotated GEDI based invoice generation.
- * 
+ *
  * Authors:
- * 
+ *
  * Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
  * Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
  * Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
@@ -21,12 +21,12 @@ package com.fairandsmart.generator.documents.element.line;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,8 +35,10 @@ package com.fairandsmart.generator.documents.element.line;
 
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;
+
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
+import java.awt.Color;
 import javax.xml.stream.XMLStreamWriter;
 
 public class HorizontalLineBox extends ElementBox {
@@ -44,11 +46,21 @@ public class HorizontalLineBox extends ElementBox {
     private final float targetX;
     private final float targetY;
     private final BoundingBox box;
+    private Color strokeColor;
 
     public HorizontalLineBox(float posX, float posY, float targetX, float targetY) {
+        this(posX, posY, targetX, targetY, Color.BLACK);
+    }
+
+    public HorizontalLineBox(float posX, float posY, float targetX, float targetY, Color strokeColor) {
         this.targetX = targetX;
         this.targetY = targetY;
+        this.strokeColor = strokeColor;
         this.box = new BoundingBox(posX, posY, 0, 0);
+    }
+
+    public void setStrokeColor(Color strokeColor) {
+        this.strokeColor = strokeColor;
     }
 
     @Override
@@ -74,7 +86,8 @@ public class HorizontalLineBox extends ElementBox {
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
         stream.moveTo(this.getBoundingBox().getPosX(), this.getBoundingBox().getPosY());
-        stream.lineTo( this.targetX, this.getBoundingBox().getPosY());
+        stream.lineTo(this.targetX, this.getBoundingBox().getPosY());
+        stream.setStrokingColor(this.strokeColor);
         stream.stroke();
     }
 

@@ -63,7 +63,6 @@ public abstract class ElementBox {
     }
 
     public String writeXMLZone(XMLStreamWriter writer, String type, String content, BoundingBox box, String cclass) throws XMLStreamException {
-        //return this.writeXMLZone(writer, type, content, box, Collections.emptyList());
 
         BoundingBox tbox = convertBox(box);
         String id = "" + nextElementId();
