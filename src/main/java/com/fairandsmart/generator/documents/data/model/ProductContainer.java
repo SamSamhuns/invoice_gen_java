@@ -35,7 +35,8 @@ package com.fairandsmart.generator.documents.data.model;
  */
 
 
-import com.fairandsmart.generator.documents.data.model.Helper;
+import com.fairandsmart.generator.documents.data.helper.HelperCommon;
+import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.google.gson.Gson;
@@ -565,13 +566,13 @@ public class ProductContainer {
 
                 price = product.getPrice();
 
-                taxRate = Helper.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
-                priceWithTax = Helper.round(price * (1 + taxRate), 2);
+                taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
+                priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
 
                 // add discounts for each item if discountAvailable
                 if (discountAvailable) {
-                    discountRate = Helper.rand_uniform(0.05f, 0.15f);  // discountRate from 0% to 10%
-                    priceWithDiscount = Helper.round(price * (1 - discountRate), 2);
+                    discountRate = HelperCommon.rand_uniform(0.05f, 0.15f);  // discountRate from 0% to 10%
+                    priceWithDiscount = HelperCommon.round(price * (1 - discountRate), 2);
                 }
                 priceWithTaxAndDiscount = price * (1 + taxRate - discountRate);
 

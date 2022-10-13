@@ -33,6 +33,8 @@ package com.fairandsmart.generator.documents.layout.bdmobilier;
  * #L%
  */
 
+import com.fairandsmart.generator.documents.data.helper.HelperCommon;
+import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.data.model.*;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
@@ -78,10 +80,10 @@ public class BDmobilierLayout implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        Random rnd = Helper.getRandom();
+        Random rnd = model.getRandom();
 
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
-        Map<String, Boolean> genProb = Helper.getMatchedConfigMap(model.getConfigMaps(), this.name());
+        Map<String, Boolean> genProb = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
         IDNumbers idNumbers = model.getCompany().getIdNumbers();
         Address address = model.getCompany().getAddress();
@@ -89,7 +91,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         // Set fontFaces
-        InvoiceLayout.pdType1Fonts fontPair = InvoiceLayout.getRandomPDType1Fonts();
+        HelperCommon.pdType1Fonts fontPair = HelperCommon.getRandomPDType1Fonts();
         PDFont fontNormal1 = fontPair.getFontNormal();
         PDFont fontBold1 = fontPair.getFontBold();
         PDFont fontItalic1 = fontPair.getFontItalic();
@@ -98,7 +100,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         float pageWidth = page.getMediaBox().getWidth();
         float middlePageX = pageWidth/2;
         PDFont normalOrBoldFont = (rnd.nextInt(2) == 1) ? fontNormal1 : fontBold1;
-        Color grayishFontColor = InvoiceLayout.getRandomColor(3);
+        Color grayishFontColor = HelperCommon.getRandomColor(3);
 
         /* Build Page components now */
 
@@ -336,7 +338,7 @@ public class BDmobilierLayout implements InvoiceLayout {
                 stampWidth = stampWidth + 50;
                 stampHeight = stampHeight - 10;
             }
-            InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
+            HelperImage.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
                                                stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
         }
         // if no signature and no stamp, then add a footer note
@@ -351,11 +353,11 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Add bg logo watermark or confidential stamp, but not both at once
         if (genProb.get("confidential_watermark")) {
             // Add confidential watermark
-            InvoiceLayout.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
+            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
         }
         else if (genProb.get("logo_watermark")) {
             // Add watermarked background logo
-            InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
+            HelperImage.addWatermarkImagePDF(document, page, logoImg);
         }
 
         contentStream.close();

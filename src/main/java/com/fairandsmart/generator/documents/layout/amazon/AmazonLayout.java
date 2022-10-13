@@ -33,7 +33,8 @@ package com.fairandsmart.generator.documents.layout.amazon;
  * #L%
  */
 
-import com.fairandsmart.generator.documents.data.model.Helper;
+import com.fairandsmart.generator.documents.data.helper.HelperCommon;
+import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -45,24 +46,26 @@ import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.mifmif.common.regex.Generex;
 
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.PDPage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.xml.stream.XMLStreamWriter;
-import java.awt.image.BufferedImage;
 import java.net.URI;
-import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
 
 
 @ApplicationScoped
@@ -84,18 +87,20 @@ public class AmazonLayout implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        Random rnd = Helper.getRandom();
+        Random rnd = model.getRandom();
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
-        Map<String, Boolean> genProb = Helper.getMatchedConfigMap(model.getConfigMaps(), this.name());
+        Map<String, Boolean> genProb = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
         // Generate barCodeNum
         Generex barCodeNumGen = new Generex("[0-9]{12}");
         String barCodeNum = barCodeNumGen.random();
 
         // Set fontFaces
-        InvoiceLayout.pdType1Fonts fontPair = InvoiceLayout.getRandomPDType1Fonts();
+        HelperCommon.pdType1Fonts fontPair = HelperCommon.getRandomPDType1Fonts();
         PDFont fontNormal1 = fontPair.getFontNormal();
         PDFont fontBold1 = fontPair.getFontBold();
+        // PDFont fontNormal1 = PDType0Font.load(document, new File("/Library/Fonts/Arial Unicode.ttf"));
+        // PDFont fontBold1 = PDType0Font.load(document, new File("/Library/Fonts/Arial Unicode.ttf"));
 
         // Center or left alignment for items in table
         boolean centerAlignItems = rnd.nextInt(2) == 0;
@@ -105,11 +110,11 @@ public class AmazonLayout implements InvoiceLayout {
 
         /* Build Page components now */
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        new BorderBox(InvoiceLayout.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, page.getMediaBox().getHeight()).build(contentStream, writer);
+        new BorderBox(HelperCommon.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, page.getMediaBox().getHeight()).build(contentStream, writer);
 
         // Barcode top
         if (genProb.get("barcode_top")) {
-            BufferedImage barcodeTopImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
+            BufferedImage barcodeTopImage = HelperImage.generateEAN13BarcodeImage(barCodeNum);
             PDImageXObject pdBarcode = LosslessFactory.createFromImage(document, barcodeTopImage);
             new ImageBox(pdBarcode, pageWidth / 2, 810, pdBarcode.getWidth(), (float)(pdBarcode.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
         }
@@ -179,7 +184,7 @@ public class AmazonLayout implements InvoiceLayout {
         boolean upperCap = rnd.nextInt(2) == 1;
         float[] configRow = {20f, 130f, 60f, 60f, 60f, 60f, 60f, 60f};
         TableRowBox firstLine = new TableRowBox(configRow, 0, 0);
-        Color tableHdrBgColor = InvoiceLayout.getRandomColor(1);
+        Color tableHdrBgColor = HelperCommon.getRandomColor(1);
         firstLine.setBackgroundColor(tableHdrBgColor);
 
         String qtyHead = model.getProductContainer().getQtyHead();
@@ -215,7 +220,7 @@ public class AmazonLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, ""), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedTotalPrice(), "PTWTX" ), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, ""), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, Float.toString(Helper.round(randomProduct.getTaxRate() * 100, 2))+"%", "TXR"), centerAlignItems);
+            productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, Float.toString(HelperCommon.round(randomProduct.getTaxRate() * 100, 2))+"%", "TXR"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNormal1, 8, 0, 0, randomProduct.getFormatedTotalTax() ), centerAlignItems);
 
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
@@ -347,7 +352,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Barcode bottom
         if (genProb.get("barcode_bottom")) {
-            BufferedImage barcodeFooterImage = InvoiceLayout.generateEAN13BarcodeImage(barCodeNum);
+            BufferedImage barcodeFooterImage = HelperImage.generateEAN13BarcodeImage(barCodeNum);
             PDImageXObject barCodeFooter = LosslessFactory.createFromImage(document, barcodeFooterImage);
             contentStream.drawImage(barCodeFooter, leftPageMargin, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
         }
@@ -387,7 +392,7 @@ public class AmazonLayout implements InvoiceLayout {
                 stampWidth = stampWidth + 50;
                 stampHeight = stampHeight - 10;
             }
-            InvoiceLayout.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
+            HelperImage.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
                                                stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
         }
         // if no signature and no stamp, then add a footer note
@@ -399,11 +404,11 @@ public class AmazonLayout implements InvoiceLayout {
         // Add bg logo watermark or confidential stamp, but not both at once
         if (genProb.get("confidential_watermark")) {
             // Add confidential watermark
-            InvoiceLayout.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
+            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
         }
         else if (genProb.get("logo_watermark")) {
             // Add watermarked background logo
-            InvoiceLayout.addWatermarkImagePDF(document, page, logoImg);
+            HelperImage.addWatermarkImagePDF(document, page, logoImg);
         }
 
         contentStream.close();

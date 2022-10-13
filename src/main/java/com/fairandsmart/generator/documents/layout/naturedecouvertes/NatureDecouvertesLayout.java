@@ -80,7 +80,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         PDFont font = PDType1Font.HELVETICA;
         PDFont fontBold1 = PDType1Font.HELVETICA_BOLD;
-        PDFont fontItalic1 = PDType1Font.HELVETICA_OBLIQUE;
+        // PDFont fontItalic1 = PDType1Font.HELVETICA_OBLIQUE;
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         String logo = this.getClass().getClassLoader().getResource("invoices/parts/ldlc/barcode.jpg").getFile();

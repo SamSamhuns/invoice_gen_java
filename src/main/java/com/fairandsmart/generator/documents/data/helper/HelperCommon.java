@@ -1,4 +1,4 @@
-package com.fairandsmart.generator.documents.data.model;
+package com.fairandsmart.generator.documents.data.helper;
 
 /*-
  * #%L
@@ -34,32 +34,79 @@ package com.fairandsmart.generator.documents.data.model;
  * #L%
  */
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
+import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
+import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.util.Matrix;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+
+import javax.xml.stream.XMLStreamWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 
-public class Helper {
+public class HelperCommon extends Helper {
 
-    private static final Random rnd = new Random();
+    public static class pdType1Fonts {
+        private PDFont fontNormal;
+        private PDFont fontBold;
+        private PDFont fontItalic;
 
-    public static Random getRandom() {
-        return rnd;
+        public pdType1Fonts (PDFont fontNormal, PDFont fontBold, PDFont fontItalic) {
+            this.fontNormal = fontNormal;
+            this.fontBold = fontBold;
+            this.fontItalic = fontItalic;
+        }
+
+        public PDFont getFontNormal() {
+            return this.fontNormal;
+        }
+
+        public void setfontNormal(PDFont font) {
+            this.fontNormal = font;
+        }
+
+        public PDFont getFontBold() {
+            return this.fontBold;
+        }
+
+        public void setfontBold(PDFont font) {
+            this.fontBold = font;
+        }
+
+        public PDFont getFontItalic() {
+            return this.fontItalic;
+        }
+
+        public void setfontItalic(PDFont font) {
+            this.fontItalic = font;
+        }
     }
 
-    public Helper() {
+
+    public HelperCommon() {
     }
 
     public static float round(float num, int decimalPlace) {
@@ -70,7 +117,7 @@ public class Helper {
 
     public static float rand_uniform(float minA, float maxA) {
         // get uniform dist from minA to maxA in default steps of 0.01
-        return Helper.rand_uniform(minA, maxA, 0.01f);
+        return HelperCommon.rand_uniform(minA, maxA, 0.01f);
     }
 
     public static float rand_uniform(float minA, float maxA, float diff) {
@@ -79,34 +126,22 @@ public class Helper {
         return (float)(rnd.nextInt((int)((maxA - minA) * steps + 1)) + minA * steps) / steps;
     }
 
-    public static BufferedImage getRotatedImage(BufferedImage buffImage, double angle) {
-        // Stackoverflow https://stackoverflow.com/a/66189875
-        double radian = Math.toRadians(angle);
-        double sin = Math.abs(Math.sin(radian));
-        double cos = Math.abs(Math.cos(radian));
-
-        int width = buffImage.getWidth();
-        int height = buffImage.getHeight();
-
-        int nWidth = (int) Math.floor((double) width * cos + (double) height * sin);
-        int nHeight = (int) Math.floor((double) height * cos + (double) width * sin);
-
-        BufferedImage rotatedImage = new BufferedImage(
-                nWidth, nHeight, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D graphics = rotatedImage.createGraphics();
-
-        graphics.setRenderingHint(
-                RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-        graphics.translate((nWidth - width) / 2, (nHeight - height) / 2);
-        // rotation around the center point
-        graphics.rotate(radian, (double) (width / 2), (double) (height / 2));
-        graphics.drawImage(buffImage, 0, 0, null);
-        graphics.dispose();
-
-        return rotatedImage;
+    public static Color getRandomColor(int cSize) throws Exception {
+          final List<Color> colorsList = Arrays.asList(
+                Color.GRAY,
+                Color.LIGHT_GRAY,
+                Color.DARK_GRAY,
+                Color.WHITE,
+                Color.ORANGE,
+                Color.YELLOW,
+                Color.BLACK
+                // Color.RED,
+                // Color.GREEN,
+                // Color.BLUE,
+                // Color.MAGENTA,
+                // Color.CYAN,
+                );
+          return colorsList.get(rnd.nextInt(Math.min(cSize, colorsList.size())));
     }
 
     /**
@@ -134,5 +169,30 @@ public class Helper {
          genMap.put(entry.getKey(), rnd.nextInt(100) < entry.getValue());
 
       return genMap;
+    }
+
+    public static pdType1Fonts getRandomPDType1Fonts() throws Exception {
+            final List<PDFont> pd1fontNormalList = Arrays.asList(
+                    PDType1Font.HELVETICA,
+                    PDType1Font.COURIER,
+                    PDType1Font.TIMES_ROMAN);
+            final List<PDFont> pd1fontBoldList = Arrays.asList(
+                    PDType1Font.HELVETICA_BOLD,
+                    PDType1Font.COURIER_BOLD,
+                    PDType1Font.TIMES_BOLD);
+            final List<PDFont> pd1fontItalicList = Arrays.asList(
+                    PDType1Font.HELVETICA_OBLIQUE,
+                    PDType1Font.COURIER_OBLIQUE,
+                    PDType1Font.TIMES_ITALIC);
+                    // PDType1Font.COURIER_BOLD_OBLIQUE,
+                    // PDType1Font.HELVETICA_BOLD_OBLIQUE,
+                    // PDType1Font.TIMES_BOLD_ITALIC);
+            assert pd1fontNormalList.size() == pd1fontBoldList.size();
+            assert pd1fontNormalList.size() == pd1fontItalicList.size();
+            int fontIdx = rnd.nextInt(pd1fontNormalList.size());
+
+            return new pdType1Fonts(pd1fontNormalList.get(fontIdx),
+                                    pd1fontBoldList.get(fontIdx),
+                                    pd1fontItalicList.get(fontIdx));
     }
 }
