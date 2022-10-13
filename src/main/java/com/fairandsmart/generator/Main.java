@@ -37,9 +37,6 @@ package com.fairandsmart.generator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {

@@ -36,7 +36,6 @@ package com.fairandsmart.generator.documents.data.model;
 
 
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
-import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.google.gson.Gson;

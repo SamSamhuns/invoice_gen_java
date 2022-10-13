@@ -36,29 +36,9 @@ package com.fairandsmart.generator.documents.layout;
 
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 
-import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
-import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
-import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.util.Matrix;
-
-import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
-
 import javax.xml.stream.XMLStreamWriter;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 public interface InvoiceLayout {
 

@@ -37,10 +37,6 @@ package com.fairandsmart.generator.documents.element.textbox;
 import com.fairandsmart.generator.documents.element.*;
 
 import javax.xml.stream.XMLStreamWriter;
-import java.awt.*;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class SimpleTextBoxForEvaluation {

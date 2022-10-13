@@ -38,7 +38,6 @@ import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.mifmif.common.regex.Generex;
 
 import java.io.FileReader;
-import java.io.File;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Random;

@@ -24,21 +24,7 @@ package com.fairandsmart.generator.documents.data.helper;
  * #L%
  */
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.util.stream.Collectors;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.List;
-import java.util.Map;
 
 
 public class Helper {

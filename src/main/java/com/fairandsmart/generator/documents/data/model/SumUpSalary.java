@@ -37,12 +37,8 @@ package com.fairandsmart.generator.documents.data.model;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class SumUpSalary {
 

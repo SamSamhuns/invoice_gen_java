@@ -51,21 +51,16 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.xml.stream.XMLStreamWriter;
-import java.net.URI;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.List;
 import java.util.Map;
-import java.io.File;
 
 
 @ApplicationScoped
@@ -96,11 +91,9 @@ public class AmazonLayout implements InvoiceLayout {
         String barCodeNum = barCodeNumGen.random();
 
         // Set fontFaces
-        HelperCommon.pdType1Fonts fontPair = HelperCommon.getRandomPDType1Fonts();
-        PDFont fontNormal1 = fontPair.getFontNormal();
-        PDFont fontBold1 = fontPair.getFontBold();
-        // PDFont fontNormal1 = PDType0Font.load(document, new File("/Library/Fonts/Arial Unicode.ttf"));
-        // PDFont fontBold1 = PDType0Font.load(document, new File("/Library/Fonts/Arial Unicode.ttf"));
+        HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDType1Fonts(document, this);
+        PDFont fontNormal1 = fontSet.getFontNormal();
+        PDFont fontBold1 = fontSet.getFontBold();
 
         // Center or left alignment for items in table
         boolean centerAlignItems = rnd.nextInt(2) == 0;
@@ -318,9 +311,7 @@ public class AmazonLayout implements InvoiceLayout {
                       singatureTextxPos + singatureTextBox.getBoundingBox().getWidth() + 10, 135
                       ).build(contentStream, writer);
 
-              // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
-              URI signatureUri = new URI(this.getClass().getClassLoader().getResource("common/signature/" + model.getCompany().getSignature().getFullPath()).getFile());
-              String signaturePath = signatureUri.getPath();
+              String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + model.getCompany().getSignature().getFullPath());
               PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
               int signatureWidth = 120;
               int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
@@ -343,9 +334,8 @@ public class AmazonLayout implements InvoiceLayout {
         verticalFooterContainer.build(contentStream, writer);
 
         // Logo Bottom
-        // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
-        URI logoUri = new URI(this.getClass().getClassLoader().getResource("common/logo/" + model.getCompany().getLogo().getFullPath()).getFile());
-        String logoPath = logoUri.getPath();
+        String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + model.getCompany().getLogo().getFullPath());
+
         PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
         float ratio = logoImg.getWidth() / logoImg.getHeight();
         contentStream.drawImage(logoImg, 480, 10, 85, 85 / ((ratio == 0) ? 1 : ratio) - 5);
@@ -359,9 +349,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Add company stamp watermark, 40% prob
         if (genProb.get("stamp_bottom")) {
-            // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
-            URI stampUri = new URI(this.getClass().getClassLoader().getResource("common/stamp/" + model.getCompany().getStamp().getFullPath()).getFile());
-            String stampPath = stampUri.getPath();
+            String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + model.getCompany().getStamp().getFullPath());
             PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
 
             float minAStamp = 0.6f; float maxAStamp = 0.8f;

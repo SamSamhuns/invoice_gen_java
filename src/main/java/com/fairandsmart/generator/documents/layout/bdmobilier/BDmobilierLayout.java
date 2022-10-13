@@ -53,11 +53,9 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.xml.stream.XMLStreamWriter;
-import java.net.URI;
-import java.awt.*;
+import java.awt.Color;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Random;
 
 
@@ -91,10 +89,10 @@ public class BDmobilierLayout implements InvoiceLayout {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         // Set fontFaces
-        HelperCommon.pdType1Fonts fontPair = HelperCommon.getRandomPDType1Fonts();
-        PDFont fontNormal1 = fontPair.getFontNormal();
-        PDFont fontBold1 = fontPair.getFontBold();
-        PDFont fontItalic1 = fontPair.getFontItalic();
+        HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDType1Fonts(document, this);
+        PDFont fontNormal1 = fontSet.getFontNormal();
+        PDFont fontBold1 = fontSet.getFontBold();
+        PDFont fontItalic1 = fontSet.getFontItalic();
 
         float leftMarginX = 10;
         float pageWidth = page.getMediaBox().getWidth();
@@ -105,8 +103,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         /* Build Page components now */
 
         // Top left logo
-        URI logoUri = new URI(this.getClass().getClassLoader().getResource("common/logo/" + model.getCompany().getLogo().getFullPath()).getFile());
-        String logoPath = logoUri.getPath();
+        String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + model.getCompany().getLogo().getFullPath());
         PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
 
         int sizeLogo = 100;
@@ -290,10 +287,7 @@ public class BDmobilierLayout implements InvoiceLayout {
                       singatureTextxPos - 10, 135,
                       singatureTextxPos + singatureTextBox.getBoundingBox().getWidth() + 10, 135
                       ).build(contentStream, writer);
-
-              // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
-              URI signatureUri = new URI(this.getClass().getClassLoader().getResource("common/signature/" + model.getCompany().getSignature().getFullPath()).getFile());
-              String signaturePath = signatureUri.getPath();
+              String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + model.getCompany().getSignature().getFullPath());
               PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
               int signatureWidth = 120;
               int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
@@ -305,9 +299,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Add company stamp watermark, 40% prob
         if (genProb.get("stamp_bottom")) {
-            // note getResource returns URL with %20 for spaces etc, so it must be converted to URI that gives a working path with %20 convereted to ' '
-            URI stampUri = new URI(this.getClass().getClassLoader().getResource("common/stamp/" + model.getCompany().getStamp().getFullPath()).getFile());
-            String stampPath = stampUri.getPath();
+            String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + model.getCompany().getStamp().getFullPath());
             PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
 
             float minAStamp = 0.6f; float maxAStamp = 0.8f;

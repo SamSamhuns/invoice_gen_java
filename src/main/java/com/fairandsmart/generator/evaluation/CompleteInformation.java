@@ -35,7 +35,6 @@ package com.fairandsmart.generator.evaluation;
  */
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CompleteInformation {

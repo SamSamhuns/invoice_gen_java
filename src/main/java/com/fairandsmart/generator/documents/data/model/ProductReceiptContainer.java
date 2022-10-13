@@ -47,7 +47,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.text.DecimalFormat;
 
 public class ProductReceiptContainer {
 
