@@ -111,6 +111,7 @@ public class Signature {
               signatureLabels.put("Legal Representation", "en");
               signatureLabels.put("Finance Manager", "en");
               signatureLabels.put("Credit Manager", "en");
+              signatureLabels.put("Approved by", "en");
         }
 
         private static final List<String> signaturesFileList = Arrays.asList(

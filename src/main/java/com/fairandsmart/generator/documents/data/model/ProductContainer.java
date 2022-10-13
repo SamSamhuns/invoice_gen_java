@@ -395,9 +395,7 @@ public class ProductContainer {
             taxHeads.put("Montant TVA", "fr");
 
             taxHeads.put("Tax", "en");
-            taxHeads.put("TAX", "en");
             taxHeads.put("Vat", "en");
-            taxHeads.put("VAT", "en");
             taxHeads.put("VAT Tax", "en");
             taxHeads.put("VAT Amount", "en");
         }
@@ -406,9 +404,7 @@ public class ProductContainer {
             taxRateHeads.put("Taux de TVA", "fr");
 
             taxRateHeads.put("Tax %", "en");
-            taxRateHeads.put("TAX %", "en");
             taxRateHeads.put("Vat %", "en");
-            taxRateHeads.put("VAT %", "en");
             taxRateHeads.put("VAT Rate", "en");
         }
         {
@@ -472,6 +468,7 @@ public class ProductContainer {
 
             withTaxAndDiscountTotalHeads.put("Amount to pay", "en");
             withTaxAndDiscountTotalHeads.put("Total Amount", "en");
+            withTaxAndDiscountTotalHeads.put("Balance Due", "en");
             withTaxAndDiscountTotalHeads.put("Final Amount", "en");
             withTaxAndDiscountTotalHeads.put("Total Net", "en");
             withTaxAndDiscountTotalHeads.put("Total", "en");
@@ -560,7 +557,7 @@ public class ProductContainer {
             float priceWithTax = 0;
             float priceWithDiscount = 0;
             float priceWithTaxAndDiscount = 0;
-            // TODO fix proper discount calculations
+
             for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
                 Product product = productsLangFiltered.get(ctx.getRandom().nextInt(productsLangFiltered.size()));
                 product.setQuantity(ctx.getRandom().nextInt(MAXQTYPERPRODUCT - 1) + 1);

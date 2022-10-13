@@ -139,15 +139,15 @@ public class InvoiceNumber {
             formatsInvoice.add("[0-9]{4}-7[0-9]{5}");
         }
         {
-            formatsOrder.add("[A-D][H-N]-[A-Z]{1}-[0-9]{1}-[0-9]{1}");
-            formatsOrder.add("[0-9]{3}-[0-9]{3}");
-            formatsOrder.add("2[0-9]{3}");
-            formatsOrder.add("[1-2][0-9]{3}");
+            formatsOrder.add("[A-D][H-N]-[A-Z]{2}-[0-9]{2}-[0-9]{2}");
+            formatsOrder.add("[0-9]{3}-[0-9]{4}");
+            formatsOrder.add("2[0-9]{6}");
+            formatsOrder.add("[1-2][0-9]{6}");
             formatsOrder.add("[4-9][0-9]{3}");
-            formatsOrder.add("CD201[0-7]00[0-9]{1}");
-            formatsOrder.add("99[0-9]{3}");
+            formatsOrder.add("CD201[0-7]00[0-9]{5}");
+            formatsOrder.add("99[0-9]{5}");
             formatsOrder.add("CM5[0-9]{3}");
-            formatsOrder.add("COM-[0-9]{3}");
+            formatsOrder.add("COM-[0-9]{5}");
             formatsOrder.add("[0-9]{3}-9[0-9]{2}");
         }
         {
@@ -172,6 +172,8 @@ public class InvoiceNumber {
             labelsInvoice.put("Tax Invoice No.", "en");
             labelsInvoice.put("Tax Invoice ID", "en");
             labelsInvoice.put("Tax Invoice Reference", "en");
+            labelsInvoice.put("Tax Inv. No.", "en");
+            labelsInvoice.put("Tax Inv. Reference", "en");
 
             labelsInvoice.put("Numéro de facture", "fr");
             labelsInvoice.put("N° facture", "fr");
@@ -189,7 +191,8 @@ public class InvoiceNumber {
             labelsOrder.put("Order Reference", "en");
             labelsOrder.put("Purchase Order Num", "en");
             labelsOrder.put("PO Num", "en");
-            labelsOrder.put("LPO", "en");
+            labelsOrder.put("LPO Num", "en");
+            labelsOrder.put("L.P.O.", "en");
 
             labelsOrder.put("Numéro de commande", "fr");
             labelsOrder.put("N° commande", "fr");
