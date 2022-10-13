@@ -85,7 +85,7 @@ public class ProductReceiptContainer {
     private String totalRounding;
     private String cash;
     private String change;
-    private float totalDeliveryCost;
+    private float totalShippingCost;
 
     public ProductReceiptContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String taxRateHead,
                                    String taxHead, String lineTotalHead, String totalHead, String taxTotalHead, String withTaxTotalHead, String snHead,

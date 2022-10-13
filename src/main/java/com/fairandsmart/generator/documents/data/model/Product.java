@@ -59,6 +59,8 @@ public class Product {
     private int taxReference;
     private String deliveryType;
 
+    public Product() {
+    }
 
     public String getDescription() {
         return description;

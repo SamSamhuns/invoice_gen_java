@@ -55,10 +55,12 @@ public class ProductContainer {
     private float totalWithTax;
     private float totalWithDiscount;
     private float totalWithTaxAndDiscount;
+    private float totalShippingCost;
 
     private String currency;
     private Boolean discountAvailable;
     private Boolean taxRateAvailable;
+    private Boolean shippingCostAvailable;
     // display field heads, must be set in constructor //
     private final String descHead;
     private final String qtyHead;
@@ -78,8 +80,6 @@ public class ProductContainer {
     private final String withDiscountTotalHead;
     private final String withTaxAndDiscountTotalHead;
 
-    // Added later
-    private float totalDeliveryCost;
 
     public ProductContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String lineTotalHead, String snHead,
                             String taxHead, String taxRateHead, String taxTotalHead,
@@ -208,18 +208,18 @@ public class ProductContainer {
         this.totalWithTaxAndDiscount = totalWithTaxAndDiscount;
     }
 
-    // delivery cost
+    // shipping cost
 
-    public float gettotalDeliveryCost() {
-        return totalDeliveryCost;
+    public float gettotalShippingCost() {
+        return totalShippingCost;
     }
 
-    public String getFormatedTotalDeliveryCost() {
-        return String.format("%.2f", this.gettotalDeliveryCost()) + " " + currency;
+    public String getFormatedtotalShippingCost() {
+        return String.format("%.2f", this.gettotalShippingCost()) + " " + currency;
     }
 
-    public void setTotalDeliveryCost(float totalDeliveryCost) {
-        this.totalDeliveryCost = totalDeliveryCost;
+    public void settotalShippingCost(float totalShippingCost) {
+        this.totalShippingCost = totalShippingCost;
     }
 
     // tax calc from existing values
@@ -308,6 +308,16 @@ public class ProductContainer {
         this.taxRateAvailable = taxRateAvailable;
     }
 
+    // shipping available boolean
+
+    public Boolean getShippingCostAvailable() {
+        return shippingCostAvailable;
+    }
+
+    public void setShippingCostAvailable(Boolean shippingCostAvailable) {
+        this.shippingCostAvailable = shippingCostAvailable;
+    }
+
     @Override
     public String toString() {
         return "ProductContainer{" +
@@ -347,6 +357,8 @@ public class ProductContainer {
             descHeads.put("Désignation du Produit", "fr");
 
             descHeads.put("Item", "en");
+            descHeads.put("Goods", "en");
+            descHeads.put("Services", "en");
             descHeads.put("Description", "en");
             descHeads.put("Product Description", "en");
             descHeads.put("Description of Goods", "en");
@@ -364,7 +376,7 @@ public class ProductContainer {
             unitPriceHeads.put("P.U. HT", "fr");
             unitPriceHeads.put("P.U.", "fr");
 
-            unitPriceHeads.put("U.P.", "en");
+            unitPriceHeads.put("Rate", "en");
             unitPriceHeads.put("Unit Price", "en");
             unitPriceHeads.put("Price per unit", "en");
         }
@@ -405,7 +417,7 @@ public class ProductContainer {
 
             taxRateHeads.put("Tax %", "en");
             taxRateHeads.put("Vat %", "en");
-            taxRateHeads.put("VAT Rate", "en");
+            taxRateHeads.put("Vat Rate", "en");
         }
         {
             taxTotalHeads.put("Montant TVA", "fr");
@@ -420,13 +432,14 @@ public class ProductContainer {
         {
             discountHeads.put("TOTAL REMISE IMMEDIATE", "fr");
 
-            discountHeads.put("@DISC", "en");
             discountHeads.put("Discount", "en");
-            discountHeads.put("Disc %", "en");
+            discountHeads.put("Disc", "en");
         }
         {
             discountRateHeads.put("Remise", "fr");
 
+            discountRateHeads.put("@DISC", "en");
+            discountRateHeads.put("Disc %", "en");
             discountRateHeads.put("Disc. Rate", "en");
             discountRateHeads.put("Discount Rate", "en");
         }
@@ -443,7 +456,9 @@ public class ProductContainer {
 
             totalHeads.put("Amount", "en");
             totalHeads.put("Total", "en");
-            totalHeads.put("Total without tax", "en");
+            totalHeads.put("Gross", "en");
+            totalHeads.put("Total Gross Amt", "en");
+            totalHeads.put("Total without Tax", "en");
             totalHeads.put("Total (Excl.Tax)", "en");
             totalHeads.put("Total (Excl.VAT)", "en");
         }
@@ -548,7 +563,7 @@ public class ProductContainer {
                     localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))
                     );
 
-            Boolean discountAvailable = false;ctx.getRandom().nextBoolean();
+            Boolean discountAvailable = ctx.getRandom().nextInt(100) < 10;
             productContainer.setDiscountAvailable(discountAvailable);
 
             float price = 0;
@@ -564,13 +579,12 @@ public class ProductContainer {
                 product.setCurrency(ctx.getCurrency());
 
                 price = product.getPrice();
-
                 taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
                 priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
 
                 // add discounts for each item if discountAvailable
                 if (discountAvailable) {
-                    discountRate = HelperCommon.rand_uniform(0.05f, 0.15f);  // discountRate from 0% to 10%
+                    discountRate = HelperCommon.rand_uniform(0.05f, 0.15f);  // discountRate from 5% to 15%
                     priceWithDiscount = HelperCommon.round(price * (1 - discountRate), 2);
                 }
                 priceWithTaxAndDiscount = price * (1 + taxRate - discountRate);
@@ -584,7 +598,29 @@ public class ProductContainer {
                 productContainer.addProduct(product);
             }
 
-            Boolean taxRateAvailable = ctx.getRandom().nextBoolean();
+            Boolean shippingCostAvailable = ctx.getRandom().nextInt(100) < 15;
+            productContainer.setShippingCostAvailable(shippingCostAvailable);
+            // Shippign will always be last item if shippingCostAvailable
+            if (shippingCostAvailable) {
+                Product shippingProduct = new Product();
+                price = 10 + ctx.getRandom().nextInt(200);
+                taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);;
+                priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
+
+                shippingProduct.setName((ctx.getRandom().nextBoolean()) ? "Shipping": "SHIPPING");
+                shippingProduct.setCurrency(ctx.getCurrency());
+                shippingProduct.setQuantity(1);
+                shippingProduct.setPrice(price);
+                shippingProduct.setTaxRate(taxRate);
+                shippingProduct.setDiscountRate(0);
+                shippingProduct.setPriceWithTax(priceWithTax);
+                shippingProduct.setPriceWithDiscount(price);
+                shippingProduct.setPriceWithTaxAndDiscount(priceWithTax);
+
+                productContainer.addProduct(shippingProduct);
+            }
+
+            Boolean taxRateAvailable = true;
             productContainer.setTaxRateAvailable(taxRateAvailable);
 
             return productContainer;

@@ -158,7 +158,7 @@ public class VerticalContainer extends ElementBox {
         if ( borderColor != null ) {
             stream.setLineWidth(borderThickness);
             stream.setStrokingColor(borderColor);
-            borderThickness += 0.5f;  // add an expansion factor
+            borderThickness += 1f;  // add an expansion factor
             stream.addRect(box.getPosX()-borderThickness, box.getPosY() - box.getHeight() - borderThickness, box.getWidth() + borderThickness*2, box.getHeight() + borderThickness*2);
             stream.stroke();
         }
