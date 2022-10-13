@@ -130,3 +130,11 @@ Generating your own invoices and other SSDs with custom data.
 -   Original facogen repo <https://github.com/fairandsmart/facogen>. Re-initialized to remove tracking of large resources.
 -   Belhadj, D., Belaïd, Y., & Belaïd, A. (2021, September). Automatic Generation of Semi-structured Documents. In International Conference on Document Analysis and Recognition (pp. 191-205). Springer, Cham.
 -   Blanchard, J., Belaïd, Y., & Belaïd, A. (2019, September). Automatic generation of a custom corpora for invoice analysis and recognition. In 2019 International Conference on Document Analysis and Recognition Workshops (ICDARW). IEEE.
+-   Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
+-   Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
+-   Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
+-   Frederic Pierre <frederic.pierre@fairansmart.com> / FairAndSmart
+-   Victor Guillaume <victor.guillaume@fairandsmart.com> / FairAndSmart
+-   Jérôme Blanchard <jerome.blanchard@fairandsmart.com> / FairAndSmart
+-   Aurore Hubert <aurore.hubert@fairandsmart.com> / FairAndSmart
+-   Kevin Meszczynski <kevin.meszczynski@fairandsmart.com> / FairAndSmart

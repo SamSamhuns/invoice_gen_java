@@ -209,6 +209,17 @@
 
   <developers>
     <developer>
+      <id>samsamhuns</id>
+      <name>Samridha Shrestha</name>
+      <email>samhunsadamant@gmailc.com</email>
+      <timezone>+5</timezone>
+      <organization>SamSamhuns</organization>
+      <organizationUrl>https://github.com/SamSamhuns</organizationUrl>
+      <roles>
+        <role>maintainer</role>
+      </roles>
+    </developer>
+    <developer>
       <id>xlefevbre</id>
       <name>Xavier Lefevre</name>
       <email>xavier.lefevre@fairandsmart.com</email>
@@ -348,6 +359,15 @@
             <id>default-testCompile</id>
             <phase>test</phase>
             <configuration>
+              <archive>
+                <index>true</index>
+                <manifest>
+                  <addClasspath>true</addClasspath>
+                </manifest>
+                <manifestEntries>
+                  <Built-By>Samridh.Shrestha</Built-By>
+                </manifestEntries>
+              </archive>
               <testExcludes>
                 <exclude>**/*TestLaunch.java</exclude>
                 <exclude>**/*TestDiversityLaunch.java</exclude>
