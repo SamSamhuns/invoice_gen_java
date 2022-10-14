@@ -136,9 +136,9 @@ public class MACOMPLayout implements InvoiceLayout {
         invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
         TableRowBox elementInfoContainer3 = new TableRowBox(configRow,0, 0);
-        SimpleTextBox Label3 = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getPaymentInfo().getLabelType(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Label3 = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getPaymentInfo().getLabelPayment(),Color.BLACK, null, HAlign.LEFT);
         elementInfoContainer3.addElement(Label3, false);
-        SimpleTextBox Value3 = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getPaymentInfo().getValueType(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Value3 = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getPaymentInfo().getValuePayment(),Color.BLACK, null, HAlign.LEFT);
         elementInfoContainer3.addElement(Value3, false);
         invoiceInfo.addElement(elementInfoContainer3);
         invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));

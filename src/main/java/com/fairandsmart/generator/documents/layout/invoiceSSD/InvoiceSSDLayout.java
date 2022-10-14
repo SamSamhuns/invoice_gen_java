@@ -586,7 +586,7 @@ public class InvoiceSSDLayout implements SSDLayout {
         }
         if(pInfoDesired && this.pInfoAvailable==1)
         {
-            invoiceInfo.addElement(getInfoAsLabelValue(model.getPaymentInfo().getLabelType(), model.getPaymentInfo().getValueType(), "PMODE"));
+            invoiceInfo.addElement(getInfoAsLabelValue(model.getPaymentInfo().getLabelPayment(), model.getPaymentInfo().getValuePayment(), "PMODE"));
             invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
             this.pInfoAvailable = -1;
             leftInfoClasses.add("pInfo");

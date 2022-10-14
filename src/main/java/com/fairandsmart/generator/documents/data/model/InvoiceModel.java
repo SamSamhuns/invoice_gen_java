@@ -82,8 +82,9 @@ public class InvoiceModel extends Model{
             model.setReference(new InvoiceNumber.Generator().generate(ctx));
             model.setDate(new InvoiceDate.Generator().generate(ctx));
             model.setLang(ctx.getLanguage());
-            model.setPaymentInfo(new PaymentInfo.Generator().generate(ctx));
             model.setCompany(new Company.Generator().generate(ctx));
+            model.setPaymentInfo(new PaymentInfo.Generator().generate(ctx));
+            model.getPaymentInfo().setValueAccountName(model.getCompany().getName());
             model.setClient(new Client.Generator().generate(ctx));
             model.setProductContainer(new ProductContainer.Generator().generate(ctx));
             model.setConfigMaps(ctx.getConfigMaps());

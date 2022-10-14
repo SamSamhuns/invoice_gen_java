@@ -36,142 +36,439 @@ package com.fairandsmart.generator.documents.data.model;
 
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
+import com.mifmif.common.regex.Generex;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 
+import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class PaymentInfo {
 
-    private String labelType;
-    private String valueType;
-    private String labelTransaction;
-    private String valueTransaction;
-    private String labelFiscalZone;
-    private String valueFiscalZone;
+    private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
-    public PaymentInfo(String labelType, String valueType, String labelTransaction, String valueTransaction, String labelFiscalZone, String valueFiscalZone) {
-        this.labelType = labelType;
-        this.valueType = valueType;
-        this.labelTransaction = labelTransaction;
-        this.valueTransaction = valueTransaction;
-        this.labelFiscalZone = labelFiscalZone;
-        this.valueFiscalZone = valueFiscalZone;
+    private String labelPayment;
+    private String valuePayment;
+    private String labelBankName;
+    private String valueBankName;
+    private String labelAccountName;
+    private String valueAccountName;
+    private String labelAccountNumber;
+    private String valueAccountNumber;
+    private String labelBranchName;
+    private String valueBranchName;
+    private String labelIBANNumber;
+    private String valueIBANNumber;
+    private String labelRoutingNumber;
+    private String valueRoutingNumber;
+    private String labelSwiftCode;
+    private String valueSwiftCode;
+    private String labelAccountCurrency;
+    private String valueAccountCurrency;
+
+    public PaymentInfo(String labelPayment,
+                       String valuePayment,
+                       String labelBankName,
+                       String valueBankName,
+                       String labelAccountName,
+                       String valueAccountName,
+                       String labelAccountNumber,
+                       String valueAccountNumber,
+                       String labelBranchName,
+                       String valueBranchName,
+                       String labelIBANNumber,
+                       String valueIBANNumber,
+                       String labelRoutingNumber,
+                       String valueRoutingNumber,
+                       String labelSwiftCode,
+                       String valueSwiftCode,
+                       String labelAccountCurrency,
+                       String valueAccountCurrency) {
+        this.labelPayment = labelPayment;
+        this.valuePayment = valuePayment;
+        this.labelBankName = labelBankName;
+        this.valueBankName = valueBankName;
+        this.labelAccountName = labelAccountName;
+        this.valueAccountName = valueAccountName;
+        this.labelAccountNumber = labelAccountNumber;
+        this.valueAccountNumber = valueAccountNumber;
+        this.labelBranchName = labelBranchName;
+        this.valueBranchName = valueBranchName;
+        this.labelIBANNumber = labelIBANNumber;
+        this.valueIBANNumber = valueIBANNumber;
+        this.labelRoutingNumber = labelRoutingNumber;
+        this.valueRoutingNumber = valueRoutingNumber;
+        this.labelSwiftCode = labelSwiftCode;
+        this.valueSwiftCode = valueSwiftCode;
+        this.labelAccountCurrency = labelAccountCurrency;
+        this.valueAccountCurrency = valueAccountCurrency;
     }
 
-    public String getLabelType() {
-        return labelType;
+    public String getLabelPayment() {
+        return labelPayment;
+    }
+    public String getValuePayment() {
+        return valuePayment;
+    }
+    public String getLabelBankName() {
+        return labelBankName;
+    }
+    public String getValueBankName() {
+        return valueBankName;
+    }
+    public String getLabelAccountName() {
+      return labelAccountName;
+    }
+    public String getValueAccountName() {
+      return valueAccountName;
+    }
+    public String getLabelAccountNumber() {
+        return labelAccountNumber;
+    }
+    public String getValueAccountNumber() {
+        return valueAccountNumber;
+    }
+    public String getLabelBranchName() {
+        return labelBranchName;
+    }
+    public String getValueBranchName() {
+        return valueBranchName;
+    }
+    public String getLabelIBANNumber() {
+        return labelIBANNumber;
+    }
+    public String getValueIBANNumber() {
+        return valueIBANNumber;
+    }
+    public String getLabelRoutingNumber() {
+        return labelRoutingNumber;
+    }
+    public String getValueRoutingNumber() {
+        return valueRoutingNumber;
+    }
+    public String getLabelSwiftCode() {
+        return labelSwiftCode;
+    }
+    public String getValueSwiftCode() {
+        return valueSwiftCode;
+    }
+    public String getLabelAccountCurrency() {
+      return labelAccountCurrency;
+    }
+    public String getValueAccountCurrency() {
+      return valueAccountCurrency;
     }
 
-    public void setLabelType(String labelType) {
-        this.labelType = labelType;
+    public void setLabelPayment(String labelPayment) {
+        this.labelPayment = labelPayment;
     }
-
-    public String getValueType() {
-        return valueType;
+    public void setValuePayment(String valuePayment) {
+        this.valuePayment = valuePayment;
     }
-
-    public void setValueType(String valueType) {
-        this.valueType = valueType;
+    public void setLabelBankName(String labelBankName) {
+        this.labelBankName = labelBankName;
     }
-
-    public String getLabelTransaction() {
-        return labelTransaction;
+    public void setValueBankName(String valueBankName) {
+        this.valueBankName = valueBankName;
     }
-
-    public void setLabelTransaction(String labelTransaction) {
-        this.labelTransaction = labelTransaction;
+    public void setLabelAccountName(String labelAccountName) {
+      this.labelAccountName = labelAccountName;
     }
-
-    public String getValueTransaction() {
-        return valueTransaction;
+    public void setValueAccountName(String valueAccountName) {
+      this.valueAccountName = valueAccountName;
     }
-
-    public void setValueTransaction(String valueTransaction) {
-        this.valueTransaction = valueTransaction;
+    public void setLabelAccountNumber(String labelAccountNumber) {
+        this.labelAccountNumber = labelAccountNumber;
     }
-
-    public String getLabelFiscalZone() {
-        return labelFiscalZone;
+    public void setValueAccountNumber(String valueAccountNumber) {
+        this.valueAccountNumber = valueAccountNumber;
     }
-
-    public void setLabelFiscalZone(String labelFiscalZone) {
-        this.labelFiscalZone = labelFiscalZone;
+    public void setLabelBranchName(String labelBranchName) {
+        this.labelBranchName = labelBranchName;
     }
-
-    public String getValueFiscalZone() {
-        return valueFiscalZone;
+    public void setValueBranchName(String valueBranchName) {
+        this.valueBranchName = valueBranchName;
     }
-
-    public void setValueFiscalZone(String valueFiscalZone) {
-        this.valueFiscalZone = valueFiscalZone;
+    public void setLabelIBANNumber(String labelIBANNumber) {
+        this.labelIBANNumber = labelIBANNumber;
+    }
+    public void setValueIBANNumber(String valueIBANNumber) {
+        this.valueIBANNumber = valueIBANNumber;
+    }
+    public void setLabelRoutingNumber(String labelRoutingNumber) {
+        this.labelRoutingNumber = labelRoutingNumber;
+    }
+    public void setValueRoutingNumber(String valueRoutingNumber) {
+        this.valueRoutingNumber = valueRoutingNumber;
+    }
+    public void setLabelSwiftCode(String labelSwiftCode) {
+        this.labelSwiftCode = labelSwiftCode;
+    }
+    public void setValueSwiftCode(String valueSwiftCode) {
+        this.valueSwiftCode = valueSwiftCode;
+    }
+    public void setLabelAccountCurrency(String labelAccountCurrency) {
+      this.labelAccountCurrency = labelAccountCurrency;
+    }
+    public void setValueAccountCurrency(String valueAccountCurrency) {
+      this.valueAccountCurrency = valueAccountCurrency;
     }
 
     @Override
     public String toString() {
         return "PaymentInfo{" +
-                "labelType='" + labelType + '\'' +
-                ", valueType='" + valueType + '\'' +
-                ", labelTransaction='" + labelTransaction + '\'' +
-                ", valueTransaction='" + valueTransaction + '\'' +
-                ", labelFiscalZone='" + labelFiscalZone + '\'' +
-                ", valueFiscalZone='" + valueFiscalZone + '\'' +
+                "  labelPayment='" + labelPayment + '\'' +
+                ", valuePayment='" + valuePayment + '\'' +
+                ", labelBankName='" + labelBankName + '\'' +
+                ", valueBankName='" + valueBankName + '\'' +
+                ", labelAccountName='" + labelAccountName + '\'' +
+                ", valueAccountName='" + valueAccountName + '\'' +
+                ", labelAccountNumber='" + labelAccountNumber + '\'' +
+                ", valueAccountNumber='" + valueAccountNumber + '\'' +
+                ", labelBranchName='" + labelBranchName + '\'' +
+                ", valueBranchName='" + valueBranchName + '\'' +
+                ", labelIBANNumber='" + labelIBANNumber + '\'' +
+                ", valueIBANNumber='" + valueIBANNumber + '\'' +
+                ", labelRoutingNumber='" + labelRoutingNumber + '\'' +
+                ", valueRoutingNumber='" + valueRoutingNumber + '\'' +
+                ", labelSwiftCode='" + labelSwiftCode + '\'' +
+                ", valueSwiftCode='" + valueSwiftCode + '\'' +
+                ", labelAccountCurrency='" + labelAccountCurrency + '\'' +
+                ", valueAccountCurrency='" + valueAccountCurrency + '\'' +
                 '}';
     }
 
     public static class Generator implements ModelGenerator<PaymentInfo> {
 
-        private static final Map<String, String> labelsType = new HashMap<>();
-        private static final Map<String, String> valuesType = new HashMap<>();
-        private static final Map<String, String> labelsTransaction = new HashMap<>();
-        private static final Map<String, String> valuesTransaction = new HashMap<>();
-        private static final Map<String, String> labelsFiscalZone = new HashMap<>();
-        private static final Map<String, String> valuesFiscalZone = new HashMap<>();
+        private static final Map<String, String> labelsPayment = new HashMap<>();
+        private static final Map<String, String> valuesPayment = new HashMap<>();
+        private static final Map<String, String> labelsBankName = new HashMap<>();
+        private static final Map<String, String> valuesBankName = new HashMap<>();
+        private static final Map<String, String> labelsAccountName = new HashMap<>();
+        private static final Map<String, String> valuesAccountName = new HashMap<>();
+        private static final Map<String, String> labelsAccountNumber = new HashMap<>();
+        private static final Map<String, String> valuesAccountNumber = new HashMap<>();
+        private static final Map<String, String> labelsBranchName = new HashMap<>();
+        private static final Map<String, String> valuesBranchName = new HashMap<>();
+        private static final Map<String, String> labelsIBANNumber = new HashMap<>();
+        private static final Map<String, String> valuesIBANNumber = new HashMap<>();
+        private static final Map<String, String> labelsRoutingNumber = new HashMap<>();
+        private static final Map<String, String> valuesRoutingNumber = new HashMap<>();
+        private static final Map<String, String> labelsSwiftCode = new HashMap<>();
+        private static final Map<String, String> valuesSwiftCode = new HashMap<>();
+        private static final Map<String, String> labelsAccountCurrency = new HashMap<>();
+        // Currency value is used from ctx.getCurrency()
 
         {
-            labelsType.put("Payment type", "en");
-            labelsType.put("Payment means", "en");
-            labelsType.put("Payed through", "en");
+            labelsPayment.put("Payment de paiement", "fr");
+            labelsPayment.put("Moyen de paiement", "fr");
+            labelsPayment.put("Mode de règlement", "fr");
 
-            labelsType.put("Type de paiement", "fr");
-            labelsType.put("Moyen de paiement", "fr");
-            labelsType.put("Mode de règlement", "fr");
+            labelsPayment.put("Payment type", "en");
+            labelsPayment.put("Payment means", "en");
+            labelsPayment.put("Payed through", "en");
         }
         {
-            valuesType.put("Paypal", "en");
-            valuesType.put("Credit Card", "en");
-            valuesType.put("Bank Transfer", "en");
-            valuesType.put("Cheque", "en");
+            valuesPayment.put("Paypal", "fr");
+            valuesPayment.put("CB", "fr");
+            valuesPayment.put("Virement", "fr");
+            valuesPayment.put("Chèque", "fr");
 
-            valuesType.put("Paypal", "fr");
-            valuesType.put("CB", "fr");
-            valuesType.put("Virement", "fr");
-            valuesType.put("Chèque", "fr");
+            valuesPayment.put("Credit Card", "en");
+            valuesPayment.put("Bank Transfer", "en");
+            valuesPayment.put("Cheque", "en");
         }
         {
-            labelsTransaction.put("Transaction number", "en");
+            labelsBankName.put("Nom de banque", "fr");
 
-            labelsTransaction.put("Transaction numéro", "fr");
+            labelsBankName.put("Bank", "en");
+            labelsBankName.put("Bank Name", "en");
+        }
+        // valueBankName is loaded from bank csv dataset
+        {
+            labelsAccountName.put("Nom du compte", "fr");
+
+            labelsAccountName.put("Account Name", "en");
+            labelsAccountName.put("A/C Name", "en");
+        }
+        // valueAccountName is same as Vendor/Company Name
+        {
+            labelsAccountNumber.put("Numéro de compte", "fr");
+
+            labelsAccountNumber.put("Account Num", "en");
+            labelsAccountNumber.put("A/C Num", "en");
+            labelsAccountNumber.put("A/C NO", "en");
         }
         {
-            labelsFiscalZone.put("Fiscal zone", "en");
+            valuesAccountNumber.put("[0-9]{13}", "FR");
 
-            labelsFiscalZone.put("Zone fiscale", "fr");
+            valuesAccountNumber.put("[0-9]{13}", "US");
+
+            valuesAccountNumber.put("[0-9]{13}", "AE_en");
+            valuesAccountNumber.put("[0]{4}[0-9]{9}", "AE_en");
+        }
+        {
+            labelsBranchName.put("Nom de la filiale", "fr");
+
+            labelsBranchName.put("Branch", "en");
+            labelsBranchName.put("Branch Name", "en");
+        }
+        // valueBranchName is loaded from bank csv dataset
+        {
+            labelsIBANNumber.put("IBAN", "fr");
+            labelsIBANNumber.put("IBAN Num", "fr");
+            labelsIBANNumber.put("IBAN NO", "fr");
+
+            labelsIBANNumber.put("IBAN", "en");
+            labelsIBANNumber.put("IBAN Num", "en");
+            labelsIBANNumber.put("IBAN NO", "en");
+        }
+        {
+            valuesIBANNumber.put("FR[0-9]{8}", "FR");
+
+            valuesIBANNumber.put("US[0-9]{8}", "US");
+
+            valuesIBANNumber.put("AE[0-9]{8}", "AE_en");
+            valuesIBANNumber.put("AE[0]{3}[0-9]{5}", "AE_en");
+        }
+        {
+            labelsRoutingNumber.put("Numéro de routage", "fr");
+
+            labelsRoutingNumber.put("Routing No", "en");
+            labelsRoutingNumber.put("Routing Num", "en");
+            labelsRoutingNumber.put("Routing Code", "en");
+        }
+        {
+            valuesRoutingNumber.put("[0-9]{9}", "FR");
+
+            valuesRoutingNumber.put("[0-9]{9}", "AE_en");
+        }
+        {
+            labelsSwiftCode.put("Swift Code", "fr");
+
+            labelsSwiftCode.put("Swift", "en");
+            labelsSwiftCode.put("Swift Code", "en");
+            labelsSwiftCode.put("Swift Number", "en");
+        }
+        {
+            valuesSwiftCode.put("[A-Z]{8,13}", "FR");
+
+            valuesSwiftCode.put("[A-Z]{8,13}", "AE_en");
+        }
+        {
+            labelsAccountCurrency.put("Devise", "fr");
+
+            labelsAccountCurrency.put("Cur", "en");
+            labelsAccountCurrency.put("Currency", "en");
         }
 
+        // Notes: fmt is "csv file, country, language"
+        List<List<String>> banksCsvCountryLangList = Arrays.asList(
+                Arrays.asList("common/bank/ae_en.csv", "AE_en", "en"),
+                Arrays.asList("common/bank/fr.csv", "FR", "fr"));
+        private static final Map<Company, String> banksInfo = new HashMap<>();
+        {
+            for (int i=0; i<banksCsvCountryLangList.size(); i++) {
+                String banksFile = banksCsvCountryLangList.get(i).get(0);
+                String bankCountry = banksCsvCountryLangList.get(i).get(1);
+                String bankLang = banksCsvCountryLangList.get(i).get(2);
+                try {
+                    Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(banksFile));
+                    Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
+                    for (CSVRecord record : records) {
+                        String bankName = record.get("name");
+                        String address = record.get("address");
+                        String country = bankCountry;
+
+                        Company bankCompany = new Company();
+                        bankCompany.setName(bankName);
+                        bankCompany.setIndustry("banking");
+                        bankCompany.setAddress(new Address(address, "", "", new Generex("[0-9]{5}").random(), address, country));
+
+                        banksInfo.put(bankCompany, bankLang);
+                    }
+                } catch ( Exception e ) {
+                    LOGGER.log(Level.SEVERE, "unable to parse csv source: " + banksFile, e);
+                }
+            }
+        }
 
         @Override
         public PaymentInfo generate(GenerationContext ctx) {
-            List<String> localizedLabelsTypes = labelsType.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            int idx1 = ctx.getRandom().nextInt(localizedLabelsTypes.size());
+            List<String> filteredLabelsPayments = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredValuesPayments = valuesPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsBankName = labelsBankName.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsAccountName = labelsAccountName.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsAccountNumber = labelsAccountNumber.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredValuesAccountNumber = valuesAccountNumber.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsBranchName = labelsBranchName.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsIBANNumber = labelsIBANNumber.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredValuesIBANNumber = valuesIBANNumber.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsRoutingNumber = labelsRoutingNumber.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredValuesRoutingNumber = valuesRoutingNumber.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsSwiftCode = labelsSwiftCode.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredValuesSwiftCode = valuesSwiftCode.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsAccountCurrency = labelsAccountCurrency.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
-            List<String> localizedValuesTypes = valuesType.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            int idx2 = ctx.getRandom().nextInt(localizedValuesTypes.size());
+            // select a random bank
+            List<Company> filteredBanksCompanies = banksInfo.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            Company filteredBankCompany = filteredBanksCompanies.get(ctx.getRandom().nextInt(filteredBanksCompanies.size()));
 
-            return new PaymentInfo(localizedLabelsTypes.get(idx1), localizedValuesTypes.get(idx2),
-                    localizedLabelsTypes.get(idx1), localizedValuesTypes.get(idx2),
-                    localizedLabelsTypes.get(idx1), localizedValuesTypes.get(idx2));
+            // select or generate the fields
+            String filteredLabelPayments = filteredLabelsPayments.get(ctx.getRandom().nextInt(filteredLabelsPayments.size()));
+            String filteredValuePayments = filteredValuesPayments.get(ctx.getRandom().nextInt(filteredValuesPayments.size()));
+
+            String filteredLabelBankName = filteredLabelsBankName.get(ctx.getRandom().nextInt(filteredLabelsBankName.size()));
+            String filteredValueBankName = filteredBankCompany.getName();
+
+            String filteredLabelAccountName = filteredLabelsAccountName.get(ctx.getRandom().nextInt(filteredLabelsAccountName.size()));
+            String filteredValueAccountName = "";  // valueAccountName is same as Vendor/Company Name and assigned later
+
+            String filteredLabelAccountNumber = filteredLabelsAccountNumber.get(ctx.getRandom().nextInt(filteredLabelsAccountNumber.size()));
+            String filteredValueAccountNumber = new Generex(filteredValuesAccountNumber.get(ctx.getRandom().nextInt(filteredValuesAccountNumber.size()))).random();
+
+            String filteredLabelBranchName = filteredLabelsBranchName.get(ctx.getRandom().nextInt(filteredLabelsBranchName.size()));
+            String filteredvalueBranchName = filteredBankCompany.getAddress().getLine1();
+
+            String filteredLabelIBANNumber = filteredLabelsIBANNumber.get(ctx.getRandom().nextInt(filteredLabelsIBANNumber.size()));
+            String filteredValueIBANNumber = new Generex(filteredValuesIBANNumber.get(ctx.getRandom().nextInt(filteredValuesIBANNumber.size()))).random() + filteredValueAccountNumber; // IBAN number uses the Account Number as a suffix
+
+            String filteredLabelRoutingNumber = filteredLabelsRoutingNumber.get(ctx.getRandom().nextInt(filteredLabelsRoutingNumber.size()));
+            String filteredValueRoutingNumber = new Generex(filteredValuesRoutingNumber.get(ctx.getRandom().nextInt(filteredValuesRoutingNumber.size()))).random();
+
+            String filteredLabelSwiftCode = filteredLabelsSwiftCode.get(ctx.getRandom().nextInt(filteredLabelsSwiftCode.size()));
+            String filteredValueSwiftCode = new Generex(filteredValuesSwiftCode.get(ctx.getRandom().nextInt(filteredValuesSwiftCode.size()))).random();
+
+            String filteredLabelAccountCurrency = filteredLabelsAccountCurrency.get(ctx.getRandom().nextInt(filteredLabelsAccountCurrency.size()));
+            String filteredValueAccountCurrency = ctx.getCurrency();
+
+            return new PaymentInfo(filteredLabelPayments,
+                                   filteredValuePayments,
+                                   filteredLabelBankName,
+                                   filteredValueBankName,
+                                   filteredLabelAccountName,
+                                   filteredValueAccountName,
+                                   filteredLabelAccountNumber,
+                                   filteredValueAccountNumber,
+                                   filteredLabelBranchName,
+                                   filteredvalueBranchName,
+                                   filteredLabelIBANNumber,
+                                   filteredValueIBANNumber,
+                                   filteredLabelRoutingNumber,
+                                   filteredValueRoutingNumber,
+                                   filteredLabelSwiftCode,
+                                   filteredValueSwiftCode,
+                                   filteredLabelAccountCurrency,
+                                   filteredValueAccountCurrency);
         }
 
     }

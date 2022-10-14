@@ -79,7 +79,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         Address address = model.getCompany().getAddress();
 
         PDFont font = PDType1Font.HELVETICA;
-        PDFont fontBold1 = PDType1Font.HELVETICA_BOLD;
+        PDFont pdFontBold = PDType1Font.HELVETICA_BOLD;
         // PDFont fontItalic1 = PDType1Font.HELVETICA_OBLIQUE;
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
@@ -96,7 +96,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         contentStream.drawImage(logoHeader, posLogoX, posLogoY, widthLogo,heightLogo);
 
         VerticalContainer headerContainer = new VerticalContainer(1282*ratioPage,page.getMediaBox().getHeight()-132*ratioPage,250);
-        headerContainer.addElement(new SimpleTextBox(fontBold1,12,0,0,model.getCompany().getName(),"SN"));
+        headerContainer.addElement(new SimpleTextBox(pdFontBold,12,0,0,model.getCompany().getName(),"SN"));
         headerContainer.addElement(new SimpleTextBox(font,10,0,0,model.getCompany().getAddress().getLine1(),"SA"));
         headerContainer.addElement(new SimpleTextBox(font,10,0,0,model.getCompany().getAddress().getZip()+" "+model.getCompany().getAddress().getCity(),"SA"));
         headerContainer.addElement(new SimpleTextBox(font,10,0,0,model.getCompany().getAddress().getCountry(),"SA"));
@@ -105,7 +105,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         VerticalContainer shippingContainer = new VerticalContainer(147*ratioPage,page.getMediaBox().getHeight()-499*ratioPage,250);
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0,"Delivery address"));
-        shippingContainer.addElement(new SimpleTextBox(fontBold1,11,0,0,model.getClient().getShippingName().toUpperCase(),"SHN"));
+        shippingContainer.addElement(new SimpleTextBox(pdFontBold,11,0,0,model.getClient().getShippingName().toUpperCase(),"SHN"));
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getShippingAddress().getLine1().toUpperCase(),"SHA"));
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getShippingAddress().getZip()+" "+model.getClient().getShippingAddress().getCity().toUpperCase(),"SHA"));
         shippingContainer.addElement(new SimpleTextBox(font,10,0,0, "Tel : 06"+(int)(1000000+(Math.random()*(99999999 - 1000000)))));
@@ -114,7 +114,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         VerticalContainer billingContainer = new VerticalContainer(1282*ratioPage,page.getMediaBox().getHeight()-499*ratioPage,250);
         billingContainer.addElement(new SimpleTextBox(font,10, 0,0,"Billing address"));
-        billingContainer.addElement(new SimpleTextBox(fontBold1,11,0,0,model.getClient().getBillingName().toUpperCase(),"BN"));
+        billingContainer.addElement(new SimpleTextBox(pdFontBold,11,0,0,model.getClient().getBillingName().toUpperCase(),"BN"));
         billingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getBillingAddress().getLine1().toUpperCase(),"BA"));
         billingContainer.addElement(new SimpleTextBox(font,10,0,0,model.getClient().getBillingAddress().getZip()+" "+model.getClient().getBillingAddress().getCity().toUpperCase(),"BA"));
 
@@ -207,8 +207,8 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         verticalInvoiceItems.build(contentStream, writer);
 
         VerticalContainer paymentTypeContainer = new VerticalContainer(1476*ratioPage,page.getMediaBox().getHeight()-2479*ratioPage,250);
-        paymentTypeContainer.addElement(new SimpleTextBox(fontBold1,11,0,0,"TOTAL T.T.C"));
-        paymentTypeContainer.addElement(new SimpleTextBox(font,8,0,0,"Regulated by : "+model.getPaymentInfo().getLabelType(),"PT"));
+        paymentTypeContainer.addElement(new SimpleTextBox(pdFontBold,11,0,0,"TOTAL T.T.C"));
+        paymentTypeContainer.addElement(new SimpleTextBox(font,8,0,0,"Regulated by : "+model.getPaymentInfo().getLabelPayment(),"PT"));
         paymentTypeContainer.build(contentStream,writer);
 
         VerticalContainer totalContainer = new VerticalContainer(2019*ratioPage,page.getMediaBox().getHeight()-2474*ratioPage,250);

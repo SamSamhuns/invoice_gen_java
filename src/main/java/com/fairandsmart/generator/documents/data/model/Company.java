@@ -178,6 +178,7 @@ public class Company {
         {
             addressHeads.put("Vendu par", "fr");
 
+            addressHeads.put("TAX INVOICE", "en");
             addressHeads.put("Sold by", "en");
             addressHeads.put("Supplier", "en");
             addressHeads.put("Seller", "en");
