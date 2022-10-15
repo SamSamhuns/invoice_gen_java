@@ -49,7 +49,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 
 import javax.xml.stream.XMLStreamWriter;
-import java.awt.*;
+import java.awt.Color;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;

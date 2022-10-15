@@ -48,7 +48,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import javax.xml.stream.XMLStreamWriter;
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 import java.util.*;
 import java.util.logging.Logger;

@@ -54,7 +54,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.xml.stream.XMLStreamWriter;
-import java.awt.*;
+import java.awt.Color;
 
 @ApplicationScoped
 public class DartyLayout implements InvoiceLayout {
