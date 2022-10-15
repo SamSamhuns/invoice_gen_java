@@ -460,7 +460,7 @@ public class NGenericLayout implements InvoiceLayout {
 
         if(pInfoDesired && this.pInfoAvailable==1)
         {
-            invoiceInfo.addElement(getInfoAsLabelValue(model.getPaymentInfo().getLabelPayment(), model.getPaymentInfo().getValuePayment(), "PMODE"));
+            invoiceInfo.addElement(getInfoAsLabelValue(model.getPaymentInfo().getLabelPaymentType(), model.getPaymentInfo().getValuePaymentType(), "PMODE"));
             invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
             this.pInfoAvailable = -1;
         }

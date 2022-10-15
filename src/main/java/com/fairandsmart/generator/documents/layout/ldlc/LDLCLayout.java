@@ -362,7 +362,7 @@ public class LDLCLayout implements InvoiceLayout {
         new BorderBox(Color.BLACK, Color.WHITE, 1,25, 56, 160,80).build(contentStream, writer);
         VerticalContainer verticalPaiement = new VerticalContainer(25+3, 140-5, 250 );
         verticalPaiement.addElement(new SimpleTextBox(font, 9, 0, 0, "PROVIDED SETTLEMENT"));
-        verticalPaiement.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getPaymentInfo().getValuePayment()));
+        verticalPaiement.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getPaymentInfo().getValuePaymentType()));
         new BorderBox(Color.BLACK, Color.BLACK, 1,25, 113, 160,1).build(contentStream, writer);
         verticalPaiement.build(contentStream, writer);
 

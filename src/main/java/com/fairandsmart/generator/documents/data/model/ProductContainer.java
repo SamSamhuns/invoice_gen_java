@@ -600,7 +600,7 @@ public class ProductContainer {
 
             Boolean shippingCostAvailable = ctx.getRandom().nextInt(100) < 15;
             productContainer.setShippingCostAvailable(shippingCostAvailable);
-            // Shippign will always be last item if shippingCostAvailable
+            // Shipping will always be last item if shippingCostAvailable
             if (shippingCostAvailable) {
                 Product shippingProduct = new Product();
                 price = 10 + ctx.getRandom().nextInt(200);

@@ -163,8 +163,8 @@ public class BDmobilierLayout implements InvoiceLayout {
         infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getDate().getLabelOrder()));
         infoCommande.addElement(new SimpleTextBox(pdFontNormal,8,0,0,model.getDate().getValueOrder(),"IDATE"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getPaymentInfo().getLabelPayment()));
-        infoCommande.addElement(new SimpleTextBox(pdFontNormal,8,0,0,model.getPaymentInfo().getValuePayment(),"PMODE"));
+        infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8,0,0,model.getPaymentInfo().getLabelPaymentType()));
+        infoCommande.addElement(new SimpleTextBox(pdFontNormal,8,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
         infoCommande.addElement(new SimpleTextBox(pdFontNormal,8,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TTX"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
 

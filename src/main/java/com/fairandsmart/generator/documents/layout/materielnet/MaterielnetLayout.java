@@ -219,11 +219,11 @@ public class MaterielnetLayout implements InvoiceLayout {
         new SimpleTextBox(pdFontBold,9,209,204,"Terms and conditions of payment").build(contentStream,writer);
 
         VerticalContainer paiementLabel = new VerticalContainer(22,190,250);
-        paiementLabel.addElement(new SimpleTextBox(font, 9,0,0,model.getPaymentInfo().getLabelPayment()+" : "));
+        paiementLabel.addElement(new SimpleTextBox(font, 9,0,0,model.getPaymentInfo().getLabelPaymentType()+" : "));
         paiementLabel.addElement(new SimpleTextBox(font, 9,0,0,"Echéance : "));
 
         VerticalContainer paiementValeur = new VerticalContainer(317,190,250);
-        paiementValeur.addElement(new SimpleTextBox(fontItalic1, 9,0,0,model.getPaymentInfo().getValuePayment(),"PMODE"));
+        paiementValeur.addElement(new SimpleTextBox(fontItalic1, 9,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
         paiementValeur.addElement(new SimpleTextBox(fontItalic1, 9,0,0,"Comptant"));
 
         paiementLabel.build(contentStream,writer);

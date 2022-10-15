@@ -220,7 +220,7 @@ public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWrite
 
         VerticalContainer paymentTypeContainer = new VerticalContainer(1476*ratioPage,page.getMediaBox().getHeight()-2479*ratioPage,250);
         paymentTypeContainer.addElement(new SimpleTextBox(pdFontBold,11,0,0,"TOTAL T.T.C"));
-        paymentTypeContainer.addElement(new SimpleTextBox(font,8,0,0,"Regulated by : "+model.getPaymentInfo().getLabelPayment(),"PT"));
+        paymentTypeContainer.addElement(new SimpleTextBox(font,8,0,0,"Regulated by : "+model.getPaymentInfo().getLabelPaymentType(),"PT"));
         paymentTypeContainer.build(contentStream,writer);
 
         VerticalContainer totalContainer = new VerticalContainer(2019*ratioPage,page.getMediaBox().getHeight()-2474*ratioPage,250);

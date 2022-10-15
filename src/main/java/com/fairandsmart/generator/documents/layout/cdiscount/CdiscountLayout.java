@@ -187,7 +187,7 @@ public class CdiscountLayout implements InvoiceLayout {
         labelInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getLabelOrder()));
         labelInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getPaymentInfo().getLabelPayment()+""));
+        labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getPaymentInfo().getLabelPaymentType()+""));
         labelInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         labelInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getLabelPayment()));
 
@@ -198,7 +198,7 @@ public class CdiscountLayout implements InvoiceLayout {
         valueInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getValueOrder(),"ONUM"));
         valueInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
-        valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getPaymentInfo().getValuePayment(),"PMODE"));
+        valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
         valueInfoClient.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2.5f));
         valueInfoClient.addElement(new SimpleTextBox(font,8,0,0,model.getDate().getValuePayment(),"IDATE"));
 

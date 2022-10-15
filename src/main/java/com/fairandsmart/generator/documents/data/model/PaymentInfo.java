@@ -56,8 +56,11 @@ public class PaymentInfo {
 
     private static final Logger LOGGER = Logger.getLogger(Company.class.getName());
 
-    private String labelPayment;
-    private String valuePayment;
+    private String addressHeader;
+    private String labelPaymentTerm;
+    private String valuePaymentTerm;
+    private String labelPaymentType;
+    private String valuePaymentType;
     private String labelBankName;
     private String valueBankName;
     private String labelAccountName;
@@ -75,8 +78,11 @@ public class PaymentInfo {
     private String labelAccountCurrency;
     private String valueAccountCurrency;
 
-    public PaymentInfo(String labelPayment,
-                       String valuePayment,
+    public PaymentInfo(String addressHeader,
+                       String labelPaymentTerm,
+                       String valuePaymentTerm,
+                       String labelPaymentType,
+                       String valuePaymentType,
                        String labelBankName,
                        String valueBankName,
                        String labelAccountName,
@@ -93,8 +99,11 @@ public class PaymentInfo {
                        String valueSwiftCode,
                        String labelAccountCurrency,
                        String valueAccountCurrency) {
-        this.labelPayment = labelPayment;
-        this.valuePayment = valuePayment;
+        this.addressHeader = addressHeader;
+        this.labelPaymentTerm = labelPaymentTerm;
+        this.valuePaymentTerm = valuePaymentTerm;
+        this.labelPaymentType = labelPaymentType;
+        this.valuePaymentType = valuePaymentType;
         this.labelBankName = labelBankName;
         this.valueBankName = valueBankName;
         this.labelAccountName = labelAccountName;
@@ -113,11 +122,20 @@ public class PaymentInfo {
         this.valueAccountCurrency = valueAccountCurrency;
     }
 
-    public String getLabelPayment() {
-        return labelPayment;
+    public String getAddressHeader() {
+        return addressHeader;
     }
-    public String getValuePayment() {
-        return valuePayment;
+    public String getLabelPaymentTerm() {
+        return labelPaymentTerm;
+    }
+    public String getValuePaymentTerm() {
+        return valuePaymentTerm;
+    }
+    public String getLabelPaymentType() {
+        return labelPaymentType;
+    }
+    public String getValuePaymentType() {
+        return valuePaymentType;
     }
     public String getLabelBankName() {
         return labelBankName;
@@ -168,11 +186,20 @@ public class PaymentInfo {
       return valueAccountCurrency;
     }
 
-    public void setLabelPayment(String labelPayment) {
-        this.labelPayment = labelPayment;
+    public void setAddressHeader(String addressHeader) {
+        this.addressHeader = addressHeader;
     }
-    public void setValuePayment(String valuePayment) {
-        this.valuePayment = valuePayment;
+    public void setLabelPaymentTerm(String labelPaymentTerm) {
+        this.labelPaymentTerm = labelPaymentTerm;
+    }
+    public void setValuePaymentTerm(String valuePaymentTerm) {
+        this.valuePaymentTerm = valuePaymentTerm;
+    }
+    public void setLabelPaymentType(String labelPaymentType) {
+        this.labelPaymentType = labelPaymentType;
+    }
+    public void setValuePaymentType(String valuePaymentType) {
+        this.valuePaymentType = valuePaymentType;
     }
     public void setLabelBankName(String labelBankName) {
         this.labelBankName = labelBankName;
@@ -226,8 +253,11 @@ public class PaymentInfo {
     @Override
     public String toString() {
         return "PaymentInfo{" +
-                "  labelPayment='" + labelPayment + '\'' +
-                ", valuePayment='" + valuePayment + '\'' +
+                "addressHeader='" + addressHeader + '\'' +
+                ", labelPaymentTerm='" + labelPaymentTerm + '\'' +
+                ", valuePaymentTerm='" + valuePaymentTerm + '\'' +
+                ", labelPaymentType='" + labelPaymentType + '\'' +
+                ", valuePaymentType='" + valuePaymentType + '\'' +
                 ", labelBankName='" + labelBankName + '\'' +
                 ", valueBankName='" + valueBankName + '\'' +
                 ", labelAccountName='" + labelAccountName + '\'' +
@@ -249,8 +279,11 @@ public class PaymentInfo {
 
     public static class Generator implements ModelGenerator<PaymentInfo> {
 
-        private static final Map<String, String> labelsPayment = new HashMap<>();
-        private static final Map<String, String> valuesPayment = new HashMap<>();
+        private static final Map<String, String> addressHeaders = new HashMap<>();
+        private static final Map<String, String> labelsPaymentTerm = new HashMap<>();
+        private static final Map<String, String> valuesPaymentTerm = new HashMap<>();
+        private static final Map<String, String> labelsPaymentType = new HashMap<>();
+        private static final Map<String, String> valuesPaymentType = new HashMap<>();
         private static final Map<String, String> labelsBankName = new HashMap<>();
         private static final Map<String, String> valuesBankName = new HashMap<>();
         private static final Map<String, String> labelsAccountName = new HashMap<>();
@@ -269,23 +302,46 @@ public class PaymentInfo {
         // Currency value is used from ctx.getCurrency()
 
         {
-            labelsPayment.put("Payment de paiement", "fr");
-            labelsPayment.put("Moyen de paiement", "fr");
-            labelsPayment.put("Mode de règlement", "fr");
+            addressHeaders.put("Adresse de Facturation", "fr");
 
-            labelsPayment.put("Payment type", "en");
-            labelsPayment.put("Payment means", "en");
-            labelsPayment.put("Payed through", "en");
+            addressHeaders.put("Pay To", "en");
+            addressHeaders.put("Payment", "en");
+            addressHeaders.put("Payment Address", "en");
         }
         {
-            valuesPayment.put("Paypal", "fr");
-            valuesPayment.put("CB", "fr");
-            valuesPayment.put("Virement", "fr");
-            valuesPayment.put("Chèque", "fr");
+            labelsPaymentTerm.put("Modalités de Paiement", "fr");
 
-            valuesPayment.put("Credit Card", "en");
-            valuesPayment.put("Bank Transfer", "en");
-            valuesPayment.put("Cheque", "en");
+            labelsPaymentTerm.put("Terms", "en");
+            labelsPaymentTerm.put("Payment Terms", "en");
+        }
+        {
+            valuesPaymentTerm.put("Fin du Mois", "fr");
+
+            valuesPaymentTerm.put("[1-5] MD", "en");
+            valuesPaymentTerm.put("Net (7|10|15|30|60|90)( days| )", "en");
+            valuesPaymentTerm.put("[1-30] (MFI|of Month Following Inv Date)", "en");
+            valuesPaymentTerm.put("(EOM|End of month)", "en");
+            valuesPaymentTerm.put("(Cash|Pay) (on delivery|next delivery|before shipment|in advance|with order)", "en");
+        }
+        {
+            labelsPaymentType.put("Payment de paiement", "fr");
+            labelsPaymentType.put("Moyen de paiement", "fr");
+            labelsPaymentType.put("Mode de règlement", "fr");
+
+            labelsPaymentType.put("Payment type", "en");
+            labelsPaymentType.put("Payment means", "en");
+            labelsPaymentType.put("Payed through", "en");
+        }
+        {
+            valuesPaymentType.put("Paypal", "fr");
+            valuesPaymentType.put("CB", "fr");
+            valuesPaymentType.put("Virement", "fr");
+            valuesPaymentType.put("Chèque", "fr");
+
+            valuesPaymentType.put("Paypal", "en");
+            valuesPaymentType.put("Credit Card", "en");
+            valuesPaymentType.put("Bank Transfer", "en");
+            valuesPaymentType.put("Cheque", "en");
         }
         {
             labelsBankName.put("Nom de banque", "fr");
@@ -404,8 +460,11 @@ public class PaymentInfo {
 
         @Override
         public PaymentInfo generate(GenerationContext ctx) {
-            List<String> filteredLabelsPayments = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> filteredValuesPayments = valuesPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredAddressHeaders = addressHeaders.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsPaymentTerm = labelsPaymentTerm.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredValuesPaymentTerm = valuesPaymentTerm.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsPaymentType = labelsPaymentType.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredValuesPaymentType = valuesPaymentType.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> filteredLabelsBankName = labelsBankName.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> filteredLabelsAccountName = labelsAccountName.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> filteredLabelsAccountNumber = labelsAccountNumber.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
@@ -424,8 +483,13 @@ public class PaymentInfo {
             Company filteredBankCompany = filteredBanksCompanies.get(ctx.getRandom().nextInt(filteredBanksCompanies.size()));
 
             // select or generate the fields
-            String filteredLabelPayments = filteredLabelsPayments.get(ctx.getRandom().nextInt(filteredLabelsPayments.size()));
-            String filteredValuePayments = filteredValuesPayments.get(ctx.getRandom().nextInt(filteredValuesPayments.size()));
+            String filteredAddressHeader = filteredAddressHeaders.get(ctx.getRandom().nextInt(filteredAddressHeaders.size()));
+
+            String filteredLabelPaymentTerm = new Generex(filteredLabelsPaymentTerm.get(ctx.getRandom().nextInt(filteredLabelsPaymentTerm.size()))).random();
+            String filteredValuePaymentTerm = new Generex(filteredValuesPaymentTerm.get(ctx.getRandom().nextInt(filteredValuesPaymentTerm.size()))).random();
+
+            String filteredLabelPaymentType = filteredLabelsPaymentType.get(ctx.getRandom().nextInt(filteredLabelsPaymentType.size()));
+            String filteredValuePaymentType = filteredValuesPaymentType.get(ctx.getRandom().nextInt(filteredValuesPaymentType.size()));
 
             String filteredLabelBankName = filteredLabelsBankName.get(ctx.getRandom().nextInt(filteredLabelsBankName.size()));
             String filteredValueBankName = filteredBankCompany.getName();
@@ -451,8 +515,11 @@ public class PaymentInfo {
             String filteredLabelAccountCurrency = filteredLabelsAccountCurrency.get(ctx.getRandom().nextInt(filteredLabelsAccountCurrency.size()));
             String filteredValueAccountCurrency = ctx.getCurrency();
 
-            return new PaymentInfo(filteredLabelPayments,
-                                   filteredValuePayments,
+            return new PaymentInfo(filteredAddressHeader,
+                                   filteredLabelPaymentTerm,
+                                   filteredValuePaymentTerm,
+                                   filteredLabelPaymentType,
+                                   filteredValuePaymentType,
                                    filteredLabelBankName,
                                    filteredValueBankName,
                                    filteredLabelAccountName,

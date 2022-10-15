@@ -278,7 +278,7 @@ public class DartyLayout implements InvoiceLayout {
         totaux.build(contentStream,writer);
 
         new SimpleTextBox(pdFontBold,9,226,posMsgY-33,"Amount paid by: ").build(contentStream,writer);
-        new SimpleTextBox(pdFontBold,9,340,posMsgY-33,model.getPaymentInfo().getValuePayment(),"PMODE").build(contentStream,writer);
+        new SimpleTextBox(pdFontBold,9,340,posMsgY-33,model.getPaymentInfo().getValuePaymentType(),"PMODE").build(contentStream,writer);
         new SimpleTextBox(pdFontBold,9,411,posMsgY-66,"Balances to be paid : ").build(contentStream,writer);
         new SimpleTextBox(pdFontBold,9,page.getMediaBox().getWidth()-90,posMsgY-33,model.getProductContainer().getFormatedTotalWithTax(),"TA").build(contentStream,writer);
         new SimpleTextBox(pdFontBold,9,page.getMediaBox().getWidth()-90,posMsgY-66,"0,00 €").build(contentStream,writer);

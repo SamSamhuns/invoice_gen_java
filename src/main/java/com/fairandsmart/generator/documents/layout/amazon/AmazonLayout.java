@@ -120,29 +120,35 @@ public class AmazonLayout implements InvoiceLayout {
         infos.build(contentStream, writer);
 
         // Vendor/Company Address
-        VerticalContainer verticalVendorAddrContainer = new VerticalContainer(leftPageMargin, 761, 300);
-        verticalVendorAddrContainer.addElement(new SimpleTextBox(pdFontBold, 10, 0, 0, model.getCompany().getAddressHeader(), "SH"));
-        verticalVendorAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getCompany().getLogo().getName(), "SN"));
-        verticalVendorAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getCompany().getAddress().getLine1(), "SA" ));
-        verticalVendorAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getCompany().getAddress().getZip()+" "+model.getCompany().getAddress().getCity(), "SA"));
-        if (genProb.get("add_border_addresses")) {
-            verticalVendorAddrContainer.setBorderColor(Color.BLACK);
-            verticalVendorAddrContainer.setBorderThickness(0.5f);
+        VerticalContainer vendorAddrContainer = new VerticalContainer(leftPageMargin, 761, 300);
+        vendorAddrContainer.addElement(new SimpleTextBox(pdFontBold, 10, 0, 0, model.getCompany().getAddressHeader(), "SH"));
+        vendorAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getCompany().getLogo().getName(), "SN"));
+        vendorAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getCompany().getAddress().getLine1(), "SA" ));
+        vendorAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getCompany().getAddress().getZip()+" "+model.getCompany().getAddress().getCity(), "SA"));
+        if (genProb.get("addresses_bordered")) {
+            vendorAddrContainer.setBorderColor(Color.BLACK);
+            vendorAddrContainer.setBorderThickness(0.5f);
         }
-        verticalVendorAddrContainer.build(contentStream, writer);
+        vendorAddrContainer.build(contentStream, writer);
 
         // Purchase Order Number
-        if (genProb.get("order_number_top")) {
+        if (genProb.get("purchase_order_number_top")) {
             new SimpleTextBox(pdFontNormal, 9, leftPageMargin, 690, model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder(), "LO").build(contentStream, writer);
         }
+        // TAX number
+        String vatText = model.getCompany().getIdNumbers().getVatLabel() + ": " + model.getCompany().getIdNumbers().getVatValue();
+        new SimpleTextBox(pdFontNormal, 9, leftPageMargin, 680, vatText, "SVAT").build(contentStream, writer);
 
-        // invoice / TRN number
-        String vatSentence = model.getCompany().getIdNumbers().getVatLabel()+" "+model.getCompany().getIdNumbers().getVatValue();
-        new SimpleTextBox(pdFontNormal, 9, leftPageMargin, 680, vatSentence, "SVAT").build(contentStream, writer);
-        new SimpleTextBox(pdFontNormal, 9, pageWidth/2, 680, ((rnd.nextInt(10) < 5) ? "Invoice No. ": "") + model.getReference().getValueInvoice(), "Invoice Number").build(contentStream, writer);
+        // Payment Terms
+        if (genProb.get("payment_terms_top")) {
+            new SimpleTextBox(pdFontNormal, 9, pageWidth/2, 690, model.getPaymentInfo().getLabelPaymentTerm()+": "+model.getPaymentInfo().getValuePaymentTerm(), "PT").build(contentStream, writer);
+        }
+        // invoice number
+        String invoiceText = model.getReference().getLabelInvoice() + ": " +model.getReference().getValueInvoice();
+        new SimpleTextBox(pdFontNormal, 9, pageWidth/2, 680, invoiceText, "INV").build(contentStream, writer);
 
         contentStream.moveTo(20, 650);
-        contentStream.lineTo( pageWidth-(20*2), 650);
+        contentStream.lineTo(pageWidth-(20*2), 650);
         contentStream.stroke();
 
         // check if billing and shipping addresses should be switched
@@ -155,16 +161,16 @@ public class AmazonLayout implements InvoiceLayout {
         float shipX = rightAddrX; float shipY = 630;
 
         // Billing Address
-        VerticalContainer verticalBillAddrContainer = new VerticalContainer(billX, billY, 250);
-        verticalBillAddrContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, model.getClient().getBillingHead(), "BH" ));
-        verticalBillAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getBillingName(), "BN" ));
-        verticalBillAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getBillingAddress().getLine1(), "BA" ));
-        verticalBillAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getBillingAddress().getZip() + " "+model.getClient().getBillingAddress().getCity(), "BA" ));
-        if (genProb.get("add_border_addresses") & model.getClient().getBillingHead().length() > 0) {
-            verticalBillAddrContainer.setBorderColor(Color.BLACK);
-            verticalBillAddrContainer.setBorderThickness(0.5f);
+        VerticalContainer billAddrContainer = new VerticalContainer(billX, billY, 250);
+        billAddrContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, model.getClient().getBillingHead(), "BH" ));
+        billAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getBillingName(), "BN" ));
+        billAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getBillingAddress().getLine1(), "BA" ));
+        billAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getBillingAddress().getZip() + " "+model.getClient().getBillingAddress().getCity(), "BA" ));
+        if (genProb.get("addresses_bordered") & model.getClient().getBillingHead().length() > 0) {
+            billAddrContainer.setBorderColor(Color.BLACK);
+            billAddrContainer.setBorderThickness(0.5f);
         }
-        verticalBillAddrContainer.build(contentStream, writer);
+        billAddrContainer.build(contentStream, writer);
 
         // Shipping Address
         VerticalContainer verticalShipAddrContainer = new VerticalContainer(shipX, shipY, 250);
@@ -172,7 +178,7 @@ public class AmazonLayout implements InvoiceLayout {
         verticalShipAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getShippingName(), "SHN" ));
         verticalShipAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getShippingAddress().getLine1(), "SHA" ));
         verticalShipAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getClient().getShippingAddress().getZip() + " " + model.getClient().getShippingAddress().getCity(), "SHA" ));
-        if (genProb.get("add_border_addresses") & model.getClient().getShippingHead().length() > 0) {
+        if (genProb.get("addresses_bordered") & model.getClient().getShippingHead().length() > 0) {
             verticalShipAddrContainer.setBorderColor(Color.BLACK);
             verticalShipAddrContainer.setBorderThickness(0.5f);
         }
@@ -187,6 +193,7 @@ public class AmazonLayout implements InvoiceLayout {
         Color tableHdrBgColor = HelperCommon.getRandomColor(1);
         firstLine.setBackgroundColor(tableHdrBgColor);
 
+        // item list head
         String qtyHead = model.getProductContainer().getQtyHead();
         String descHead = model.getProductContainer().getDescHead();
         String unitPriceHead = model.getProductContainer().getUPHead();
@@ -273,54 +280,75 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Add registered address information
         if (genProb.get("registered_address_info")) {
-              verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-(20*2), 0));
-              verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-(20*2), 0));
+            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
-              String addressFooterText = String.format("Registered Address for %s, %s, %s, %s, %s, %s",
-                                                       model.getCompany().getName(),
-                                                       model.getCompany().getAddress().getLine1(),
-                                                       model.getCompany().getAddress().getLine2(),
-                                                       model.getCompany().getAddress().getZip(),
-                                                       model.getCompany().getAddress().getCity(),
-                                                       model.getCompany().getAddress().getCountry());
-              SimpleTextBox addressFooter = new SimpleTextBox(pdFontNormal, 10, 0, 0, addressFooterText);
-              addressFooter.setWidth(500);
-              verticalInvoiceItems.addElement(addressFooter);
-              verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-              verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-(20*2), 0));
+            String addressFooterText = String.format("Registered Address for %s, %s, %s, %s, %s, %s",
+                                                     model.getCompany().getName(),
+                                                     model.getCompany().getAddress().getLine1(),
+                                                     model.getCompany().getAddress().getLine2(),
+                                                     model.getCompany().getAddress().getZip(),
+                                                     model.getCompany().getAddress().getCity(),
+                                                     model.getCompany().getAddress().getCountry());
+            SimpleTextBox addressFooter = new SimpleTextBox(pdFontNormal, 10, 0, 0, addressFooterText);
+            addressFooter.setWidth(500);
+            verticalInvoiceItems.addElement(addressFooter);
+            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-(20*2), 0));
         }
         verticalInvoiceItems.build(contentStream, writer);
 
+        // Payment Address
+        if (genProb.get("payment_address")) {
+            // Set paymentAddrContainer opposite to the signature location
+            float paymentAddrXPos = (genProb.get("signature_bottom_left")) ? rightAddrX: leftPageMargin;
+            float paymentAddrYPos = verticalInvoiceItems.getBoundingBox().getPosY() - verticalInvoiceItems.getBoundingBox().getHeight() - 15;
+
+            VerticalContainer paymentAddrContainer = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
+            paymentAddrContainer.addElement(new SimpleTextBox(pdFontBold, 10, 0, 0, model.getPaymentInfo().getAddressHeader(), "PH"));
+            paymentAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getPaymentInfo().getLabelBankName()+": "+model.getPaymentInfo().getValueBankName(), "PBN"));
+            paymentAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getPaymentInfo().getLabelAccountName()+": "+model.getPaymentInfo().getValueAccountName(), "PAName"));
+            paymentAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getPaymentInfo().getLabelAccountNumber()+": "+model.getPaymentInfo().getValueAccountNumber(), "PANum"));
+            paymentAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getPaymentInfo().getLabelBranchName()+": "+model.getPaymentInfo().getValueBranchName(), "PBName"));
+            paymentAddrContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getPaymentInfo().getLabelIBANNumber()+": "+model.getPaymentInfo().getValueIBANNumber(), "PBNum"));
+
+            if (genProb.get("addresses_bordered")) {
+                paymentAddrContainer.setBorderColor(Color.BLACK);
+                paymentAddrContainer.setBorderThickness(0.5f);
+            }
+            paymentAddrContainer.build(contentStream, writer);
+        }
+
         // Add Signature at bottom
         if (genProb.get("signature_bottom")) {
-              String compSignatureName = model.getCompany().getName();
-              compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
-              SimpleTextBox singatureTextBox = new SimpleTextBox(
-                      pdFontNormal, 8, 0, 130,
-                      model.getCompany().getSignature().getLabel()+" "+compSignatureName, "Signature");
+            String compSignatureName = model.getCompany().getName();
+            compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
+            SimpleTextBox singatureTextBox = new SimpleTextBox(
+                    pdFontNormal, 8, 0, 130,
+                    model.getCompany().getSignature().getLabel()+" "+compSignatureName, "Signature");
 
-              float singatureTextxPos;
-              if (genProb.get("signature_bottom_left")) {  // bottom left
-                  singatureTextxPos = leftPageMargin + 25;
-              } else {                                     // bottom right
-                  singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
-              }
+            float singatureTextxPos;
+            if (genProb.get("signature_bottom_left")) {  // bottom left
+                singatureTextxPos = leftPageMargin + 25;
+            } else {                                     // bottom right
+                singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
+            }
 
-              singatureTextBox.getBoundingBox().setPosX(singatureTextxPos);
-              singatureTextBox.build(contentStream, writer);
-              new HorizontalLineBox(
-                      singatureTextxPos - 10, 135,
-                      singatureTextxPos + singatureTextBox.getBoundingBox().getWidth() + 10, 135
-                      ).build(contentStream, writer);
+            singatureTextBox.getBoundingBox().setPosX(singatureTextxPos);
+            singatureTextBox.build(contentStream, writer);
+            new HorizontalLineBox(
+                    singatureTextxPos - 10, 135,
+                    singatureTextxPos + singatureTextBox.getBoundingBox().getWidth() + 10, 135
+                    ).build(contentStream, writer);
 
-              String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + model.getCompany().getSignature().getFullPath());
-              PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
-              int signatureWidth = 120;
-              int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
-              // align signature to center of singatureTextBox bbox
-              float signatureXPos = singatureTextBox.getBoundingBox().getPosX() + singatureTextBox.getBoundingBox().getWidth()/2 - signatureWidth/2;
-              float signatureYPos = 140;
-              contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
+            String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + model.getCompany().getSignature().getFullPath());
+            PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
+            int signatureWidth = 120;
+            int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
+            // align signature to center of singatureTextBox bbox
+            float signatureXPos = singatureTextBox.getBoundingBox().getPosX() + singatureTextBox.getBoundingBox().getWidth()/2 - signatureWidth/2;
+            float signatureYPos = 140;
+            contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
         }
 
         // Add footer line and info

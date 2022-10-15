@@ -162,7 +162,6 @@ public class InvoiceNumber {
             formatsClient.add("CL-[0-9]{4}");
             formatsClient.add("[0-9]{3}-0[0-9]{3}");
         }
-
         {
             labelsInvoice.put("Invoice Number", "en");
             labelsInvoice.put("Invoice No.", "en");

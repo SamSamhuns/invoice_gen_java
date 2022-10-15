@@ -173,17 +173,17 @@ public class Company {
 
     public static class Generator implements ModelGenerator<Company> {
 
-        private static final Map<String, String> addressHeads = new LinkedHashMap<>();
+        private static final Map<String, String> addressHeaders = new LinkedHashMap<>();
 
         {
-            addressHeads.put("Vendu par", "fr");
+            addressHeaders.put("Le Fournisseur", "fr");
 
-            addressHeads.put("TAX INVOICE", "en");
-            addressHeads.put("Sold by", "en");
-            addressHeads.put("Supplier", "en");
-            addressHeads.put("Seller", "en");
-            addressHeads.put("Vendor", "en");
-            addressHeads.put("From", "en");
+            addressHeaders.put("TAX INVOICE", "en");
+            addressHeaders.put("Sold by", "en");
+            addressHeaders.put("Supplier", "en");
+            addressHeaders.put("Seller", "en");
+            addressHeaders.put("Vendor", "en");
+            addressHeaders.put("From", "en");
         }
 
         private static final List<String> companiesFileList = Arrays.asList(
@@ -228,11 +228,11 @@ public class Company {
 
         @Override
         public Company generate(GenerationContext ctx) {
-            List<String> localizedAddressHeads = addressHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredAddressHeaders = addressHeaders.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<Company> goodCompanies = companies.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
             Company company = goodCompanies.get(ctx.getRandom().nextInt(goodCompanies.size()));
             company.setLogo(new Logo(ctx, company.getName()));
-            company.setAddressHeader(localizedAddressHeads.get(ctx.getRandom().nextInt(localizedAddressHeads.size())));
+            company.setAddressHeader(filteredAddressHeaders.get(ctx.getRandom().nextInt(filteredAddressHeaders.size())));
             company.setStamp(new Stamp(ctx, company.getName()));
             company.setIdNumbers(new IDNumbers.Generator().generate(ctx));
             company.setContact(new ContactNumber.Generator().generate(ctx));
