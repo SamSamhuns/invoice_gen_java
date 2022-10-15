@@ -194,7 +194,7 @@ public class IDNumbers {
                 siretValue = cidValue + space + gennic.random();
 
                 int key = (12 + 3 * (siren % 97))% 97; // To calculate key for VAT from SIREN
-                vatValue = "FR"+ space + String.valueOf(key) + space + cidValue; // VAT number
+                vatValue = "FR"+ space + key + space + cidValue; // VAT number
 
                 try {
                     toaValue = getToacode();

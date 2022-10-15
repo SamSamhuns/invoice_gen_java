@@ -144,7 +144,7 @@ public class PayslipGenerationHandler implements JobHandler {
                     GenerationContext ctx = GenerationContext.generate();
                     PayslipModel model = new PayslipModel.Generator().generate(ctx);
                     PayslipGenerator.getInstance().generatePayslip(new com.fairandsmart.generator.documents.layout.payslip.GenericPayslipLayout(), model, pdf, xml, img,xmlEval);
-                    manager.progress(jobId, (long)((i-start)* 100L)/qty);
+                    manager.progress(jobId, ((i-start)* 100L) /qty);
                 }
                 report.append("All payslips generated");
                 LOGGER.log(Level.INFO, "All payslips generated");

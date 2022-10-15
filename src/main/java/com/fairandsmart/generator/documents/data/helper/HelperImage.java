@@ -69,6 +69,23 @@ public class HelperImage extends Helper {
             return canvas.getBufferedImage();
     }
 
+    public void drawPolygon(PDPageContentStream cs, float[] x, float[] y) throws IOException
+    {
+        if (x.length != y.length) {
+            throw new IllegalArgumentException("Error: some points are missing coordinate");
+        }
+        for (int i = 0; i < x.length; i++) {
+            if (i == 0) {
+                cs.moveTo(x[i], y[i]);
+            }
+            else {
+                cs.lineTo(x[i], y[i]);
+            }
+        }
+        cs.closePath();
+        cs.stroke();
+    }
+
     public static BufferedImage getRotatedImage(BufferedImage buffImage, double angle) {
         // Stackoverflow https://stackoverflow.com/a/66189875
         double radian = Math.toRadians(angle);
@@ -92,7 +109,7 @@ public class HelperImage extends Helper {
 
         graphics.translate((nWidth - width) / 2, (nHeight - height) / 2);
         // rotation around the center point
-        graphics.rotate(radian, (double) (width / 2), (double) (height / 2));
+        graphics.rotate(radian, width / 2, height / 2);
         graphics.drawImage(buffImage, 0, 0, null);
         graphics.dispose();
 

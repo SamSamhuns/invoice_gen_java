@@ -104,7 +104,7 @@ public class ProductBox extends ElementBox {
                 break;
             case "UP":  productElement = product.getFormatedPrice();
                 break;
-            case "TXR":  productElement = Float.toString(product.getTaxRate() * 100)+"%";
+            case "TXR":  productElement = product.getTaxRate() * 100 +"%";
                 break;
             case "PTWTX":  productElement = product.getFormatedTotalPrice();
                 break;

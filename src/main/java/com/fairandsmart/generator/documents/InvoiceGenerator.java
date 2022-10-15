@@ -60,6 +60,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -86,7 +87,7 @@ public class InvoiceGenerator {
     public void generateInvoice(InvoiceLayout layout, InvoiceModel model, Path pdf, Path xml, Path img, Path json) throws Exception {
 
         OutputStream xmlos = Files.newOutputStream(xml);
-        XMLStreamWriter xmlOut = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, "utf-8"));
+        XMLStreamWriter xmlOut = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
         xmlOut.writeStartDocument();
         xmlOut.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
         xmlOut.writeAttribute("GEDI_version", "2.4");

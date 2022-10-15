@@ -330,12 +330,12 @@ public class EmployeeInformation {
     }
 
     public String getEmploymentLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Job :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Job :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getQualifLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Qualification :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Qualification :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
@@ -345,12 +345,12 @@ public class EmployeeInformation {
     }
 
     public String getClassificationLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Classification :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Classification :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getCoeffLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Coefficient :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Coefficient :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
@@ -370,12 +370,12 @@ public class EmployeeInformation {
     }
 
     public String getMonthlyRefPayLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Monthly Salary Ref :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Monthly Salary Ref :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getMonthlyPayLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Monthly Salary :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Monthly Salary :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
@@ -390,7 +390,7 @@ public class EmployeeInformation {
     }
 
     public String getContratLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Contract :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Contract :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
@@ -409,7 +409,7 @@ public class EmployeeInformation {
         return labels.get(this.random.nextInt(labels.size()));
     }
     public String getPaymentPeriodLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Period :"));
+        List<String> labels = new ArrayList<String>(Collections.singletonList("Period :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
     public String getPaymentPeriodDatesLabel() {

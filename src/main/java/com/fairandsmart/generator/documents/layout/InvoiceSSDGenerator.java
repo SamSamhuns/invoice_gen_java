@@ -55,6 +55,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -81,7 +82,7 @@ public class InvoiceSSDGenerator {
     public void generateInvoice(InvoiceSSDLayout layout, InvoiceModel model, Path pdf, Path xml, Path img, Path json, Path xmlForEvaluation) throws Exception {
 
         OutputStream xmlos = Files.newOutputStream(xml);
-        XMLStreamWriter xmlout = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, "utf-8"));
+        XMLStreamWriter xmlout = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
         xmlout.writeStartDocument();
         xmlout.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
         xmlout.writeAttribute("GEDI_version", "2.4");
@@ -98,7 +99,7 @@ public class InvoiceSSDGenerator {
 
         ////
         OutputStream xmlosEval = Files.newOutputStream(xmlForEvaluation);
-        XMLStreamWriter xmloutEval = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlosEval, "utf-8"));
+        XMLStreamWriter xmloutEval = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlosEval, StandardCharsets.UTF_8));
         xmloutEval.writeStartDocument();
         xmloutEval.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
         xmloutEval.writeAttribute("GEDI_version", "2.4");
@@ -156,7 +157,6 @@ public class InvoiceSSDGenerator {
         int start = Integer.parseInt(args[1]);
         int stop = Integer.parseInt(args[2]);
         for ( int i=start; i<stop; i++) {
-            //String ts = "" + System.currentTimeMillis();
             Path pdf = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".pdf");
             Path xml = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
             Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".tiff");

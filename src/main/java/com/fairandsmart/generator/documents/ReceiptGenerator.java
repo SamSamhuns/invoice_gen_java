@@ -48,6 +48,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,7 +74,7 @@ public class ReceiptGenerator {
         Boolean modeEval= true;
         if (xmlForEvaluation == null) modeEval = false;
         OutputStream xmlos = Files.newOutputStream(xml);
-        XMLStreamWriter xmlout = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, "utf-8"));
+        XMLStreamWriter xmlout = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
         xmlout.writeStartDocument();
         xmlout.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
         xmlout.writeAttribute("GEDI_version", "2.4");
@@ -93,7 +94,7 @@ public class ReceiptGenerator {
         XMLStreamWriter xmloutEval = null;
         if (modeEval) {
             xmlosEval = Files.newOutputStream(xmlForEvaluation);
-            xmloutEval = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlosEval, "utf-8"));
+            xmloutEval = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlosEval, StandardCharsets.UTF_8));
             xmloutEval.writeStartDocument();
             xmloutEval.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
             xmloutEval.writeAttribute("GEDI_version", "2.4");

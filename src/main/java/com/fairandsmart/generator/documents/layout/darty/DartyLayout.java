@@ -203,13 +203,13 @@ public class DartyLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
 
-            String anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-4,model.getDate().getValueInvoice().length());
+            String anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-4);
             int nouvAnnee;
             String dateGarantie;
 
             if(anneeGarantie.contains("/")){
-                nouvAnnee = Integer.parseInt(anneeGarantie.substring(anneeGarantie.length()-2,anneeGarantie.length()))+2;
-                anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-2,model.getDate().getValueInvoice().length());
+                nouvAnnee = Integer.parseInt(anneeGarantie.substring(anneeGarantie.length()-2))+2;
+                anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-2);
                 dateGarantie = model.getDate().getValueInvoice().replace(anneeGarantie,nouvAnnee+"");
             }
             else {

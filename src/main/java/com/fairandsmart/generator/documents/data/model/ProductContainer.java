@@ -604,7 +604,7 @@ public class ProductContainer {
             if (shippingCostAvailable) {
                 Product shippingProduct = new Product();
                 price = 10 + ctx.getRandom().nextInt(200);
-                taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);;
+                taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);
                 priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
 
                 shippingProduct.setName((ctx.getRandom().nextBoolean()) ? "Shipping": "SHIPPING");

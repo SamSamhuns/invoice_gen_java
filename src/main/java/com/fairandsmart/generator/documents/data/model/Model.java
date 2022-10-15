@@ -104,7 +104,7 @@ public class Model {
     }
 
     public void setConfigMaps(List<Map<String, Object>> configMaps) {
-        this.configMaps = configMaps;
+        Model.configMaps = configMaps;
     }
 
     @Override

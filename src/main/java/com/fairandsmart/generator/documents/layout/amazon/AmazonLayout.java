@@ -220,7 +220,7 @@ public class AmazonLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(pdFontNormal, 8, 0, 0, ""), centerAlignItems);
             productLine.addElement(new SimpleTextBox(pdFontNormal, 8, 0, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(pdFontNormal, 8, 0, 0, ""), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(pdFontNormal, 8, 0, 0, Float.toString(HelperCommon.round(randomProduct.getTaxRate() * 100, 2))+"%", "TXR"), centerAlignItems);
+            productLine.addElement(new SimpleTextBox(pdFontNormal, 8, 0, 0, HelperCommon.round(randomProduct.getTaxRate() * 100, 2)+"%", "TXR"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(pdFontNormal, 8, 0, 0, randomProduct.getFormatedTotalTax() ), centerAlignItems);
 
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
@@ -263,7 +263,7 @@ public class AmazonLayout implements InvoiceLayout {
         totalInvoice1.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, ""), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getProductContainer().getFormatedTotalWithTax(), "TA" ), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, (upperCap ? taxRateHead.toUpperCase(): taxRateHead), "TR"), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, Float.toString(model.getProductContainer().getProducts().get(0).getTaxRate() * 100)+"%", "TXR"), centerAlignItems);
+        totalInvoice1.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getProductContainer().getProducts().get(0).getTaxRate() * 100 +"%", "TXR"), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, model.getProductContainer().getFormatedTotalTax(), "TTX" ), centerAlignItems);
         verticalInvoiceItems.addElement(totalInvoice1);
 

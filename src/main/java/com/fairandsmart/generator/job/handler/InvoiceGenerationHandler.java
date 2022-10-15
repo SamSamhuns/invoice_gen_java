@@ -133,7 +133,7 @@ public class InvoiceGenerationHandler implements JobHandler {
                     GenerationContext ctx = GenerationContext.generate();
                     InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
                     InvoiceGenerator.getInstance().generateInvoice(availableLayouts.get(i % availableLayouts.size()), model, pdf, xml, img, json);
-                    manager.progress(jobId, (long)((i-start)* 100L)/qty);
+                    manager.progress(jobId, ((i-start)* 100L) /qty);
                 }
                 LOGGER.log(Level.INFO, "All invoices generated");
                 report.append("All invoices generated");

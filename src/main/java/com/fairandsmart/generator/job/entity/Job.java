@@ -81,7 +81,7 @@ public class Job extends PanacheEntity implements Delayed {
 
     @Override
     public int compareTo(@Nonnull Delayed obj) {
-        LOGGER.log(Level.FINE, "Comparing to another object: " + obj.toString());
+        LOGGER.log(Level.FINE, "Comparing to another object: " + obj);
         if (!(obj instanceof Job)) {
             throw new IllegalArgumentException("Illegal comparison to non-Job");
         }

@@ -54,14 +54,14 @@ public class SimpleTextBox extends ElementBox {
 
     private Color textColor;
     private Color backgroundColor;
-    private PDFont font;
-    private float fontSize;
-    private BoundingBox box;
+    private final PDFont font;
+    private final float fontSize;
+    private final BoundingBox box;
     private Padding padding;
-    private float lineHeight;
-    private float underline;
-    private float overline;
-    private String text;
+    private final float lineHeight;
+    private final float underline;
+    private final float overline;
+    private final String text;
     private List<String> lines;
     private String entityName;
     private HAlign halign;

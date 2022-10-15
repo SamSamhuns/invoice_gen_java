@@ -47,6 +47,7 @@ import java.awt.Color;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.io.File;
+import java.math.RoundingMode;
 import java.net.URI;
 
 import java.util.stream.Collectors;
@@ -100,7 +101,7 @@ public class HelperCommon extends Helper {
 
     public static float round(float num, int decimalPlace) {
           BigDecimal bd = new BigDecimal(Float.toString(num));
-          bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+          bd = bd.setScale(decimalPlace, RoundingMode.HALF_UP);
           return bd.floatValue();
     }
 
@@ -112,7 +113,7 @@ public class HelperCommon extends Helper {
     public static float rand_uniform(float minA, float maxA, float diff) {
           // get uniform dist from minA to maxA in steps differences
           float steps = 1 / diff;
-          return (float)(rnd.nextInt((int)((maxA - minA) * steps + 1)) + minA * steps) / steps;
+          return (rnd.nextInt((int)((maxA - minA) * steps + 1)) + minA * steps) / steps;
     }
 
     public static String getResourceFullPath(Object classObj, String resourcePath) throws Exception {

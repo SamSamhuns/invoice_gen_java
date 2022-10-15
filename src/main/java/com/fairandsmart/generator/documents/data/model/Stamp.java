@@ -41,6 +41,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class Stamp {
     }
 
     public static List<Stamp> getStampList() {
-        final List<String> stampsFileList = Arrays.asList(
+        final List<String> stampsFileList = Collections.singletonList(
                 "common/stamp/ae_en/metadata.json");
         List<Stamp> stamps = new ArrayList<Stamp>();
         {

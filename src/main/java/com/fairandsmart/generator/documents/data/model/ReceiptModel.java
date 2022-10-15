@@ -145,13 +145,13 @@ public class ReceiptModel extends Model {
                     "THANK YOU","PLEASE COME AGAIN"), "en");
             footnotesLabels.put(Arrays.asList("EXCHANGE ARE ALLOWED WITHIN 7 DAYS WITH RECEIPT.",
                     "STRICTLY NO CASH REFUND."), "en");
-            footnotesLabels.put(Arrays.asList("THANKS YOUR SUPPORT"), "en");
+            footnotesLabels.put(Collections.singletonList("THANKS YOUR SUPPORT"), "en");
             footnotesLabels.put(Arrays.asList("********* THANK YOU **********",
                     "ANY GOODS RETURN PLEASE DO WITHIN 7 DAYS WITH ORIGINAL RECEIPT TQ^^"), "en");
             footnotesLabels.put(Arrays.asList("THANK YOU FOR SHOPPING","GOODS SOLD ARE NOT RETURNABLE."), "en");
             footnotesLabels.put(Arrays.asList("THANK YOU! PLEASE COME AGAIN!","\"GOODS ARE NOT RETURNABLE",
                     "DEALING IN WHOLESALE AND RETAIL"), "en");
-            footnotesLabels.put(Arrays.asList("Merci de votre visite"), "fr");
+            footnotesLabels.put(Collections.singletonList("Merci de votre visite"), "fr");
             footnotesLabels.put(Arrays.asList("TICKET CLIENT","A CONSERVER","MERCI ET A BIENTOT"), "fr");
         }
 

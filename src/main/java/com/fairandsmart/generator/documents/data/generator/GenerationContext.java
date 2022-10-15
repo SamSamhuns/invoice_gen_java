@@ -168,7 +168,7 @@ public class GenerationContext {
     }
 
     public void setConfigMaps(List<Map<String, Object>> configMaps) {
-        this.configMaps = configMaps;
+        GenerationContext.configMaps = configMaps;
     }
 
     @Override
