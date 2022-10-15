@@ -177,53 +177,30 @@ public class HelperCommon extends Helper {
     */
 
     public static PDCustomFonts getRandomPDType1Fonts(PDDocument doc, Object classObj) throws Exception {
-          // IMPORTANT: the normal, bold and italic fonts must match up
-          final List<String> ttfFontNormalList = Arrays.asList(
-                  "Arial.ttf",
-                  "Baskerville.ttf",
-                  "Century Gothic.ttf",
-                  "Futura.ttf",
-                  "Georgia.ttf",
-                  "Optima.ttf",
-                  "Palatino.ttf",
-                  "Univers.ttf",
-                  "Verdana.ttf",
-                  "bookman old style.ttf");
-          final List<String> ttfFontBoldList = Arrays.asList(
-                  "Arial Bold.ttf",
-                  "Baskerville Bold.ttf",
-                  "Century Gothic Bold.ttf",
-                  "Futura Bold.ttf",
-                  "Georgia Bold.ttf",
-                  "Optima Bold.ttf",
-                  "Palatino Bold.ttf",
-                  "UniversBlack.ttf",
-                  "Verdana Bold.ttf",
-                  "bookman old style Bold.ttf");
-          final List<String> ttfFontItalicList = Arrays.asList(
-                  "Arial Italic.ttf",
-                  "Baskerville Italic.ttf",
-                  "Century Gothic Italic.ttf",
-                  "Futura Italic.ttf",
-                  "Georgia Italic.ttf",
-                  "Optima Italic.ttf",
-                  "Palatino Italic.ttf",
-                  "Univers Italic.ttf",
-                  "Verdana Italic.ttf",
-                  "bookman old style Italic.ttf");
+          // IMPORTANT: fonts must be arranged in normal, bold and italic parts
 
-          assert ttfFontNormalList.size() == ttfFontBoldList.size();
-          assert ttfFontNormalList.size() == ttfFontItalicList.size();
+          final List<List<String>> ttfFontNormalBoldItalicList = Arrays.asList(
+                  Arrays.asList("Arial.ttf", "Arial Bold.ttf", "Arial Italic.ttf"),
+                  Arrays.asList("Baskerville.ttf", "Baskerville Bold.ttf", "Baskerville Italic.ttf"),
+                  Arrays.asList("Century Gothic.ttf", "Century Gothic Bold.ttf", "Century Gothic Italic.ttf"),
+                  Arrays.asList("Futura.ttf", "Futura Bold.ttf", "Futura Italic.ttf"),
+                  Arrays.asList("Georgia.ttf", "Georgia Bold.ttf", "Georgia Italic.ttf"),
+                  Arrays.asList("Optima.ttf", "Optima Bold.ttf", "Optima Italic.ttf"),
+                  Arrays.asList("Palatino.ttf", "Palatino Bold.ttf", "Palatino Italic.ttf"),
+                  Arrays.asList("Univers.ttf", "UniversBlack.ttf", "Univers Italic.ttf"),
+                  Arrays.asList("Verdana.ttf", "Verdana Bold.ttf", "Verdana Italic.ttf"),
+                  Arrays.asList("bookman old style.ttf", "bookman old style Bold.ttf", "bookman old style Italic.ttf")
+          );
 
           List<PDFont> pdfontNormalList = new ArrayList<PDFont>();
           List<PDFont> pdfontBoldList = new ArrayList<PDFont>();
           List<PDFont> pdfontItalicList = new ArrayList<PDFont>();
 
           String fontNormalPath; String fontBoldPath; String fontItalicPath;
-          for (int i=0; i<ttfFontNormalList.size(); i++) {
-              fontNormalPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + ttfFontNormalList.get(i));
-              fontBoldPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + ttfFontBoldList.get(i));
-              fontItalicPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + ttfFontItalicList.get(i));
+          for (List<String> fontNBI : ttfFontNormalBoldItalicList) {
+              fontNormalPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(0));
+              fontBoldPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(1));
+              fontItalicPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(2));
 
               pdfontNormalList.add(PDType0Font.load(doc, new File(fontNormalPath)));
               pdfontBoldList.add(PDType0Font.load(doc, new File(fontBoldPath)));

@@ -33,6 +33,7 @@ package com.fairandsmart.generator.documents.layout.naturedecouvertes;
  * #L%
  */
 
+import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
@@ -59,13 +60,13 @@ import java.awt.Color;
 public class NatureDecouvertesLayout implements InvoiceLayout {
 
 
-    @Override
-    public String name() {
+@Override
+public String name() {
         return "Nature&Decouvertes";
-    }
+}
 
-    @Override
-    public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
+@Override
+public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
         writer.writeStartElement("DL_PAGE");
@@ -178,31 +179,41 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         new BorderBox(Color.BLACK,Color.WHITE, 1,165*ratioPage, page.getMediaBox().getHeight()-2462*ratioPage, 2138*ratioPage,1418*ratioPage ).build(contentStream,writer);
         //new BorderBox(Color.BLACK,new Color (200,200,200, 1.0f), 1,165*ratioPage, page.getMediaBox().getHeight()-2596*ratioPage, 1844*ratioPage,1552*ratioPage ).build(contentStream,writer);
         new BorderBox(Color.BLACK,Color.lightGray, 1,165*ratioPage, page.getMediaBox().getHeight()-1158*ratioPage, 2138*ratioPage,118*ratioPage ).build(contentStream,writer);
-        contentStream.drawPolygon(new float[]{165 * ratioPage,2303*ratioPage,2303*ratioPage, 165 * ratioPage},new float[]{page.getMediaBox().getHeight()-2596*ratioPage,page.getMediaBox().getHeight()-2596*ratioPage,page.getMediaBox().getHeight()-1044*ratioPage,page.getMediaBox().getHeight()-1044*ratioPage});
-        contentStream.drawPolygon(new float[]{165 * ratioPage,2009*ratioPage,2009*ratioPage, 165 * ratioPage},new float[]{page.getMediaBox().getHeight()-2596*ratioPage,page.getMediaBox().getHeight()-2596*ratioPage,page.getMediaBox().getHeight()-1044*ratioPage,page.getMediaBox().getHeight()-1044*ratioPage});
-        contentStream.drawLine(406*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 406*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
-        contentStream.drawLine(1342*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1342*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
-        contentStream.drawLine(1576*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1576*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
-        contentStream.drawLine(1467*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1467*ratioPage,page.getMediaBox().getHeight()-2596*ratioPage);
-        contentStream.drawLine(1804*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1804*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
+        HelperImage.drawPolygon(
+                contentStream,
+                new float[] {165*ratioPage,2303*ratioPage,
+                             2303*ratioPage, 165*ratioPage},
+                new float[] {page.getMediaBox().getHeight()-2596*ratioPage,page.getMediaBox().getHeight()-2596*ratioPage,
+                             page.getMediaBox().getHeight()-1044*ratioPage,page.getMediaBox().getHeight()-1044*ratioPage});
+        HelperImage.drawPolygon(
+                contentStream,
+                new float[] {165*ratioPage,2009*ratioPage,
+                             2009*ratioPage, 165*ratioPage},
+                new float[] {page.getMediaBox().getHeight()-2596*ratioPage,page.getMediaBox().getHeight()-2596*ratioPage,
+                             page.getMediaBox().getHeight()-1044*ratioPage,page.getMediaBox().getHeight()-1044*ratioPage});
+        HelperImage.drawLine(contentStream, 406*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 406*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
+        HelperImage.drawLine(contentStream, 1342*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1342*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
+        HelperImage.drawLine(contentStream, 1576*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1576*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
+        HelperImage.drawLine(contentStream, 1467*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1467*ratioPage,page.getMediaBox().getHeight()-2596*ratioPage);
+        HelperImage.drawLine(contentStream, 1804*ratioPage,page.getMediaBox().getHeight()-1042*ratioPage, 1804*ratioPage,page.getMediaBox().getHeight()-2462*ratioPage);
         verticalInvoiceItems.addElement(firstLine);
 
 
         for(int w=0; w< model.getProductContainer().getProducts().size(); w++) {
 
-            Product randomProduct = model.getProductContainer().getProducts().get(w);
+                Product randomProduct = model.getProductContainer().getProducts().get(w);
 
-            TableRowBox productLine = new TableRowBox(configRow, 0, -10);
-            productLine.addElement(new SimpleTextBox(font, 7, 2, 0, randomProduct.getEan(), "SNO"), true);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getTaxRate() * 100 + "%", "TXR"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "PTWTX"), false);
-            float puttc = (float)(int)((randomProduct.getPrice() + randomProduct.getPrice() * randomProduct.getTaxRate())*100)/100;
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, puttc + "", "UP"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax(), "PTTX"), false);
+                TableRowBox productLine = new TableRowBox(configRow, 0, -10);
+                productLine.addElement(new SimpleTextBox(font, 7, 2, 0, randomProduct.getEan(), "SNO"), true);
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getTaxRate() * 100 + "%", "TXR"), false);
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "PTWTX"), false);
+                float puttc = (float)(int)((randomProduct.getPrice() + randomProduct.getPrice() * randomProduct.getTaxRate())*100)/100;
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, puttc + "", "UP"), false);
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax(), "PTTX"), false);
 
-            verticalInvoiceItems.addElement(productLine);
+                verticalInvoiceItems.addElement(productLine);
         }
 
         verticalInvoiceItems.build(contentStream, writer);
@@ -221,7 +232,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         backContainer.build(contentStream,writer);
         String barcode = this.getClass().getClassLoader().getResource("invoices/parts/ldlc/barcode.jpg").getFile();
         PDImageXObject pdBarcode = PDImageXObject.createFromFile(barcode, document);
-        new ImageBox(pdBarcode, 343*ratioPage,page.getMediaBox().getHeight()-2940*ratioPage , pdBarcode.getWidth()*ratioPage, pdBarcode.getHeight()*ratioPage, model.getReference().getValueOrder()).build(contentStream,writer);
+        new ImageBox(pdBarcode, 343*ratioPage,page.getMediaBox().getHeight()-2940*ratioPage, pdBarcode.getWidth()*ratioPage, pdBarcode.getHeight()*ratioPage, model.getReference().getValueOrder()).build(contentStream,writer);
         backContainer = new VerticalContainer(370*ratioPage, page.getMediaBox().getHeight()-3050*ratioPage, 636*ratioPage);
         backContainer.addElement(new SimpleTextBox(font,8,0,0,model.getReference().getValueOrder()));
         backContainer.build(contentStream,writer);
@@ -251,10 +262,6 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         tax.build(contentStream, writer);
 
-
-
         contentStream.close();
-
-
-    }
+      }
 }

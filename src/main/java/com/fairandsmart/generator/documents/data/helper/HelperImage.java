@@ -62,15 +62,21 @@ public class HelperImage extends Helper {
     }
 
     public static BufferedImage generateEAN13BarcodeImage(String barcodeText) throws Exception {
-            // generates a barcode based on the String barcodeText
-            EAN13Bean barcodeGenerator = new EAN13Bean();
-            BitmapCanvasProvider canvas = new BitmapCanvasProvider(160, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-            barcodeGenerator.generateBarcode(canvas, barcodeText);
-            return canvas.getBufferedImage();
+        // generates a barcode based on the String barcodeText
+        EAN13Bean barcodeGenerator = new EAN13Bean();
+        BitmapCanvasProvider canvas = new BitmapCanvasProvider(160, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+        barcodeGenerator.generateBarcode(canvas, barcodeText);
+        return canvas.getBufferedImage();
     }
 
-    public void drawPolygon(PDPageContentStream cs, float[] x, float[] y) throws IOException
-    {
+    public static void drawLine(PDPageContentStream cs, float x1, float y1, float x2, float y2) throws Exception {
+        cs.moveTo(x1, y1);
+        cs.lineTo(x2, y2);
+        cs.closePath();
+        cs.stroke();
+    }
+
+    public static void drawPolygon(PDPageContentStream cs, float[] x, float[] y) throws IOException {
         if (x.length != y.length) {
             throw new IllegalArgumentException("Error: some points are missing coordinate");
         }
@@ -118,20 +124,20 @@ public class HelperImage extends Helper {
 
     public static void addWatermarkImagePDF(final PDDocument doc, final PDPage page, final PDImageXObject imgPDF) throws IOException {
 
-          float oImgW = imgPDF.getWidth();
-          float oImgH = imgPDF.getHeight();
-          float pageW = page.getMediaBox().getWidth();
-          float pageH = page.getMediaBox().getHeight();
-          // rescale img dims to be 1/2.5 of page dim
-          float nImgW = (1f/2.5f) * pageW;
-          float nimgH = (nImgW * oImgH) / oImgW;
-          float xoff = (pageW - nImgW) / 2;
-          float yoff = (pageH - nimgH) / 2;
+        float oImgW = imgPDF.getWidth();
+        float oImgH = imgPDF.getHeight();
+        float pageW = page.getMediaBox().getWidth();
+        float pageH = page.getMediaBox().getHeight();
+        // rescale img dims to be 1/2.5 of page dim
+        float nImgW = (1f/2.5f) * pageW;
+        float nimgH = (nImgW * oImgH) / oImgW;
+        float xoff = (pageW - nImgW) / 2;
+        float yoff = (pageH - nimgH) / 2;
 
-          float minImgAlpha = 0.08f;
-          float maxImgAlpha = 0.18f;
-          double rotAngle = 0;
-          addWatermarkImagePDF(doc, page, imgPDF, xoff, yoff, nImgW, nimgH, minImgAlpha, maxImgAlpha, rotAngle);
+        float minImgAlpha = 0.08f;
+        float maxImgAlpha = 0.18f;
+        double rotAngle = 0;
+        addWatermarkImagePDF(doc, page, imgPDF, xoff, yoff, nImgW, nimgH, minImgAlpha, maxImgAlpha, rotAngle);
     }
 
     public static void addWatermarkImagePDF(
