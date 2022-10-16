@@ -61,7 +61,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.util.Random;
 import java.util.Map;
-
+import java.util.Locale;
 
 @ApplicationScoped
 public class AmazonLayout implements InvoiceLayout {
@@ -99,17 +99,31 @@ public class AmazonLayout implements InvoiceLayout {
         boolean centerAlignItems = rnd.nextBoolean();
 
         float pageWidth = page.getMediaBox().getWidth();
+        float pageHeight = page.getMediaBox().getHeight();
         float leftPageMargin = 25;
+        float rightPageMargin = 40;
 
         /* Build Page components now */
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
         new BorderBox(HelperCommon.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, page.getMediaBox().getHeight()).build(contentStream, writer);
 
+        // load logo img
+        String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + model.getCompany().getLogo().getFullPath());
+        PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
+        float logoWidth; float logoHeight;
+        // gen barcode img
+        BufferedImage barcodeBufImg = HelperImage.generateEAN13BarcodeImage(barCodeNum);
+        PDImageXObject barcodeImg = LosslessFactory.createFromImage(document, barcodeBufImg);
+
         // Barcode top
         if (genProb.get("barcode_top")) {
-            BufferedImage barcodeTopImage = HelperImage.generateEAN13BarcodeImage(barCodeNum);
-            PDImageXObject pdBarcode = LosslessFactory.createFromImage(document, barcodeTopImage);
-            new ImageBox(pdBarcode, pageWidth / 2, 810, pdBarcode.getWidth(), (float)(pdBarcode.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
+            new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
+        }
+        // or Logo top
+        else if (genProb.get("logo_top")) {
+            logoWidth = 100;
+            logoHeight = (logoWidth * logoImg.getHeight()) / logoImg.getWidth();
+            contentStream.drawImage(logoImg, pageWidth-logoWidth-rightPageMargin, pageHeight-logoHeight-rightPageMargin, logoWidth, logoHeight);
         }
 
         // Text top
@@ -148,7 +162,7 @@ public class AmazonLayout implements InvoiceLayout {
         new SimpleTextBox(pdFontNormal, 9, pageWidth/2, 680, invoiceText, "INV").build(contentStream, writer);
 
         contentStream.moveTo(20, 650);
-        contentStream.lineTo(pageWidth-(20*2), 650);
+        contentStream.lineTo(pageWidth-rightPageMargin, 650);
         contentStream.stroke();
 
         // check if billing and shipping addresses should be switched
@@ -214,7 +228,7 @@ public class AmazonLayout implements InvoiceLayout {
         VerticalContainer verticalInvoiceItems = new VerticalContainer(leftPageMargin, 550, 600);
         verticalInvoiceItems.addElement(firstLine);
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-(20*2), 0));
+        verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0));
         // item list
         for(int w=0; w<model.getProductContainer().getProducts().size(); w++) {
 
@@ -237,7 +251,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         verticalInvoiceItems.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, ""));
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-(20*2), 0));
+        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0));
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalInvoiceItems.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, ""));
 
@@ -260,7 +274,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         verticalInvoiceItems.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, ""));
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-(20*2), 0));
+        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0));
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
         TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
@@ -275,12 +289,12 @@ public class AmazonLayout implements InvoiceLayout {
         verticalInvoiceItems.addElement(totalInvoice1);
 
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-(20*2), 0));
+        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0));
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
         // Add registered address information
         if (genProb.get("registered_address_info")) {
-            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-(20*2), 0));
+            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0));
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
             String addressFooterText = String.format("Registered Address for %s, %s, %s, %s, %s, %s",
@@ -294,7 +308,23 @@ public class AmazonLayout implements InvoiceLayout {
             addressFooter.setWidth(500);
             verticalInvoiceItems.addElement(addressFooter);
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-(20*2), 0));
+            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0));
+        }
+        else if (genProb.get("total_in_words") & !genProb.get("registered_address_info")) {
+            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0));
+            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+
+            String totalInWordsText = HelperCommon.spellout_number(
+                    model.getProductContainer().getTotalWithTax(),
+                    new Locale(model.getLocale()));
+            totalInWordsText = "Total in Words: " + totalInWordsText+" "+model.getProductContainer().getCurrency();
+            totalInWordsText = (rnd.nextInt(100) < 50) ? totalInWordsText.toUpperCase() : totalInWordsText;
+
+            SimpleTextBox totalInWordsFooter = new SimpleTextBox(pdFontNormal, 10, 0, 0, totalInWordsText);
+            totalInWordsFooter.setWidth(500);
+            verticalInvoiceItems.addElement(totalInWordsFooter);
+            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0));
         }
         verticalInvoiceItems.build(contentStream, writer);
 
@@ -351,30 +381,30 @@ public class AmazonLayout implements InvoiceLayout {
             contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
         }
 
-        // Add footer line and info
-        new HorizontalLineBox(20, 110, pageWidth-(20*2), 0).build(contentStream, writer);
+        // Add footer line and info if footer_info to be used and number of items less than 5
+        if (genProb.get("footer_info") & model.getProductContainer().getProducts().size() < 5) {
+            new HorizontalLineBox(20, 110, pageWidth-rightPageMargin, 0).build(contentStream, writer);
 
-        VerticalContainer verticalFooterContainer = new VerticalContainer(leftPageMargin, 100, 450);
-        String compEmail = ((model.getCompany().getWebsite() == null) ? "company.domain.com" :  model.getCompany().getWebsite());
-        verticalFooterContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, String.format("To return an item, visit %s/returns", compEmail)));
-        String infoText = (rnd.nextInt(2) == 1) ? "For more information on your orders, visit http://": "For queries on orders, visit http://";
-        verticalFooterContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, infoText));
-        verticalFooterContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, String.format("%s/your-account", compEmail)));
-        verticalFooterContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, barCodeNum));
-        verticalFooterContainer.build(contentStream, writer);
+            VerticalContainer verticalFooterContainer = new VerticalContainer(leftPageMargin, 100, 450);
+            String compEmail = ((model.getCompany().getWebsite() == null) ? "company.domain.com" :  model.getCompany().getWebsite());
+            verticalFooterContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, String.format("To return an item, visit %s/returns", compEmail)));
+            String infoText = (rnd.nextInt(2) == 1) ? "For more information on your orders, visit http://": "For queries on orders, visit http://";
+            verticalFooterContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, infoText));
+            verticalFooterContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, String.format("%s/your-account", compEmail)));
+            verticalFooterContainer.addElement(new SimpleTextBox(pdFontNormal, 9, 0, 0, barCodeNum));
+            verticalFooterContainer.build(contentStream, writer);
+        }
 
-        // Logo Bottom
-        String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + model.getCompany().getLogo().getFullPath());
-        PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
-
-        float ratio = logoImg.getWidth() / logoImg.getHeight();
-        contentStream.drawImage(logoImg, 480, 10, 85, 85 / ((ratio == 0) ? 1 : ratio) - 5);
+        // Logo Bottom if logo is not at top
+        if (!genProb.get("logo_top") | genProb.get("barcode_top")) {
+            logoWidth = 85;
+            logoHeight = (logoWidth * logoImg.getHeight()) / logoImg.getWidth();
+            contentStream.drawImage(logoImg, 480, 10, logoWidth, logoHeight);
+        }
 
         // Barcode bottom
         if (genProb.get("barcode_bottom")) {
-            BufferedImage barcodeFooterImage = HelperImage.generateEAN13BarcodeImage(barCodeNum);
-            PDImageXObject barCodeFooter = LosslessFactory.createFromImage(document, barcodeFooterImage);
-            contentStream.drawImage(barCodeFooter, leftPageMargin, 10, barCodeFooter.getWidth() - 10, barCodeFooter.getHeight() - 70);
+            contentStream.drawImage(barcodeImg, leftPageMargin, 10, barcodeImg.getWidth() - 15, barcodeImg.getHeight() - 72);
         }
 
         // Add company stamp watermark, 40% prob
