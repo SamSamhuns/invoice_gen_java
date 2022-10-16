@@ -131,18 +131,18 @@ public class ContactNumber {
             phoneLabels.put("Téléphone", "fr");
             phoneLabels.put("Numéro de Tel", "fr");
 
-            phoneLabels.put("Phone:", "en");
-            phoneLabels.put("Phone Number:", "en");
-            phoneLabels.put("Tel:", "en");
-            phoneLabels.put("Telephone:", "en");
+            phoneLabels.put("Phone", "en");
+            phoneLabels.put("Phone Number", "en");
+            phoneLabels.put("Tel", "en");
+            phoneLabels.put("Telephone", "en");
         }
         {
-            faxLabels.put("Fax:", "fr");
+            faxLabels.put("Fax", "fr");
             faxLabels.put("Télécopie", "fr");
             faxLabels.put("Numéro de Fax", "fr");
 
-            faxLabels.put("Fax:", "en");
-            faxLabels.put("Fax Number:", "en");
+            faxLabels.put("Fax", "en");
+            faxLabels.put("Fax Number", "en");
         }
 
         @Override
@@ -151,10 +151,8 @@ public class ContactNumber {
             List<String> faxFormat = faxFormats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
             int idx1 = ctx.getRandom().nextInt(phoneFormat.size());
             int idx2 = ctx.getRandom().nextInt(faxFormat.size());
-            Generex generex1 = new Generex(phoneFormat.get(idx1));
-            Generex generex2 = new Generex(faxFormat.get(idx2));
-            String phoneNumber = generex1.random();
-            String faxNumber = generex2.random();
+            String phoneNumber = new Generex(phoneFormat.get(idx1)).random();
+            String faxNumber = new Generex(faxFormat.get(idx2)).random();
 
             List<String> locPLabels = phoneLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> locFLabels = faxLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());

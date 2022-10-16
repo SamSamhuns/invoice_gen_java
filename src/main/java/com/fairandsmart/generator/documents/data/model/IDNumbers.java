@@ -154,7 +154,12 @@ public class IDNumbers {
             vatLabels.put("TIN Number", "en");
         }
         {
+            vatValues.put("[0-9]{15}", "AE_en");
+            vatValues.put("[0-9]{10}", "AE_en");
+            vatValues.put("100[0-9]{13}", "AE_en");
             vatValues.put("UAE[0-9]{14}", "AE_en");
+
+            vatValues.put("[0-9]{10}", "US");
 
             vatValues.put("FR[0-9]{8}", "FR");
 
