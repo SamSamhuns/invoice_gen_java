@@ -20,6 +20,8 @@
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
 
+    <version.commons-lang>2.6</version.commons-lang>
+    <version.icu4j>68.1</version.icu4j>
     <version.barcode4j>2.1</version.barcode4j>
     <version.tika-core>1.18</version.tika-core>
     <version.zt-zip>1.15</version.zt-zip>
@@ -48,6 +50,16 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>${version.commons-lang}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>${version.icu4j}</version>
+    </dependency>
     <dependency>
       <groupId>net.sf.barcode4j</groupId>
       <artifactId>barcode4j</artifactId>
