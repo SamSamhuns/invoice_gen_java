@@ -70,9 +70,14 @@ public class HelperImage extends Helper {
     }
 
     public static void drawLine(PDPageContentStream cs, float x1, float y1, float x2, float y2) throws Exception {
+        drawLine(cs, x1, y1, x2, y2, Color.BLACK);
+    }
+
+    public static void drawLine(PDPageContentStream cs, float x1, float y1, float x2, float y2, Color strokeColor) throws Exception {
         cs.moveTo(x1, y1);
         cs.lineTo(x2, y2);
         cs.closePath();
+        cs.setStrokingColor(strokeColor);
         cs.stroke();
     }
 

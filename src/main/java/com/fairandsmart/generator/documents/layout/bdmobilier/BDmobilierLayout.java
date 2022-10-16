@@ -86,30 +86,32 @@ public class BDmobilierLayout implements InvoiceLayout {
         IDNumbers idNumbers = model.getCompany().getIdNumbers();
         Address address = model.getCompany().getAddress();
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
         // Set fontFaces
         HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDType1Fonts(document, this);
         PDFont pdFontNormal = fontSet.getFontNormal();
         PDFont pdFontBold = fontSet.getFontBold();
         PDFont fontItalic1 = fontSet.getFontItalic();
+        PDFont normalOrBoldFont = (rnd.nextBoolean()) ? pdFontNormal : pdFontBold;
 
-        float leftMarginX = 10;
+        float leftPageMargin = 10;
         float pageWidth = page.getMediaBox().getWidth();
+        float pageHeight = page.getMediaBox().getHeight();
         float middlePageX = pageWidth/2;
-        PDFont normalOrBoldFont = (rnd.nextInt(2) == 1) ? pdFontNormal : pdFontBold;
         Color grayishFontColor = HelperCommon.getRandomColor(3);
+        Color lineStrokeColor = (rnd.nextInt(100) < 95) ? Color.BLACK: Color.BLUE;
 
-        /* Build Page components now */
-
-        // Top left logo
+        // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + model.getCompany().getLogo().getFullPath());
         PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
 
+        /*//////////////////   Build Page components now   //////////////////*/
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        /// Draw top left logo
         int sizeLogo = 100;
-        float ratioLogo = (float)logoImg.getWidth() / (float)logoImg.getHeight();
+        float ratioLogo = logoImg.getWidth() / logoImg.getHeight();
         float posLogoY = page.getMediaBox().getHeight()-sizeLogo/ratioLogo-20;
-        contentStream.drawImage(logoImg, leftMarginX, posLogoY, sizeLogo, sizeLogo/ratioLogo);
+        contentStream.drawImage(logoImg, leftPageMargin, posLogoY, sizeLogo, sizeLogo/ratioLogo);
 
         // check if billing and shipping addresses should be switched
         float leftAddrX = 120 + rnd.nextInt(15);
@@ -156,7 +158,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         headerContainer.build(contentStream,writer);
 
         // Left top info
-        VerticalContainer infoCommande = new VerticalContainer(leftMarginX,page.getMediaBox().getHeight()-211,76);
+        VerticalContainer infoCommande = new VerticalContainer(leftPageMargin,page.getMediaBox().getHeight()-211,76);
         infoCommande.addElement(new SimpleTextBox(normalOrBoldFont,8, 0,0,model.getReference().getLabelOrder()));
         infoCommande.addElement(new SimpleTextBox(pdFontNormal,8,0,0,model.getReference().getValueOrder(),"ONUM"));
         infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
@@ -276,7 +278,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
               float singatureTextxPos;
               if (genProb.get("signature_bottom_left")) {  // bottom left
-                  singatureTextxPos = leftMarginX + 25;
+                  singatureTextxPos = leftPageMargin + 25;
               } else {                                     // bottom right
                   singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
               }
@@ -307,7 +309,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             float xPosStamp; float yPosStamp;
             // draw to lower right if signature if present
             if (genProb.get("signature_bottom") && rnd.nextInt(3) < 2) {
-                xPosStamp = ((genProb.get("signature_bottom_left")) ? leftMarginX + 5 : 405) + rnd.nextInt(10);
+                xPosStamp = ((genProb.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             else {  // draw to lower center

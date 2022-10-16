@@ -3,9 +3,12 @@
     "probability": {
       "barcode_top": 50,
       "logo_top": 50,
+      "vendor_address_phone_fax": 40,
       "payment_terms_top": 50,
       "purchase_order_number_top": 50,
       "switch_bill_ship_addresses": 10,
+      "bill_address_phone_fax": 30,
+      "ship_address_phone_fax": 30,
       "addresses_bordered": 40,
       "registered_address_info": 50,
       "total_in_words": 50,
