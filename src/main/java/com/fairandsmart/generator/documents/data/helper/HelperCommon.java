@@ -38,25 +38,28 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.commons.lang3.text.WordUtils;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
 
-import java.awt.Color;
+import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.text.NumberFormat;
 
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.io.File;
 import java.math.RoundingMode;
+import java.math.BigDecimal;
+import java.awt.Color;
 import java.net.URI;
+import java.io.File;
 
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Locale;
 
 public class HelperCommon extends Helper {
 
@@ -114,6 +117,20 @@ public class HelperCommon extends Helper {
           // get uniform dist from minA to maxA in steps differences
           float steps = 1 / diff;
           return (rnd.nextInt((int)((maxA - minA) * steps + 1)) + minA * steps) / steps;
+    }
+
+    public static String spellout_number(float num, Locale locale) {
+          // conv 128.34 -> one hundred twenty eight point three four, etc.
+          BigDecimal bd = new BigDecimal(Float.toString(num));
+          NumberFormat fmtr = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT);
+          return WordUtils.capitalizeFully(fmtr.format(bd));
+    }
+
+    public static String ordinalize_number(int num, Locale locale) {
+          // conv 1 -> 1st, 2 -> 2nd, etc.
+          BigDecimal bd = new BigDecimal(Integer.toString(num));
+          NumberFormat fmtr = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.ORDINAL);
+          return fmtr.format(bd);
     }
 
     public static String getResourceFullPath(Object classObj, String resourcePath) throws Exception {
