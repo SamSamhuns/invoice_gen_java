@@ -67,10 +67,12 @@ public class InvoiceModel extends Model{
                 "reference=" + reference +
                 ", date=" + getDate() +
                 ", lang=" + getLang() +
+                ", locale=" + getLocale() +
                 ", paymentInfo=" + getPaymentInfo() +
                 ", company=" + getCompany() +
                 ", client=" + getClient() +
                 ", productContainer=" + getProductContainer() +
+                ", configRow=" + getConfigMaps() +
                 '}';
     }
 
@@ -82,6 +84,7 @@ public class InvoiceModel extends Model{
             model.setReference(new InvoiceNumber.Generator().generate(ctx));
             model.setDate(new InvoiceDate.Generator().generate(ctx));
             model.setLang(ctx.getLanguage());
+            model.setLocale(ctx.getLocale());
             model.setCompany(new Company.Generator().generate(ctx));
             model.setPaymentInfo(new PaymentInfo.Generator().generate(ctx));
             model.getPaymentInfo().setValueAccountName(model.getCompany().getName());

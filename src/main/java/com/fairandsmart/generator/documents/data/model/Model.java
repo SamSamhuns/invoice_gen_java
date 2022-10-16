@@ -39,6 +39,7 @@ import java.util.Random;
 
 public class Model {
     private String lang;
+    private String locale;
     private PaymentInfo paymentInfo;
     private Company company;
     private Client client;
@@ -65,6 +66,14 @@ public class Model {
 
     public void setLang(String lang) {
         this.lang = lang;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     public PaymentInfo getPaymentInfo() {
@@ -111,10 +120,12 @@ public class Model {
     public String toString() {
         return "Model{"+
                 ", lang=" + lang +
+                ", locale=" + locale +
                 ", paymentInfo=" + paymentInfo +
                 ", company=" + company +
                 ", client=" + client +
                 ", productContainer=" + productContainer +
+                ", configMaps=" + configMaps +
                 '}';
     }
 }
