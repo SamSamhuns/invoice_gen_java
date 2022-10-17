@@ -3,9 +3,9 @@ package com.fairandsmart.generator.documents.element.container;
 /*-
  * #%L
  * FacoGen / A tool for annotated GEDI based invoice generation.
- * 
+ *
  * Authors:
- * 
+ *
  * Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
  * Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
  * Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
@@ -21,12 +21,12 @@ package com.fairandsmart.generator.documents.element.container;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -49,6 +49,8 @@ public class HorizontalContainer extends ElementBox {
 
     private final List<ElementBox> elements;
     private final BoundingBox box;
+    private float borderThickness;
+    private Color borderColor;
     private Color backgroundColor;
 
     public HorizontalContainer(float posX, float posY) {
@@ -65,6 +67,14 @@ public class HorizontalContainer extends ElementBox {
             this.box.setHeight(element.getBoundingBox().getHeight());
         }
         this.box.setWidth(this.box.getWidth() + element.getBoundingBox().getWidth());
+    }
+
+    public void setBorderThickness(float thick) {
+        this.borderThickness = thick;
+    }
+
+    public void setBorderColor(Color color) {
+        this.borderColor = color;
     }
 
     public void setBackgroundColor(Color color) {
@@ -98,6 +108,13 @@ public class HorizontalContainer extends ElementBox {
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
+        if ( borderColor != null ) {
+            stream.setLineWidth(borderThickness);
+            stream.setStrokingColor(borderColor);
+            borderThickness += 1f;  // add an expansion factor
+            stream.addRect(box.getPosX()-borderThickness, box.getPosY() - box.getHeight() - borderThickness, box.getWidth() + borderThickness*2, box.getHeight() + borderThickness*2);
+            stream.stroke();
+        }
         if ( backgroundColor != null ) {
             stream.setNonStrokingColor(backgroundColor);
             stream.addRect(box.getPosX(), box.getPosY()-box.getHeight(), box.getWidth(), box.getHeight());

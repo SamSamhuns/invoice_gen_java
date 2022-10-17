@@ -50,10 +50,12 @@ public class TableRowBox extends ElementBox {
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
 
     private final float[] config;
-    private Color backgroundColor;
     private final BoundingBox box;
     private final List<ElementBox> elements;
     private final VAlign valign;
+    private float borderThickness;
+    private Color borderColor;
+    private Color backgroundColor;
 
     public TableRowBox(float[] config, float posX, float posY) {
         this(config, posX, posY, VAlign.TOP);
@@ -113,6 +115,14 @@ public class TableRowBox extends ElementBox {
         }
     }
 
+    public void setBorderThickness(float thick) {
+        this.borderThickness = thick;
+    }
+
+    public void setBorderColor(Color color) {
+        this.borderColor = color;
+    }
+
     public void setBackgroundColor(Color color) {
         this.backgroundColor = color;
     }
@@ -142,6 +152,13 @@ public class TableRowBox extends ElementBox {
     }
 
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
+        if ( borderColor != null ) {
+            stream.setLineWidth(borderThickness);
+            stream.setStrokingColor(borderColor);
+            borderThickness += 1f;  // add an expansion factor
+            stream.addRect(box.getPosX()-borderThickness, box.getPosY() - box.getHeight() - borderThickness, box.getWidth() + borderThickness*2, box.getHeight() + borderThickness*2);
+            stream.stroke();
+        }
         if ( backgroundColor != null ) {
             stream.setNonStrokingColor(backgroundColor);
             stream.addRect(box.getPosX(), box.getPosY() - box.getHeight(), box.getWidth(), box.getHeight());
