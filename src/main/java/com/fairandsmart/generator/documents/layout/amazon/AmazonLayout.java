@@ -117,7 +117,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         /*//////////////////   Build Page components now   //////////////////*/
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        new BorderBox(HelperCommon.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, page.getMediaBox().getHeight()).build(contentStream, writer);
+        new BorderBox(HelperCommon.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, pageHeight).build(contentStream, writer);
 
         // Barcode top
         if (genProb.get("barcode_top")) {
