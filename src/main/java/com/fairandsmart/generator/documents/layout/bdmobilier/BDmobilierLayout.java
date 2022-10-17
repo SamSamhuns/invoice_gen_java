@@ -56,6 +56,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
 
 import java.util.Map;
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -97,7 +98,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         float rightPageMargin = 35;
         float pageWidth = page.getMediaBox().getWidth();
         float pageHeight = page.getMediaBox().getHeight();
-        float middlePageX = pageWidth/2;
+        float pageMiddleX = pageWidth/2;
         Color grayishFontColor = HelperCommon.getRandomColor(3);
         Color lineStrokeColor = (rnd.nextInt(100) < 95) ? Color.BLACK: Color.BLUE;
 
@@ -119,6 +120,10 @@ public class BDmobilierLayout implements InvoiceLayout {
         headerContainer.addElement(new SimpleTextBox(fontNB,10,0,0,model.getCompany().getName(),"SN"));
         headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,model.getDate().getValueInvoice(),grayishFontColor,Color.WHITE,"IDATE"));
 
+        // Purchase Order Number
+        if (genProb.get("purchase_order_number_top")) {
+            headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder(), "LO"));
+        }
         HorizontalContainer numFact = new HorizontalContainer(0, 0);
         numFact.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getLabelInvoice()+" ",grayishFontColor,Color.WHITE));
         numFact.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getValueInvoice(),grayishFontColor,Color.WHITE,"IN"));
@@ -134,108 +139,133 @@ public class BDmobilierLayout implements InvoiceLayout {
         if (genProb.get("switch_bill_ship_addresses")) {
             float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
         }
-        float billX = leftAddrX; float billY = pageHeight-121;
-        float shipX = rightAddrX; float shipY = pageHeight-121;
+        float billX = leftAddrX; float billY = pageHeight-110;
+        float shipX = rightAddrX; float shipY = pageHeight-110;
 
         // Billing Address
-        VerticalContainer billingContainer = new VerticalContainer(billX,billY,250);
-        billingContainer.addElement(new SimpleTextBox(fontB,9, 0,0,model.getClient().getBillingHead(),grayishFontColor,Color.WHITE));
-        billingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingName(),"BN"));
-        billingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingAddress().getLine1(),"BA"));
-        billingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingAddress().getZip()+" "+model.getClient().getBillingAddress().getCity(),"BA"));
-        billingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingAddress().getCountry(),"BA"));
-        billingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingContactNumber().getPhoneValue()));
+        VerticalContainer billAddrContainer = new VerticalContainer(billX,billY,250);
+        billAddrContainer.addElement(new SimpleTextBox(fontB,9, 0,0,model.getClient().getBillingHead(),grayishFontColor,Color.WHITE));
+        billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingName(),"BN"));
+        billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingAddress().getLine1(),"BA"));
+        billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingAddress().getZip()+" "+model.getClient().getBillingAddress().getCity(),"BA"));
+        if (genProb.get("bill_address_phone_fax")) {
+            billAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getClient().getBillingContactNumber().getPhoneLabel()+": "+model.getClient().getBillingContactNumber().getPhoneValue(), "BC"));
+            billAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getClient().getBillingContactNumber().getFaxLabel()+": "+model.getClient().getBillingContactNumber().getFaxValue(), "BF"));
+        } else {
+            billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getBillingAddress().getCountry(),"BA"));
+        }
+        if (genProb.get("client_bill_address_tax_number")) {
+            billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getIdNumbers().getVatLabel()+": "+model.getClient().getIdNumbers().getVatValue(),"BA"));
+        }
+        if (genProb.get("addresses_bordered") & model.getClient().getBillingHead().length() > 0) {
+            billAddrContainer.setBorderColor(lineStrokeColor);
+            billAddrContainer.setBorderThickness(0.5f);
+        }
 
-        billingContainer.build(contentStream,writer);
+        billAddrContainer.build(contentStream,writer);
 
         // Shipping Address
-        VerticalContainer shippingContainer = new VerticalContainer(shipX,shipY,250);
-        shippingContainer.addElement(new SimpleTextBox(fontB,9,0,0,model.getClient().getShippingHead(),grayishFontColor,Color.WHITE));
-        shippingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingName(),"SHN"));
-        shippingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingAddress().getLine1(),"SHA"));
-        shippingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingAddress().getZip()+" "+model.getClient().getShippingAddress().getCity(),"SHA"));
-        shippingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingAddress().getCountry(),"SHA"));
-        shippingContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingContactNumber().getPhoneValue()));
+        VerticalContainer shipAddrContainer = new VerticalContainer(shipX,shipY,250);
+        shipAddrContainer.addElement(new SimpleTextBox(fontB,9,0,0,model.getClient().getShippingHead(),grayishFontColor,Color.WHITE));
+        shipAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingName(),"SHN"));
+        shipAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingAddress().getLine1(),"SHA"));
+        shipAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingAddress().getZip()+" "+model.getClient().getShippingAddress().getCity(),"SHA"));
+        if (genProb.get("bill_address_phone_fax") & genProb.get("ship_address_phone_fax")) {
+            String connec = (model.getClient().getShippingContactNumber().getPhoneLabel().length() > 0) ? ": ": "";
+            shipAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getClient().getShippingContactNumber().getPhoneLabel()+connec+model.getClient().getShippingContactNumber().getPhoneValue(), "SHC"));
+            shipAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getClient().getShippingContactNumber().getFaxLabel()+connec+model.getClient().getShippingContactNumber().getFaxValue(), "SHF"));
+        } else {
+            shipAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getShippingAddress().getCountry(),"SHA"));
+        }
+        if (genProb.get("addresses_bordered") & model.getClient().getShippingHead().length() > 0) {
+            shipAddrContainer.setBorderColor(lineStrokeColor);
+            shipAddrContainer.setBorderThickness(0.5f);
+        }
 
-        shippingContainer.build(contentStream,writer);
+        shipAddrContainer.build(contentStream,writer);
 
-        // Left top info
-        VerticalContainer infoCommande = new VerticalContainer(leftPageMargin,pageHeight-211,76);
-        infoCommande.addElement(new SimpleTextBox(fontNB,8, 0,0,model.getReference().getLabelOrder()));
-        infoCommande.addElement(new SimpleTextBox(fontN,8,0,0,model.getReference().getValueOrder(),"ONUM"));
-        infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-        infoCommande.addElement(new SimpleTextBox(fontNB,8,0,0,model.getDate().getLabelOrder()));
-        infoCommande.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getValueOrder(),"IDATE"));
-        infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-        infoCommande.addElement(new SimpleTextBox(fontNB,8,0,0,model.getPaymentInfo().getLabelPaymentType()));
-        infoCommande.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
-        infoCommande.addElement(new SimpleTextBox(fontN,8,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TTX"));
-        infoCommande.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
+        // Left side margin info
+        VerticalContainer infoOrder = new VerticalContainer(leftPageMargin,pageHeight-211,76);
+        infoOrder.addElement(new SimpleTextBox(fontNB,8, 0,0,model.getReference().getLabelOrder()));
+        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getReference().getValueOrder(),"ONUM"));
+        infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
+        infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getDate().getLabelOrder()));
+        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getValueOrder(),"IDATE"));
+        infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
+        infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getPaymentInfo().getLabelPaymentType()));
+        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
+        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TTX"));
+        infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
 
-        infoCommande.build(contentStream,writer);
+        // Payment Terms
+        if (genProb.get("payment_terms_top")) {
+            infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getPaymentInfo().getLabelPaymentTerm(), "PTL"));
+            infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getValuePaymentTerm(), "PTV"));
+            infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
+        }
+        infoOrder.build(contentStream,writer);
+
+        // table text colors
+        Color textColor = genProb.get("table_hdr_black_text") ? Color.BLACK: Color.WHITE; // textColor black (predominantly) or white
+        Color bgColor = (textColor == Color.WHITE) ? Color.BLACK: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, Color.WHITE).get(rnd.nextInt(3)); // bgColor should be contrasting to textColor
 
         // item list head
-        float[] configRow = {209,56,45,90,51};
-        TableRowBox firstLine = new TableRowBox(configRow, 0, 0);
-        firstLine.addElement(new SimpleTextBox(fontB, 9, 0, 0, "Product / Reference",Color.WHITE,Color.BLACK), false);
-        firstLine.addElement(new SimpleTextBox(fontB, 9, 0, 0, "Unit Price",Color.WHITE,Color.BLACK), false);
-        firstLine.addElement(new SimpleTextBox(fontB, 9, 0, 0, "Discount",Color.WHITE,Color.BLACK), false);
-        firstLine.addElement(new SimpleTextBox(fontB, 9, 0, 0, "Quantity",Color.WHITE,Color.BLACK), false);
-        firstLine.addElement(new SimpleTextBox(fontB, 9, 0, 0, "Total",Color.WHITE,Color.BLACK), false);
+        ProductContainer pc = model.getProductContainer();
+        float[] configRow = {209,56,45,70,71};
+        TableRowBox row1 = new TableRowBox(configRow, 0, 0);
 
-        TableRowBox line2 = new TableRowBox(configRow, 0, 0);
-        line2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",Color.WHITE,Color.BLACK), false);
-        line2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",Color.WHITE,Color.BLACK), false);
-        line2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",Color.WHITE,Color.BLACK), false);
-        line2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",Color.WHITE,Color.BLACK), false);
-        line2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",Color.WHITE,Color.BLACK), false);
+        row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getDescHead(),textColor,bgColor), false);
+        row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getUPHead(),textColor,bgColor), false);
+        row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getDiscountHead(),textColor,bgColor), false);
+        row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getQtyHead(),textColor,bgColor), false);
+        row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getLineTotalHead(),textColor,bgColor), false);
+        row1.setBackgroundColor(bgColor);
 
+        TableRowBox row2 = new TableRowBox(configRow, 0, 0);
+        row2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",textColor,bgColor), false);
+        row2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",textColor,bgColor), false);
+        row2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",textColor,bgColor), false);
+        row2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",textColor,bgColor), false);
+        row2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",textColor,bgColor), false);
+        row2.setBackgroundColor(bgColor);
 
         VerticalContainer verticalInvoiceItems = new VerticalContainer(110, pageHeight-209, 500);
-        verticalInvoiceItems.addElement(firstLine);
-        verticalInvoiceItems.addElement(line2);
+        verticalInvoiceItems.addElement(row1);
+        verticalInvoiceItems.addElement(row2);
+        verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
 
+        String quantity;
         String discount = "";
         // item list body
         for(int w=0; w< model.getProductContainer().getProducts().size(); w++) {
-
-            Product randomProduct = model.getProductContainer().getProducts().get(w);
+            Product randomProduct = pc.getProducts().get(w);
+            textColor = Color.BLACK;
+            bgColor = (randomProduct.getName().toLowerCase().equals("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
+            quantity = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Float.toString(randomProduct.getQuantity());
+            discount = (randomProduct.getDiscountRate() == 0.0) ? "--": randomProduct.getFormatedTotalDiscount();
 
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
-            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getName(), "PD"), false);
-            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFormatedPrice(), "UP"), false);
-            discount = (randomProduct.getDiscountRate() == 0.0) ? "--": randomProduct.getFormatedTotalDiscount();
-            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, discount, "undefined"), false);
-            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getQuantity() +"", "QTY"), false);
-            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), false);
+            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getName(),textColor,bgColor,"PD"), false);
+            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFormatedPrice(),textColor,bgColor,"UP"), false);
+            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, discount,textColor,bgColor,"DISC"), false);
+            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getQuantity()+"",textColor,bgColor,"QTY"), false);
+            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFormatedTotalPrice(),textColor,bgColor,"PTWTX"), false);
 
             verticalInvoiceItems.addElement(productLine);
         }
-        // Shipping / Delivery info
-        TableRowBox lineDelivery = new TableRowBox(configRow, 0, 0);
-        String currency = model.getProductContainer().getCurrency();
-        lineDelivery.addElement(new SimpleTextBox(fontN, 9, 2, 0, "Shipping Cost",Color.BLACK,Color.LIGHT_GRAY), false);
-        lineDelivery.addElement(new SimpleTextBox(fontN, 9, 2, 0, "0.00 "+currency,Color.BLACK,Color.LIGHT_GRAY), false);
-        lineDelivery.addElement(new SimpleTextBox(fontN, 9, 2, 0, "--",Color.BLACK,Color.LIGHT_GRAY), false);
-        lineDelivery.addElement(new SimpleTextBox(fontN, 9, 2, 0, "1",Color.BLACK,Color.LIGHT_GRAY), false);
-        lineDelivery.addElement(new SimpleTextBox(fontN, 9, 2, 0, "0.00",Color.BLACK,Color.LIGHT_GRAY), false);
-
-        verticalInvoiceItems.addElement(lineDelivery);
-
         verticalInvoiceItems.build(contentStream,writer);
 
-        ProductContainer pc = model.getProductContainer();
-
         float posYTotal = verticalInvoiceItems.getBoundingBox().getPosY()-verticalInvoiceItems.getBoundingBox().getHeight()-13;
-        new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal,158,13).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal-13,158,13).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal-40,158,40).build(contentStream,writer);
+        // new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal-13,158,13).build(contentStream,writer);
 
         // Totals and Taxes calculations
-        new SimpleTextBox(fontN, 9, 435, posYTotal+11, pc.getTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 430, posYTotal+11, pc.getTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
         new SimpleTextBox(fontN, 9, 508, posYTotal+11, pc.getFormatedTotal(),Color.WHITE,Color.BLACK,"TWTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 435, posYTotal-2, pc.getTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 430, posYTotal-2, pc.getTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
         new SimpleTextBox(fontN, 9, 508, posYTotal-2, pc.getFormatedTotalTax(),Color.WHITE,Color.BLACK,"TTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 435, posYTotal-16, pc.getWithTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 430, posYTotal-16, pc.getWithTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
         new SimpleTextBox(fontN, 9, 508, posYTotal-16, pc.getFormatedTotalWithTax(),Color.WHITE,Color.BLACK,"TA").build(contentStream,writer);
 
         // Footer company info
@@ -262,16 +292,16 @@ public class BDmobilierLayout implements InvoiceLayout {
         infoEntreprise3.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, model.getCompany().getContact().getPhoneLabel()+" : "));
         infoEntreprise3.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, model.getCompany().getContact().getPhoneValue(),"SCN"));
 
-        infoEntreprise.translate(middlePageX-infoEntreprise.getBoundingBox().getWidth()/2,61);
-        infoEntreprise2.translate(middlePageX-infoEntreprise2.getBoundingBox().getWidth()/2,53);
-        infoEntreprise3.translate(middlePageX-infoEntreprise3.getBoundingBox().getWidth()/2,45);
+        infoEntreprise.translate(pageMiddleX-infoEntreprise.getBoundingBox().getWidth()/2,61);
+        infoEntreprise2.translate(pageMiddleX-infoEntreprise2.getBoundingBox().getWidth()/2,53);
+        infoEntreprise3.translate(pageMiddleX-infoEntreprise3.getBoundingBox().getWidth()/2,45);
 
         infoEntreprise.build(contentStream,writer);
         infoEntreprise2.build(contentStream,writer);
         infoEntreprise3.build(contentStream,writer);
 
-        // Add Signature if it is not null
-        if (model.getCompany().getSignature().getName() != null) {
+        // Add Signature at bottom
+        if (genProb.get("signature_bottom")) {
               String compSignatureName = model.getCompany().getName();
               compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
               SimpleTextBox singatureTextBox = new SimpleTextBox(
@@ -325,6 +355,7 @@ public class BDmobilierLayout implements InvoiceLayout {
                 // For Rectangular stamps, set rotation angle to 0 and
                 // resize stamp maintaining aspect ratio
                 rotAngle = 0;
+                stampWidth += rnd.nextInt(20);
                 stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
             }
             else if (genProb.get("stamp_bottom_elongated")) {
@@ -342,7 +373,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or the Company's stamp in order to be considered valid";
             SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontN, footerFontSize-1, 0, 80, noStampSignMsg, "Footnote");
             // align the text to the center
-            noStampSignMsgBox.getBoundingBox().setPosX(middlePageX - noStampSignMsgBox.getBoundingBox().getWidth()/2);
+            noStampSignMsgBox.getBoundingBox().setPosX(pageMiddleX - noStampSignMsgBox.getBoundingBox().getWidth()/2);
             noStampSignMsgBox.build(contentStream, writer);
         }
 
@@ -357,5 +388,6 @@ public class BDmobilierLayout implements InvoiceLayout {
         }
 
         contentStream.close();
+        writer.writeEndElement();
     }
 }
