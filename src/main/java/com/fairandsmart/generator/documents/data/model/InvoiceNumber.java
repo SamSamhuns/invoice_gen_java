@@ -188,9 +188,9 @@ public class InvoiceNumber {
             labelsOrder.put("Order No.", "en");
             labelsOrder.put("Order ID", "en");
             labelsOrder.put("Order Reference", "en");
-            labelsOrder.put("Purchase Order Num", "en");
-            labelsOrder.put("PO Num", "en");
-            labelsOrder.put("LPO Num", "en");
+            labelsOrder.put("Purchase Order No", "en");
+            labelsOrder.put("PO No", "en");
+            labelsOrder.put("LPO No", "en");
             labelsOrder.put("L.P.O.", "en");
 
             labelsOrder.put("Numéro de commande", "fr");

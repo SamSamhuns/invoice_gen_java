@@ -127,14 +127,15 @@ public class ContactNumber {
             faxFormats.put("[0-9]{5} [0-9]{4}", "AE_en");
         }
         {
-            phoneLabels.put("Tel:", "fr");
+            phoneLabels.put("Tel", "fr");
             phoneLabels.put("Téléphone", "fr");
             phoneLabels.put("Numéro de Tel", "fr");
 
-            phoneLabels.put("Phone", "en");
-            phoneLabels.put("Phone Number", "en");
             phoneLabels.put("Tel", "en");
+            phoneLabels.put("Phone", "en");
             phoneLabels.put("Telephone", "en");
+            phoneLabels.put("Phone No", "en");
+            phoneLabels.put("Phone Number", "en");
         }
         {
             faxLabels.put("Fax", "fr");
@@ -142,6 +143,7 @@ public class ContactNumber {
             faxLabels.put("Numéro de Fax", "fr");
 
             faxLabels.put("Fax", "en");
+            faxLabels.put("Fax No", "en");
             faxLabels.put("Fax Number", "en");
         }
 

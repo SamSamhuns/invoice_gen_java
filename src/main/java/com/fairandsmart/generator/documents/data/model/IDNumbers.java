@@ -148,8 +148,8 @@ public class IDNumbers {
             vatLabels.put("N° TVA", "fr");
 
             vatLabels.put("TRN No", "en");
+            vatLabels.put("VAT No", "en");
             vatLabels.put("VAT Number", "en");
-            vatLabels.put("VAT", "en");
             vatLabels.put("Tax Number", "en");
             vatLabels.put("TIN Number", "en");
         }
@@ -230,7 +230,7 @@ public class IDNumbers {
             String toaLabel = generex5.random();
 
 
-            return new IDNumbers(vatValue, vatLabel, cidValue, cidLabel, siretValue, siretLabel,toaValue,toaLabel);
+            return new IDNumbers(vatValue,vatLabel,cidValue,cidLabel,siretValue,siretLabel,toaValue,toaLabel);
         }
 
         private String getToacode() throws IOException {

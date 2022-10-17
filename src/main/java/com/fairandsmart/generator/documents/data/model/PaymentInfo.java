@@ -362,7 +362,7 @@ public class PaymentInfo {
 
             labelsAccountNumber.put("Account Num", "en");
             labelsAccountNumber.put("A/C Num", "en");
-            labelsAccountNumber.put("A/C NO", "en");
+            labelsAccountNumber.put("A/C No", "en");
         }
         {
             valuesAccountNumber.put("[0-9]{13}", "FR");
@@ -381,12 +381,12 @@ public class PaymentInfo {
         // valueBranchName is loaded from bank csv dataset
         {
             labelsIBANNumber.put("IBAN", "fr");
+            labelsIBANNumber.put("IBAN No", "fr");
             labelsIBANNumber.put("IBAN Num", "fr");
-            labelsIBANNumber.put("IBAN NO", "fr");
 
             labelsIBANNumber.put("IBAN", "en");
+            labelsIBANNumber.put("IBAN No", "en");
             labelsIBANNumber.put("IBAN Num", "en");
-            labelsIBANNumber.put("IBAN NO", "en");
         }
         {
             valuesIBANNumber.put("FR[0-9]{8}", "FR");

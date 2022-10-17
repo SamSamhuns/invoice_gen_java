@@ -360,6 +360,8 @@ public class ProductContainer {
             descHeads.put("Goods", "en");
             descHeads.put("Services", "en");
             descHeads.put("Description", "en");
+            descHeads.put("Product / Ref", "en");
+            descHeads.put("Product Desc", "en");
             descHeads.put("Product Description", "en");
             descHeads.put("Description of Goods", "en");
         }
@@ -417,6 +419,7 @@ public class ProductContainer {
 
             taxRateHeads.put("Tax %", "en");
             taxRateHeads.put("Vat %", "en");
+            taxRateHeads.put("@Vat", "en");
             taxRateHeads.put("Vat Rate", "en");
         }
         {
@@ -563,7 +566,7 @@ public class ProductContainer {
                     localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))
                     );
 
-            Boolean discountAvailable = ctx.getRandom().nextInt(100) < 10;
+            Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10;
             productContainer.setDiscountAvailable(discountAvailable);
 
             float price = 0;
