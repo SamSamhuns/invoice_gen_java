@@ -48,6 +48,8 @@ public class Client {
 
     private static final Logger LOGGER = Logger.getLogger(Client.class.getName());
 
+    private IDNumbers idNumbers;
+
     private String billingHead;
     private String billingName;
     private Address billingAddress;
@@ -68,6 +70,15 @@ public class Client {
         this.shippingName = shippingName;
         this.shippingAddress = shippingAddress;
         this.shippingContactNumber = shippingContactNumber;
+        // Note idNumbers must be assigned later
+    }
+
+    public IDNumbers getIdNumbers() {
+        return idNumbers;
+    }
+
+    public void setIdNumbers(IDNumbers idNumbers) {
+        this.idNumbers = idNumbers;
     }
 
     public String getBillingHead() {
@@ -137,6 +148,7 @@ public class Client {
     @Override
     public String toString() {
         return "Client{" +
+                "idNumbers='" + idNumbers + '\'' +
                 "billingHead='" + billingHead + '\'' +
                 ", billingName=" + billingName +
                 ", billingAddress=" + billingAddress +
@@ -165,9 +177,9 @@ public class Client {
             billingHeads.put("Billed To", "en");
             billingHeads.put("Billing Address", "en");
             billingHeads.put("Sold To", "en");
-
+            billingHeads.put("Buyer", "en");
+            billingHeads.put("Purchaser", "en");
         }
-
         {
             shippingHeads.put("Livraison à", "fr");
             shippingHeads.put("Adresse Livraison", "fr");
@@ -180,6 +192,8 @@ public class Client {
             shippingHeads.put("Shipped To", "en");
             shippingHeads.put("Shipping Address", "en");
             shippingHeads.put("Send To", "en");
+            shippingHeads.put("Shipping Receiver", "en");
+            shippingHeads.put("Delivery Receiver", "en");
         }
         {
           // billingHeads and shippingHeads must have the same number of corresponding values
@@ -228,6 +242,9 @@ public class Client {
                 genClient.setShippingAddress(new Address("", "", "", "", "", ""));
                 genClient.setShippingContactNumber(new ContactNumber("", "", "", ""));
             }
+            // assign idNumbers, ie. vatLabel and vatValue
+            genClient.setIdNumbers(new IDNumbers.Generator().generate(ctx));
+
             return genClient;
         }
     }
