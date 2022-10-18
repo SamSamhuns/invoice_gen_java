@@ -401,7 +401,7 @@ public class ProductContainer {
             snHeads.put("SN.", "en");
             snHeads.put("S.No.", "en");
             snHeads.put("SI No.", "en");
-            snHeads.put("Serial Number", "en");
+            snHeads.put("Serial No.", "en");
         }
         // tax heads //
         {
@@ -451,6 +451,8 @@ public class ProductContainer {
 
             discountTotalHeads.put("Discount Amount", "en");
             discountTotalHeads.put("Total Discount", "en");
+            discountTotalHeads.put("Gross Discount", "en");
+            discountTotalHeads.put("Final Discount", "en");
         }
         // total, total+tax, total+discount, total+tax+discount heads //
         {
@@ -461,6 +463,8 @@ public class ProductContainer {
             totalHeads.put("Total", "en");
             totalHeads.put("Gross", "en");
             totalHeads.put("Total Gross Amt", "en");
+            totalHeads.put("Total w/o Tax", "en");
+            totalHeads.put("Total w.o. Tax", "en");
             totalHeads.put("Total without Tax", "en");
             totalHeads.put("Total (Excl.Tax)", "en");
             totalHeads.put("Total (Excl.VAT)", "en");
@@ -469,13 +473,16 @@ public class ProductContainer {
             withTaxTotalHeads.put("Montant TTC", "fr");
 
             withTaxTotalHeads.put("Total Amount with Tax", "en");
+            withTaxTotalHeads.put("Total Amount w/ Tax", "en");
             withTaxTotalHeads.put("Amount with Tax", "en");
             withTaxTotalHeads.put("Total with Tax", "en");
+            withTaxTotalHeads.put("Total w/ Tax", "en");
+            withTaxTotalHeads.put("Amount w/ Tax", "en");
         }
         {
             withDiscountTotalHeads.put("Montant avec remise", "fr");
 
-            withDiscountTotalHeads.put("Total Amount with Discount", "en");
+            withDiscountTotalHeads.put("Total Amount w/ Discount", "en");
             withDiscountTotalHeads.put("Amount with Discount", "en");
             withDiscountTotalHeads.put("Total with Discount", "en");
         }
