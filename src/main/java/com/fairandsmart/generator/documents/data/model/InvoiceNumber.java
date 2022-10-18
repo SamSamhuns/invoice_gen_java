@@ -37,7 +37,10 @@ import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.mifmif.common.regex.Generex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class InvoiceNumber {

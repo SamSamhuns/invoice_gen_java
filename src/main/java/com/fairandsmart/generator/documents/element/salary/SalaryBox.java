@@ -50,8 +50,11 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 import java.text.DecimalFormat;
 

@@ -57,8 +57,10 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import javax.enterprise.context.ApplicationScoped;
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.*;
+import java.util.Random;
 
 @ApplicationScoped
 public class GenericReceiptLayout implements SSDLayout {
