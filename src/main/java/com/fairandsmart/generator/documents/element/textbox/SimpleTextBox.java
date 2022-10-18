@@ -40,6 +40,7 @@ import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.davidmoten.text.utils.WordWrap;
 
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
@@ -62,7 +63,7 @@ public class SimpleTextBox extends ElementBox {
     private final float underline;
     private final float overline;
     private final String text;
-    private List<String> lines;
+    private List<String> textLines;
     private String entityName;
     private HAlign halign;
 
@@ -96,8 +97,8 @@ public class SimpleTextBox extends ElementBox {
         this.text = VerifCharEncoding.remove(text);
         //this.text = text.replace("\n", "").replace("\r", "");
         this.entityName = entityName;
-        this.lines = new ArrayList<>();
-        this.lines.add(this.text);
+        this.textLines = new ArrayList<>();
+        this.textLines.add(this.text);
         this.underline = font.getFontDescriptor().getFontBoundingBox().getLowerLeftY() / 1000 * fontSize;
         this.overline = font.getFontDescriptor().getFontBoundingBox().getUpperRightY() / 1000 * fontSize;
         this.lineHeight = overline - underline;
@@ -115,7 +116,6 @@ public class SimpleTextBox extends ElementBox {
         this.entityName = entityName;
     }
 
-
     @Override
     public BoundingBox getBoundingBox() {
         return box;
@@ -124,26 +124,21 @@ public class SimpleTextBox extends ElementBox {
     @Override
     public void setWidth(float width) throws IOException {
         //TODO we need to count the number of spaces between word to include the good posX in the offset
-        //TODO Maybe throw en exception when a single word is longer that the maxwidth (unseccable) or cut the word
         float contentWidth = width - this.padding.getHorizontalPadding();
         /*if ( contentWidth <= 0 ) {
             throw new IOException("unable to fit content in the desired width");
         }*/
-        String[] words = text.split(" ");
-        this.lines = new ArrayList<>();
-        String currentLine = "";
-        for ( String word : words ) {
-            float lineWidth = (this.fontSize * this.font.getStringWidth(currentLine + (currentLine.isEmpty()?"":" ") + word) / 1000);
-            //If line is empty, word is too long to fit in the width, we put it anyway and it will be outside of the box...
-            if ( !currentLine.isEmpty() && lineWidth > contentWidth ) {
-                this.lines.add(currentLine);
-                currentLine = word;
-            } else {
-                currentLine += (currentLine.isEmpty() ? "" : " ") + word;
-            }
+        String dummyString = "x".repeat(10);
+        float dummyStringWidth = (this.fontSize * this.font.getStringWidth(dummyString) / 1000);
+        // max length of chars that fit within contentWidth
+        int maxContentLength = (int)(dummyString.length() / (dummyStringWidth/contentWidth)) - 1;
+        String wrappedText = WordWrap.from(text).maxWidth(maxContentLength).insertHyphens(true).breakWords(true).wrap();
+
+        this.textLines = new ArrayList<>();
+        for ( String word : wrappedText.split("\n") ) {
+              this.textLines.add(word);
         }
-        this.lines.add(currentLine);
-        this.box.setHeight((this.lines.size() * lineHeight) + padding.getVerticalPadding());
+        this.box.setHeight((this.textLines.size() * lineHeight) + padding.getVerticalPadding());
         this.box.setWidth(width + padding.getHorizontalPadding());
     }
 
@@ -187,8 +182,8 @@ public class SimpleTextBox extends ElementBox {
         stream.setFont(font, fontSize);
         float lineOffsetX = 0;
         stream.newLineAtOffset(box.getPosX(), box.getPosY() - underline - padding.getTop());
-        for (int i=0; i<this.lines.size(); i++) {
-            float lineWidth = this.fontSize * this.font.getStringWidth(this.lines.get(i)) / 1000;
+        for (int i=0; i<this.textLines.size(); i++) {
+            float lineWidth = this.fontSize * this.font.getStringWidth(this.textLines.get(i)) / 1000;
             switch ( halign ) {
                 case LEFT :
                     lineOffsetX = padding.getLeft(); break;
@@ -198,15 +193,15 @@ public class SimpleTextBox extends ElementBox {
                     lineOffsetX = padding.getLeft() + ((box.getWidth() - lineWidth - padding.getHorizontalPadding()) / 2); break;
             }
             stream.newLineAtOffset(lineOffsetX, 0-lineHeight);
-            stream.showText(this.lines.get(i));
+            stream.showText(this.textLines.get(i));
             stream.newLineAtOffset(0-lineOffsetX, 0);
         }
         stream.endText();
 
         lineOffsetX = 0;
         float offsetY = 0 - padding.getTop() - lineHeight;
-        for (int i=0; i<this.lines.size(); i++) {
-            float lineWidth = this.fontSize * this.font.getStringWidth(this.lines.get(i)) / 1000;
+        for (int i=0; i<this.textLines.size(); i++) {
+            float lineWidth = this.fontSize * this.font.getStringWidth(this.textLines.get(i)) / 1000;
             switch ( halign ) {
                 case LEFT :
                     lineOffsetX = padding.getLeft(); break;
@@ -217,8 +212,8 @@ public class SimpleTextBox extends ElementBox {
             }
 
             float wordOffsetX = lineOffsetX;
-            if ( lines.get(i).length() > 0 ) {
-                String[] words = lines.get(i).split(" ");
+            if ( textLines.get(i).length() > 0 ) {
+                String[] words = textLines.get(i).split(" ");
                 List<String> wordIds = new ArrayList<>();
                 for (String word : words) {
                     //TODO we need to count the number of spaces between word to include the good posX in the offset
@@ -228,9 +223,9 @@ public class SimpleTextBox extends ElementBox {
                     wordOffsetX = wordOffsetX + wordWidth + (fontSize * font.getSpaceWidth() / 1000);
                 }
                // if ( entityName != null && entityName.length() > 0 ) {
-               //     lineWidth = fontSize * font.getStringWidth(lines.get(i)) / 1000;
+               //     lineWidth = fontSize * font.getStringWidth(textLines.get(i)) / 1000;
                //     BoundingBox entityBox = new BoundingBox(box.getPosX() + lineOffsetX, box.getPosY() + offsetY, lineWidth, lineHeight);
-               //     writeXMLZone(writer, entityName, this.lines.get(i), entityBox, wordIds);
+               //     writeXMLZone(writer, entityName, this.textLines.get(i), entityBox, wordIds);
                // }
             }
             offsetY = offsetY - lineHeight;

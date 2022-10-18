@@ -20,6 +20,7 @@
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
 
+    <version.word-wrap>0.1.11</version.word-wrap>
     <version.commons-lang>2.6</version.commons-lang>
     <version.icu4j>68.1</version.icu4j>
     <version.barcode4j>2.1</version.barcode4j>
@@ -50,6 +51,11 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>com.github.davidmoten</groupId>
+      <artifactId>word-wrap</artifactId>
+      <version>${version.word-wrap}</version>
+    </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>

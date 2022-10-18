@@ -49,9 +49,9 @@ public class TableRowBox extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
 
+    private final List<ElementBox> elements;
     private final float[] config;
     private final BoundingBox box;
-    private final List<ElementBox> elements;
     private final VAlign valign;
     private float borderThickness;
     private Color borderColor;
@@ -81,7 +81,7 @@ public class TableRowBox extends ElementBox {
 
         //TODO : Add Center Right & Left Horizontal alignment
 
-        if(!(element.getBoundingBox().getPosY()==0 && element.getBoundingBox().getPosX()!=0))
+        if( !( element.getBoundingBox().getPosY()==0 && element.getBoundingBox().getPosX()!=0 ))
         {   // Translate only if x is not 0 and y is 0 which is in case of image center alignment
             element.getBoundingBox().setPosX(0);
             element.getBoundingBox().setPosY(0);
@@ -89,7 +89,7 @@ public class TableRowBox extends ElementBox {
 
         element.translate(box.getPosX() + this.getColumnOffsetX(elements.size()-1), box.getPosY() );
 
-        if(center_align && elements.size()>1) {
+        if ( center_align && elements.size()>1 ) {
             element.translate(element.getBoundingBox().getWidth()/3 , box.getPosY() );
         }
         if ( element.getBoundingBox().getHeight() > box.getHeight() ) {

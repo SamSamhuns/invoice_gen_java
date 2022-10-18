@@ -33,13 +33,15 @@ package com.fairandsmart.generator.documents.element;
  * #L%
  */
 
+import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.InvoiceGenerator;
-import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.element.container.VerticalContainer;
+import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
+import com.fairandsmart.generator.documents.element.HAlign;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -78,53 +80,46 @@ public class TestTableRowBox implements InvoiceLayout {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-        int currentPosY = 750;
-
+        int startPosX = 25;
+        int endPosX = 400;
+        int startPosY = 750;
         PDFont font = PDType1Font.HELVETICA_BOLD;
 
-        contentStream.moveTo( 20, 750);
-        contentStream.lineTo( 400, 750);
-        contentStream.stroke();
+        HelperImage.drawLine(contentStream, startPosX, startPosY, endPosX, startPosY, Color.RED);
 
-        //System.out.println("posY: " + currentPosY);
+        VerticalContainer container = new VerticalContainer(startPosX, startPosY, 0);
 
-        VerticalContainer container = new VerticalContainer(25, currentPosY, 0);
+        float[] config = new float[] {50, 50, 150, 50};
+        TableRowBox row1 = new TableRowBox(config, 0, 0);
+        row1.addElement(new SimpleTextBox(font, 12, 0, 0, "COL11"), false);
+        row1.addElement(new SimpleTextBox(font, 12, 0, 0, "COL12"), false);
+        row1.addElement(new SimpleTextBox(font, 12, 0, 0, "COL13"), false);
+        row1.addElement(new SimpleTextBox(font, 12, 0, 0, "COL14"), false);
+        row1.setBackgroundColor(Color.GRAY);
+        container.addElement(row1);
 
-        float[] config = new float[] {50, 150, 50, 50};
-        TableRowBox box1 = new TableRowBox(config, 0, 0);
-        SimpleTextBox stb1 = new SimpleTextBox(font, 12, 0, 0, "COL11");
-        box1.addElement(stb1, false);
-        SimpleTextBox stb2 = new SimpleTextBox(font, 12, 0, 0, "COL12");
-        box1.addElement(stb2, false);
-        SimpleTextBox stb3 = new SimpleTextBox(font, 12, 0, 0, "COL13");
-        box1.addElement(stb3, false);
-        SimpleTextBox stb4 = new SimpleTextBox(font, 12, 0, 0, "COL14");
-        box1.addElement(stb4, false);
-        box1.setBackgroundColor(Color.GRAY);
-        container.addElement(box1);
+        TableRowBox row2 = new TableRowBox(config, 0,0);
+        row2.addElement(new SimpleTextBox(font, 12, 0, 0, "COL21"), false);
+        row2.addElement(new SimpleTextBox(font, 12, 0, 0, "COL22"), false);
+        row2.addElement(new SimpleTextBox(font, 12, 0, 0, "Center Aligned COL23", Color.BLACK, Color.WHITE, HAlign.CENTER), false);
+        row2.addElement(new SimpleTextBox(font, 12, 0, 0, "COL24"), false);
+        container.addElement(row2);
 
-        TableRowBox box2 = new TableRowBox(config, 0,0);
-        SimpleTextBox stb21 = new SimpleTextBox(font, 12, 0, 0, "COL21");
-        box2.addElement(stb21, false);
-        SimpleTextBox stb22 = new SimpleTextBox(font, 12, 0, 0, "COL22");
-        box2.addElement(stb22, false);
-        SimpleTextBox stb23 = new SimpleTextBox(font, 12, 0, 0, "COL23");
-        box2.addElement(stb23, false);
-        SimpleTextBox stb24 = new SimpleTextBox(font, 12, 0, 0, "COL24");
-        box2.addElement(stb24, false);
-        container.addElement(box2);
+        TableRowBox row3 = new TableRowBox(config, 0,0, VAlign.BOTTOM);
+        row3.addElement(new SimpleTextBox(font, 12, 0, 0, "This BottomAligned col is going to be more than one line"), true);
+        row3.addElement(new SimpleTextBox(font, 12, 0, 0, "This is a filler column text that is going to be more than one line"), false);
+        row3.addElement(new SimpleTextBox(font, 12, 0, 0, "COL33"), false);
+        row3.addElement(new SimpleTextBox(font, 12, 0, 0, "COL34"), false);
+        row3.setBackgroundColor(Color.LIGHT_GRAY);
+        container.addElement(row3);
 
-        TableRowBox box3 = new TableRowBox(config, 0,0, VAlign.BOTTOM);
-        SimpleTextBox stb31 = new SimpleTextBox(font, 12, 0, 0, "This col is going to be more thant one line");
-        box3.addElement(stb31, false);
-        SimpleTextBox stb32 = new SimpleTextBox(font, 12, 0, 0, "COL32");
-        box3.addElement(stb32, false);
-        SimpleTextBox stb33 = new SimpleTextBox(font, 12, 0, 0, "COL33");
-        box3.addElement(stb33, false);
-        SimpleTextBox stb34 = new SimpleTextBox(font, 12, 0, 0, "COL34");
-        box3.addElement(stb34, false);
-        box3.setBackgroundColor(Color.LIGHT_GRAY);
-        container.addElement(box3);
+        TableRowBox row4 = new TableRowBox(config, 0,0);
+        row4.addElement(new SimpleTextBox(font, 12, 0, 0, "COL41", Color.WHITE, Color.DARK_GRAY), false);
+        row4.addElement(new SimpleTextBox(font, 12, 0, 0, "COL42", Color.WHITE, Color.DARK_GRAY), false);
+        row4.addElement(new SimpleTextBox(font, 12, 0, 0, "This topAligned col is going to be more than one line", Color.WHITE, Color.DARK_GRAY), false);
+        row4.addElement(new SimpleTextBox(font, 12, 0, 0, "COL44", Color.WHITE, Color.DARK_GRAY), false);
+        row4.setBackgroundColor(Color.DARK_GRAY);
+        container.addElement(row4);
 
         container.build(contentStream, writer);
         contentStream.close();
