@@ -44,8 +44,13 @@ import com.google.gson.reflect.TypeToken;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.*;
 import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 public class ProductContainer {
@@ -70,8 +75,10 @@ public class ProductContainer {
     // tax & discount rate & total heads
     private final String taxHead;
     private final String taxRateHead;
+    private final String taxRateTotalHead;
     private final String taxTotalHead;
     private final String discountHead;
+    private final String discountRateTotalHead;
     private final String discountRateHead;
     private final String discountTotalHead;
     // totals with tax, discount and both
@@ -82,8 +89,8 @@ public class ProductContainer {
 
 
     public ProductContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String lineTotalHead, String snHead,
-                            String taxHead, String taxRateHead, String taxTotalHead,
-                            String discountHead, String discountRateHead, String discountTotalHead,
+                            String taxHead, String taxRateHead, String taxRateTotalHead, String taxTotalHead,
+                            String discountHead, String discountRateHead, String discountRateTotalHead, String discountTotalHead,
                             String totalHead, String withTaxTotalHead, String withDiscountTotalHead, String withTaxAndDiscountTotalHead) {
         this.setCurrency(currency);
         this.descHead = descHead;
@@ -94,10 +101,12 @@ public class ProductContainer {
 
         this.taxHead = taxHead;
         this.taxRateHead = taxRateHead;
+        this.taxRateTotalHead = taxRateTotalHead;
         this.taxTotalHead = taxTotalHead;
 
         this.discountHead = discountHead;
         this.discountRateHead = discountRateHead;
+        this.discountRateTotalHead = discountRateTotalHead;
         this.discountTotalHead = discountTotalHead;
 
         this.totalHead = totalHead;
@@ -232,6 +241,14 @@ public class ProductContainer {
         return String.format("%.2f", this.getTotalTax()) + " " + currency;
     }
 
+    public float getTotalTaxRate() {
+        return this.getTotalTax() / total;
+    }
+
+    public String getFormatedTotalTaxRate() {
+        return String.format("%.2f", this.getTotalTaxRate() * 100) + "%";
+    }
+
     // discount calc from existing values
 
     public float getTotalDiscount() {
@@ -242,6 +259,14 @@ public class ProductContainer {
         return String.format("%.2f", this.getTotalDiscount()) + " " + currency;
     }
 
+    public float getTotalDiscountRate() {
+        return this.getTotalDiscount() / total;
+    }
+
+    public String getFormatedTotalDiscountRate() {
+        return String.format("%.2f", this.getTotalDiscountRate() * 100) + "%";
+    }
+
     // tax getter heads //
 
     public String getTaxHead() {
@@ -250,6 +275,10 @@ public class ProductContainer {
 
     public String getTaxRateHead() {
         return taxRateHead;
+    }
+
+    public String getTaxRateTotalHead() {
+        return taxRateTotalHead;
     }
 
     public String getTaxTotalHead() {
@@ -264,6 +293,10 @@ public class ProductContainer {
 
     public String getDiscountRateHead() {
         return discountRateHead;
+    }
+
+    public String getDiscountRateTotalHead() {
+        return discountRateTotalHead;
     }
 
     public String getDiscountTotalHead() {
@@ -339,10 +372,12 @@ public class ProductContainer {
 
         private static final Map<String, String> taxHeads = new LinkedHashMap<>();
         private static final Map<String, String> taxRateHeads = new LinkedHashMap<>();
+        private static final Map<String, String> taxRateTotalHeads = new LinkedHashMap<>();
         private static final Map<String, String> taxTotalHeads = new LinkedHashMap<>();
 
         private static final Map<String, String> discountHeads = new LinkedHashMap<>();
         private static final Map<String, String> discountRateHeads = new LinkedHashMap<>();
+        private static final Map<String, String> discountRateTotalHeads = new LinkedHashMap<>();
         private static final Map<String, String> discountTotalHeads = new LinkedHashMap<>();
 
         private static final Map<String, String> totalHeads = new LinkedHashMap<>();
@@ -423,6 +458,17 @@ public class ProductContainer {
             taxRateHeads.put("Vat Rate", "en");
         }
         {
+            taxRateTotalHeads.put("Taux d'imposition Total", "fr");
+
+            taxRateTotalHeads.put("Total @Tax", "en");
+            taxRateTotalHeads.put("Total @VAT", "en");
+            taxRateTotalHeads.put("Total Tax%", "en");
+            taxRateTotalHeads.put("Final VAT%", "en");
+            taxRateTotalHeads.put("Final VAT Rate", "en");
+            taxRateTotalHeads.put("Total VAT Rate", "en");
+            taxRateTotalHeads.put("Total Tax Rate", "en");
+        }
+        {
             taxTotalHeads.put("Montant TVA", "fr");
             taxTotalHeads.put("TVA", "fr");
 
@@ -445,6 +491,14 @@ public class ProductContainer {
             discountRateHeads.put("Disc %", "en");
             discountRateHeads.put("Disc. Rate", "en");
             discountRateHeads.put("Discount Rate", "en");
+        }
+        {
+            discountRateTotalHeads.put("Taux d'actualisation Total", "fr");
+
+            discountRateTotalHeads.put("Total @Discount", "en");
+            discountRateTotalHeads.put("Final Disc%", "en");
+            discountRateTotalHeads.put("Final Disc. Rate", "en");
+            discountRateTotalHeads.put("Total Discount Rate", "en");
         }
         {
             discountTotalHeads.put("Montant de la remise", "fr");
@@ -534,10 +588,12 @@ public class ProductContainer {
 
             List<String> localTaxHeads = taxHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localTaxRateHeads = taxRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localTaxRateTotalHeads = taxRateTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localTaxTotalHeads = taxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
             List<String> localDiscountHeads = discountHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localDiscountRateHeads = discountRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localDiscountRateTotalHeads = discountRateTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localDiscountTotalHeads = discountTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
             List<String> localTotalHeads = totalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
@@ -563,9 +619,11 @@ public class ProductContainer {
                     localSNHeads.get(ctx.getRandom().nextInt(localSNHeads.size())),
                     localTaxHeads.get(ctx.getRandom().nextInt(localTaxHeads.size())),
                     localTaxRateHeads.get(ctx.getRandom().nextInt(localTaxRateHeads.size())),
+                    localTaxRateTotalHeads.get(ctx.getRandom().nextInt(localTaxRateTotalHeads.size())),
                     localTaxTotalHeads.get(ctx.getRandom().nextInt(localTaxTotalHeads.size())),
                     localDiscountHeads.get(ctx.getRandom().nextInt(localDiscountHeads.size())),
                     localDiscountRateHeads.get(ctx.getRandom().nextInt(localDiscountRateHeads.size())),
+                    localDiscountRateTotalHeads.get(ctx.getRandom().nextInt(localDiscountRateTotalHeads.size())),
                     localDiscountTotalHeads.get(ctx.getRandom().nextInt(localDiscountTotalHeads.size())),
                     localTotalHeads.get(ctx.getRandom().nextInt(localTotalHeads.size())),
                     localWithTaxTotalHeads.get(ctx.getRandom().nextInt(localWithTaxTotalHeads.size())),
@@ -573,7 +631,7 @@ public class ProductContainer {
                     localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))
                     );
 
-            Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10;
+            Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10; TODO fix this
             productContainer.setDiscountAvailable(discountAvailable);
 
             float price = 0;
@@ -593,6 +651,7 @@ public class ProductContainer {
                 priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
 
                 // add discounts for each item if discountAvailable
+                priceWithDiscount = price;
                 if (discountAvailable) {
                     discountRate = HelperCommon.rand_uniform(0.05f, 0.15f);  // discountRate from 5% to 15%
                     priceWithDiscount = HelperCommon.round(price * (1 - discountRate), 2);
