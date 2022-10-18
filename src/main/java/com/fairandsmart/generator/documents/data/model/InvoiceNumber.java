@@ -226,15 +226,9 @@ public class InvoiceNumber {
         @Override
         public InvoiceNumber generate(GenerationContext ctx) {
 
-            Generex generex;
-            generex = new Generex(formatsInvoice.get(ctx.getRandom().nextInt(formatsInvoice.size())));
-            String generatedInvoiceFmt = generex.random();
-
-            generex = new Generex(formatsOrder.get(ctx.getRandom().nextInt(formatsOrder.size())));
-            String generatedOrderFmt = generex.random();
-
-            generex = new Generex(formatsClient.get(ctx.getRandom().nextInt(formatsClient.size())));
-            String generatedClientFmt = generex.random();
+            String generatedInvoiceFmt = new Generex(formatsInvoice.get(ctx.getRandom().nextInt(formatsInvoice.size()))).random();
+            String generatedOrderFmt = new Generex(formatsOrder.get(ctx.getRandom().nextInt(formatsOrder.size()))).random();
+            String generatedClientFmt = new Generex(formatsClient.get(ctx.getRandom().nextInt(formatsClient.size()))).random();
 
             List<String> localizedLabelsInvoice = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localizedLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());

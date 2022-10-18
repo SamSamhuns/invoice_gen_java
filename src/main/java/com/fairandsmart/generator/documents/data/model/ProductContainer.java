@@ -40,6 +40,7 @@ import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mifmif.common.regex.Generex;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -443,112 +444,90 @@ public class ProductContainer {
             taxHeads.put("TVA", "fr");
             taxHeads.put("Montant TVA", "fr");
 
-            taxHeads.put("Tax", "en");
-            taxHeads.put("Vat", "en");
             taxHeads.put("VAT Tax", "en");
-            taxHeads.put("VAT Amount", "en");
+            taxHeads.put("(Tax|TAX|Vat|VAT)", "en");
+            taxHeads.put("(Tax|TAX|Vat|VAT) Amount", "en");
         }
         {
             taxRateHeads.put("TVA", "fr");
             taxRateHeads.put("Taux de TVA", "fr");
 
-            taxRateHeads.put("Tax %", "en");
-            taxRateHeads.put("Vat %", "en");
-            taxRateHeads.put("@Vat", "en");
-            taxRateHeads.put("Vat Rate", "en");
+            taxRateHeads.put("(Tax|TAX|Vat|VAT)\\%", "en");
+            taxRateHeads.put("\\@(Tax|TAX|Vat|VAT)", "en");
+            taxRateHeads.put("(Tax|TAX|Vat|VAT) Rate", "en");
         }
         {
             taxRateTotalHeads.put("Taux d'imposition Total", "fr");
 
-            taxRateTotalHeads.put("Total @Tax", "en");
-            taxRateTotalHeads.put("Total @VAT", "en");
-            taxRateTotalHeads.put("Total Tax%", "en");
-            taxRateTotalHeads.put("Final VAT%", "en");
-            taxRateTotalHeads.put("Final VAT Rate", "en");
-            taxRateTotalHeads.put("Total VAT Rate", "en");
-            taxRateTotalHeads.put("Total Tax Rate", "en");
+            taxRateTotalHeads.put("(Total|Final) \\@(Tax|TAX|Vat|VAT)", "en");
+            taxRateTotalHeads.put("(Total|Final) (Tax|TAX|Vat|VAT)\\%", "en");
+            taxRateTotalHeads.put("(Total|Final) (Tax|TAX|Vat|VAT) Rate", "en");
         }
         {
             taxTotalHeads.put("Montant TVA", "fr");
             taxTotalHeads.put("TVA", "fr");
 
-            taxTotalHeads.put("VAT Amount", "en");
-            taxTotalHeads.put("Tax Amount", "en");
-            taxTotalHeads.put("Total Tax", "en");
-            taxTotalHeads.put("Sales Tax", "en");
+            taxTotalHeads.put("(Tax|TAX|Vat|VAT) Amount", "en");
+            taxTotalHeads.put("Total (Tax|TAX|Vat|VAT)", "en");
+            taxTotalHeads.put("Sales (Tax|TAX)", "en");
         }
         // discount heads //
         {
             discountHeads.put("TOTAL REMISE IMMEDIATE", "fr");
 
-            discountHeads.put("Discount", "en");
-            discountHeads.put("Disc", "en");
+            discountHeads.put("(Disc|Discount)", "en");
         }
         {
             discountRateHeads.put("Remise", "fr");
 
-            discountRateHeads.put("@DISC", "en");
-            discountRateHeads.put("Disc %", "en");
-            discountRateHeads.put("Disc. Rate", "en");
-            discountRateHeads.put("Discount Rate", "en");
+            discountRateHeads.put("\\@DISC", "en");
+            discountRateHeads.put("Disc \\%", "en");
+            discountRateHeads.put("(Disc\\.|Disc|Discount) Rate", "en");
         }
         {
             discountRateTotalHeads.put("Taux d'actualisation Total", "fr");
 
-            discountRateTotalHeads.put("Total @Discount", "en");
-            discountRateTotalHeads.put("Final Disc%", "en");
-            discountRateTotalHeads.put("Final Disc. Rate", "en");
-            discountRateTotalHeads.put("Total Discount Rate", "en");
+            discountRateTotalHeads.put("(Total|Final) Disc\\%", "en");
+            discountRateTotalHeads.put("(Total|Final) \\@(Disc|Discount)", "en");
+            discountRateTotalHeads.put("(Total|Final) (Disc\\.|Disc|Discount) Rate", "en");
         }
         {
             discountTotalHeads.put("Montant de la remise", "fr");
 
-            discountTotalHeads.put("Discount Amount", "en");
-            discountTotalHeads.put("Total Discount", "en");
-            discountTotalHeads.put("Gross Discount", "en");
-            discountTotalHeads.put("Final Discount", "en");
+            discountTotalHeads.put("Discount (Amt|Amount)", "en");
+            discountTotalHeads.put("(Total|Final|Gross) (Disc|Discount)", "en");
         }
         // total, total+tax, total+discount, total+tax+discount heads //
         {
             totalHeads.put("Montant H.T.", "fr");
             totalHeads.put("Montant HT", "fr");
 
-            totalHeads.put("Amount", "en");
-            totalHeads.put("Total", "en");
-            totalHeads.put("Gross", "en");
-            totalHeads.put("Total Gross Amt", "en");
-            totalHeads.put("Total w/o Tax", "en");
-            totalHeads.put("Total w.o. Tax", "en");
-            totalHeads.put("Total without Tax", "en");
-            totalHeads.put("Total (Excl.Tax)", "en");
-            totalHeads.put("Total (Excl.VAT)", "en");
+            totalHeads.put("(Total|Amt|Amount|Gross)", "en");
+            totalHeads.put("Total Gross (Amt|Amount)", "en");
+            totalHeads.put("Total (Excl\\.(Tax|TAX|Vat|VAT))", "en");
+            totalHeads.put("Total (w\\.o\\.|w/o|without) (Tax|TAX|Vat|VAT)", "en");
         }
         {
             withTaxTotalHeads.put("Montant TTC", "fr");
 
-            withTaxTotalHeads.put("Total Amount with Tax", "en");
-            withTaxTotalHeads.put("Total Amount w/ Tax", "en");
-            withTaxTotalHeads.put("Amount with Tax", "en");
-            withTaxTotalHeads.put("Total with Tax", "en");
-            withTaxTotalHeads.put("Total w/ Tax", "en");
-            withTaxTotalHeads.put("Amount w/ Tax", "en");
+            withTaxTotalHeads.put("Total (Amt|Amount) (with|w/) (Tax|TAX|Vat|VAT)", "en");
+            withTaxTotalHeads.put("(Total|Amt|Amount) (with|w/) (Tax|TAX|Vat|VAT)", "en");
         }
         {
             withDiscountTotalHeads.put("Montant avec remise", "fr");
 
-            withDiscountTotalHeads.put("Total Amount w/ Discount", "en");
-            withDiscountTotalHeads.put("Amount with Discount", "en");
-            withDiscountTotalHeads.put("Total with Discount", "en");
+            withDiscountTotalHeads.put("(Total|Final) Amount w/ (Disc|Discount)", "en");
+            withDiscountTotalHeads.put("(Total|Final) (w/|with) (Disc|Discount)", "en");
         }
         {
             withTaxTotalHeads.put("Montant TTC", "fr");
             withTaxTotalHeads.put("Total TTC", "fr");
             withTaxTotalHeads.put("Net à payer", "fr");
 
-            withTaxAndDiscountTotalHeads.put("Amount to pay", "en");
-            withTaxAndDiscountTotalHeads.put("Total Amount", "en");
+            withTaxAndDiscountTotalHeads.put("(Amt|Amount|Balance) to pay", "en");
+            withTaxAndDiscountTotalHeads.put("(Total|Final) (Amt|Amount|Payable|Due)", "en");
+            withTaxAndDiscountTotalHeads.put("Net Amount", "en");
             withTaxAndDiscountTotalHeads.put("Balance Due", "en");
-            withTaxAndDiscountTotalHeads.put("Final Amount", "en");
             withTaxAndDiscountTotalHeads.put("Total Net", "en");
             withTaxAndDiscountTotalHeads.put("Total", "en");
         }
@@ -617,18 +596,18 @@ public class ProductContainer {
                     localUPHeads.get(ctx.getRandom().nextInt(localUPHeads.size())),
                     localLineTotalHeads.get(ctx.getRandom().nextInt(localLineTotalHeads.size())),
                     localSNHeads.get(ctx.getRandom().nextInt(localSNHeads.size())),
-                    localTaxHeads.get(ctx.getRandom().nextInt(localTaxHeads.size())),
-                    localTaxRateHeads.get(ctx.getRandom().nextInt(localTaxRateHeads.size())),
-                    localTaxRateTotalHeads.get(ctx.getRandom().nextInt(localTaxRateTotalHeads.size())),
-                    localTaxTotalHeads.get(ctx.getRandom().nextInt(localTaxTotalHeads.size())),
-                    localDiscountHeads.get(ctx.getRandom().nextInt(localDiscountHeads.size())),
-                    localDiscountRateHeads.get(ctx.getRandom().nextInt(localDiscountRateHeads.size())),
-                    localDiscountRateTotalHeads.get(ctx.getRandom().nextInt(localDiscountRateTotalHeads.size())),
-                    localDiscountTotalHeads.get(ctx.getRandom().nextInt(localDiscountTotalHeads.size())),
-                    localTotalHeads.get(ctx.getRandom().nextInt(localTotalHeads.size())),
-                    localWithTaxTotalHeads.get(ctx.getRandom().nextInt(localWithTaxTotalHeads.size())),
-                    localWithDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithDiscountTotalHeads.size())),
-                    localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))
+                    new Generex(localTaxHeads.get(ctx.getRandom().nextInt(localTaxHeads.size()))).random(),
+                    new Generex(localTaxRateHeads.get(ctx.getRandom().nextInt(localTaxRateHeads.size()))).random(),
+                    new Generex(localTaxRateTotalHeads.get(ctx.getRandom().nextInt(localTaxRateTotalHeads.size()))).random(),
+                    new Generex(localTaxTotalHeads.get(ctx.getRandom().nextInt(localTaxTotalHeads.size()))).random(),
+                    new Generex(localDiscountHeads.get(ctx.getRandom().nextInt(localDiscountHeads.size()))).random(),
+                    new Generex(localDiscountRateHeads.get(ctx.getRandom().nextInt(localDiscountRateHeads.size()))).random(),
+                    new Generex(localDiscountRateTotalHeads.get(ctx.getRandom().nextInt(localDiscountRateTotalHeads.size()))).random(),
+                    new Generex(localDiscountTotalHeads.get(ctx.getRandom().nextInt(localDiscountTotalHeads.size()))).random(),
+                    new Generex(localTotalHeads.get(ctx.getRandom().nextInt(localTotalHeads.size()))).random(),
+                    new Generex(localWithTaxTotalHeads.get(ctx.getRandom().nextInt(localWithTaxTotalHeads.size()))).random(),
+                    new Generex(localWithDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithDiscountTotalHeads.size()))).random(),
+                    new Generex(localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))).random()
                     );
 
             Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10; TODO fix this

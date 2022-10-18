@@ -211,16 +211,16 @@ public class Client {
             ContactNumber shippingContactNumber = billingContactNumber;
 
             // shippingAddress & shippingContactNumber is different
-            if ( ctx.getRandom().nextInt(50) < 10 ) {
+            if ( ctx.getRandom().nextInt(100) < 20 ) {
                 shippingAddress = new Address.Generator().generate(ctx);
                 shippingContactNumber = new ContactNumber.Generator().generate(ctx);
             }
             // shippingName is different
-            if ( ctx.getRandom().nextInt(50) < 5 ) {
+            if ( ctx.getRandom().nextInt(100) < 10 ) {
                 shippingName = faker.name().fullName();
             }
             // shippingName is set to same as billing and Address is empty
-            if ( ctx.getRandom().nextInt(50) < 4 ) {
+            if ( ctx.getRandom().nextInt(100) < 10 ) {
                 shippingName = "Same as Billing Address";
                 shippingAddress = new Address("", "", "", "", "", "");
                 shippingContactNumber = new ContactNumber("", "", "", "");
@@ -236,7 +236,7 @@ public class Client {
                     localizedShipHeads.get(idxA), shippingName, shippingAddress, shippingContactNumber);
 
             // shippingAddress is not present
-            if ( ctx.getRandom().nextInt(50) < 2 ) {
+            if ( ctx.getRandom().nextInt(100) < 5 ) {
                 genClient.setShippingHead("");
                 genClient.setShippingName("");
                 genClient.setShippingAddress(new Address("", "", "", "", "", ""));
