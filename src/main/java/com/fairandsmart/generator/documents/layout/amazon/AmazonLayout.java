@@ -39,6 +39,7 @@ import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
+import com.fairandsmart.generator.documents.data.model.TableColumnItem;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
@@ -64,6 +65,7 @@ import java.util.Random;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 
 @ApplicationScoped
@@ -243,7 +245,6 @@ public class AmazonLayout implements InvoiceLayout {
         boolean upperCap = rnd.nextBoolean();
         ProductContainer pc = model.getProductContainer();
         float[] configRow = {40f, 40f, 150f, 60f, 60f, 60f, 60f, 60f};  // should add up to 530 which is pageW - leftM - rightM
-        TableRowBox row1 = new TableRowBox(configRow, 0, 0);
 
         String snHead = pc.getsnHead();
         String qtyHead = pc.getQtyHead();
@@ -253,14 +254,28 @@ public class AmazonLayout implements InvoiceLayout {
         String totalWithoutTaxHead = pc.getTotalHead();
         String taxRateHead = pc.getTaxRateHead();
         String taxHead = pc.getTaxHead();
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? snHead.toUpperCase() : snHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? qtyHead.toUpperCase() : qtyHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? descHead.toUpperCase() : descHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? unitPriceHead.toUpperCase() : unitPriceHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? discountHead.toUpperCase() : discountHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? totalWithoutTaxHead.toUpperCase() : totalWithoutTaxHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? taxRateHead.toUpperCase() : taxRateHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontB, 8, 0, 0, (upperCap ? taxHead.toUpperCase() : taxHead), textColor, bgColor), centerAlignItems);
+
+        // TODO: use maps to assign order of items, headers and footers to columns
+        // SN, Qty, Item, ItemRate, Disc, GrossTotal, TaxRate, TaxAmt
+        // Map<String, TableColumnItem> itemMap = new LinkedHashMap<>();
+        // itemMap.put("SN", new TableColumnItem(40f, snHead, "", ""));
+        // itemMap.put("Qty", new TableColumnItem(40f, qtyHead, "", ""));
+        // itemMap.put("Item", new TableColumnItem(40f, descHead, "", ""));
+        // itemMap.put("ItemRate", new TableColumnItem(40f, unitPriceHead, "", ""));
+        // itemMap.put("Disc", new TableColumnItem(40f, discountHead, "", ""));
+        // itemMap.put("GrossTotal", new TableColumnItem(40f, totalWithoutTaxHead, "", ""));
+        // itemMap.put("TaxRate", new TableColumnItem(40f, taxRateHead, "", ""));
+        // itemMap.put("TaxAmt", new TableColumnItem(40f, taxHead, "", ""));
+
+        TableRowBox row1 = new TableRowBox(configRow, 0, 0);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? snHead.toUpperCase() : snHead), textColor, bgColor), centerAlignItems);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? qtyHead.toUpperCase() : qtyHead), textColor, bgColor), centerAlignItems);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? descHead.toUpperCase() : descHead), textColor, bgColor), centerAlignItems);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? unitPriceHead.toUpperCase() : unitPriceHead), textColor, bgColor), centerAlignItems);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? discountHead.toUpperCase() : discountHead), textColor, bgColor), centerAlignItems);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? totalWithoutTaxHead.toUpperCase() : totalWithoutTaxHead), textColor, bgColor), centerAlignItems);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? taxRateHead.toUpperCase() : taxRateHead), textColor, bgColor), centerAlignItems);
+        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? taxHead.toUpperCase() : taxHead), textColor, bgColor), centerAlignItems);
         row1.setBackgroundColor(bgColor);
 
         VerticalContainer verticalInvoiceItems = new VerticalContainer(leftPageMargin, tableHdrPosY - tableHdr.getBoundingBox().getHeight() - 2, 600);
@@ -281,9 +296,9 @@ public class AmazonLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, quantity, textColor, bgColor, "QTY"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontNB, 8, 0, 0, randomProduct.getName(), textColor, bgColor, "PD"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedPrice(), textColor, bgColor, "UP"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, "", textColor, bgColor, "DISC"), centerAlignItems);
+            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTotalDiscount(), textColor, bgColor, "DISC"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTotalPrice(), textColor, bgColor, "PTWTX"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, HelperCommon.round(randomProduct.getTaxRate() * 100, 2)+"%", textColor, bgColor, "TXR"), centerAlignItems);
+            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTaxRate(), textColor, bgColor, "TXR"), centerAlignItems);
             productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTotalTax(), textColor, bgColor, "PTTAX"), centerAlignItems);
 
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
@@ -301,17 +316,18 @@ public class AmazonLayout implements InvoiceLayout {
         String totalHead = pc.getTotalHead();
         String discountTotalHead = pc.getDiscountTotalHead();
         String taxAndDiscountTotalHead = pc.getWithTaxAndDiscountTotalHead();
+        String taxRateTotalHead = pc.getTaxRateTotalHead();
         String taxTotalHead = pc.getTaxTotalHead();
 
         TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, ""), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, ""), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, ""), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, (upperCap ? totalHead.toUpperCase() : totalHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, (upperCap ? discountTotalHead.toUpperCase() : discountTotalHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, (upperCap ? taxAndDiscountTotalHead.toUpperCase() : taxAndDiscountTotalHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, (upperCap ? taxRateHead.toUpperCase() : taxRateHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontB, 9, 0, 0, (upperCap ? taxTotalHead.toUpperCase() : taxTotalHead)), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, ""), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, ""), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, ""), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? totalHead.toUpperCase() : totalHead)), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? discountTotalHead.toUpperCase() : discountTotalHead)), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? taxAndDiscountTotalHead.toUpperCase() : taxAndDiscountTotalHead)), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? taxRateTotalHead.toUpperCase() : taxRateTotalHead)), centerAlignItems);
+        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? taxTotalHead.toUpperCase() : taxTotalHead)), centerAlignItems);
         verticalInvoiceItems.addElement(titleTotalInvoice);
 
         verticalInvoiceItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
@@ -325,9 +341,9 @@ public class AmazonLayout implements InvoiceLayout {
         totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotal(), "TWTX" ), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""), centerAlignItems);
+        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalDiscount(), "TD"), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalWithTax(), "TA" ), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getProducts().get(0).getTaxRate() * 100 +"%", "TXR"), centerAlignItems);
+        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalTaxRate(), "TXR" ), centerAlignItems);
         totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalTax(), "TTX" ), centerAlignItems);
         verticalInvoiceItems.addElement(totalInvoice1);
 
@@ -444,7 +460,7 @@ public class AmazonLayout implements InvoiceLayout {
             verticalFooterContainer.build(contentStream, writer);
         }
 
-        // Logo Bottom if logo is not at top
+        // Logo Bottom if logo is not at top or barcode at top
         if (!genProb.get("logo_top") | genProb.get("barcode_top")) {
             logoWidth = 85;
             logoHeight = (logoWidth * logoImg.getHeight()) / logoImg.getWidth();

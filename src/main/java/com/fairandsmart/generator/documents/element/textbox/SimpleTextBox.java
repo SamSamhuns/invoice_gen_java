@@ -131,7 +131,8 @@ public class SimpleTextBox extends ElementBox {
         String dummyString = "x".repeat(100);
         float dummyStringWidth = (this.fontSize * this.font.getStringWidth(dummyString) / 1000);
         // max length of chars that fit within contentWidth
-        int maxContentLength = (int)(dummyString.length() / (dummyStringWidth/contentWidth)) - 1;
+        int maxContentLength = (int) Math.max((dummyString.length() / (dummyStringWidth/contentWidth)) - 1, 1);
+
         String wrappedText = WordWrap.from(text)
                                      .maxWidth(maxContentLength)
                                      .insertHyphens(true)
