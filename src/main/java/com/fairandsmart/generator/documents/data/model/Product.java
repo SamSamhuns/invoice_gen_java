@@ -166,12 +166,20 @@ public class Product {
         return taxRate;
     }
 
+    public String getFormatedTaxRate() {
+        return String.format("%.2f", this.getTaxRate() * 100) + "%";
+    }
+
     public void setTaxRate(float taxRate) {
         this.taxRate = taxRate;
     }
 
     public float getDiscountRate() {
         return discountRate;
+    }
+
+    public String getFormatedDiscountRate() {
+        return String.format("%.2f", this.getDiscountRate() * 100) + "%";
     }
 
     public void setDiscountRate(float discountRate) {
