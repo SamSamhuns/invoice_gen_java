@@ -128,11 +128,15 @@ public class SimpleTextBox extends ElementBox {
         /*if ( contentWidth <= 0 ) {
             throw new IOException("unable to fit content in the desired width");
         }*/
-        String dummyString = "x".repeat(10);
+        String dummyString = "x".repeat(100);
         float dummyStringWidth = (this.fontSize * this.font.getStringWidth(dummyString) / 1000);
         // max length of chars that fit within contentWidth
         int maxContentLength = (int)(dummyString.length() / (dummyStringWidth/contentWidth)) - 1;
-        String wrappedText = WordWrap.from(text).maxWidth(maxContentLength).insertHyphens(true).breakWords(true).wrap();
+        String wrappedText = WordWrap.from(text)
+                                     .maxWidth(maxContentLength)
+                                     .insertHyphens(true)
+                                     .breakWords(true)
+                                     .wrap();
 
         this.textLines = new ArrayList<>();
         for ( String word : wrappedText.split("\n") ) {
