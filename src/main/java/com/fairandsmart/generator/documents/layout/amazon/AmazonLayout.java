@@ -290,7 +290,7 @@ public class AmazonLayout implements InvoiceLayout {
         String taxTotalHead = pc.getTaxTotalHead();
 
         // building item table column width list
-        float[] configRow = {40f, 40f, 150f, 60f, 60f, 60f, 60f, 60f};  // should add up to 530 which is pageW - leftM - rightM
+        float[] configRow = {40f, 40f, 150f, 60f, 60f, 60f, 60f, 60f};  // Adds up to 530 which is pageW - leftM - rightM
         // Use maps to assign order of items, headers and footers to columns
         // SN, Qty, Item, ItemRate, Disc, Total, TaxRate, Tax
         Map<String, TableColumnItem> itemMap = new LinkedHashMap<>();
@@ -308,7 +308,7 @@ public class AmazonLayout implements InvoiceLayout {
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
         for (String tableHeader: tableHeaders) {
             String hdrLabel = itemMap.get(tableHeader).getColLabelHeader();
-            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"Header"), centerAlignItems);
+            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), centerAlignItems);
         }
         row1.setBackgroundColor(hdrBgColor);
 
@@ -371,30 +371,45 @@ public class AmazonLayout implements InvoiceLayout {
         verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
         verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
 
-        // Footer Labels for final total amount, tax and discount
-        TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
-        for (String tableHeader: tableHeaders) {
-            String hdrLabel = itemMap.get(tableHeader).getColLabelFooter();
-            titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign), centerAlignItems);
+        if (genProb.get("table_footer_multi_row")) {
+            float[] configFooterRow = {450f, 80f}; // Adds up to 530 which is pageW - leftM - rightM
+            for (int i=0; i<tableHeaders.size(); i++ ) {
+              TableRowBox footerInvoice = new TableRowBox(configFooterRow, 0, 25);
+              String tableHeader = tableHeaders.get(i);
+              String hdrLabel = itemMap.get(tableHeader).getColLabelFooter();
+              String hdrValue = itemMap.get(tableHeader).getColValueFooter();
+              footerInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), HAlign.RIGHT, tableHeader+"FooterLabel"), centerAlignItems);
+              footerInvoice.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.RIGHT, tableHeader+"FooterValue"), centerAlignItems);
+              verticalTableItems.addElement(footerInvoice);
+            }
         }
-        verticalTableItems.addElement(titleTotalInvoice);
+        else {
+            // Table Footer Single Row
+            // Footer Labels for final total amount, tax and discount
+            TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
+            for (String tableHeader: tableHeaders) {
+                String hdrLabel = itemMap.get(tableHeader).getColLabelFooter();
+                titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign, tableHeader+"FooterLabel"), centerAlignItems);
+            }
+            verticalTableItems.addElement(titleTotalInvoice);
 
-        verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
-        verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-        verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
-        // Footer Numerical formatted values for final total amount, tax and discount
-        TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
-        for (String tableHeader: tableHeaders) {
-            String hdrValue = itemMap.get(tableHeader).getColValueFooter();
-            totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign), centerAlignItems);
+            // Footer Numerical formatted values for final total amount, tax and discount
+            TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
+            for (String tableHeader: tableHeaders) {
+                String hdrValue = itemMap.get(tableHeader).getColValueFooter();
+                totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), centerAlignItems);
+            }
+            verticalTableItems.addElement(totalInvoice1);
+
+            verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
         }
-        verticalTableItems.addElement(totalInvoice1);
-
-        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
-        verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
 
         // Add registered address information
         if (genProb.get("registered_address_info")) {
@@ -517,7 +532,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Add footer line and info if footer_info to be used and number of items less than 5
         if (genProb.get("footer_info") & model.getProductContainer().getProducts().size() < 5) {
-            new HorizontalLineBox(20, 110, pageWidth-rightPageMargin, 0, lineStrokeColor).build(contentStream, writer);
+            new HorizontalLineBox(20, 110, pageWidth-rightPageMargin, 110, lineStrokeColor).build(contentStream, writer);
 
             VerticalContainer verticalFooterContainer = new VerticalContainer(leftPageMargin, 100, 450);
             String compEmail = ((model.getCompany().getWebsite() == null) ? "company.domain.com" :  model.getCompany().getWebsite());
@@ -540,7 +555,7 @@ public class AmazonLayout implements InvoiceLayout {
         if (!genProb.get("logo_top") | genProb.get("barcode_top")) {
             logoWidth = 85;
             logoHeight = (logoWidth * logoImg.getHeight()) / logoImg.getWidth();
-            contentStream.drawImage(logoImg, 480, 8, logoWidth, logoHeight);
+            contentStream.drawImage(logoImg, pageWidth-logoWidth-rightPageMargin, 8, logoWidth, logoHeight);
         }
 
         // Barcode bottom
