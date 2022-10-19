@@ -58,7 +58,7 @@ public class FairAndSmartLayout {//implements InvoiceLayout {
     }
 
     //@Override
-    public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws IOException {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws IOException {
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
 

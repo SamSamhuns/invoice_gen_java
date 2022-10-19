@@ -65,7 +65,7 @@ public class DartyLayout implements InvoiceLayout {
     }
 
     @Override
-    public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
 
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
@@ -213,7 +213,6 @@ public class DartyLayout implements InvoiceLayout {
                 dateWarranty = model.getDate().getValueInvoice().replace(yearWarranty,newYear+"");
             }
             else {
-                System.out.println(yearWarranty);
                 newYear = Integer.parseInt(yearWarranty) + 2;
                 dateWarranty = model.getDate().getValueInvoice().replace(yearWarranty,newYear+"");
             }

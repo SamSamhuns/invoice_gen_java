@@ -72,7 +72,7 @@ public class MACOMPLayout implements InvoiceLayout {
     }
 
     @Override
-    public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
 
         float fontSize = 10;
         PDPage page = new PDPage(PDRectangle.A4);

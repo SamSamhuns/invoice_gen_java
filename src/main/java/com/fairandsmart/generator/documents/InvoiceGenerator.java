@@ -50,7 +50,6 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -105,7 +104,7 @@ public class InvoiceGenerator {
         // Export as PDF
         PDDocument document = new PDDocument();
         // Build invoice layout and populate pdf
-        layout.builtInvoice(model, document, xmlOut);
+        layout.buildInvoice(model, document, xmlOut);
         document.save(pdf.toFile());
 
         // Export model annots as JSON

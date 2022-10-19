@@ -92,7 +92,7 @@ public class NGenericLayout implements InvoiceLayout {
     }
 
     @Override
-    public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
 
         this.model = model;
         this.invoiceNumAvailable = model.getRandom().nextInt(2);

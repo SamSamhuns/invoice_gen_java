@@ -67,7 +67,7 @@ public class TestTableRowBox implements InvoiceLayout {
     }
 
     @Override
-    public void builtInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
 
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
