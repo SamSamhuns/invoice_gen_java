@@ -38,6 +38,7 @@ import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Product;
+import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.TableColumnItem;
 import com.fairandsmart.generator.documents.element.HAlign;
@@ -47,6 +48,7 @@ import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
+
 import com.mifmif.common.regex.Generex;
 
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
@@ -270,14 +272,10 @@ public class AmazonLayout implements InvoiceLayout {
         boolean upperCap = rnd.nextBoolean();
         HAlign tableHdrAlign = (genProb.get("table_center_align_items")) ? HAlign.CENTER: HAlign.LEFT;
 
-
-        // building item table column width list
-        float[] configRow = {40f, 40f, 150f, 60f, 60f, 60f, 60f, 60f};  // should add up to 530 which is pageW - leftM - rightM
-
         // Header Item list head labels
         String snHead = pc.getsnHead();
         String qtyHead = pc.getQtyHead();
-        String descHead = pc.getDescHead();
+        String nameHead = pc.getNameHead();
         String unitPriceHead = pc.getUPHead();
         String discountHead = pc.getDiscountHead();
         String totalWithoutTaxHead = pc.getTotalHead();
@@ -291,13 +289,15 @@ public class AmazonLayout implements InvoiceLayout {
         String taxRateTotalHead = pc.getTaxRateTotalHead();
         String taxTotalHead = pc.getTaxTotalHead();
 
+        // building item table column width list
+        float[] configRow = {40f, 40f, 150f, 60f, 60f, 60f, 60f, 60f};  // should add up to 530 which is pageW - leftM - rightM
         // Use maps to assign order of items, headers and footers to columns
         // SN, Qty, Item, ItemRate, Disc, Total, TaxRate, Tax
         Map<String, TableColumnItem> itemMap = new LinkedHashMap<>();
         // TableColumnItem constructor(float colWidth, String colLabelHeader, String colLabelFooter, String colValueFooter)
         itemMap.put("SN", new TableColumnItem(40f, snHead, "", ""));
         itemMap.put("Qty", new TableColumnItem(40f, qtyHead, "", ""));
-        itemMap.put("Item", new TableColumnItem(150f, descHead, "", ""));
+        itemMap.put("Item", new TableColumnItem(150f, nameHead, "", ""));
         itemMap.put("ItemRate", new TableColumnItem(60f, unitPriceHead, totalHead, pc.getFormatedTotal()));
         itemMap.put("Disc", new TableColumnItem(60f, discountHead, discountTotalHead, pc.getFormatedTotalDiscount()));
         itemMap.put("Total", new TableColumnItem(60f, totalWithoutTaxHead, taxAndDiscountTotalHead, pc.getFormatedTotalWithTax()));
@@ -453,14 +453,29 @@ public class AmazonLayout implements InvoiceLayout {
             // Set paymentAddrContainer opposite to the signature location
             float paymentAddrXPos = (genProb.get("signature_bottom_left")) ? rightAddrX: leftPageMargin;
             float paymentAddrYPos = verticalTableItems.getBoundingBox().getPosY() - verticalTableItems.getBoundingBox().getHeight() - 10;
+            PaymentInfo mp = model.getPaymentInfo();
 
             VerticalContainer paymentAddrContainer = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
-            paymentAddrContainer.addElement(new SimpleTextBox(fontB, 10, 0, 0, model.getPaymentInfo().getAddressHeader(), "PH"));
-            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getPaymentInfo().getLabelBankName()+": "+model.getPaymentInfo().getValueBankName(), "PBN"));
-            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getPaymentInfo().getLabelAccountName()+": "+model.getPaymentInfo().getValueAccountName(), "PAName"));
-            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getPaymentInfo().getLabelAccountNumber()+": "+model.getPaymentInfo().getValueAccountNumber(), "PANum"));
-            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getPaymentInfo().getLabelBranchName()+": "+model.getPaymentInfo().getValueBranchName(), "PBName"));
-            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getPaymentInfo().getLabelIBANNumber()+": "+model.getPaymentInfo().getValueIBANNumber(), "PBNum"));
+            paymentAddrContainer.addElement(new SimpleTextBox(fontNB, 10, 0, 0, mp.getAddressHeader(), "PH"));
+            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, mp.getLabelBankName()+": "+model.getPaymentInfo().getValueBankName(), "PBN"));
+            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, mp.getLabelAccountName()+": "+model.getPaymentInfo().getValueAccountName(), "PAName"));
+            if (genProb.get("payment_account_number")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, mp.getLabelAccountNumber()+": "+mp.getValueAccountNumber(), "PANum"));
+            }
+            if (genProb.get("payment_branch_name")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, mp.getLabelBranchName()+": "+mp.getValueBranchName(), "PBName"));
+            }
+            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getPaymentInfo().getLabelIBANNumber()+": "+mp.getValueIBANNumber(), "PBNum"));
+            if (genProb.get("payment_routing_number")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, mp.getLabelRoutingNumber()+": "+mp.getValueRoutingNumber(), "PRNum"));
+            }
+            if (genProb.get("payment_swift_number")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, mp.getLabelSwiftCode()+": "+mp.getValueSwiftCode(), "PSNum"));
+            }
+            // Client TAX number bottom added randomly if client_bill_address_tax_number is NOT present
+            if (!genProb.get("client_bill_address_tax_number") && genProb.get("client_payment_tax_number")) {
+                billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,model.getClient().getIdNumbers().getVatLabel()+": "+model.getClient().getIdNumbers().getVatValue(),"PTax"));
+            }
             if (genProb.get("addresses_bordered")) {
                 paymentAddrContainer.setBorderColor(lineStrokeColor);
                 paymentAddrContainer.setBorderThickness(0.5f);
