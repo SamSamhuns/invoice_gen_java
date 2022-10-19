@@ -1,37 +1,59 @@
 {
   "invoice": {
     "invoice_date": "Invoice Date",
-    "invoice_id": "Invoice Id",
-    "invoice_order_id": "Purchase Order",
+    "invoice_id": "Invoice Id/Number",
+    "invoice_order_id": "Purchase Order Number",
     "invoice_due_date": "Due Date"
   },
   "vendor": {
     "vendor_name": "Vendor Name",
-    "vendor_recipient": "Vendor Address Recipient",
     "vendor_addr": "Vendor Address",
-    "vendor_tax_id": "Vendor TaxId"
+    "vendor_po_box": "Vendor PO Box/ZIP",
+    "vendor_trn": "Vendor Tax Id"
   },
-  "customer": {
-    "customer_recipient": "Customer Address Recipient",
-    "customer_addr": "Customer Address"
+  "billto": {
+    "customer_name": "Customer Name",
+    "customer_addr": "Customer Address",
+    "customer_po_box": "Customer PO Box/ZIP",
+    "customer_trn": "Customer Tax Id"
   },
   "shipto": {
-    "shipto_recipient": "Shipping Address Recipient",
+    "shipto_name": "Shipping Address Recipient",
+    "shipto_po_box": "Customer PO Box/ZIP",
     "shipto_addr": "Shipping Address"
   },
+  "paymentto": {
+    "bank_name": "Bank Name",
+    "account_name": "Bank Name",
+    "account_number": "Bank Name",
+    "branch_address": "Branch Name/Address",
+    "iban_number": "Iban Number",
+    "swift_code": "Swift Code",
+    "routing_number": "Routing Number",
+    "customer_trn": "Customer TRN Number"
+  },
   "items": [{
+    "Serial Number": "Serial Number of item",
     "Description": "Item Description",
+    "Item Code": "Item code i.e. sku, ean",
     "Quantity": "Item Quantity",
     "Unit": "Item unit i.e. hours, lbs, kgs",
     "UnitPrice": "Price per unit i.e. 5$ per Gallon",
-    "VAT": "VAT Percentage",
+    "Discount": "Discount Amount",
+    "Discount Rate": "Discount Rate",
     "Tax": "Tax Amount",
-    "Amount": "Total of Item i.e. Quantity x UnitPrice"
+    "Tax Rate": "Tax Percentage",
+    "Sub Total": "Total of Item i.e. Quantity x UnitPrice inc Discount but no Tax",
+    "Total": "Total of Item i.e. Quantity x UnitPrice inc. Tax+discount Or sometimes just Quantity x UnitPrice w/o Tax"
   }],
   "total": {
+    "tax_price": "Tax Total",
+    "tax_rate": "Tax Rate",
+    "discount_price": "Discount Total",
+    "discount_rate": "Discount Rate",
     "subtotal_price": "SubTotal",
-    "tax_price": "Total Tax / Total VAT",
-    "total_price": "Invoice Total / Amount Due"
+    "total_price": "Invoice Total / Amount Due",
+    "currency": "Invoice Currency"
   },
   "terms": {
     "payment_term": "Payment Term"
