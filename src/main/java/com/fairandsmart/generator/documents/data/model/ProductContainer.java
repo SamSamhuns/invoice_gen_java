@@ -597,8 +597,6 @@ public class ProductContainer {
                     productsLangFiltered.add(products.get(i));
                 }
             }
-            final int MAXPRODUCT = 6;
-            final int MAXQTYPERPRODUCT = 5;
 
             ProductContainer productContainer = new ProductContainer(
                     ctx.getCurrency(),
@@ -625,6 +623,8 @@ public class ProductContainer {
             Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10; TODO fix this
             productContainer.setDiscountAvailable(discountAvailable);
 
+            final int MAXPRODUCT = 6;
+            final int MAXQTYPERPRODUCT = 5;
             float price = 0;
             float taxRate = 0;
             float discountRate = 0;
@@ -635,7 +635,9 @@ public class ProductContainer {
 
             for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
                 Product product = productsLangFiltered.get(ctx.getRandom().nextInt(productsLangFiltered.size()));
-                product.setQuantity(ctx.getRandom().nextInt(MAXQTYPERPRODUCT - 1) + 1);
+                int quantity = ctx.getRandom().nextInt(MAXQTYPERPRODUCT - 1) + 1;
+                quantity = (product.getPrice() < 250) ? quantity * 8: quantity; // 8x qty if price < 250
+                product.setQuantity(quantity);
                 product.setCurrency(ctx.getCurrency());
 
                 price = product.getPrice();
