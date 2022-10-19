@@ -68,11 +68,19 @@ public class SimpleTextBox extends ElementBox {
     private HAlign halign;
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text) throws Exception {
-        this(font, fontSize, posX, posY, text, "undefined");
+        this(font, fontSize, posX, posY, text, Color.BLACK, null, "undefined");
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, String entityName) throws Exception {
         this(font, fontSize, posX, posY, text, Color.BLACK, null, entityName);
+    }
+
+    public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, HAlign halign) throws Exception {
+        this(font, fontSize, posX, posY, text, Color.BLACK, null, halign, "undefined");
+    }
+
+    public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, HAlign halign, String entityName) throws Exception {
+        this(font, fontSize, posX, posY, text, Color.BLACK, null, halign, entityName);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, Color textColor, Color backgroundColor) throws Exception {
@@ -131,7 +139,7 @@ public class SimpleTextBox extends ElementBox {
         String dummyString = "x".repeat(100);
         float dummyStringWidth = (this.fontSize * this.font.getStringWidth(dummyString) / 1000);
         // max length of chars that fit within contentWidth
-        int maxContentLength = (int) Math.max((dummyString.length() / (dummyStringWidth/contentWidth)) - 1, 1);
+        int maxContentLength = Math.max((int)(dummyString.length() / (dummyStringWidth/contentWidth)) - 2, 1); // -2 makes breaking more likely
 
         String wrappedText = WordWrap.from(text)
                                      .maxWidth(maxContentLength)

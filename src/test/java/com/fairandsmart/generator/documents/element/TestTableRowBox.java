@@ -90,6 +90,8 @@ public class TestTableRowBox implements InvoiceLayout {
         VerticalContainer container = new VerticalContainer(startPosX, startPosY, 0);
 
         float[] config = new float[] {50, 50, 150, 50};
+
+
         TableRowBox row1 = new TableRowBox(config, 0, 0);
         row1.addElement(new SimpleTextBox(font, 12, 0, 0, "COL11"), false);
         row1.addElement(new SimpleTextBox(font, 12, 0, 0, "COL12"), false);
@@ -97,6 +99,15 @@ public class TestTableRowBox implements InvoiceLayout {
         row1.addElement(new SimpleTextBox(font, 12, 0, 0, "COL14"), false);
         row1.setBackgroundColor(Color.GRAY);
         container.addElement(row1);
+
+        TableRowBox row11 = new TableRowBox(new float[] {50, 25, 25, 150, 50}, 0, 0);
+        row11.addElement(new SimpleTextBox(font, 12, 0, 0, "COL111"), false);
+        row11.addElement(new SimpleTextBox(font, 12, 0, 0, "SC112"), false);
+        row11.addElement(new SimpleTextBox(font, 12, 0, 0, "SC122"), false);
+        row11.addElement(new SimpleTextBox(font, 12, 0, 0, "COL113"), false);
+        row11.addElement(new SimpleTextBox(font, 12, 0, 0, "COL114"), false);
+        row11.setBackgroundColor(Color.GRAY);
+        container.addElement(row11);
 
         TableRowBox row2 = new TableRowBox(config, 0,0);
         row2.addElement(new SimpleTextBox(font, 12, 0, 0, "COL21"), false);

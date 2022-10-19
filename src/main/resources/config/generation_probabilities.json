@@ -12,6 +12,7 @@
       "client_bill_address_tax_number": 50,
       "addresses_bordered": 40,
       "table_hdr_black_text": 80,
+      "table_center_align_items": 40,
       "registered_address_info": 50,
       "total_in_words": 50,
       "payment_address": 40,

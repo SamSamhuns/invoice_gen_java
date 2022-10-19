@@ -40,6 +40,7 @@ import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.TableColumnItem;
+import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
@@ -65,6 +66,7 @@ import java.util.Random;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
+import java.util.List;
 import java.util.LinkedHashMap;
 
 
@@ -224,28 +226,34 @@ public class AmazonLayout implements InvoiceLayout {
         }
         shipAddrContainer.build(contentStream, writer);
 
-        // table text colors
-        Color textColor = genProb.get("table_hdr_black_text") ? Color.BLACK: Color.WHITE; // textColor black (predominantly) or white
-        Color bgColor = (textColor == Color.WHITE) ? Color.BLACK: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, Color.WHITE).get(rnd.nextInt(3)); // bgColor should be contrasting to textColor
+        // table header text colors
+        Color hdrTextColor = genProb.get("table_hdr_black_text") ? Color.BLACK: Color.WHITE; // hdrTextColor black (predominantly) or white
+        Color hdrBgColor = (hdrTextColor == Color.WHITE) ? Color.BLACK: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, Color.WHITE).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
 
-        // table top header
-        String tableHdrText = new Generex("(Transaction|Nature of Transaction|Transaction Type): (Purchase|Sale)").random();
-        float tableHdrPosX = leftPageMargin;
-        float tableHdrPosY = billAddrContainer.getBoundingBox().getPosY() - billAddrContainer.getBoundingBox().getHeight() - 15;
-        if (bgColor == Color.WHITE) {
-            tableHdrText = ""; // if bgColor is white, do not write tableHdrText
-            float x1 = leftPageMargin; float y1 = tableHdrPosY;
-            float x2 = pageWidth-rightPageMargin; float y2 = y1;
-            new HorizontalLineBox(x1, y1, x2, y2, lineStrokeColor).build(contentStream, writer);
-        }
-        SimpleTextBox tableHdr = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableHdrPosX, tableHdrPosY, tableHdrText);
-        tableHdr.build(contentStream, writer);
+        // table top info
+        String tableTopInfoText = (hdrBgColor == Color.WHITE) ? "" : new Generex("(Transaction|Nature of Transaction|Transaction Type): (Purchase|Sale)").random();
+        float tableTopInfoPosX = leftPageMargin;
+        float tableTopInfoPosY = billAddrContainer.getBoundingBox().getPosY() - billAddrContainer.getBoundingBox().getHeight() - 15;
 
-        // item list head
-        boolean upperCap = rnd.nextBoolean();
+        SimpleTextBox tableTopInfoBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopInfoPosX, tableTopInfoPosY, tableTopInfoText);
+        tableTopInfoBox.build(contentStream, writer);
+
+        // tabel top horizontal line, will be built after
+        float x1 = leftPageMargin; float y1 = tableTopInfoBox.getBoundingBox().getPosY() - tableTopInfoBox.getBoundingBox().getHeight() - 2;
+        float x2 = pageWidth-rightPageMargin; float y2 = y1;
+        HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(x1, y1, x2, y2, lineStrokeColor);
+
+        ////////////////////////////////////      Building Table      ////////////////////////////////////
+
         ProductContainer pc = model.getProductContainer();
+        boolean upperCap = rnd.nextBoolean();
+        HAlign tableHdrAlign = (genProb.get("table_center_align_items")) ? HAlign.CENTER: HAlign.LEFT;
+
+
+        // building item table column width list
         float[] configRow = {40f, 40f, 150f, 60f, 60f, 60f, 60f, 60f};  // should add up to 530 which is pageW - leftM - rightM
 
+        // Header Item list head labels
         String snHead = pc.getsnHead();
         String qtyHead = pc.getQtyHead();
         String descHead = pc.getDescHead();
@@ -255,106 +263,118 @@ public class AmazonLayout implements InvoiceLayout {
         String taxRateHead = pc.getTaxRateHead();
         String taxHead = pc.getTaxHead();
 
-        // TODO: use maps to assign order of items, headers and footers to columns
-        // SN, Qty, Item, ItemRate, Disc, GrossTotal, TaxRate, TaxAmt
-        // Map<String, TableColumnItem> itemMap = new LinkedHashMap<>();
-        // itemMap.put("SN", new TableColumnItem(40f, snHead, "", ""));
-        // itemMap.put("Qty", new TableColumnItem(40f, qtyHead, "", ""));
-        // itemMap.put("Item", new TableColumnItem(40f, descHead, "", ""));
-        // itemMap.put("ItemRate", new TableColumnItem(40f, unitPriceHead, "", ""));
-        // itemMap.put("Disc", new TableColumnItem(40f, discountHead, "", ""));
-        // itemMap.put("GrossTotal", new TableColumnItem(40f, totalWithoutTaxHead, "", ""));
-        // itemMap.put("TaxRate", new TableColumnItem(40f, taxRateHead, "", ""));
-        // itemMap.put("TaxAmt", new TableColumnItem(40f, taxHead, "", ""));
-
-        TableRowBox row1 = new TableRowBox(configRow, 0, 0);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? snHead.toUpperCase() : snHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? qtyHead.toUpperCase() : qtyHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? descHead.toUpperCase() : descHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? unitPriceHead.toUpperCase() : unitPriceHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? discountHead.toUpperCase() : discountHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? totalWithoutTaxHead.toUpperCase() : totalWithoutTaxHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? taxRateHead.toUpperCase() : taxRateHead), textColor, bgColor), centerAlignItems);
-        row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? taxHead.toUpperCase() : taxHead), textColor, bgColor), centerAlignItems);
-        row1.setBackgroundColor(bgColor);
-
-        VerticalContainer verticalInvoiceItems = new VerticalContainer(leftPageMargin, tableHdrPosY - tableHdr.getBoundingBox().getHeight() - 2, 600);
-        verticalInvoiceItems.addElement(row1);
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
-        // item list
-        String quantity; String snNum;
-        for(int w=0; w<model.getProductContainer().getProducts().size(); w++) {
-            Product randomProduct = model.getProductContainer().getProducts().get(w);
-            textColor = Color.BLACK;
-            bgColor = (randomProduct.getName().toLowerCase().equals("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
-            quantity = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Float.toString(randomProduct.getQuantity());
-            snNum = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Integer.toString(w + 1);
-
-            TableRowBox productLine = new TableRowBox(configRow, 0, 0);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, snNum, textColor, bgColor, "SN"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, quantity, textColor, bgColor, "QTY"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontNB, 8, 0, 0, randomProduct.getName(), textColor, bgColor, "PD"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedPrice(), textColor, bgColor, "UP"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTotalDiscount(), textColor, bgColor, "DISC"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTotalPrice(), textColor, bgColor, "PTWTX"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTaxRate(), textColor, bgColor, "TXR"), centerAlignItems);
-            productLine.addElement(new SimpleTextBox(fontN, 8, 0, 0, randomProduct.getFormatedTotalTax(), textColor, bgColor, "PTTAX"), centerAlignItems);
-
-            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-            verticalInvoiceItems.addElement(productLine);
-            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-        }
-
-        verticalInvoiceItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
-        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
-
-        // Head labels for final total amount, tax and discount
+        // Footer labels for final total amount, tax and discount
         String totalHead = pc.getTotalHead();
         String discountTotalHead = pc.getDiscountTotalHead();
         String taxAndDiscountTotalHead = pc.getWithTaxAndDiscountTotalHead();
         String taxRateTotalHead = pc.getTaxRateTotalHead();
         String taxTotalHead = pc.getTaxTotalHead();
 
+        // Use maps to assign order of items, headers and footers to columns
+        // SN, Qty, Item, ItemRate, Disc, Total, TaxRate, Tax
+        Map<String, TableColumnItem> itemMap = new LinkedHashMap<>();
+        // TableColumnItem constructor(float colWidth, String colLabelHeader, String colLabelFooter, String colValueFooter)
+        itemMap.put("SN", new TableColumnItem(40f, snHead, "", ""));
+        itemMap.put("Qty", new TableColumnItem(40f, qtyHead, "", ""));
+        itemMap.put("Item", new TableColumnItem(150f, descHead, "", ""));
+        itemMap.put("ItemRate", new TableColumnItem(60f, unitPriceHead, totalHead, pc.getFormatedTotal()));
+        itemMap.put("Disc", new TableColumnItem(60f, discountHead, discountTotalHead, pc.getFormatedTotalDiscount()));
+        itemMap.put("Total", new TableColumnItem(60f, totalWithoutTaxHead, taxAndDiscountTotalHead, pc.getFormatedTotalWithTax()));
+        itemMap.put("TaxRate", new TableColumnItem(60f, taxRateHead, taxRateTotalHead, pc.getFormatedTotalTaxRate()));
+        itemMap.put("Tax", new TableColumnItem(60f, taxHead, taxTotalHead, pc.getFormatedTotalTax()));
+        List<String> tableHeaders = Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "Total", "TaxRate", "Tax");
+
+        TableRowBox row1 = new TableRowBox(configRow, 0, 0);
+        for (String tableHeader: tableHeaders) {
+            String hdrLabel = itemMap.get(tableHeader).getColLabelHeader();
+            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"Header"), centerAlignItems);
+        }
+        row1.setBackgroundColor(hdrBgColor);
+
+        VerticalContainer verticalTableItems = new VerticalContainer(leftPageMargin, tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2, 600);
+        verticalTableItems.addElement(row1);
+        verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+
+        // item list
+        String quantity; String snNum;
+        Color cellTextColor; Color cellBgColor;
+        for(int w=0; w<model.getProductContainer().getProducts().size(); w++) {
+            Product randomProduct = model.getProductContainer().getProducts().get(w);
+            cellTextColor = Color.BLACK;
+            cellBgColor = (randomProduct.getName().toLowerCase().equals("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
+            quantity = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Float.toString(randomProduct.getQuantity());
+            snNum = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Integer.toString(w + 1);
+
+            TableRowBox productLine = new TableRowBox(configRow, 0, 0);
+            for (String tableHeader: tableHeaders) {
+                String cellText = "";
+                PDFont cellFont = fontN;
+                HAlign cellAlign = tableHdrAlign;
+                switch (tableHeader) {
+                    case "SN":
+                        cellText = snNum; break;
+                    case "Qty":
+                        cellText = quantity; break;
+                    case "Item":
+                        cellText = randomProduct.getName();
+                        cellFont = fontNB; break;
+                    case "ItemRate":
+                        cellText = randomProduct.getFormatedPrice(); break;
+                    case "Disc":
+                        cellText = randomProduct.getFormatedTotalDiscount(); break;
+                    case "Total":
+                        cellText = randomProduct.getFormatedTotalPrice(); break;
+                    case "TaxRate":
+                        cellText = randomProduct.getFormatedTaxRate(); break;
+                    case "Tax":
+                        cellText = randomProduct.getFormatedTotalTax(); break;
+                }
+                productLine.addElement(new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item"), centerAlignItems);
+            }
+
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(productLine);
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+        }
+
+        verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        float tableItemsBottomY = verticalTableItems.getBoundingBox().getHeight();
+
+        verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+
+        // Footer Labels for final total amount, tax and discount
         TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, ""), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, ""), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, ""), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? totalHead.toUpperCase() : totalHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? discountTotalHead.toUpperCase() : discountTotalHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? taxAndDiscountTotalHead.toUpperCase() : taxAndDiscountTotalHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? taxRateTotalHead.toUpperCase() : taxRateTotalHead)), centerAlignItems);
-        titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 9, 0, 0, (upperCap ? taxTotalHead.toUpperCase() : taxTotalHead)), centerAlignItems);
-        verticalInvoiceItems.addElement(titleTotalInvoice);
+        for (String tableHeader: tableHeaders) {
+            String hdrLabel = itemMap.get(tableHeader).getColLabelFooter();
+            titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign), centerAlignItems);
+        }
+        verticalTableItems.addElement(titleTotalInvoice);
 
-        verticalInvoiceItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
-        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+        verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+        verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
-        // Numerical values for final total amount, tax and discount
+        // Footer Numerical values for final total amount, tax and discount
         TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotal(), "TWTX" ), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalDiscount(), "TD"), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalWithTax(), "TA" ), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalTaxRate(), "TXR" ), centerAlignItems);
-        totalInvoice1.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getProductContainer().getFormatedTotalTax(), "TTX" ), centerAlignItems);
-        verticalInvoiceItems.addElement(totalInvoice1);
+        for (String tableHeader: tableHeaders) {
+            String hdrValue = itemMap.get(tableHeader).getColValueFooter();
+            totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign), centerAlignItems);
+        }
+        verticalTableItems.addElement(totalInvoice1);
 
-        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
-        verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalInvoiceItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
 
         // Add registered address information
         if (genProb.get("registered_address_info")) {
-            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
             String addressFooterText = String.format("Registered Address for %s, %s, %s, %s, %s, %s",
                                                      model.getCompany().getName(),
@@ -365,13 +385,13 @@ public class AmazonLayout implements InvoiceLayout {
                                                      model.getCompany().getAddress().getCountry());
             SimpleTextBox addressFooter = new SimpleTextBox(fontN, 10, 0, 0, addressFooterText);
             addressFooter.setWidth(500);
-            verticalInvoiceItems.addElement(addressFooter);
-            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(addressFooter);
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         }
         else if (genProb.get("total_in_words") & !genProb.get("registered_address_info")) {
-            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
             String totalInWordsText = HelperCommon.spellout_number(
                     model.getProductContainer().getTotalWithTax(),
@@ -381,17 +401,33 @@ public class AmazonLayout implements InvoiceLayout {
 
             SimpleTextBox totalInWordsFooter = new SimpleTextBox(fontN, 10, 0, 0, totalInWordsText);
             totalInWordsFooter.setWidth(500);
-            verticalInvoiceItems.addElement(totalInWordsFooter);
-            verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
-            verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(totalInWordsFooter);
+            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         }
-        verticalInvoiceItems.build(contentStream, writer);
+        verticalTableItems.build(contentStream, writer);
+        tableTopInfoLine.build(contentStream, writer); // must be built after verticalTableItems
+
+        // Add borders to table cell items if tabel cell is CENTER aligned horizontally
+        if ( tableHdrAlign == HAlign.CENTER ) {
+            float xPos = leftPageMargin;
+            float yPos = tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2;
+            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsBottomY, lineStrokeColor);
+            xPos += configRow[0];
+            for (int i=1; i < configRow.length; i++) {
+              HelperImage.drawLine(contentStream, xPos-2, yPos, xPos, yPos - tableItemsBottomY, lineStrokeColor);
+              xPos += configRow[i];
+            }
+            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsBottomY, lineStrokeColor);
+        }
+
+        ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
         // Payment Address
         if (genProb.get("payment_address")) {
             // Set paymentAddrContainer opposite to the signature location
             float paymentAddrXPos = (genProb.get("signature_bottom_left")) ? rightAddrX: leftPageMargin;
-            float paymentAddrYPos = verticalInvoiceItems.getBoundingBox().getPosY() - verticalInvoiceItems.getBoundingBox().getHeight() - 10;
+            float paymentAddrYPos = verticalTableItems.getBoundingBox().getPosY() - verticalTableItems.getBoundingBox().getHeight() - 10;
 
             VerticalContainer paymentAddrContainer = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
             paymentAddrContainer.addElement(new SimpleTextBox(fontB, 10, 0, 0, model.getPaymentInfo().getAddressHeader(), "PH"));
