@@ -548,23 +548,19 @@ public class ProductContainer {
 
 
         private final List<Product> products = new ArrayList<Product>();
-        private static final List<String> productsFileList = Arrays.asList(
-                "common/product/fr/householdandmedia_fr.json",
-                "common/product/en/householdandmedia_en.json");
-        private static final List<String> productsLangList = Arrays.asList(
-                "fr",
-                "en");
+        private static final List<List<String>> productsFileLangList = Arrays.asList(
+                Arrays.asList("common/product/fr/householdandmedia_fr.json", "fr"),
+                Arrays.asList("common/product/en/householdandmedia_en.json", "en"));
         {
-            assert productsFileList.size() == productsLangList.size();
             int currentListSize = 0;
-            for (int i=0; i < productsFileList.size(); i++) {
-                Reader jsonReader = new InputStreamReader(ProductContainer.class.getClassLoader().getResourceAsStream(productsFileList.get(i)));
+            for (int i=0; i < productsFileLangList.size(); i++) {
+                Reader jsonReader = new InputStreamReader(ProductContainer.class.getClassLoader().getResourceAsStream(productsFileLangList.get(i).get(0)));
                 Gson gson = new Gson();
                 Type collectionType = new TypeToken<Collection<Product>>(){}.getType();
                 products.addAll(gson.fromJson(jsonReader, collectionType));
 
                 for (int j=currentListSize; j<products.size(); j++) {
-                    products.get(j).setLanguage(productsLangList.get(i));
+                    products.get(j).setLanguage(productsFileLangList.get(i).get(1));
                 }
                 currentListSize += products.size();
             }
