@@ -124,7 +124,7 @@ public class AmazonLayout implements InvoiceLayout {
         BufferedImage barcodeBufImg = HelperImage.generateEAN13BarcodeImage(barCodeNum);
         PDImageXObject barcodeImg = LosslessFactory.createFromImage(document, barcodeBufImg);
 
-        /*//////////////////   Build Page components now   //////////////////*/
+        ///////////////////////////////////      Build Page components now      ////////////////////////////////////
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
         new BorderBox(HelperCommon.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, pageHeight).build(contentStream, writer);
 
@@ -132,7 +132,7 @@ public class AmazonLayout implements InvoiceLayout {
         if (genProb.get("barcode_top")) {
             new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
         }
-        // or Logo top
+        // Or Logo top
         else if (genProb.get("logo_top")) {
             logoWidth = 100;
             logoHeight = (logoWidth * logoImg.getHeight()) / logoImg.getWidth();
@@ -156,28 +156,49 @@ public class AmazonLayout implements InvoiceLayout {
             vendorAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getCompany().getContact().getPhoneLabel()+": "+model.getCompany().getContact().getPhoneValue(), "SC"));
             vendorAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getCompany().getContact().getFaxLabel()+": "+model.getCompany().getContact().getFaxValue(), "SF"));
         }
-        // Purchase Order Number
-        else if (genProb.get("purchase_order_number_top")) {
-          new SimpleTextBox(fontN, 9, leftPageMargin, 680, model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder(), "LO").build(contentStream, writer);
-        }
-
         if (genProb.get("addresses_bordered")) {
             vendorAddrContainer.setBorderColor(lineStrokeColor);
             vendorAddrContainer.setBorderThickness(0.5f);
         }
         vendorAddrContainer.build(contentStream, writer);
 
-        // TAX number
-        String vatText = model.getCompany().getIdNumbers().getVatLabel() + ": " + model.getCompany().getIdNumbers().getVatValue();
-        new SimpleTextBox(fontN, 9, leftPageMargin, 670, vatText, "SVAT").build(contentStream, writer);
-
-        // Payment Terms
-        if (genProb.get("payment_terms_top")) {
-            new SimpleTextBox(fontN, 9, pageWidth/2, 680, model.getPaymentInfo().getLabelPaymentTerm()+": "+model.getPaymentInfo().getValuePaymentTerm(), "PT").build(contentStream, writer);
+        float leftTopInfoY = 670; // Progressively inc by 10 pts after each left-side box
+        // if no "vendor_address_phone_fax" then Purchase Order Number, Left side
+        if (!genProb.get("vendor_address_phone_fax") && genProb.get("purchase_order_number_top")) {
+          String purchaseOrderText = model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder();
+          new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, purchaseOrderText, "LO").build(contentStream, writer);
+          leftTopInfoY += 10;
         }
-        // invoice number
-        String invoiceText = model.getReference().getLabelInvoice() + ": " +model.getReference().getValueInvoice();
-        new SimpleTextBox(fontN, 9, pageWidth/2, 670, invoiceText, "INV").build(contentStream, writer);
+        // TAX number, Left side
+        if (genProb.get("tax_number_top")) {
+            String vatText = model.getCompany().getIdNumbers().getVatLabel() + ": " + model.getCompany().getIdNumbers().getVatValue();
+            new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, vatText, "SVAT").build(contentStream, writer);
+        }
+
+        float rightTopInfoY = 670; // Progressively inc by 10 pts after each right-side box
+        // Currency Used, Right side
+        if (genProb.get("currency_top")) {
+            String currencyText = model.getPaymentInfo().getLabelAccountCurrency()+": "+model.getProductContainer().getCurrency();
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, currencyText, "CUR").build(contentStream, writer);
+            rightTopInfoY += 10;
+        }
+        // Currency Exchange Used, Right side
+        if (genProb.get("currency_exchange_top")) {
+            String currencyText = model.getPaymentInfo().getLabelAccountCurrency()+" Exchange: "+model.getProductContainer().getCurrency();
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, currencyText, "CEX").build(contentStream, writer);
+            rightTopInfoY += 10;
+        }
+        // Payment Terms, Right side
+        if (genProb.get("payment_terms_top")) {
+            String paymentTermText = model.getPaymentInfo().getLabelPaymentTerm()+": "+model.getPaymentInfo().getValuePaymentTerm();
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentTermText, "PT").build(contentStream, writer);
+            rightTopInfoY += 10;
+        }
+        // invoice number, Right side
+        if (genProb.get("invoice_number_top")) {
+            String invoiceText = model.getReference().getLabelInvoice() + ": " +model.getReference().getValueInvoice();
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, invoiceText, "INV").build(contentStream, writer);
+        }
 
         HelperImage.drawLine(contentStream, leftPageMargin, 650, pageWidth-rightPageMargin, 650, lineStrokeColor);
 
@@ -238,7 +259,7 @@ public class AmazonLayout implements InvoiceLayout {
         SimpleTextBox tableTopInfoBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopInfoPosX, tableTopInfoPosY, tableTopInfoText);
         tableTopInfoBox.build(contentStream, writer);
 
-        // tabel top horizontal line, will be built after
+        // table top horizontal line, will be built after verticalTableItems
         float x1 = leftPageMargin; float y1 = tableTopInfoBox.getBoundingBox().getPosY() - tableTopInfoBox.getBoundingBox().getHeight() - 2;
         float x2 = pageWidth-rightPageMargin; float y2 = y1;
         HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(x1, y1, x2, y2, lineStrokeColor);
@@ -330,7 +351,11 @@ public class AmazonLayout implements InvoiceLayout {
                     case "Tax":
                         cellText = randomProduct.getFormatedTotalTax(); break;
                 }
-                productLine.addElement(new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item"), centerAlignItems);
+                SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellAlign, tableHeader+"Item");
+                x1 = rowBox.getBoundingBox().getPosX();
+                y1 = rowBox.getBoundingBox().getPosY() - rowBox.getBoundingBox().getHeight();
+                HelperImage.drawLine(contentStream, x1, y1, x1 + rowBox.getBoundingBox().getWidth(), y1, Color.RED);
+                productLine.addElement(rowBox, centerAlignItems);
             }
 
             verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
@@ -359,7 +384,7 @@ public class AmazonLayout implements InvoiceLayout {
         verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
 
-        // Footer Numerical values for final total amount, tax and discount
+        // Footer Numerical formatted values for final total amount, tax and discount
         TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
         for (String tableHeader: tableHeaders) {
             String hdrValue = itemMap.get(tableHeader).getColValueFooter();
@@ -402,13 +427,13 @@ public class AmazonLayout implements InvoiceLayout {
             SimpleTextBox totalInWordsFooter = new SimpleTextBox(fontN, 10, 0, 0, totalInWordsText);
             totalInWordsFooter.setWidth(500);
             verticalTableItems.addElement(totalInWordsFooter);
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         }
         verticalTableItems.build(contentStream, writer);
         tableTopInfoLine.build(contentStream, writer); // must be built after verticalTableItems
 
-        // Add borders to table cell items if tabel cell is CENTER aligned horizontally
+        // Add borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = leftPageMargin;
             float yPos = tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2;
