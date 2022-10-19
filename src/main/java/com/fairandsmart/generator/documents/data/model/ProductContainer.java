@@ -393,6 +393,7 @@ public class ProductContainer {
             descHeads.put("Désignation du Produit", "fr");
 
             descHeads.put("Item", "en");
+            descHeads.put("Item ID", "en");
             descHeads.put("Goods", "en");
             descHeads.put("Services", "en");
             descHeads.put("Description", "en");
@@ -446,7 +447,7 @@ public class ProductContainer {
 
             taxHeads.put("VAT Tax", "en");
             taxHeads.put("(Tax|TAX|Vat|VAT)", "en");
-            taxHeads.put("(Tax|TAX|Vat|VAT) Amount", "en");
+            taxHeads.put("(Tax|TAX|Vat|VAT) (Amt|Amount)", "en");
         }
         {
             taxRateHeads.put("TVA", "fr");
@@ -467,7 +468,7 @@ public class ProductContainer {
             taxTotalHeads.put("Montant TVA", "fr");
             taxTotalHeads.put("TVA", "fr");
 
-            taxTotalHeads.put("(Tax|TAX|Vat|VAT) Amount", "en");
+            taxTotalHeads.put("(Tax|TAX|Vat|VAT) (Amt|Amount)", "en");
             taxTotalHeads.put("Total (Tax|TAX|Vat|VAT)", "en");
             taxTotalHeads.put("Sales (Tax|TAX)", "en");
         }
@@ -504,8 +505,7 @@ public class ProductContainer {
 
             totalHeads.put("(Total|Amt|Amount|Gross)", "en");
             totalHeads.put("Total Gross (Amt|Amount)", "en");
-            totalHeads.put("Total (Excl\\.(Tax|TAX|Vat|VAT))", "en");
-            totalHeads.put("Total (w\\.o\\.|w/o|without) (Tax|TAX|Vat|VAT)", "en");
+            totalHeads.put("Total (w\\.o\\.|w/o|without|Excl\\.) (Tax|TAX|Vat|VAT)", "en");
         }
         {
             withTaxTotalHeads.put("Montant TTC", "fr");
