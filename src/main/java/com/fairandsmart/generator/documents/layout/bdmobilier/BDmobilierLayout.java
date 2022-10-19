@@ -214,7 +214,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         float[] configRow = {209,56,45,70,71};
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
 
-        row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getDescHead(),textColor,bgColor), false);
+        row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getNameHead(),textColor,bgColor), false);
         row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getUPHead(),textColor,bgColor), false);
         row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getDiscountHead(),textColor,bgColor), false);
         row1.addElement(new SimpleTextBox(fontB, 9, 0, 0, pc.getQtyHead(),textColor,bgColor), false);

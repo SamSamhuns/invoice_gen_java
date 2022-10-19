@@ -61,7 +61,7 @@ public class ProductReceiptContainer {
     private int totalQty;
     private float total;
     private String currency;
-    private final String descHead;
+    private final String nameHead;
     private final String qtyHead;
     private final String unitPriceHead;
     private final String taxRateHead;
@@ -91,12 +91,12 @@ public class ProductReceiptContainer {
     private String change;
     private float totalShippingCost;
 
-    public ProductReceiptContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String taxRateHead,
+    public ProductReceiptContainer(String currency, String nameHead, String qtyHead, String unitPriceHead, String taxRateHead,
                                    String taxHead, String lineTotalHead, String totalHead, String taxTotalHead, String withTaxTotalHead, String snHead,
                                    String discountHead, String roundedHead, String roundingHead, String cashHead, String changeHead,
                                    String qtyTotalHead,String itemsTotalHead,String GSTHead) {
         this.setCurrency(currency);
-        this.descHead = descHead;
+        this.nameHead = nameHead;
         this.qtyHead = qtyHead;
         this.unitPriceHead = unitPriceHead;
         this. taxRateHead = taxRateHead;
@@ -173,8 +173,8 @@ public class ProductReceiptContainer {
         return String.format("%.2f", this.getTotalTax()) + " " + currency;
     }
 
-    public String getDescHead() {
-        return descHead;
+    public String getNameHead() {
+        return nameHead;
     }
 
     public String getQtyHead() {
@@ -364,7 +364,7 @@ public class ProductReceiptContainer {
 
     public static class Generator implements ModelGenerator<ProductReceiptContainer> {
 
-        private static final Map<String, String> descHeads = new LinkedHashMap<>();
+        private static final Map<String, String> nameHeads = new LinkedHashMap<>();
         private static final Map<String, String> qtyHeads = new LinkedHashMap<>();
         private static final Map<String, String> unitPriceHeads = new LinkedHashMap<>();
         private static final Map<String, String> taxRateHeads = new LinkedHashMap<>();
@@ -388,12 +388,12 @@ public class ProductReceiptContainer {
 
 
         {
-            descHeads.put("Désignation", "fr");
-            descHeads.put("Description", "fr");
-            descHeads.put("Désignation du Produit", "fr");
+            nameHeads.put("Désignation", "fr");
+            nameHeads.put("Description", "fr");
+            nameHeads.put("Désignation du Produit", "fr");
 
-            descHeads.put("Descriptions", "en");
-            descHeads.put("Product Description", "en");
+            nameHeads.put("Descriptions", "en");
+            nameHeads.put("Product Description", "en");
         }
 
         {
@@ -578,7 +578,7 @@ public class ProductReceiptContainer {
         @Override
         public ProductReceiptContainer generate(GenerationContext ctx) {
 
-            List<String> localDescHeads = descHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localNameHeads = nameHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localQtyHeads = qtyHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localUPHeads = unitPriceHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localTaxRateHeads = taxRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
@@ -612,7 +612,7 @@ public class ProductReceiptContainer {
 
 
             int maxProduct = 6;
-            ProductReceiptContainer productContainer = new ProductReceiptContainer(ctx.getCurrency(), localDescHeads.get(idxL), localQtyHeads.get(idxL),
+            ProductReceiptContainer productContainer = new ProductReceiptContainer(ctx.getCurrency(), localNameHeads.get(idxL), localQtyHeads.get(idxL),
                                                 localUPHeads.get(idxL), localTaxRateHeads.get(idxL), localTaxHeads.get(idxL), localLineTotalHeads.get(idxL),
                                                 localTotalHeads.get(idxL), localTaxTotalHeads.get(idxL), localWithTaxTotalHeads.get(idxL), localSNHeads.get(idxL), localDiscountHeads.get(idxD),
                                                 localroundedHeads.get(idxRed),localroundingHeads.get(idxRing),localCashHeads.get(idxCsh), localChangeHeads.get(idxCh),

@@ -38,8 +38,9 @@ package com.fairandsmart.generator.documents.data.model;
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.generator.ModelGenerator;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.google.gson.Gson;
+
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.mifmif.common.regex.Generex;
 
 import java.io.InputStreamReader;
@@ -68,7 +69,8 @@ public class ProductContainer {
     private Boolean taxRateAvailable;
     private Boolean shippingCostAvailable;
     // display field heads, must be set in constructor //
-    private final String descHead;
+    private final String nameHead;
+    private final String codeHead;
     private final String qtyHead;
     private final String unitPriceHead;
     private final String lineTotalHead;
@@ -89,12 +91,13 @@ public class ProductContainer {
     private final String withTaxAndDiscountTotalHead;
 
 
-    public ProductContainer(String currency, String descHead, String qtyHead, String unitPriceHead, String lineTotalHead, String snHead,
+    public ProductContainer(String currency, String nameHead, String codeHead, String qtyHead, String unitPriceHead, String lineTotalHead, String snHead,
                             String taxHead, String taxRateHead, String taxRateTotalHead, String taxTotalHead,
                             String discountHead, String discountRateHead, String discountRateTotalHead, String discountTotalHead,
                             String totalHead, String withTaxTotalHead, String withDiscountTotalHead, String withTaxAndDiscountTotalHead) {
         this.setCurrency(currency);
-        this.descHead = descHead;
+        this.nameHead = nameHead;
+        this.codeHead = codeHead;
         this.qtyHead = qtyHead;
         this.unitPriceHead = unitPriceHead;
         this.lineTotalHead = lineTotalHead;
@@ -142,8 +145,8 @@ public class ProductContainer {
 
     // get only field heads
 
-    public String getDescHead() {
-        return descHead;
+    public String getNameHead() {
+        return nameHead;
     }
 
     public String getQtyHead() {
@@ -365,7 +368,8 @@ public class ProductContainer {
 
     public static class Generator implements ModelGenerator<ProductContainer> {
 
-        private static final Map<String, String> descHeads = new LinkedHashMap<>();
+        private static final Map<String, String> nameHeads = new LinkedHashMap<>();
+        private static final Map<String, String> codeHeads = new LinkedHashMap<>();
         private static final Map<String, String> qtyHeads = new LinkedHashMap<>();
         private static final Map<String, String> unitPriceHeads = new LinkedHashMap<>();
         private static final Map<String, String> lineTotalHeads = new LinkedHashMap<>();
@@ -388,19 +392,28 @@ public class ProductContainer {
 
         // Primary heads //
         {
-            descHeads.put("Désignation", "fr");
-            descHeads.put("Description", "fr");
-            descHeads.put("Désignation du Produit", "fr");
+            nameHeads.put("Désignation", "fr");
+            nameHeads.put("Description", "fr");
+            nameHeads.put("Désignation du Produit", "fr");
 
-            descHeads.put("Item", "en");
-            descHeads.put("Item ID", "en");
-            descHeads.put("Goods", "en");
-            descHeads.put("Services", "en");
-            descHeads.put("Description", "en");
-            descHeads.put("Product / Ref", "en");
-            descHeads.put("Product Desc", "en");
-            descHeads.put("Product Description", "en");
-            descHeads.put("Description of Goods", "en");
+            nameHeads.put("Item", "en");
+            nameHeads.put("Name", "en");
+            nameHeads.put("Goods", "en");
+            nameHeads.put("Services", "en");
+            nameHeads.put("Description", "en");
+            nameHeads.put("Product Desc", "en");
+            nameHeads.put("Product Description", "en");
+            nameHeads.put("Description of Goods", "en");
+        }
+        {
+            codeHeads.put("Code Produit", "fr");
+
+            codeHeads.put("ID", "en");
+            codeHeads.put("Item ID", "en");
+            codeHeads.put("Item Ref", "en");
+            codeHeads.put("Product Ref", "en");
+            codeHeads.put("Product ID", "en");
+            codeHeads.put("Product Code", "en");
         }
         {
             qtyHeads.put("Qté", "fr");
@@ -560,7 +573,8 @@ public class ProductContainer {
         @Override
         public ProductContainer generate(GenerationContext ctx) {
 
-            List<String> localDescHeads = descHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localNameHeads = nameHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localCodeHeads = codeHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localQtyHeads = qtyHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localUPHeads = unitPriceHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localLineTotalHeads = lineTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
@@ -592,7 +606,8 @@ public class ProductContainer {
 
             ProductContainer productContainer = new ProductContainer(
                     ctx.getCurrency(),
-                    localDescHeads.get(ctx.getRandom().nextInt(localDescHeads.size())),
+                    localNameHeads.get(ctx.getRandom().nextInt(localNameHeads.size())),
+                    localCodeHeads.get(ctx.getRandom().nextInt(localCodeHeads.size())),
                     localQtyHeads.get(ctx.getRandom().nextInt(localQtyHeads.size())),
                     localUPHeads.get(ctx.getRandom().nextInt(localUPHeads.size())),
                     localLineTotalHeads.get(ctx.getRandom().nextInt(localLineTotalHeads.size())),
@@ -620,6 +635,7 @@ public class ProductContainer {
             float priceWithTax = 0;
             float priceWithDiscount = 0;
             float priceWithTaxAndDiscount = 0;
+            Generex codeGenerex = new Generex("[A-Z0-9]"+"{"+new Generex("[4-9]").random()+"}");  // [A-Z0-9]
 
             for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
                 Product product = productsLangFiltered.get(ctx.getRandom().nextInt(productsLangFiltered.size()));
@@ -643,6 +659,7 @@ public class ProductContainer {
                 product.setPriceWithTax(priceWithTax);
                 product.setPriceWithDiscount(priceWithDiscount);
                 product.setPriceWithTaxAndDiscount(priceWithTaxAndDiscount);
+                product.setCode(codeGenerex.random());
 
                 productContainer.addProduct(product);
             }

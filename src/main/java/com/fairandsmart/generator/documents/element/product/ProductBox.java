@@ -123,7 +123,7 @@ public class ProductBox extends ElementBox {
     private void init() throws Exception {
         final Map<String, String> headLabels = new HashMap<>();
         {
-            headLabels.put("PD", productContainer.getDescHead());
+            headLabels.put("PD", productContainer.getNameHead());
             headLabels.put("QTY", productContainer.getQtyHead());
             headLabels.put("UP", productContainer.getUPHead());
             headLabels.put("TXR", productContainer.getTaxRateHead());

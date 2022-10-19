@@ -36,10 +36,8 @@ package com.fairandsmart.generator.documents.data.model;
 public class Product {
 
 
-    private String description;
-    private String taxType;
-
     private String name;
+    private String description;
     private String ean;
     private String sku;
     private String brand;
@@ -49,6 +47,7 @@ public class Product {
     private float price;
     // assigned during generation
     private int quantity;
+    private String code;
     private float taxRate;
     private float discountRate;
     private float priceWithTax;
@@ -56,10 +55,27 @@ public class Product {
     private float priceWithTaxAndDiscount;
 
     // Added later
+    private String taxType;
     private int taxReference;
     private String deliveryType;
 
     public Product() {
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public String getCode() {
+      return code;
+    }
+
+    public void setCode(String code) {
+      this.code = code;
     }
 
     public String getDescription() {
@@ -68,22 +84,6 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getTaxType() {
-        return taxType;
-    }
-
-    public void setTaxType(String taxType) {
-        this.taxType = taxType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEan() {
@@ -134,6 +134,8 @@ public class Product {
         return String.format("%.2f", this.getPrice()) + " " + currency;
     }
 
+    // Assigned during generation
+
     public void setPrice(float price) {
         this.price = price;
     }
@@ -144,6 +146,14 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getTaxType() {
+        return taxType;
+    }
+
+    public void setTaxType(String taxType) {
+        this.taxType = taxType;
     }
 
     public int getTaxReference() {
@@ -287,14 +297,15 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "description='" + description + '\'' +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", description ='" + description + '\'' +
                 ", ean='" + ean + '\'' +
                 ", sku='" + sku + '\'' +
                 ", brand='" + brand + '\'' +
+                ", currency='" + currency + '\'' +
                 ", taxType='" + taxType + '\'' +
                 ", taxReference=" + taxReference +
-                ", currency='" + currency + '\'' +
                 ", deliveryType='" + deliveryType + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
@@ -307,16 +318,16 @@ public class Product {
     }
 
     /*
-      "price": "479.0",
-      "ean": "8806088499048",
-      "name": "Samsung ADD WASH WW90K4437YW porthole washing machine",
-      "brand": "Samsung",
-      "sku": "000000000001079579",
-      "categories": [
-      "Major Appliances",
-      "Washing machine",
-      "Porthole washing machine"
-      ]
+        "brand": "Samsung",
+        "categories": [
+            "Large household appliances",
+            "Washing machine",
+            "Washing machine with porthole"
+        ],
+        "ean": "8806088499048",
+        "name": "Washing machine with porthole Samsung ADD WASH WW90K4437YW",
+        "price": 399.167,
+        "sku": "000000000001079579"
     */
 
 }
