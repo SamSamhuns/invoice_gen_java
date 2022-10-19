@@ -203,21 +203,22 @@ public class DartyLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
 
-            String anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-4);
-            int nouvAnnee;
-            String dateGarantie;
+            String yearWarranty = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-4);
+            int newYear;
+            String dateWarranty;
 
-            if(anneeGarantie.contains("/")){
-                nouvAnnee = Integer.parseInt(anneeGarantie.substring(anneeGarantie.length()-2))+2;
-                anneeGarantie = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-2);
-                dateGarantie = model.getDate().getValueInvoice().replace(anneeGarantie,nouvAnnee+"");
+            if(yearWarranty.contains("/")){
+                newYear = Integer.parseInt(yearWarranty.substring(yearWarranty.length()-2))+2;
+                yearWarranty = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-2);
+                dateWarranty = model.getDate().getValueInvoice().replace(yearWarranty,newYear+"");
             }
             else {
-                nouvAnnee = Integer.parseInt(anneeGarantie) + 2;
-                dateGarantie = model.getDate().getValueInvoice().replace(anneeGarantie,nouvAnnee+"");
+                System.out.println(yearWarranty);
+                newYear = Integer.parseInt(yearWarranty) + 2;
+                dateWarranty = model.getDate().getValueInvoice().replace(yearWarranty,newYear+"");
             }
 
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0,dateGarantie ), true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, dateWarranty), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalTax(),"TXR"),true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax()+"","undefined"),true);
