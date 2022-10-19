@@ -361,6 +361,7 @@ public class PaymentInfo {
             labelsAccountNumber.put("Numéro de compte", "fr");
 
             labelsAccountNumber.put("Account Num", "en");
+            labelsAccountNumber.put("Account #", "en");
             labelsAccountNumber.put("A/C Num", "en");
             labelsAccountNumber.put("A/C No", "en");
         }
@@ -377,6 +378,7 @@ public class PaymentInfo {
 
             labelsBranchName.put("Branch", "en");
             labelsBranchName.put("Branch Name", "en");
+            labelsBranchName.put("Branch Address", "en");
         }
         // valueBranchName is loaded from bank csv dataset
         {
@@ -385,6 +387,7 @@ public class PaymentInfo {
             labelsIBANNumber.put("IBAN Num", "fr");
 
             labelsIBANNumber.put("IBAN", "en");
+            labelsIBANNumber.put("IBAN #", "en");
             labelsIBANNumber.put("IBAN No", "en");
             labelsIBANNumber.put("IBAN Num", "en");
         }
@@ -399,6 +402,7 @@ public class PaymentInfo {
         {
             labelsRoutingNumber.put("Numéro de routage", "fr");
 
+            labelsRoutingNumber.put("Routing #", "en");
             labelsRoutingNumber.put("Routing No", "en");
             labelsRoutingNumber.put("Routing Num", "en");
             labelsRoutingNumber.put("Routing Code", "en");
@@ -412,6 +416,7 @@ public class PaymentInfo {
             labelsSwiftCode.put("Swift Code", "fr");
 
             labelsSwiftCode.put("Swift", "en");
+            labelsSwiftCode.put("Swift #", "en");
             labelsSwiftCode.put("Swift Code", "en");
             labelsSwiftCode.put("Swift Number", "en");
         }
@@ -424,6 +429,7 @@ public class PaymentInfo {
             labelsAccountCurrency.put("Devise", "fr");
 
             labelsAccountCurrency.put("Cur", "en");
+            labelsAccountCurrency.put("CUR", "en");
             labelsAccountCurrency.put("Currency", "en");
         }
 

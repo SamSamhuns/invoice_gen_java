@@ -504,7 +504,7 @@ public class ProductContainer {
             totalHeads.put("Montant HT", "fr");
 
             totalHeads.put("(Total|Amt|Amount|Gross)", "en");
-            totalHeads.put("Total Gross (Amt|Amount)", "en");
+            totalHeads.put("Total Net (Amt|Amount)", "en");
             totalHeads.put("Total (w\\.o\\.|w/o|without|Excl\\.) (Tax|TAX|Vat|VAT)", "en");
         }
         {
@@ -516,6 +516,7 @@ public class ProductContainer {
         {
             withDiscountTotalHeads.put("Montant avec remise", "fr");
 
+            withDiscountTotalHeads.put("Net (Amt|Amount)", "en");
             withDiscountTotalHeads.put("(Total|Final) Amount w/ (Disc|Discount)", "en");
             withDiscountTotalHeads.put("(Total|Final) (w/|with) (Disc|Discount)", "en");
         }
@@ -526,7 +527,7 @@ public class ProductContainer {
 
             withTaxAndDiscountTotalHeads.put("(Amt|Amount|Balance) to pay", "en");
             withTaxAndDiscountTotalHeads.put("(Total|Final) (Amt|Amount|Payable|Due)", "en");
-            withTaxAndDiscountTotalHeads.put("Net Amount", "en");
+            withTaxAndDiscountTotalHeads.put("Gross (Amt|Amount)", "en");
             withTaxAndDiscountTotalHeads.put("Balance Due", "en");
             withTaxAndDiscountTotalHeads.put("Total Net", "en");
             withTaxAndDiscountTotalHeads.put("Total", "en");
