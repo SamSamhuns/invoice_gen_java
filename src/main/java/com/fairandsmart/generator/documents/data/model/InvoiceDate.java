@@ -54,10 +54,15 @@ public class InvoiceDate {
     private String valueShipping;
     private String labelPayment;
     private String valuePayment;
+    private String labelPaymentDue;
+    private String valuePaymentDue;
 
 
-    public InvoiceDate(String labelInvoice, String valueInvoice, String labelOrder, String valueOrder, String labelShipping, String valueShipping, String labelPayment, String valuePayment
-    ) {
+    public InvoiceDate(String labelInvoice, String valueInvoice,
+                       String labelOrder, String valueOrder,
+                       String labelShipping, String valueShipping,
+                       String labelPayment, String valuePayment,
+                       String labelPaymentDue, String valuePaymentDue) {
         this.labelInvoice = labelInvoice;
         this.valueInvoice = valueInvoice;
         this.labelOrder = labelOrder;
@@ -66,6 +71,8 @@ public class InvoiceDate {
         this.valueShipping = valueShipping;
         this.labelPayment = labelPayment;
         this.valuePayment = valuePayment;
+        this.labelPaymentDue = labelPaymentDue;
+        this.valuePaymentDue = valuePaymentDue;
     }
 
     public String getValueInvoice() {
@@ -132,6 +139,22 @@ public class InvoiceDate {
         this.valuePayment = valuePayment;
     }
 
+    public String getLabelPaymentDue() {
+        return labelPaymentDue;
+    }
+
+    public void setLabelPaymentDue(String labelPaymentDue) {
+        this.labelPaymentDue = labelPaymentDue;
+    }
+
+    public String getValuePaymentDue() {
+        return valuePaymentDue;
+    }
+
+    public void setValuePaymentDue(String valuePaymentDue) {
+        this.valuePaymentDue = valuePaymentDue;
+    }
+
     @Override
     public String toString() {
         return "InvoiceDate{" +
@@ -143,18 +166,21 @@ public class InvoiceDate {
                 ", valueShipping='" + valueShipping + '\'' +
                 ", labelPayment='" + labelPayment + '\'' +
                 ", valuePayment='" + valuePayment + '\'' +
+                ", labelPaymentDue='" + labelPaymentDue + '\'' +
+                ", valuePaymentDue='" + valuePaymentDue + '\'' +
                 '}';
     }
 
     public static class Generator implements ModelGenerator<InvoiceDate> {
 
-        private static final long from = 252493200;
+        private static final long from = 942493200;  // from  Nov 13, 1999
         private static final long to = System.currentTimeMillis() / 1000;
         private static final Map<SimpleDateFormat, String> formats = new LinkedHashMap<>();
         private static final Map<String, String> labelsInvoice = new LinkedHashMap<>();
         private static final Map<String, String> labelsOrder = new LinkedHashMap<>();
         private static final Map<String, String> labelsShipping = new LinkedHashMap<>();
         private static final Map<String, String> labelsPayment = new LinkedHashMap<>();
+        private static final Map<String, String> labelsPaymentDue = new LinkedHashMap<>();
         {
           // formats.put(new SimpleDateFormat("YYYY-MM-dd HH:mm:ss"), "en");
             formats.put(new SimpleDateFormat("MMM d, YYYY"), "en");
@@ -176,7 +202,10 @@ public class InvoiceDate {
             labelsOrder.put("Date de commande", "fr");
 
             labelsOrder.put("Order date", "en");
+            labelsOrder.put("Purchase date", "en");
             labelsOrder.put("Date of Order", "en");
+            labelsOrder.put("Date of Purchase", "en");
+            labelsOrder.put("Purchased On", "en");
         }
         {
             labelsShipping.put("Expédié le", "fr");
@@ -185,13 +214,25 @@ public class InvoiceDate {
             labelsShipping.put("Shipping date", "en");
             labelsShipping.put("Shipment date", "en");
             labelsShipping.put("Date of Shipment", "en");
+            labelsShipping.put("Shipped On", "en");
         }
         {
             labelsPayment.put("Payé le", "fr");
             labelsPayment.put("Date de paiement", "fr");
 
-            labelsPayment.put("Purchase date", "en");
-            labelsPayment.put("Date of Purchase", "en");
+            labelsPayment.put("Payment date", "en");
+            labelsPayment.put("Date of Payment", "en");
+            labelsPayment.put("Paid On", "en");
+        }
+        {
+            labelsPaymentDue.put("Payé le", "fr");
+            labelsPaymentDue.put("Date de paiement", "fr");
+
+            labelsPaymentDue.put("Payment Due Date", "en");
+            labelsPaymentDue.put("Payment Due On", "en");
+            labelsPaymentDue.put("Payment Due", "en");
+            labelsPaymentDue.put("Pay By", "en");
+            labelsPaymentDue.put("Due Date", "en");
         }
 
 
@@ -199,29 +240,38 @@ public class InvoiceDate {
         public InvoiceDate generate(GenerationContext ctx) {
             long date = (ctx.getRandom().nextInt((int)(to-from)) + from) * 1000;
             ctx.setDate(date);
-            List<SimpleDateFormat> localizedFormats = formats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<SimpleDateFormat> filteredFormats = formats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
-            List<String> localizedLabels = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsShipping = labelsShipping.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsPayment = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabels = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsShipping = labelsShipping.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsPayment = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsPaymentDue = labelsPaymentDue.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date);
+
             Date invoiceDate = calendar.getTime();
             Date shippingDate = calendar.getTime();
-            calendar.add(Calendar.DAY_OF_WEEK, -4);
+
+            int addedDays = 2 + ctx.getRandom().nextInt(30);
+            calendar.add(Calendar.DAY_OF_WEEK, addedDays);
+            Date paymentDueDate = calendar.getTime();
+
+            calendar.add(Calendar.DAY_OF_WEEK, -(addedDays + 2 + ctx.getRandom().nextInt(30)));
             Date orderDate = calendar.getTime();
             Date paymentDate = calendar.getTime();
             return new InvoiceDate(
-                    localizedLabels.get(ctx.getRandom().nextInt(localizedLabels.size())),
-                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(invoiceDate),
-                    localizedLabelsOrder.get(ctx.getRandom().nextInt(localizedLabelsOrder.size())),
-                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(orderDate),
-                    localizedLabelsShipping.get(ctx.getRandom().nextInt(localizedLabelsShipping.size())),
-                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(shippingDate),
-                    localizedLabelsPayment.get(ctx.getRandom().nextInt(localizedLabelsPayment.size())),
-                    localizedFormats.get(ctx.getRandom().nextInt(localizedFormats.size())).format(paymentDate)
+                    filteredLabels.get(ctx.getRandom().nextInt(filteredLabels.size())),
+                    filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(invoiceDate),
+                    filteredLabelsOrder.get(ctx.getRandom().nextInt(filteredLabelsOrder.size())),
+                    filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(orderDate),
+                    filteredLabelsShipping.get(ctx.getRandom().nextInt(filteredLabelsShipping.size())),
+                    filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(shippingDate),
+                    filteredLabelsPayment.get(ctx.getRandom().nextInt(filteredLabelsPayment.size())),
+                    filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(paymentDate),
+                    filteredLabelsPaymentDue.get(ctx.getRandom().nextInt(filteredLabelsPaymentDue.size())),
+                    filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(paymentDueDate)
             );
         }
 
