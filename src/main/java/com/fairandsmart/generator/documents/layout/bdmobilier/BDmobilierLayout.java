@@ -43,8 +43,10 @@ import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
-import org.apache.pdfbox.pdmodel.PDDocument;
+
+import org.json.JSONObject;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -69,7 +71,7 @@ public class BDmobilierLayout implements InvoiceLayout {
     }
 
     @Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, JSONObject jsonAnnot) throws Exception {
 
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);

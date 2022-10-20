@@ -50,6 +50,7 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
+import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -101,16 +102,19 @@ public class InvoiceGenerator {
         xmlOut.writeAttribute("NrOfPages", "1");
         xmlOut.writeAttribute("docTag", "xml");
 
-        // Export as PDF
         PDDocument document = new PDDocument();
+        JSONObject jsonOut = new JSONObject();
+
         // Build invoice layout and populate pdf
-        layout.buildInvoice(model, document, xmlOut);
+        layout.buildInvoice(model, document, xmlOut, jsonOut);
+
+        // Export as PDF
         document.save(pdf.toFile());
 
-        // Export model annots as JSON
+        // Export jsonOut annotations to JSON file
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         FileWriter json_file = new FileWriter(json.toString());
-        gsonBuilder.toJson(model, json_file);
+        gsonBuilder.toJson(jsonOut, json_file);
         json_file.flush();
         json_file.close();
 

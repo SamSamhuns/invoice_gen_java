@@ -51,8 +51,10 @@ import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBoxForEvaluation;
 import com.fairandsmart.generator.documents.layout.SSDLayout;
-import org.apache.pdfbox.pdmodel.PDDocument;
+
+import org.json.JSONObject;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -400,7 +402,7 @@ public class InvoiceSSDLayout implements SSDLayout {
         totalsContainer.addElement(totalHT);
         pos_element++;
         new SimpleTextBoxForEvaluation("TWTX",pos_element).build(writerEval);
-        if(model.getProductContainer().getTaxRateAvailable()) {
+        if(model.getProductContainer().getTaxAvailable()) {
             HorizontalContainer totalTaxRate = new HorizontalContainer(0, 0);
             totalTaxRate.addElement(new SimpleTextBox(font, fontSize + 1, 0, 0, model.getProductContainer().getTaxRateHead(), Color.BLACK, null, HAlign.LEFT));
             totalTaxRate.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 10, 0));

@@ -45,6 +45,8 @@ import com.fairandsmart.generator.documents.element.product.ProductBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
+
+import org.json.JSONObject;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -72,7 +74,7 @@ public class MACOMPLayout implements InvoiceLayout {
     }
 
     @Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, JSONObject jsonAnnot) throws Exception {
 
         float fontSize = 10;
         PDPage page = new PDPage(PDRectangle.A4);

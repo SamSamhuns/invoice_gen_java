@@ -36,6 +36,7 @@ package com.fairandsmart.generator.documents.layout;
 
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 
+import org.json.JSONObject;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -44,6 +45,6 @@ public interface InvoiceLayout {
 
   String name();
 
-  void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer) throws Exception;
+  void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, JSONObject jsonAnnot) throws Exception;
 
 }

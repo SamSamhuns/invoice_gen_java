@@ -66,7 +66,7 @@ public class ProductContainer {
 
     private String currency;
     private Boolean discountAvailable;
-    private Boolean taxRateAvailable;
+    private Boolean taxAvailable;
     private Boolean shippingCostAvailable;
     // display field heads, must be set in constructor //
     private final String nameHead;
@@ -337,12 +337,12 @@ public class ProductContainer {
 
     // tax available boolean
 
-    public Boolean getTaxRateAvailable() {
-        return taxRateAvailable;
+    public Boolean getTaxAvailable() {
+        return taxAvailable;
     }
 
-    public void setTaxRateAvailable(Boolean taxRateAvailable) {
-        this.taxRateAvailable = taxRateAvailable;
+    public void setTaxAvailable(Boolean taxAvailable) {
+        this.taxAvailable = taxAvailable;
     }
 
     // shipping available boolean
@@ -620,8 +620,11 @@ public class ProductContainer {
                     new Generex(localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))).random()
                     );
 
-            Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10; TODO fix this
+            Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10; TODO uncomment
             productContainer.setDiscountAvailable(discountAvailable);
+
+            Boolean taxAvailable = true;  // ctx.getRandom().nextInt(100) < 90; TODO uncomment
+            productContainer.setTaxAvailable(taxAvailable);
 
             final int MAXPRODUCT = 6;
             final int MAXQTYPERPRODUCT = 5;
@@ -641,11 +644,16 @@ public class ProductContainer {
                 product.setCurrency(ctx.getCurrency());
 
                 price = product.getPrice();
-                taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
-                priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
 
-                // add discounts for each item if discountAvailable
+                priceWithTax = price;
+                // add tax for each item if taxAvailable
+                if (taxAvailable) {
+                    taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
+                    priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
+                }
+
                 priceWithDiscount = price;
+                // add discounts for each item if discountAvailable
                 if (discountAvailable) {
                     discountRate = HelperCommon.rand_uniform(0.05f, 0.15f);  // discountRate from 5% to 15%
                     priceWithDiscount = HelperCommon.round(price * (1 - discountRate), 2);
@@ -683,9 +691,6 @@ public class ProductContainer {
 
                 productContainer.addProduct(shippingProduct);
             }
-
-            Boolean taxRateAvailable = true;
-            productContainer.setTaxRateAvailable(taxRateAvailable);
 
             return productContainer;
         }
