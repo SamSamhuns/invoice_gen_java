@@ -243,8 +243,8 @@ public class BDmobilierLayout implements InvoiceLayout {
         for(int w=0; w< model.getProductContainer().getProducts().size(); w++) {
             Product randomProduct = pc.getProducts().get(w);
             textColor = Color.BLACK;
-            bgColor = (randomProduct.getName().toLowerCase().equals("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
-            quantity = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Float.toString(randomProduct.getQuantity());
+            bgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
+            quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
             discount = (randomProduct.getDiscountRate() == 0.0) ? "--": randomProduct.getFormatedTotalDiscount();
 
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);

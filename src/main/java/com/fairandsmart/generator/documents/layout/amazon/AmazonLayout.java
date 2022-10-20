@@ -328,9 +328,9 @@ public class AmazonLayout implements InvoiceLayout {
         for(int w=0; w<model.getProductContainer().getProducts().size(); w++) {
             Product randomProduct = model.getProductContainer().getProducts().get(w);
             cellTextColor = Color.BLACK;
-            cellBgColor = (randomProduct.getName().toLowerCase().equals("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
-            quantity = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Float.toString(randomProduct.getQuantity());
-            snNum = (randomProduct.getName().toLowerCase().equals("shipping")) ? "": Integer.toString(w + 1);
+            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
+            quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
+            snNum = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Integer.toString(w + 1);
 
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             for (String tableHeader: tableHeaders) {

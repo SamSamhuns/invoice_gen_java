@@ -46,6 +46,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -148,9 +149,7 @@ public class SimpleTextBox extends ElementBox {
                                      .wrap();
 
         this.textLines = new ArrayList<>();
-        for ( String word : wrappedText.split("\n") ) {
-              this.textLines.add(word);
-        }
+        Collections.addAll(this.textLines, wrappedText.split("\n"));
         this.box.setHeight((this.textLines.size() * lineHeight) + padding.getVerticalPadding());
         this.box.setWidth(width + padding.getHorizontalPadding());
     }
