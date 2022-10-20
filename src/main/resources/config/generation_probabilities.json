@@ -3,7 +3,8 @@
     "probability": {
       "barcode_top": 50,
       "logo_top": 50,
-      "text_top_center": 99,
+      "text_top_invoice_number": 80,
+      "text_top_center": 50,
       "vendor_address_phone_fax": 35,
       "tax_number_top": 95,
       "currency_top": 60,

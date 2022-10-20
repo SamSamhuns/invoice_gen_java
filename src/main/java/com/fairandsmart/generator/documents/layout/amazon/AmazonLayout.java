@@ -145,8 +145,12 @@ public class AmazonLayout implements InvoiceLayout {
         // Text top
         VerticalContainer topTextContainer = new VerticalContainer(leftPageMargin, 810, 500);
         topTextContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, "Page 1 of 1" + ((rnd.nextBoolean()) ? ", 1-1/1": ".")));
-        topTextContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getReference().getLabelInvoice()+" for "+model.getReference().getValueInvoice()+" "+model.getDate().getValueInvoice(), "Invoice Number"));
-        topTextContainer.addElement(new SimpleTextBox(fontB, 10, 0, 0, ((rnd.nextBoolean()) ? "Retail / Invoice / Cash Memorandum": "Retail / Tax Invoice") ));
+        String textTopInvString = ((rnd.nextBoolean()) ? "Tax Invoice for ": "Invoice dated ")+model.getDate().getValueInvoice();
+        if (genProb.get("text_top_invoice_number") && !genProb.get("invoice_number_top")) {  // inc invoice number if not mentioned below
+            textTopInvString = model.getReference().getLabelInvoice()+" "+model.getReference().getValueInvoice()+" for "+model.getDate().getValueInvoice();
+        }
+        topTextContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, textTopInvString, "Invoice Number"));
+        topTextContainer.addElement(new SimpleTextBox(fontNB, 10, 0, 0, ((rnd.nextBoolean()) ? "Retail / Invoice / Cash Memorandum": "Retail / Tax Invoice") ));
         if (genProb.get("text_top_center") && !genProb.get("barcode_top")) {  // center top text if barcode not present
             topTextContainer.alignElements("CENTER", topTextContainer.getBoundingBox().getWidth());
             topTextContainer.translate(pageMiddleX - topTextContainer.getBoundingBox().getWidth()/2, 0);
