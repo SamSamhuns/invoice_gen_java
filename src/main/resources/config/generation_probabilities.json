@@ -10,6 +10,7 @@
       "currency_top": 60,
       "currency_exchange_top": 30,
       "payment_terms_top": 50,
+      "payment_due_top": 50,
       "invoice_number_top": 95,
       "purchase_order_number_top": 70,
       "switch_bill_ship_addresses": 10,

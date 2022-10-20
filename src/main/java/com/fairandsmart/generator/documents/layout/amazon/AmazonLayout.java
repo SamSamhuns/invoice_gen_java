@@ -186,7 +186,7 @@ public class AmazonLayout implements InvoiceLayout {
             new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, vatText, "SVAT").build(contentStream, writer);
         }
 
-        float rightTopInfoY = 670; // Progressively inc by 10 pts after each right-side box
+        float rightTopInfoY = 670; // Progressively inc by 10 pts after each right-side box, building from bottom
         // Currency Used, Right side
         if (genProb.get("currency_top")) {
             String currencyText = model.getPaymentInfo().getLabelAccountCurrency()+": "+model.getProductContainer().getCurrency();
@@ -203,6 +203,12 @@ public class AmazonLayout implements InvoiceLayout {
         if (genProb.get("payment_terms_top")) {
             String paymentTermText = model.getPaymentInfo().getLabelPaymentTerm()+": "+model.getPaymentInfo().getValuePaymentTerm();
             new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentTermText, "PT").build(contentStream, writer);
+            rightTopInfoY += 10;
+        }
+        // Payment Due Date if Payment Terms is not mentioned 
+        else if (genProb.get("payment_due_top")) {
+            String paymentDueText = model.getDate().getLabelPaymentDue()+": "+model.getDate().getValuePaymentDue();
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentDueText, "PT").build(contentStream, writer);
             rightTopInfoY += 10;
         }
         // invoice number, Right side
