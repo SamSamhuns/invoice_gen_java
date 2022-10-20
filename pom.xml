@@ -20,7 +20,6 @@
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
 
-    <version.json>20220924</version.json>
     <version.word-wrap>0.1.11</version.word-wrap>
     <version.commons-lang>2.6</version.commons-lang>
     <version.icu4j>68.1</version.icu4j>
@@ -52,11 +51,6 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>${version.json}</version>
-    </dependency>
     <dependency>
       <groupId>com.github.davidmoten</groupId>
       <artifactId>word-wrap</artifactId>

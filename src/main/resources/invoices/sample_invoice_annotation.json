@@ -3,7 +3,8 @@
     "invoice_date": "Invoice Date",
     "invoice_id": "Invoice Id/Number",
     "invoice_order_id": "Purchase Order Number",
-    "invoice_due_date": "Due Date"
+    "invoice_due_date": "Due Date",
+    "payment_term": "Payment Term"
   },
   "vendor": {
     "vendor_name": "Vendor Name",
@@ -24,8 +25,8 @@
   },
   "paymentto": {
     "bank_name": "Bank Name",
-    "account_name": "Bank Name",
-    "account_number": "Bank Name",
+    "account_name": "Account Name",
+    "account_number": "Account Number",
     "branch_address": "Branch Name/Address",
     "iban_number": "Iban Number",
     "swift_code": "Swift Code",
@@ -33,18 +34,18 @@
     "customer_trn": "Customer TRN Number"
   },
   "items": [{
-    "Serial Number": "Serial Number of item",
-    "Description": "Item Description",
-    "Item Code": "Item code i.e. sku, ean",
-    "Quantity": "Item Quantity",
-    "Unit": "Item unit i.e. hours, lbs, kgs",
-    "UnitPrice": "Price per unit i.e. 5$ per Gallon",
-    "Discount": "Discount Amount",
-    "Discount Rate": "Discount Rate",
-    "Tax": "Tax Amount",
-    "Tax Rate": "Tax Percentage",
-    "Sub Total": "Total of Item i.e. Quantity x UnitPrice inc Discount but no Tax",
-    "Total": "Total of Item i.e. Quantity x UnitPrice inc. Tax+discount Or sometimes just Quantity x UnitPrice w/o Tax"
+    "serial_number": "Serial Number of item",
+    "description": "Item Description",
+    "item_code": "Item code i.e. sku, ean",
+    "quantity": "Item Quantity",
+    "unit": "Item unit i.e. hours, lbs, kgs",
+    "unit_price": "Price per unit i.e. 5$ per Gallon",
+    "discount": "Discount Amount",
+    "discount_rate": "Discount Rate",
+    "tax": "Tax Amount",
+    "tax_rate": "Tax Percentage",
+    "sub_total": "Total of Item i.e. Quantity x UnitPrice inc Discount but no Tax",
+    "total": "Total of Item i.e. Quantity x UnitPrice inc. Tax+discount Or sometimes just Quantity x UnitPrice w/o Tax"
   }],
   "total": {
     "tax_price": "Tax Total",
@@ -54,8 +55,5 @@
     "subtotal_price": "SubTotal",
     "total_price": "Invoice Total / Amount Due",
     "currency": "Invoice Currency"
-  },
-  "terms": {
-    "payment_term": "Payment Term"
   }
 }
