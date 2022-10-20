@@ -37,6 +37,7 @@ import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
@@ -51,7 +52,6 @@ import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 
 import com.mifmif.common.regex.Generex;
 
-import org.json.JSONObject;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -82,7 +82,7 @@ public class AmazonLayout implements InvoiceLayout {
     }
 
     @Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, JSONObject jsonAnnot) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws Exception {
         PDPage page = new PDPage(PDRectangle.A4);
 
         document.addPage(page);
@@ -143,11 +143,15 @@ public class AmazonLayout implements InvoiceLayout {
         }
 
         // Text top
-        VerticalContainer infos = new VerticalContainer(leftPageMargin, 810, 500);
-        infos.addElement(new SimpleTextBox(fontN, 9, 0, 0, "Page 1 of 1" + ((rnd.nextBoolean()) ? ", 1-1/1": ".")));
-        infos.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getReference().getLabelInvoice()+" for "+model.getReference().getValueInvoice()+" "+model.getDate().getValueInvoice(), "Invoice Number"));
-        infos.addElement(new SimpleTextBox(fontB, 10, 0, 0, ((rnd.nextBoolean()) ? "Retail" : "Institution") + ((rnd.nextBoolean()) ? " / Tax Invoice / Cash Memorandum": " / Invoice") ));
-        infos.build(contentStream, writer);
+        VerticalContainer topTextContainer = new VerticalContainer(leftPageMargin, 810, 500);
+        topTextContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, "Page 1 of 1" + ((rnd.nextBoolean()) ? ", 1-1/1": ".")));
+        topTextContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, model.getReference().getLabelInvoice()+" for "+model.getReference().getValueInvoice()+" "+model.getDate().getValueInvoice(), "Invoice Number"));
+        topTextContainer.addElement(new SimpleTextBox(fontB, 10, 0, 0, ((rnd.nextBoolean()) ? "Retail / Invoice / Cash Memorandum": "Retail / Tax Invoice") ));
+        if (genProb.get("text_top_center") && !genProb.get("barcode_top")) {  // center top text if barcode not present
+            topTextContainer.alignElements("CENTER", topTextContainer.getBoundingBox().getWidth());
+            topTextContainer.translate(pageMiddleX - topTextContainer.getBoundingBox().getWidth()/2, 0);
+        }
+        topTextContainer.build(contentStream, writer);
 
         // Vendor/Company Address
         VerticalContainer vendorAddrContainer = new VerticalContainer(leftPageMargin, 761, 300);

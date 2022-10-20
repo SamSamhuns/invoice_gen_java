@@ -41,7 +41,7 @@ import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 
-import org.json.JSONObject;
+import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -67,7 +67,7 @@ public class TestVerticalContainer implements InvoiceLayout {
     }
 
     @Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, JSONObject jsonAnnot) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws Exception {
 
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);

@@ -52,7 +52,7 @@ import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBoxForEvaluation;
 import com.fairandsmart.generator.documents.layout.SSDLayout;
 
-import org.json.JSONObject;
+import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

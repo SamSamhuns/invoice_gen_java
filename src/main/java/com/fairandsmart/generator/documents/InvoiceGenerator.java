@@ -37,6 +37,7 @@ package com.fairandsmart.generator.documents;
 import com.fairandsmart.generator.documents.layout.ldlc.LDLCLayout;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.layout.amazon.AmazonLayout;
 import com.fairandsmart.generator.documents.layout.bdmobilier.BDmobilierLayout;
@@ -45,14 +46,14 @@ import com.fairandsmart.generator.documents.layout.darty.DartyLayout;
 import com.fairandsmart.generator.documents.layout.macomp.MACOMPLayout;
 import com.fairandsmart.generator.documents.layout.materielnet.MaterielnetLayout;
 import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
-
-import org.json.JSONObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
@@ -103,18 +104,18 @@ public class InvoiceGenerator {
         xmlOut.writeAttribute("docTag", "xml");
 
         PDDocument document = new PDDocument();
-        JSONObject jsonOut = new JSONObject();
+        InvoiceAnnotModel modelAnnot = new InvoiceAnnotModel();
 
         // Build invoice layout and populate pdf
-        layout.buildInvoice(model, document, xmlOut, jsonOut);
+        layout.buildInvoice(model, document, xmlOut, modelAnnot);
 
         // Export as PDF
         document.save(pdf.toFile());
 
-        // Export jsonOut annotations to JSON file
+        // Export prettified modelAnnot annotations object to JSON file
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         FileWriter json_file = new FileWriter(json.toString());
-        gsonBuilder.toJson(jsonOut, json_file);
+        gsonBuilder.toJson(modelAnnot, json_file);
         json_file.flush();
         json_file.close();
 

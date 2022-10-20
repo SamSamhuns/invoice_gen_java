@@ -37,7 +37,7 @@ import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 
-import org.json.JSONObject;
+import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -60,7 +60,7 @@ public class FairAndSmartLayout {//implements InvoiceLayout {
     }
 
     //@Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, JSONObject jsonAnnot) throws IOException {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws IOException {
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
 
