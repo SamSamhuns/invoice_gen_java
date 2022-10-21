@@ -210,10 +210,10 @@ public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWrite
                 productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
                 productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
                 productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getTaxRate() * 100 + "%", "TXR"), false);
-                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "PTWTX"), false);
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtPrice(), "PTWTX"), false);
                 float puttc = (float)(int)((randomProduct.getPrice() + randomProduct.getPrice() * randomProduct.getTaxRate())*100)/100;
                 productLine.addElement(new SimpleTextBox(font, 8, 2, 0, puttc + "", "UP"), false);
-                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax(), "PTTX"), false);
+                productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtTotalPriceWithTax(), "PTTX"), false);
 
                 verticalInvoiceItems.addElement(productLine);
         }
@@ -226,7 +226,7 @@ public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWrite
         paymentTypeContainer.build(contentStream,writer);
 
         VerticalContainer totalContainer = new VerticalContainer(2019*ratioPage,page.getMediaBox().getHeight()-2474*ratioPage,250);
-        totalContainer.addElement(new SimpleTextBox(font,11,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TA"));
+        totalContainer.addElement(new SimpleTextBox(font,11,0,0,model.getProductContainer().getFmtTotalWithTax(),"TA"));
         totalContainer.build(contentStream,writer);
 
         VerticalContainer backContainer = new VerticalContainer(343*ratioPage, page.getMediaBox().getHeight()-2840*ratioPage, 636*ratioPage);
@@ -257,9 +257,9 @@ public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWrite
 
         TableRowBox taxContent = new TableRowBox(row, 0, -20);
         taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, "1", Color.BLACK,null), true);
-        taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, model.getProductContainer().getFormatedTotal(), Color.BLACK, null), true);
+        taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, model.getProductContainer().getFmtTotal(), Color.BLACK, null), true);
         taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, ""+model.getProductContainer().getProducts().get(0).getTaxRate(), Color.BLACK, null), true);
-        taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, model.getProductContainer().getFormatedTotalTax(), Color.BLACK, null), true);
+        taxContent.addElement(new SimpleTextBox(PDType1Font.HELVETICA_BOLD, 8, 0, 0, model.getProductContainer().getFmtTotalTax(), Color.BLACK, null), true);
         tax.addElement(taxContent);
 
         tax.build(contentStream, writer);

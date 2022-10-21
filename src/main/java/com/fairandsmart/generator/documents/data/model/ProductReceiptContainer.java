@@ -137,7 +137,7 @@ public class ProductReceiptContainer {
         return totalWithTax;
     }
 
-    public String getFormatedTotalWithTax() {
+    public String getFmtTotalWithTax() {
         return String.format("%.2f", this.getTotalWithTax()) + " " + currency;
     }
 
@@ -149,7 +149,7 @@ public class ProductReceiptContainer {
         return total;
     }
 
-    public String getFormatedTotal() {
+    public String getFmtTotal() {
         return String.format("%.2f", this.getTotal()) + " " + currency;
     }
 
@@ -169,7 +169,7 @@ public class ProductReceiptContainer {
         return totalWithTax - total;
     }
 
-    public String getFormatedTotalTax() {
+    public String getFmtTotalTax() {
         return String.format("%.2f", this.getTotalTax()) + " " + currency;
     }
 

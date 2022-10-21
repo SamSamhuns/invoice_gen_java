@@ -109,9 +109,9 @@ public class ReceiptProductBox extends ElementBox {
                 break;
             case "QTY":  productElement = Integer.toString(product.getQuantity());
                 break;
-            case "UP":  productElement = product.getFormatedPrice();
+            case "UP":  productElement = product.getFmtPrice();
                 break;
-            case "PTWTX":  productElement = product.getFormatedTotalPrice();
+            case "PTWTX":  productElement = product.getFmtTotalPrice();
                 break;
 
             default: return "Invalid Product Name";
@@ -213,7 +213,7 @@ public class ReceiptProductBox extends ElementBox {
         totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalTax.addElement(new SimpleTextBox(pdFontBold, fontSize+1, 0, 0, productContainer.getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
-        totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFormatedTotalTax(), Color.BLACK, null, HAlign.CENTER , "TTX"), false);
+        totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFmtTotalTax(), Color.BLACK, null, HAlign.CENTER , "TTX"), false);
 
         container.addElement(totalTax);*/
 
@@ -223,7 +223,7 @@ public class ReceiptProductBox extends ElementBox {
         }
         totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalTTC.addElement(new SimpleTextBox(pdFontBold, fontSize+1, 0, 0, productContainer.getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
-        totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFormatedTotalWithTax(), Color.BLACK, null, HAlign.CENTER,"TA" ), false);
+        totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFmtTotalWithTax(), Color.BLACK, null, HAlign.CENTER,"TA" ), false);
 
         container.addElement(totalTTC);*/
     }

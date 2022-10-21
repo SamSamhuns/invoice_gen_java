@@ -143,10 +143,14 @@ public class ProductContainer {
         this.currency = currency;
     }
 
-    // get only field heads
+    // getter only field heads
 
     public String getNameHead() {
         return nameHead;
+    }
+
+    public String getCodeHead() {
+        return codeHead;
     }
 
     public String getQtyHead() {
@@ -171,8 +175,8 @@ public class ProductContainer {
         return total;
     }
 
-    public String getFormatedTotal() {
-        return String.format("%.2f", this.getTotal()) + " " + currency;
+    public String getFmtTotal() {
+        return String.format("%.2f", this.getTotal());
     }
 
     public void setTotal(float total) {
@@ -185,8 +189,8 @@ public class ProductContainer {
         return totalWithTax;
     }
 
-    public String getFormatedTotalWithTax() {
-        return String.format("%.2f", this.getTotalWithTax()) + " " + currency;
+    public String getFmtTotalWithTax() {
+        return String.format("%.2f", this.getTotalWithTax());
     }
 
     public void setTotalWithTax(float totalWithTax) {
@@ -199,8 +203,8 @@ public class ProductContainer {
         return totalWithDiscount;
     }
 
-    public String getFormatedTotalWithDiscount() {
-        return String.format("%.2f", this.getTotalWithDiscount()) + " " + currency;
+    public String getFmtTotalWithDiscount() {
+        return String.format("%.2f", this.getTotalWithDiscount());
     }
 
     public void setTotalWithDiscount(float totalWithTax) {
@@ -213,8 +217,8 @@ public class ProductContainer {
         return totalWithTaxAndDiscount;
     }
 
-    public String getFormatedTotalWithTaxAndDiscount() {
-        return String.format("%.2f", this.getTotalWithTaxAndDiscount()) + " " + currency;
+    public String getFmtTotalWithTaxAndDiscount() {
+        return String.format("%.2f", this.getTotalWithTaxAndDiscount());
     }
 
     public void setTotalWithTaxAndDiscount(float totalWithTaxAndTax) {
@@ -227,8 +231,8 @@ public class ProductContainer {
         return totalShippingCost;
     }
 
-    public String getFormatedtotalShippingCost() {
-        return String.format("%.2f", this.gettotalShippingCost()) + " " + currency;
+    public String getFmttotalShippingCost() {
+        return String.format("%.2f", this.gettotalShippingCost());
     }
 
     public void settotalShippingCost(float totalShippingCost) {
@@ -241,15 +245,15 @@ public class ProductContainer {
         return totalWithTax - total;
     }
 
-    public String getFormatedTotalTax() {
-        return String.format("%.2f", this.getTotalTax()) + " " + currency;
+    public String getFmtTotalTax() {
+        return String.format("%.2f", this.getTotalTax());
     }
 
     public float getTotalTaxRate() {
         return this.getTotalTax() / total;
     }
 
-    public String getFormatedTotalTaxRate() {
+    public String getFmtTotalTaxRate() {
         return String.format("%.2f", this.getTotalTaxRate() * 100) + "%";
     }
 
@@ -259,15 +263,15 @@ public class ProductContainer {
         return totalWithDiscount - total;
     }
 
-    public String getFormatedTotalDiscount() {
-        return String.format("%.2f", this.getTotalDiscount()) + " " + currency;
+    public String getFmtTotalDiscount() {
+        return String.format("%.2f", this.getTotalDiscount());
     }
 
     public float getTotalDiscountRate() {
         return this.getTotalDiscount() / total;
     }
 
-    public String getFormatedTotalDiscountRate() {
+    public String getFmtTotalDiscountRate() {
         return String.format("%.2f", this.getTotalDiscountRate() * 100) + "%";
     }
 

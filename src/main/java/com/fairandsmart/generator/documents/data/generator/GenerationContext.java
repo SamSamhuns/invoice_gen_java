@@ -77,7 +77,7 @@ public class GenerationContext {
     }
     {
         currencies.add("EUR");
-        currencies.add("€");
+        // currencies.add("€");
         currencies.add("USD");
         currencies.add("$");
         // currencies.add("Rs.");

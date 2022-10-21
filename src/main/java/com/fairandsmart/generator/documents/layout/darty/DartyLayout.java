@@ -220,9 +220,9 @@ public class DartyLayout implements InvoiceLayout {
             }
 
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, dateWarranty), true);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), true);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalTax(),"TXR"),true);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax()+"","undefined"),true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtTotalPrice(), "PTWTX"), true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtTotalTax(),"TXR"),true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtTotalPriceWithTax()+"","undefined"),true);
 
             TableRowBox productLine2 = new TableRowBox(configRow, 0, 0);
             productLine2.addElement(new SimpleTextBox(font, 8, 2, 0, ""), true);
@@ -270,19 +270,19 @@ public class DartyLayout implements InvoiceLayout {
         HorizontalContainer totaux = new HorizontalContainer(250,posMsgY+39-3);
         totaux.addElement(new SimpleTextBox(pdFontBold,9,0,0,"Total invoice : "));
         totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
-        SimpleTextBox stb = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotal()+"","TWTX");
+        SimpleTextBox stb = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotal()+"","TWTX");
         totaux.addElement(stb);
         totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,70-stb.getBoundingBox().getWidth(),0));
-        SimpleTextBox stb2 = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalTax()+"","TTX");
+        SimpleTextBox stb2 = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotalTax()+"","TTX");
         totaux.addElement(stb2);
         totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,73-stb2.getBoundingBox().getWidth(),0));
-        totaux.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalWithTax()+"","TA"));
+        totaux.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotalWithTax()+"","TA"));
         totaux.build(contentStream,writer);
 
         new SimpleTextBox(pdFontBold,9,226,posMsgY-33,"Amount paid by: ").build(contentStream,writer);
         new SimpleTextBox(pdFontBold,9,340,posMsgY-33,model.getPaymentInfo().getValuePaymentType(),"PMODE").build(contentStream,writer);
         new SimpleTextBox(pdFontBold,9,411,posMsgY-66,"Balances to be paid : ").build(contentStream,writer);
-        new SimpleTextBox(pdFontBold,9,page.getMediaBox().getWidth()-90,posMsgY-33,model.getProductContainer().getFormatedTotalWithTax(),"TA").build(contentStream,writer);
+        new SimpleTextBox(pdFontBold,9,page.getMediaBox().getWidth()-90,posMsgY-33,model.getProductContainer().getFmtTotalWithTax(),"TA").build(contentStream,writer);
         new SimpleTextBox(pdFontBold,9,page.getMediaBox().getWidth()-90,posMsgY-66,"0,00 €").build(contentStream,writer);
 
 

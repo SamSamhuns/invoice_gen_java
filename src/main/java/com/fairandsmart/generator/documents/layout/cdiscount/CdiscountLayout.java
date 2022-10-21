@@ -274,10 +274,10 @@ public class CdiscountLayout implements InvoiceLayout {
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getEan(), "SNO"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "UP"), false);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtPrice(), "UP"), false);
             float puttcR = (float)(int)((randomProduct.getPrice() + randomProduct.getPrice() * randomProduct.getTaxRate())*100)/100;
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, puttcR + "", "undefined"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPriceWithTax(), "undefined"), false);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtTotalPriceWithTax(), "undefined"), false);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getTaxRate() * 100 + "%", "TXR"), false);
 
             verticalInvoiceItems.addElement(productLine);
@@ -331,7 +331,7 @@ public class CdiscountLayout implements InvoiceLayout {
         labelTotal.build(contentStream,writer);
 
         VerticalContainer valeurTotal = new VerticalContainer(480,posTab-2,250);
-        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TA"));
+        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFmtTotalWithTax(),"TA"));
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,4));
         valeurTotal.addElement(new SimpleTextBox(font,8,0,0,"0,00"));
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,4));
@@ -339,11 +339,11 @@ public class CdiscountLayout implements InvoiceLayout {
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0, 0,4));
         valeurTotal.addElement(new SimpleTextBox(font,8,0,0,"0,00"));
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,4));
-        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TA"));
+        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFmtTotalWithTax(),"TA"));
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,4));
-        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFormatedTotalTax(),"TTX"));
+        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFmtTotalTax(),"TTX"));
         valeurTotal.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,4));
-        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFormatedTotal(),"TWTX"));
+        valeurTotal.addElement(new SimpleTextBox(font,8,0,0,model.getProductContainer().getFmtTotal(),"TWTX"));
         valeurTotal.build(contentStream,writer);
 
         new SimpleTextBox(fontItalic1,9,170,posMsgY-76,"No discount will be applied in case of early payment").build(contentStream,writer);

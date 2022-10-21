@@ -140,7 +140,7 @@ public class SimpleTextBox extends ElementBox {
         String dummyString = "x".repeat(100);
         float dummyStringWidth = (this.fontSize * this.font.getStringWidth(dummyString) / 1000);
         // max length of chars that fit within contentWidth
-        int maxContentLength = Math.max((int)(dummyString.length() / (dummyStringWidth/contentWidth)) - 2, 1); // -2 makes breaking more likely
+        int maxContentLength = Math.max((int)(dummyString.length() / (dummyStringWidth/contentWidth)) - 3, 1); // -3 makes breaking more likely
 
         String wrappedText = WordWrap.from(text)
                                      .maxWidth(maxContentLength)

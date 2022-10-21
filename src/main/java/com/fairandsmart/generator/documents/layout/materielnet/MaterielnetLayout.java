@@ -176,8 +176,8 @@ public class MaterielnetLayout implements InvoiceLayout {
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, Float.toString(randomProduct.getQuantity()), "QTY"), true);
             productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getName(), "PD"), false);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedPrice(), "UP"), true);
-            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFormatedTotalPrice(), "PTWTX"), true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtPrice(), "UP"), true);
+            productLine.addElement(new SimpleTextBox(font, 8, 2, 0, randomProduct.getFmtTotalPrice(), "PTWTX"), true);
 
 
             verticalInvoiceItems.addElement(productLine);
@@ -197,18 +197,18 @@ public class MaterielnetLayout implements InvoiceLayout {
         HorizontalContainer baseHT = new HorizontalContainer(0,0);
         baseHT.addElement(new SimpleTextBox(pdFontBold,9,0,0,model.getProductContainer().getTotalHead()));
         baseHT.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
-        baseHT.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotal(),"TWTX"));
+        baseHT.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotal(),"TWTX"));
 
         HorizontalContainer taxeTVA = new HorizontalContainer(0,0);
         taxeTVA.addElement(new SimpleTextBox(pdFontBold,9,0,0,model.getProductContainer().getTaxTotalHead()));
         taxeTVA.addElement(new SimpleTextBox(pdFontBold,9,0,0," 20%"));
         taxeTVA.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
-        taxeTVA.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalTax(),"TTX"));
+        taxeTVA.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotalTax(),"TTX"));
 
         HorizontalContainer totalTTC = new HorizontalContainer(0,0);
         totalTTC.addElement(new SimpleTextBox(pdFontBold,9,0,0,model.getProductContainer().getWithTaxTotalHead()));
         totalTTC.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
-        totalTTC.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TA"));
+        totalTTC.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotalWithTax(),"TA"));
 
         totalContainer.addElement(baseHT);
         totalContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,4));

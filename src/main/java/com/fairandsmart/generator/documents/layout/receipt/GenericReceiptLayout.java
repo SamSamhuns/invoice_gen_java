@@ -402,7 +402,7 @@ public class GenericReceiptLayout implements SSDLayout {
             HorizontalContainer totalHT = new HorizontalContainer(0, 0);
             totalHT.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getTotalHead(), Color.BLACK, null, HAlign.LEFT));
             totalHT.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 5, 0));
-            totalHT.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotal(), Color.BLACK, null, HAlign.CENTER));//, "TWTX"));
+            totalHT.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFmtTotal(), Color.BLACK, null, HAlign.CENTER));//, "TWTX"));
             a6.addElement(totalHT);
             if(modeEval) {
                 pos_element++;
@@ -411,7 +411,7 @@ public class GenericReceiptLayout implements SSDLayout {
             HorizontalContainer totalTax = new HorizontalContainer(0, 0);
             totalTax.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT));
             totalTax.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 5, 0));
-            totalTax.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotalTax(), Color.BLACK, null, HAlign.CENTER));//, "TTX"));
+            totalTax.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFmtTotalTax(), Color.BLACK, null, HAlign.CENTER));//, "TTX"));
             //totalTax.setHeight(5);
             a6.addElement(totalTax);
             if(modeEval) {
@@ -423,14 +423,14 @@ public class GenericReceiptLayout implements SSDLayout {
         totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize+1, 0, 0, this.model.getProductReceiptContainer().getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT));
         totalTTC.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 5, 0));
         if(this.model.getProductReceiptContainer().getRoundAvailable()) {
-            totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotalWithTax(), Color.BLACK, null, HAlign.CENTER));
+            totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFmtTotalWithTax(), Color.BLACK, null, HAlign.CENTER));
             if(modeEval) {
                 pos_element++;
                 new SimpleTextBoxForEvaluation("rounded", pos_element).build(writerEval);
             }
         }
         else {
-            totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFormatedTotalWithTax(), Color.BLACK, null, HAlign.CENTER, "TA"));
+            totalTTC.addElement(new SimpleTextBox(fonts[0], fontSize, 0, 0, this.model.getProductReceiptContainer().getFmtTotalWithTax(), Color.BLACK, null, HAlign.CENTER, "TA"));
             if(modeEval) {
                 pos_element++;
                 new SimpleTextBoxForEvaluation("TA", pos_element).build(writerEval);

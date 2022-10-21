@@ -109,11 +109,11 @@ public class ReceiptGSTSammury extends ElementBox {
                 break;
             case "TAUX":  tableElement = String.format("%.2f",productContainer.getTotalTaxRate() * 100)+"%";
                 break;
-            case "TTC":  tableElement = productContainer.getFormatedTotalWithTax();
+            case "TTC":  tableElement = productContainer.getFmtTotalWithTax();
                 break;
-            case "VAT":  tableElement = productContainer.getFormatedTotalTax();
+            case "VAT":  tableElement = productContainer.getFmtTotalTax();
                 break;
-            case "HT":  tableElement = productContainer.getFormatedTotal();
+            case "HT":  tableElement = productContainer.getFmtTotal();
                 break;
             default: return "Invalid element name Name";
         }

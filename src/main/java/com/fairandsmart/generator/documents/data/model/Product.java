@@ -130,8 +130,8 @@ public class Product {
         return price;
     }
 
-    public String getFormatedPrice() {
-        return String.format("%.2f", this.getPrice()) + " " + currency;
+    public String getFmtPrice() {
+        return String.format("%.2f", this.getPrice());
     }
 
     // Assigned during generation
@@ -176,7 +176,7 @@ public class Product {
         return taxRate;
     }
 
-    public String getFormatedTaxRate() {
+    public String getFmtTaxRate() {
         return String.format("%.2f", this.getTaxRate() * 100) + "%";
     }
 
@@ -188,7 +188,7 @@ public class Product {
         return discountRate;
     }
 
-    public String getFormatedDiscountRate() {
+    public String getFmtDiscountRate() {
         return String.format("%.2f", this.getDiscountRate() * 100) + "%";
     }
 
@@ -202,8 +202,8 @@ public class Product {
         return priceWithTax;
     }
 
-    public String getFormatedPriceWithTax() {
-        return String.format("%.2f", this.getPriceWithTax()) + " " + currency;
+    public String getFmtPriceWithTax() {
+        return String.format("%.2f", this.getPriceWithTax());
     }
 
     public void setPriceWithTax(float priceWithTax) {
@@ -216,8 +216,8 @@ public class Product {
         return priceWithDiscount;
     }
 
-    public String getFormatedPriceWithDiscount() {
-        return String.format("%.2f", this.getPriceWithDiscount()) + " " + currency;
+    public String getFmtPriceWithDiscount() {
+        return String.format("%.2f", this.getPriceWithDiscount());
     }
 
     public void setPriceWithDiscount(float priceWithDiscount) {
@@ -230,8 +230,8 @@ public class Product {
         return priceWithTaxAndDiscount;
     }
 
-    public String getFormatedPriceWithTaxAndDiscount() {
-        return String.format("%.2f", this.getPriceWithTaxAndDiscount()) + " " + currency;
+    public String getFmtPriceWithTaxAndDiscount() {
+        return String.format("%.2f", this.getPriceWithTaxAndDiscount());
     }
 
     public void setPriceWithTaxAndDiscount(float priceWithTaxAndDiscount) {
@@ -245,8 +245,8 @@ public class Product {
         return price * quantity;
     }
 
-    public String getFormatedTotalPrice() {
-        return String.format("%.2f", this.getTotalPrice()) + " " + currency;
+    public String getFmtTotalPrice() {
+        return String.format("%.2f", this.getTotalPrice());
     }
 
     // Total Price with Tax
@@ -254,8 +254,8 @@ public class Product {
         return priceWithTax * quantity;
     }
 
-    public String getFormatedTotalPriceWithTax() {
-        return String.format("%.2f", this.getTotalPriceWithTax()) + " " + currency;
+    public String getFmtTotalPriceWithTax() {
+        return String.format("%.2f", this.getTotalPriceWithTax());
     }
 
     // Total Price with Discount
@@ -263,8 +263,8 @@ public class Product {
         return priceWithDiscount * quantity;
     }
 
-    public String getFormatedTotalPriceWithDiscount() {
-        return String.format("%.2f", this.getTotalPriceWithDiscount()) + " " + currency;
+    public String getFmtTotalPriceWithDiscount() {
+        return String.format("%.2f", this.getTotalPriceWithDiscount());
     }
 
     // Total Price with Tax and Discount (FINAL price)
@@ -272,8 +272,8 @@ public class Product {
         return priceWithTaxAndDiscount * quantity;
     }
 
-    public String getFormatedTotalPriceWithTaxAndDDiscount() {
-        return String.format("%.2f", this.getTotalPriceWithTaxAndDiscount()) + " " + currency;
+    public String getFmtTotalPriceWithTaxAndDDiscount() {
+        return String.format("%.2f", this.getTotalPriceWithTaxAndDiscount());
     }
 
     // Total Tax
@@ -281,8 +281,8 @@ public class Product {
         return this.getTotalPriceWithTax() - this.getTotalPrice();
     }
 
-    public String getFormatedTotalTax() {
-        return String.format("%.2f", this.getTotalTax()) + " " + currency;
+    public String getFmtTotalTax() {
+        return String.format("%.2f", this.getTotalTax());
     }
 
     // Total Discount
@@ -290,8 +290,8 @@ public class Product {
         return this.getTotalPrice() - this.getTotalPriceWithDiscount();
     }
 
-    public String getFormatedTotalDiscount() {
-        return String.format("%.2f", this.getTotalDiscount()) + " " + currency;
+    public String getFmtTotalDiscount() {
+        return String.format("%.2f", this.getTotalDiscount());
     }
 
     @Override

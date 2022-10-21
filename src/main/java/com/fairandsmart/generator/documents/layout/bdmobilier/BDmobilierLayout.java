@@ -196,7 +196,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
         infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getPaymentInfo().getLabelPaymentType()));
         infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
-        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getProductContainer().getFormatedTotalWithTax(),"TTX"));
+        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getProductContainer().getFmtTotalWithTax(),"TTX"));
         infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
 
         // Payment Terms
@@ -245,14 +245,14 @@ public class BDmobilierLayout implements InvoiceLayout {
             textColor = Color.BLACK;
             bgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
             quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
-            discount = (randomProduct.getDiscountRate() == 0.0) ? "--": randomProduct.getFormatedTotalDiscount();
+            discount = (randomProduct.getDiscountRate() == 0.0) ? "--": randomProduct.getFmtTotalDiscount();
 
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getName(),textColor,bgColor,"PD"), false);
-            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFormatedPrice(),textColor,bgColor,"UP"), false);
+            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFmtPrice(),textColor,bgColor,"UP"), false);
             productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, discount,textColor,bgColor,"DISC"), false);
             productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getQuantity()+"",textColor,bgColor,"QTY"), false);
-            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFormatedTotalPrice(),textColor,bgColor,"PTWTX"), false);
+            productLine.addElement(new SimpleTextBox(fontN, 9, 2, 0, randomProduct.getFmtTotalPrice(),textColor,bgColor,"PTWTX"), false);
 
             verticalInvoiceItems.addElement(productLine);
         }
@@ -264,11 +264,11 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Totals and Taxes calculations
         new SimpleTextBox(fontN, 9, 430, posYTotal+11, pc.getTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, posYTotal+11, pc.getFormatedTotal(),Color.WHITE,Color.BLACK,"TWTX").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 508, posYTotal+11, pc.getFmtTotal(),Color.WHITE,Color.BLACK,"TWTX").build(contentStream,writer);
         new SimpleTextBox(fontN, 9, 430, posYTotal-2, pc.getTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, posYTotal-2, pc.getFormatedTotalTax(),Color.WHITE,Color.BLACK,"TTX").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 508, posYTotal-2, pc.getFmtTotalTax(),Color.WHITE,Color.BLACK,"TTX").build(contentStream,writer);
         new SimpleTextBox(fontN, 9, 430, posYTotal-16, pc.getWithTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, posYTotal-16, pc.getFormatedTotalWithTax(),Color.WHITE,Color.BLACK,"TA").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 508, posYTotal-16, pc.getFmtTotalWithTax(),Color.WHITE,Color.BLACK,"TA").build(contentStream,writer);
 
         // Footer company info
         int footerFontSize = 7 + rnd.nextInt(3);

@@ -129,7 +129,7 @@ public class SalaryLine {
 
 
 /*
-    public String getFormatedPrice() {
+    public String getFmtPrice() {
         return String.format("%.2f", this.getPrice()) + " " + currency;
     }*/
 
