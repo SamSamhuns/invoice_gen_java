@@ -329,20 +329,55 @@ public class AmazonLayout implements InvoiceLayout {
         itemMap.put("Item",     new TableColumnItem(140f, pc.getNameHead(),         "",                                  ""));
         itemMap.put("ItemRate", new TableColumnItem(62f,  pc.getUPHead(),           pc.getTotalHead(),                   pc.getFmtTotal()+amtSuffix));
         itemMap.put("Disc",     new TableColumnItem(62f,  pc.getDiscountHead(),     pc.getDiscountTotalHead(),           pc.getFmtTotalDiscount()+amtSuffix));
-        itemMap.put("DiscRate", new TableColumnItem(62f,  pc.getDiscountRateHead(), pc.getDiscountRateTotalHead(),       pc.getFmtTotalDiscountRate()+amtSuffix));
+        itemMap.put("DiscRate", new TableColumnItem(62f,  pc.getDiscountRateHead(), pc.getDiscountRateTotalHead(),       pc.getFmtTotalDiscountRate()));
         itemMap.put("Tax",      new TableColumnItem(62f,  pc.getTaxHead(),          pc.getTaxTotalHead(),                pc.getFmtTotalTax()+amtSuffix));
-        itemMap.put("TaxRate",  new TableColumnItem(62f,  pc.getTaxRateHead(),      pc.getTaxRateTotalHead(),            pc.getFmtTotalTaxRate()+amtSuffix));
+        itemMap.put("TaxRate",  new TableColumnItem(62f,  pc.getTaxRateHead(),      pc.getTaxRateTotalHead(),            pc.getFmtTotalTaxRate()));
         itemMap.put("SubTotal", new TableColumnItem(62f,  pc.getTotalHead(),        pc.getTotalHead(),                   pc.getFmtTotalWithDiscount()+amtSuffix));
         itemMap.put("Total",    new TableColumnItem(62f,  pc.getWithTaxTotalHead(), pc.getWithTaxAndDiscountTotalHead(), pc.getFmtTotalWithTaxAndDiscount()+amtSuffix));
 
         // IMPORTANT: this list order determins which fields to display in table
-        List<String> tableHeaders = Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total");
+        List<List<String>> CandidateTableHeaders = Arrays.asList(
+            Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
+            Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "Tax", "Total"),
+            Arrays.asList("ItemCode", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
+            Arrays.asList("SN", "Item", "Qty", "ItemRate", "Disc", "Tax", "TaxRate", "Total"),
+            Arrays.asList("SN", "Item", "ItemCode", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
+            Arrays.asList("SN", "ItemCode", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
+            Arrays.asList("SN", "ItemCode", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
+            Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
+            Arrays.asList("SN", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
+            Arrays.asList("SN", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
+            Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "Total"),
+            Arrays.asList("Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
+            Arrays.asList("Item", "Qty", "ItemRate", "Tax", "SubTotal"),
+            Arrays.asList("Item", "Qty", "ItemRate", "Tax", "Total"),
+            Arrays.asList("SN", "Item", "Tax", "TaxRate", "Total"),
+            Arrays.asList("SN", "Item", "Tax", "Total"),
+            Arrays.asList("Item", "Tax", "Total")
+        );
+        List<String> tableHeaders = CandidateTableHeaders.get(rnd.nextInt(CandidateTableHeaders.size()));
 
         // building item table column width list
-        // Values must add to 530 which is pageW - leftM - rightM
         float[] configRow = new float[tableHeaders.size()];
-        for (int i=0; i<tableHeaders.size(); i++) {
-            configRow[i] = itemMap.get(tableHeaders.get(i)).getColWidth();
+        float curWidth = 0;
+        for (int i=0; i<configRow.length; i++) {
+            float colWidth =  itemMap.get(tableHeaders.get(i)).getColWidth();
+            curWidth += colWidth;
+            configRow[i] = colWidth;
+        }
+
+        // Values must add to tableWidth: 530 which is pageW - leftM - rightM
+        float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
+        assert (curWidth <= tableWidth);
+        // if curWidth < tableWidth, increment size of each col till condition is met
+        while (curWidth < tableWidth) {
+            for (int i=0; i<configRow.length; i++) {
+                configRow[i] += 1;
+                curWidth += 1;
+                if (curWidth >= tableWidth) {
+                    break;
+                }
+            }
         }
 
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
@@ -398,13 +433,13 @@ public class AmazonLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalDiscount()+amtSuffix;
                         randomItem.setDiscount(cellText); break;
                     case "DiscRate":
-                        cellText = randomProduct.getFmtDiscountRate()+amtSuffix;
+                        cellText = randomProduct.getFmtDiscountRate();
                         randomItem.setDiscountRate(cellText); break;
                     case "Tax":
                         cellText = randomProduct.getFmtTotalTax()+amtSuffix;
                         randomItem.setTax(cellText); break;
                     case "TaxRate":
-                        cellText = randomProduct.getFmtTaxRate()+amtSuffix;
+                        cellText = randomProduct.getFmtTaxRate();
                         randomItem.setTaxRate(cellText); break;
                     case "SubTotal":
                         cellText = randomProduct.getFmtTotalPriceWithDiscount()+amtSuffix;
@@ -448,6 +483,7 @@ public class AmazonLayout implements InvoiceLayout {
                     case "Disc": modelAnnot.getTotal().setDiscountPrice(hdrValue); break;
                     case "DiscRate": modelAnnot.getTotal().setDiscountRate(hdrValue); break;
                     case "ItemRate": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "SubTotal": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
                     case "Total": modelAnnot.getTotal().setTotalPrice(hdrValue); break;
                 }
             }
@@ -478,6 +514,7 @@ public class AmazonLayout implements InvoiceLayout {
                     case "Disc": modelAnnot.getTotal().setDiscountPrice(hdrValue); break;
                     case "DiscRate": modelAnnot.getTotal().setDiscountRate(hdrValue); break;
                     case "ItemRate": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "SubTotal": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
                     case "Total": modelAnnot.getTotal().setTotalPrice(hdrValue); break;
                 }
             }
