@@ -43,7 +43,7 @@ import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
-import com.fairandsmart.generator.documents.data.model.TableColumnItem;
+import com.fairandsmart.generator.documents.data.model.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -319,66 +319,12 @@ public class AmazonLayout implements InvoiceLayout {
         HAlign tableHdrAlign = genProb.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
 
         // Building Header Item labels, table values and footer labels list
-        // Use maps to assign order of items, headers and footers to columns
-        Map<String, TableColumnItem> itemMap = new LinkedHashMap<>();
-        // TableColumnItem constructor(float colWidth, String colLabelHeader, String colLabelFooter, String colValueFooter)
-        //          Identifier                     Width  Column Label Head         Col Label Footer                     Col Value Footer
-        itemMap.put("SN",       new TableColumnItem(40f,  pc.getsnHead(),           "",                                  ""));
-        itemMap.put("Qty",      new TableColumnItem(40f,  pc.getQtyHead(),          "",                                  ""));
-        itemMap.put("ItemCode", new TableColumnItem(40f,  pc.getCodeHead(),         "",                                  ""));
-        itemMap.put("Item",     new TableColumnItem(140f, pc.getNameHead(),         "",                                  ""));
-        itemMap.put("ItemRate", new TableColumnItem(62f,  pc.getUPHead(),           pc.getTotalHead(),                   pc.getFmtTotal()+amtSuffix));
-        itemMap.put("Disc",     new TableColumnItem(62f,  pc.getDiscountHead(),     pc.getDiscountTotalHead(),           pc.getFmtTotalDiscount()+amtSuffix));
-        itemMap.put("DiscRate", new TableColumnItem(62f,  pc.getDiscountRateHead(), pc.getDiscountRateTotalHead(),       pc.getFmtTotalDiscountRate()));
-        itemMap.put("Tax",      new TableColumnItem(62f,  pc.getTaxHead(),          pc.getTaxTotalHead(),                pc.getFmtTotalTax()+amtSuffix));
-        itemMap.put("TaxRate",  new TableColumnItem(62f,  pc.getTaxRateHead(),      pc.getTaxRateTotalHead(),            pc.getFmtTotalTaxRate()));
-        itemMap.put("SubTotal", new TableColumnItem(62f,  pc.getTotalHead(),        pc.getTotalHead(),                   pc.getFmtTotalWithDiscount()+amtSuffix));
-        itemMap.put("Total",    new TableColumnItem(62f,  pc.getWithTaxTotalHead(), pc.getWithTaxAndDiscountTotalHead(), pc.getFmtTotalWithTaxAndDiscount()+amtSuffix));
-
-        // IMPORTANT: this list order determins which fields to display in table
-        List<List<String>> CandidateTableHeaders = Arrays.asList(
-            Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
-            Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "Tax", "Total"),
-            Arrays.asList("ItemCode", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
-            Arrays.asList("SN", "Item", "Qty", "ItemRate", "Disc", "Tax", "TaxRate", "Total"),
-            Arrays.asList("SN", "Item", "ItemCode", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
-            Arrays.asList("SN", "ItemCode", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
-            Arrays.asList("SN", "ItemCode", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
-            Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
-            Arrays.asList("SN", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
-            Arrays.asList("SN", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
-            Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "Total"),
-            Arrays.asList("Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
-            Arrays.asList("Item", "Qty", "ItemRate", "Tax", "SubTotal"),
-            Arrays.asList("Item", "Qty", "ItemRate", "Tax", "Total"),
-            Arrays.asList("SN", "Item", "Tax", "TaxRate", "Total"),
-            Arrays.asList("SN", "Item", "Tax", "Total"),
-            Arrays.asList("Item", "Tax", "Total")
-        );
-        List<String> tableHeaders = CandidateTableHeaders.get(rnd.nextInt(CandidateTableHeaders.size()));
-
-        // building item table column width list
-        float[] configRow = new float[tableHeaders.size()];
-        float curWidth = 0;
-        for (int i=0; i<configRow.length; i++) {
-            float colWidth =  itemMap.get(tableHeaders.get(i)).getColWidth();
-            curWidth += colWidth;
-            configRow[i] = colWidth;
-        }
-
-        // Values must add to tableWidth: 530 which is pageW - leftM - rightM
         float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
-        assert (curWidth <= tableWidth);
-        // if curWidth < tableWidth, increment size of each col till condition is met
-        while (curWidth < tableWidth) {
-            for (int i=0; i<configRow.length; i++) {
-                configRow[i] += 1;
-                curWidth += 1;
-                if (curWidth >= tableWidth) {
-                    break;
-                }
-            }
-        }
+        ProductTable pt = new ProductTable(pc, model.getLang(), amtSuffix, tableWidth);
+        List<String> tableHeaders = pt.getTableHeaders();
+        // configRow values must add to tableWidth: 530 which is pageW - leftM - rightM
+        float[] configRow = pt.getConfigRow();
+        Map<String, ProductTable.ColumnItem> itemMap = pt.getItemMap();
 
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
         for (String tableHeader: tableHeaders) {

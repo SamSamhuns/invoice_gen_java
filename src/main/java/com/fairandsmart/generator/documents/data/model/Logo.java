@@ -51,11 +51,6 @@ public class Logo {
     private String fullPath;
     private String name;
 
-    public Logo(String fullPath, String name) {
-        this.fullPath = fullPath;
-        this.name = name;
-    }
-
     public String getFullPath() {
         return fullPath;
     }
@@ -115,6 +110,11 @@ public class Logo {
             }
             return electibleLogo;
         }
+    }
+
+    public Logo(String fullPath, String name) {
+        this.fullPath = fullPath;
+        this.name = name;
     }
 
     public Logo(GenerationContext ctx, String companyName) {
