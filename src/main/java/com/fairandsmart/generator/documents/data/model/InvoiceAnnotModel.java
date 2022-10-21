@@ -34,6 +34,10 @@ package com.fairandsmart.generator.documents.data.model;
  * #L%
  */
 
+import java.util.List;
+import java.util.ArrayList;
+
+
 /*
   This class should be exporte dto JSON with gson to get an json annotation file
     A fully populated sample annot along with field descriptions
@@ -48,44 +52,44 @@ public class InvoiceAnnotModel{
         private String invoice_due_date;
         private String payment_term;
 
-        public String getInvoice_date() {
+        public String getInvoiceDate() {
             return invoice_date;
         }
 
-        public void setInvoice_date(String invoice_date) {
-            this.invoice_date = invoice_date;
+        public void setInvoiceDate(String invoiceDate) {
+            this.invoice_date = invoiceDate;
         }
 
-        public String getInvoice_id() {
+        public String getInvoiceId() {
             return invoice_id;
         }
 
-        public void setInvoice_id(String invoice_id) {
-            this.invoice_id = invoice_id;
+        public void setInvoiceId(String invoiceId) {
+            this.invoice_id = invoiceId;
         }
 
-        public String getInvoice_order_id() {
+        public String getInvoiceOrderId() {
             return invoice_order_id;
         }
 
-        public void setInvoice_order_id(String invoice_order_id) {
-            this.invoice_order_id = invoice_order_id;
+        public void setInvoiceOrderId(String invoiceOrderId) {
+            this.invoice_order_id = invoiceOrderId;
         }
 
-        public String getInvoice_due_date() {
+        public String getInvoiceDueDate() {
             return invoice_due_date;
         }
 
-        public void setInvoice_due_date(String invoice_due_date) {
-            this.invoice_due_date = invoice_due_date;
+        public void setInvoiceDueDate(String invoiceDueDate) {
+            this.invoice_due_date = invoiceDueDate;
         }
 
-        public String getPayment_term() {
+        public String getPaymentTerm() {
             return payment_term;
         }
 
-        public void setPayment_term(String payment_term) {
-            this.payment_term = payment_term;
+        public void setPaymentTerm(String paymentTerm) {
+            this.payment_term = paymentTerm;
         }
 
         public Invoice() {
@@ -107,36 +111,36 @@ public class InvoiceAnnotModel{
         private String vendor_po_box;
         private String vendor_trn;
 
-        public String getVendor_name() {
+        public String getVendorName() {
             return vendor_name;
         }
 
-        public void setVendor_name(String vendor_name) {
-            this.vendor_name = vendor_name;
+        public void setVendorName(String vendorName) {
+            this.vendor_name = vendorName;
         }
 
-        public String getVendor_addr() {
+        public String getVendorAddr() {
             return vendor_addr;
         }
 
-        public void setVendor_addr(String vendor_addr) {
-            this.vendor_addr = vendor_addr;
+        public void setVendorAddr(String vendorAddr) {
+            this.vendor_addr = vendorAddr;
         }
 
-        public String getVendor_po_box() {
+        public String getVendorPOBox() {
             return vendor_po_box;
         }
 
-        public void setVendor_po_box(String vendor_po_box) {
-            this.vendor_po_box = vendor_po_box;
+        public void setVendorPOBox(String vendorPOBox) {
+            this.vendor_po_box = vendorPOBox;
         }
 
-        public String getVendor_trn() {
+        public String getVendorTrn() {
             return vendor_trn;
         }
 
-        public void setVendor_trn(String vendor_trn) {
-            this.vendor_trn = vendor_trn;
+        public void setVendorTrn(String vendorTrn) {
+            this.vendor_trn = vendorTrn;
         }
 
         public Vendor() {
@@ -156,36 +160,36 @@ public class InvoiceAnnotModel{
         private String customer_po_box;
         private String customer_trn;
 
-        public String getCustomer_name() {
+        public String getCustomerName() {
             return customer_name;
         }
 
-        public void setCustomer_name(String customer_name) {
-            this.customer_name = customer_name;
+        public void setCustomerName(String customerName) {
+            this.customer_name = customerName;
         }
 
-        public String getCustomer_addr() {
+        public String getCustomerAddr() {
             return customer_addr;
         }
 
-        public void setCustomer_addr(String customer_addr) {
-            this.customer_addr = customer_addr;
+        public void setCustomerAddr(String customerAddr) {
+            this.customer_addr = customerAddr;
         }
 
-        public String getCustomer_po_box() {
+        public String getCustomerPOBox() {
             return customer_po_box;
         }
 
-        public void setCustomer_po_box(String customer_po_box) {
-            this.customer_po_box = customer_po_box;
+        public void setCustomerPOBox(String customerPOBox) {
+            this.customer_po_box = customerPOBox;
         }
 
-        public String getCustomer_trn() {
+        public String getCustomerTrn() {
             return customer_trn;
         }
 
-        public void setCustomer_trn(String customer_trn) {
-            this.customer_trn = customer_trn;
+        public void setCustomerTrn(String customerTrn) {
+            this.customer_trn = customerTrn;
         }
 
         public Billto() {
@@ -204,28 +208,28 @@ public class InvoiceAnnotModel{
         private String shipto_po_box;
         private String shipto_addr;
 
-        public String getShipto_name() {
+        public String getShiptoName() {
             return shipto_name;
         }
 
-        public void setShipto_name(String shipto_name) {
-            this.shipto_name = shipto_name;
+        public void setShiptoName(String shiptoName) {
+            this.shipto_name = shiptoName;
         }
 
-        public String getShipto_po_box() {
+        public String getShiptoPOBox() {
             return shipto_po_box;
         }
 
-        public void setShipto_po_box(String shipto_po_box) {
-            this.shipto_po_box = shipto_po_box;
+        public void setShiptoPOBox(String shiptoPOBox) {
+            this.shipto_po_box = shiptoPOBox;
         }
 
-        public String getShipto_addr() {
+        public String getShiptoAddr() {
             return shipto_addr;
         }
 
-        public void setShipto_addr(String shipto_addr) {
-            this.shipto_addr = shipto_addr;
+        public void setShiptoAddr(String shiptoAddr) {
+            this.shipto_addr = shiptoAddr;
         }
 
         public Shipto() {
@@ -248,68 +252,68 @@ public class InvoiceAnnotModel{
         private String routing_number;
         private String customer_trn;
 
-        public String getBank_name() {
+        public String getBankName() {
             return bank_name;
         }
 
-        public void setBank_name(String bank_name) {
-            this.bank_name = bank_name;
+        public void setBankName(String bankName) {
+            this.bank_name = bankName;
         }
 
-        public String getAccount_name() {
+        public String getAccountName() {
             return account_name;
         }
 
-        public void setAccount_name(String account_name) {
-            this.account_name = account_name;
+        public void setAccountName(String accountName) {
+            this.account_name = accountName;
         }
 
-        public String getAccount_number() {
+        public String getAccountNumber() {
             return account_number;
         }
 
-        public void setAccount_number(String account_number) {
-            this.account_number = account_number;
+        public void setAccountNumber(String accountNumber) {
+            this.account_number = accountNumber;
         }
 
-        public String getBranch_address() {
+        public String getBranchAddress() {
             return branch_address;
         }
 
-        public void setBranch_address(String branch_address) {
-            this.branch_address = branch_address;
+        public void setBranchAddress(String branchAddress) {
+            this.branch_address = branchAddress;
         }
 
-        public String getIban_number() {
+        public String getIbanNumber() {
             return iban_number;
         }
 
-        public void setIban_number(String iban_number) {
-            this.iban_number = iban_number;
+        public void setIbanNumber(String ibanNumber) {
+            this.iban_number = ibanNumber;
         }
 
-        public String getSwift_code() {
+        public String getSwiftCode() {
             return swift_code;
         }
 
-        public void setSwift_code(String swift_code) {
-            this.swift_code = swift_code;
+        public void setSwiftCode(String swiftCode) {
+            this.swift_code = swiftCode;
         }
 
-        public String getRouting_number() {
+        public String getRoutingNumber() {
             return routing_number;
         }
 
-        public void setRouting_number(String routing_number) {
-            this.routing_number = routing_number;
+        public void setRoutingNumber(String routingNumber) {
+            this.routing_number = routingNumber;
         }
 
-        public String getCustomer_trn() {
+        public String getCustomerTrn() {
             return customer_trn;
         }
 
-        public void setCustomer_trn(String customer_trn) {
-            this.customer_trn = customer_trn;
+        public void setCustomerTrn(String customerTrn) {
+            this.customer_trn = customerTrn;
         }
 
         public Paymentto() {
@@ -341,12 +345,12 @@ public class InvoiceAnnotModel{
         private String sub_total;
         private String total;
 
-        public String getSerial_number() {
+        public String getSerialNumber() {
             return serial_number;
         }
 
-        public void setSerial_number(String serial_number) {
-            this.serial_number = serial_number;
+        public void setSerialNumber(String serialNumber) {
+            this.serial_number = serialNumber;
         }
 
         public String getDescription() {
@@ -357,12 +361,12 @@ public class InvoiceAnnotModel{
             this.description = description;
         }
 
-        public String getItem_code() {
+        public String getItemCode() {
             return item_code;
         }
 
-        public void setItem_code(String item_code) {
-            this.item_code = item_code;
+        public void setItemCode(String itemCode) {
+            this.item_code = itemCode;
         }
 
         public String getQuantity() {
@@ -381,12 +385,12 @@ public class InvoiceAnnotModel{
             this.unit = unit;
         }
 
-        public String getUnit_price() {
+        public String getUnitPrice() {
             return unit_price;
         }
 
-        public void setUnit_price(String unit_price) {
-            this.unit_price = unit_price;
+        public void setUnitPrice(String unitPrice) {
+            this.unit_price = unitPrice;
         }
 
         public String getDiscount() {
@@ -397,12 +401,12 @@ public class InvoiceAnnotModel{
             this.discount = discount;
         }
 
-        public String getDiscount_rate() {
+        public String getDiscountRate() {
             return discount_rate;
         }
 
-        public void setDiscount_rate(String discount_rate) {
-            this.discount_rate = discount_rate;
+        public void setDiscountRate(String discountRate) {
+            this.discount_rate = discountRate;
         }
 
         public String getTax() {
@@ -413,20 +417,20 @@ public class InvoiceAnnotModel{
             this.tax = tax;
         }
 
-        public String getTax_rate() {
+        public String getTaxRate() {
             return tax_rate;
         }
 
-        public void setTax_rate(String tax_rate) {
-            this.tax_rate = tax_rate;
+        public void setTaxRate(String taxRate) {
+            this.tax_rate = taxRate;
         }
 
-        public String getSub_total() {
+        public String getSubTotal() {
             return sub_total;
         }
 
-        public void setSub_total(String sub_total) {
-            this.sub_total = sub_total;
+        public void setSubTotal(String subTotal) {
+            this.sub_total = subTotal;
         }
 
         public String getTotal() {
@@ -465,52 +469,52 @@ public class InvoiceAnnotModel{
         private String total_price;
         private String currency;
 
-        public String getTax_price() {
+        public String getTaxPrice() {
             return tax_price;
         }
 
-        public void setTax_price(String tax_price) {
-            this.tax_price = tax_price;
+        public void setTaxPrice(String taxPrice) {
+            this.tax_price = taxPrice;
         }
 
-        public String getTax_rate() {
+        public String getTaxRate() {
             return tax_rate;
         }
 
-        public void setTax_rate(String tax_rate) {
-            this.tax_rate = tax_rate;
+        public void setTaxRate(String taxRate) {
+            this.tax_rate = taxRate;
         }
 
-        public String getDiscount_price() {
+        public String getDiscountPrice() {
             return discount_price;
         }
 
-        public void setDiscount_price(String discount_price) {
-            this.discount_price = discount_price;
+        public void setDiscountPrice(String discountPrice) {
+            this.discount_price = discountPrice;
         }
 
-        public String getDiscount_rate() {
+        public String getDiscountRate() {
             return discount_rate;
         }
 
-        public void setDiscount_rate(String discount_rate) {
-            this.discount_rate = discount_rate;
+        public void setDiscountRate(String discountRate) {
+            this.discount_rate = discountRate;
         }
 
-        public String getSubtotal_price() {
+        public String getSubtotalPrice() {
             return subtotal_price;
         }
 
-        public void setSubtotal_price(String subtotal_price) {
-            this.subtotal_price = subtotal_price;
+        public void setSubtotalPrice(String subtotalPrice) {
+            this.subtotal_price = subtotalPrice;
         }
 
-        public String getTotal_price() {
+        public String getTotalPrice() {
             return total_price;
         }
 
-        public void setTotal_price(String total_price) {
-            this.total_price = total_price;
+        public void setTotalPrice(String totalPrice) {
+            this.total_price = totalPrice;
         }
 
         public String getCurrency() {
@@ -535,13 +539,22 @@ public class InvoiceAnnotModel{
         }
     }
 
+    private String title;
     private Invoice invoice;
     private Vendor vendor;
     private Billto billto;
     private Shipto shipto;
     private Paymentto paymentto;
-    private Item item;
+    private List<Item> items;
     private Total total;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Invoice getInvoice() {
         return invoice;
@@ -583,12 +596,12 @@ public class InvoiceAnnotModel{
         this.paymentto = paymentto;
     }
 
-    public Item getItem() {
-        return item;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public Total getTotal() {
@@ -600,5 +613,13 @@ public class InvoiceAnnotModel{
     }
 
     public InvoiceAnnotModel() {
+        this.title = "";
+        this.invoice = new Invoice();
+        this.vendor = new Vendor();
+        this.billto = new Billto();
+        this.shipto = new Shipto();
+        this.paymentto = new Paymentto();
+        this.items = new ArrayList<Item>();
+        this.total = new Total();
     }
 }
