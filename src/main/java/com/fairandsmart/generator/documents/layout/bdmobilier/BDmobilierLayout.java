@@ -35,7 +35,16 @@ package com.fairandsmart.generator.documents.layout.bdmobilier;
 
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
-import com.fairandsmart.generator.documents.data.model.*;
+import com.fairandsmart.generator.documents.data.model.Address;
+import com.fairandsmart.generator.documents.data.model.Client;
+import com.fairandsmart.generator.documents.data.model.Company;å
+import com.fairandsmart.generator.documents.data.model.IDNumbers;
+import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
+import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.data.model.PaymentInfo;
+import com.fairandsmart.generator.documents.data.model.Product;
+import com.fairandsmart.generator.documents.data.model.ProductContainer;
+import com.fairandsmart.generator.documents.data.model.ProductTable;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -58,6 +67,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
 
 import java.util.Map;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -81,7 +91,13 @@ public class BDmobilierLayout implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
+        // set frequently accessed vars
         Random rnd = model.getRandom();
+        Client client = model.getClient();
+        Company company = model.getCompany();
+        PaymentInfo payment = model.getPaymentInfo();
+        ProductContainer pc = model.getProductContainer();
+        String cur = pc.getCurrency();
 
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
         Map<String, Boolean> genProb = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
@@ -96,19 +112,21 @@ public class BDmobilierLayout implements InvoiceLayout {
         PDFont fontI = fontSet.getFontItalic();
         PDFont fontNB = (rnd.nextBoolean()) ? fontN : fontB;
 
-        float leftPageMargin = 10;
-        float rightPageMargin = 35;
         float pageWidth = page.getMediaBox().getWidth();
         float pageHeight = page.getMediaBox().getHeight();
         float pageMiddleX = pageWidth/2;
+        float leftPageMargin = 10;
+        float rightPageMargin = 35;
+
+        Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: Color.BLUE;
         Color grayishFontColor = HelperCommon.getRandomColor(3);
-        Color lineStrokeColor = (rnd.nextInt(100) < 95) ? Color.BLACK: Color.BLUE;
 
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + model.getCompany().getLogo().getFullPath());
         PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
 
         /*//////////////////   Build Page components now   //////////////////*/
+
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         /// Draw top left logo
@@ -186,33 +204,59 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         shipAddrContainer.build(contentStream,writer);
 
-        // Left side margin info
+        // Left side info
         VerticalContainer infoOrder = new VerticalContainer(leftPageMargin,pageHeight-211,76);
+        // Purhase Order Number right if not at the top
+        if (genProb.get("purchase_order_number_left") & !genProb.get("purchase_order_number_top")) {
+            infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getReference().getLabelOrder()));
+            infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getReference().getValueOrder(),"PDATE"));
+            infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
+        }
         infoOrder.addElement(new SimpleTextBox(fontNB,8, 0,0,model.getReference().getLabelOrder()));
         infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getReference().getValueOrder(),"ONUM"));
         infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-        infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getDate().getLabelOrder()));
-        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getValueOrder(),"IDATE"));
-        infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
+        // Payment Due
+        if (genProb.get("payment_due_left")) {
+            infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getDate().getLabelPaymentDue()));
+            infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getValuePaymentDue(),"PDATE"));
+            infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
+        }
         infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getPaymentInfo().getLabelPaymentType()));
         infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
-        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getProductContainer().getFmtTotalWithTax(),"TTX"));
+        infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getProductContainer().getFmtTotalWithTaxAndDiscount(),"TTX"));
         infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
-
         // Payment Terms
-        if (genProb.get("payment_terms_top")) {
+        if (genProb.get("payment_terms_left")) {
             infoOrder.addElement(new SimpleTextBox(fontNB,8,0,0,model.getPaymentInfo().getLabelPaymentTerm(), "PTL"));
             infoOrder.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getValuePaymentTerm(), "PTV"));
             infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
         }
         infoOrder.build(contentStream,writer);
 
+        // table top horizontal line, will be built after verticalTableItems
+        float ttx1 = 110; float tty1 = billAddrContainer.getBoundingBox().getPosY() - billAddrContainer.getBoundingBox().getHeight() - 15;
+        float ttx2 = pageWidth-rightPageMargin; float tty2 = tty1;
+        HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(ttx1, tty1, ttx2, tty2, lineStrokeColor);
+
+        ////////////////////////////////////      Building Table      ////////////////////////////////////
+        // check if cur should be included in table amt items
+        String amtSuffix = "";
+        if (genProb.get("currency_in_table_items")) {
+              amtSuffix = " "+cur;
+              modelAnnot.getTotal().setCurrency(cur);
+        }
         // table text colors
         Color textColor = genProb.get("table_hdr_black_text") ? Color.BLACK: Color.WHITE; // textColor black (predominantly) or white
         Color bgColor = (textColor == Color.WHITE) ? Color.BLACK: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, Color.WHITE).get(rnd.nextInt(3)); // bgColor should be contrasting to textColor
 
+        // Building Header Item labels, table values and footer labels list
+        float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
+        ProductTable pt = new ProductTable(pc, amtSuffix, tableWidth);
+        List<String> tableHeaders = pt.getTableHeaders();
+        float[] configRow2 = pt.getConfigRow();  // configRow values must add to tableWidth: 530 which is pageW - leftM - rightM
+        Map<String, ProductTable.ColumnItem> itemMap = pt.getItemMap();
+
         // item list head
-        ProductContainer pc = model.getProductContainer();
         float[] configRow = {209,56,45,70,71};
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
 
@@ -231,7 +275,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         row2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "",textColor,bgColor), false);
         row2.setBackgroundColor(bgColor);
 
-        VerticalContainer verticalInvoiceItems = new VerticalContainer(110, pageHeight-209, 500);
+        VerticalContainer verticalInvoiceItems = new VerticalContainer(ttx1, tty1, 500);
         verticalInvoiceItems.addElement(row1);
         verticalInvoiceItems.addElement(row2);
         verticalInvoiceItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
@@ -257,18 +301,20 @@ public class BDmobilierLayout implements InvoiceLayout {
             verticalInvoiceItems.addElement(productLine);
         }
         verticalInvoiceItems.build(contentStream,writer);
+        tableTopInfoLine.build(contentStream,writer);
 
         float posYTotal = verticalInvoiceItems.getBoundingBox().getPosY()-verticalInvoiceItems.getBoundingBox().getHeight()-13;
-        new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal-40,158,40).build(contentStream,writer);
+        new BorderBox(bgColor,bgColor,1,405,posYTotal-33,158,45).build(contentStream,writer);
         // new BorderBox(Color.BLACK,Color.BLACK,1,405,posYTotal-13,158,13).build(contentStream,writer);
+        new HorizontalLineBox(ttx1, posYTotal+13, ttx2, posYTotal+13, lineStrokeColor).build(contentStream,writer);
 
         // Totals and Taxes calculations
-        new SimpleTextBox(fontN, 9, 430, posYTotal+11, pc.getTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, posYTotal+11, pc.getFmtTotal(),Color.WHITE,Color.BLACK,"TWTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 430, posYTotal-2, pc.getTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, posYTotal-2, pc.getFmtTotalTax(),Color.WHITE,Color.BLACK,"TTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 430, posYTotal-16, pc.getWithTaxTotalHead(),Color.WHITE,Color.BLACK).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, posYTotal-16, pc.getFmtTotalWithTax(),Color.WHITE,Color.BLACK,"TA").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 410, posYTotal+11, pc.getTotalHead(),textColor,bgColor).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 508, posYTotal+11, pc.getFmtTotal(),textColor,bgColor,"TWTX").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 410, posYTotal-2, pc.getTaxTotalHead(),textColor,bgColor).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 508, posYTotal-2, pc.getFmtTotalTax(),textColor,bgColor,"TTX").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 410, posYTotal-16, pc.getWithTaxTotalHead(),textColor,bgColor).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 508, posYTotal-16, pc.getFmtTotalWithTax(),textColor,bgColor,"TA").build(contentStream,writer);
 
         // Footer company info
         int footerFontSize = 7 + rnd.nextInt(3);
