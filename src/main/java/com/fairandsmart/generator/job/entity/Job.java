@@ -36,7 +36,13 @@ package com.fairandsmart.generator.job.entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.annotation.Nonnull;
-import javax.persistence.*;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.Transient;
+import javax.persistence.Version;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

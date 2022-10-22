@@ -34,7 +34,7 @@ package com.fairandsmart.generator.documents.element.textbox;
  * #L%
  */
 
-import com.fairandsmart.generator.documents.element.*;
+import com.fairandsmart.generator.documents.element.ElementBoxForEvaluation;
 
 import javax.xml.stream.XMLStreamWriter;
 import java.util.logging.Logger;
