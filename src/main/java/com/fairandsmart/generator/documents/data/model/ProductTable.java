@@ -35,14 +35,11 @@ package com.fairandsmart.generator.documents.data.model;
  */
 
 import java.util.LinkedHashMap;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 
 public class ProductTable {
@@ -113,28 +110,25 @@ public class ProductTable {
 
     private final Random rnd = new Random();
     // This list also order determins which fields to display in table
-    private static final Map<List<String>, String> candidateTableHeaders = new HashMap<>();
-    {
-        candidateTableHeaders.put(Arrays.asList("SN", "Article", "Taxe", "Taux de taxe", "Total"), "fr");
-
-        candidateTableHeaders.put(Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "Tax", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("ItemCode", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Item", "Qty", "ItemRate", "Disc", "Tax", "TaxRate", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Item", "ItemCode", "Qty", "ItemRate", "Tax", "TaxRate", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "ItemCode", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "ItemCode", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("Item", "Qty", "ItemRate", "Tax", "SubTotal"), "en");
-        candidateTableHeaders.put(Arrays.asList("Item", "Qty", "ItemRate", "Tax", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Item", "Tax", "TaxRate", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("SN", "Item", "Tax", "Total"), "en");
-        candidateTableHeaders.put(Arrays.asList("Item", "Tax", "Total"), "en");
-    }
+    private static final List<List<String>> candidateTableHeaders = Arrays.asList(
+        Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
+        Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "Tax", "Total"),
+        Arrays.asList("ItemCode", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
+        Arrays.asList("SN", "Item", "Qty", "ItemRate", "Disc", "Tax", "TaxRate", "Total"),
+        Arrays.asList("SN", "Item", "ItemCode", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
+        Arrays.asList("SN", "ItemCode", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
+        Arrays.asList("SN", "ItemCode", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
+        Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
+        Arrays.asList("SN", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
+        Arrays.asList("SN", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
+        Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "Total"),
+        Arrays.asList("Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
+        Arrays.asList("Item", "Qty", "ItemRate", "Tax", "SubTotal"),
+        Arrays.asList("Item", "Qty", "ItemRate", "Tax", "Total"),
+        Arrays.asList("SN", "Item", "Tax", "TaxRate", "Total"),
+        Arrays.asList("SN", "Item", "Tax", "Total"),
+        Arrays.asList("Item", "Tax", "Total")
+    );
 
     public List<String> getTableHeaders() {
         return tableHeaders;
@@ -154,15 +148,12 @@ public class ProductTable {
                 '}';
     }
 
-    public ProductTable(ProductContainer pc, String lang, String amtSuffix, float tableWidth) {
-
-        List<List<String>> filteredTableHeaders = candidateTableHeaders.entrySet().stream().filter(entry -> entry.getValue().equals(lang)).map(Map.Entry::getKey).collect(Collectors.toList());
-        List<String> tableHeaders = filteredTableHeaders.get(rnd.nextInt(filteredTableHeaders.size()));
+    public ProductTable(ProductContainer pc, String amtSuffix, float tableWidth) {
+        List<String> tableHeaders = candidateTableHeaders.get(rnd.nextInt(candidateTableHeaders.size()));
         this.tableHeaders = tableHeaders;
 
         // Building Header Item labels, table values and footer labels list
         this.itemMap = new LinkedHashMap<>();
-
         //          Identifier                     Width  Column Label Head         Col Label Footer                     Col Value Footer
         this.itemMap.put("SN",       new ColumnItem(40f,  pc.getsnHead(),           "",                                  ""));
         this.itemMap.put("Qty",      new ColumnItem(40f,  pc.getQtyHead(),          "",                                  ""));

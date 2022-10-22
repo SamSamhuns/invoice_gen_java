@@ -320,10 +320,9 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Building Header Item labels, table values and footer labels list
         float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
-        ProductTable pt = new ProductTable(pc, model.getLang(), amtSuffix, tableWidth);
+        ProductTable pt = new ProductTable(pc, amtSuffix, tableWidth);
         List<String> tableHeaders = pt.getTableHeaders();
-        // configRow values must add to tableWidth: 530 which is pageW - leftM - rightM
-        float[] configRow = pt.getConfigRow();
+        float[] configRow = pt.getConfigRow();  // configRow values must add to tableWidth: 530 which is pageW - leftM - rightM
         Map<String, ProductTable.ColumnItem> itemMap = pt.getItemMap();
 
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
