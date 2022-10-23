@@ -40,73 +40,74 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.HashMap;
 
 
 public class ProductTable {
 
-    public static class ColumnItem {
+    public class ColItem {
 
-        private float colWidth;
-        private String colLabelHeader;
-        private String colLabelFooter;
-        private String colValueFooter;
+        private float widthWeight;  // higher value means col will be wider based on total avai width
+        private String labelHeader;
+        private String labelFooter;
+        private String ValueFooter;
 
-        public float getColWidth() {
-            return colWidth;
+        public float getWidthWeight() {
+            return widthWeight;
         }
-        public String getColLabelHeader() {
-            return colLabelHeader;
+        public String getLabelHeader() {
+            return labelHeader;
         }
-        public String getColLabelFooter() {
-            return colLabelFooter;
+        public String getLabelFooter() {
+            return labelFooter;
         }
-        public String getColValueFooter() {
-            return colValueFooter;
-        }
-
-        public void setColWidth(float colWidth) {
-            this.colWidth = colWidth;
-        }
-        public void setColLabelHeader(String colLabelHeader) {
-            this.colLabelHeader = colLabelHeader;
-        }
-        public void setColLabelFooter(String colLabelFooter) {
-            this.colLabelFooter = colLabelFooter;
-        }
-        public void setColValueFooter(String colValueFooter) {
-            this.colValueFooter = colValueFooter;
+        public String getValueFooter() {
+            return ValueFooter;
         }
 
-        public ColumnItem(float colWidth, String colLabelHeader, String colLabelFooter, String colValueFooter) {
-            this.colWidth = colWidth;
-            this.colLabelHeader = colLabelHeader;
-            this.colLabelFooter = colLabelFooter;
-            this.colValueFooter = colValueFooter;
+        public void setWidthWeight(float widthWeight) {
+            this.widthWeight = widthWeight;
+        }
+        public void setLabelHeader(String labelHeader) {
+            this.labelHeader = labelHeader;
+        }
+        public void setLabelFooter(String labelFooter) {
+            this.labelFooter = labelFooter;
+        }
+        public void setValueFooter(String ValueFooter) {
+            this.ValueFooter = ValueFooter;
+        }
+
+        public ColItem(float widthWeight, String labelHeader, String labelFooter, String ValueFooter) {
+            this.widthWeight = widthWeight;
+            this.labelHeader = labelHeader;
+            this.labelFooter = labelFooter;
+            this.ValueFooter = ValueFooter;
         }
 
         @Override
         public String toString() {
-            return "ColumnItem{" +
-                    "colWidth=" + colWidth +
-                    ", colLabelHeader=" + colLabelHeader +
-                    ", colLabelFooter=" + colLabelFooter +
-                    ", colValueFooter=" + colValueFooter +
+            return "ColItem{" +
+                    ", widthWeight=" + widthWeight +
+                    ", labelHeader=" + labelHeader +
+                    ", labelFooter=" + labelFooter +
+                    ", ValueFooter=" + ValueFooter +
                     '}';
         }
 
         /*
         ColumnProduct{
-          colWidth=50
-          colLabelHeader=VAT Amt
-          colLabelFooter=VAT Total Amt
-          colValueFooter=100
+          widthWeight=1.5
+          labelHeader=VAT Amt
+          labelFooter=VAT Total Amt
+          ValueFooter=100
           }
         */
     }
 
     private List<String> tableHeaders;
     private float[] configRow;
-    private Map<String, ColumnItem> itemMap;
+    private Map<String, ColItem> itemMap;
 
     private final Random rnd = new Random();
     // This list also order determins which fields to display in table
@@ -136,7 +137,7 @@ public class ProductTable {
     public float[] getConfigRow() {
         return configRow;
     }
-    public Map<String, ColumnItem> getItemMap() {
+    public Map<String, ColItem> getItemMap() {
         return itemMap;
     }
 
@@ -150,28 +151,35 @@ public class ProductTable {
 
     public ProductTable(ProductContainer pc, String amtSuffix, float tableWidth) {
         List<String> tableHeaders = candidateTableHeaders.get(rnd.nextInt(candidateTableHeaders.size()));
-        this.tableHeaders = tableHeaders;
 
         // Building Header Item labels, table values and footer labels list
-        this.itemMap = new LinkedHashMap<>();
-        //          Identifier                     Width  Column Label Head         Col Label Footer                     Col Value Footer
-        this.itemMap.put("SN",       new ColumnItem(40f,  pc.getsnHead(),           "",                                  ""));
-        this.itemMap.put("Qty",      new ColumnItem(40f,  pc.getQtyHead(),          "",                                  ""));
-        this.itemMap.put("ItemCode", new ColumnItem(40f,  pc.getCodeHead(),         "",                                  ""));
-        this.itemMap.put("Item",     new ColumnItem(140f, pc.getNameHead(),         "",                                  ""));
-        this.itemMap.put("ItemRate", new ColumnItem(62f,  pc.getUPHead(),           pc.getTotalHead(),                   pc.getFmtTotal()+amtSuffix));
-        this.itemMap.put("Disc",     new ColumnItem(62f,  pc.getDiscountHead(),     pc.getDiscountTotalHead(),           pc.getFmtTotalDiscount()+amtSuffix));
-        this.itemMap.put("DiscRate", new ColumnItem(62f,  pc.getDiscountRateHead(), pc.getDiscountRateTotalHead(),       pc.getFmtTotalDiscountRate()));
-        this.itemMap.put("Tax",      new ColumnItem(62f,  pc.getTaxHead(),          pc.getTaxTotalHead(),                pc.getFmtTotalTax()+amtSuffix));
-        this.itemMap.put("TaxRate",  new ColumnItem(62f,  pc.getTaxRateHead(),      pc.getTaxRateTotalHead(),            pc.getFmtTotalTaxRate()));
-        this.itemMap.put("SubTotal", new ColumnItem(62f,  pc.getTotalHead(),        pc.getTotalHead(),                   pc.getFmtTotalWithDiscount()+amtSuffix));
-        this.itemMap.put("Total",    new ColumnItem(62f,  pc.getWithTaxTotalHead(), pc.getWithTaxAndDiscountTotalHead(), pc.getFmtTotalWithTaxAndDiscount()+amtSuffix));
+        Map<String, ColItem> itemColMap = new HashMap<>();
+        //      Hdr Identifier          Width-Weight  Column Label Head         Col Label Footer                     Col Value Footer
+        itemColMap.put("SN",       new ColItem(1f,    pc.getsnHead(),           "",                                  ""));
+        itemColMap.put("Qty",      new ColItem(1f,    pc.getQtyHead(),          "",                                  ""));
+        itemColMap.put("ItemCode", new ColItem(1f,    pc.getCodeHead(),         "",                                  ""));
+        itemColMap.put("Item",     new ColItem(3.5f,  pc.getNameHead(),         "",                                  ""));
+        itemColMap.put("ItemRate", new ColItem(1.55f, pc.getUPHead(),           pc.getTotalHead(),                   pc.getFmtTotal()+amtSuffix));
+        itemColMap.put("Disc",     new ColItem(1.55f, pc.getDiscountHead(),     pc.getDiscountTotalHead(),           pc.getFmtTotalDiscount()+amtSuffix));
+        itemColMap.put("DiscRate", new ColItem(1.55f, pc.getDiscountRateHead(), pc.getDiscountRateTotalHead(),       pc.getFmtTotalDiscountRate()));
+        itemColMap.put("Tax",      new ColItem(1.55f, pc.getTaxHead(),          pc.getTaxTotalHead(),                pc.getFmtTotalTax()+amtSuffix));
+        itemColMap.put("TaxRate",  new ColItem(1.55f, pc.getTaxRateHead(),      pc.getTaxRateTotalHead(),            pc.getFmtTotalTaxRate()));
+        itemColMap.put("SubTotal", new ColItem(1.55f, pc.getTotalHead(),        pc.getTotalHead(),                   pc.getFmtTotalWithDiscount()+amtSuffix));
+        itemColMap.put("Total",    new ColItem(1.55f, pc.getWithTaxTotalHead(), pc.getWithTaxAndDiscountTotalHead(), pc.getFmtTotalWithTaxAndDiscount()+amtSuffix));
+
+        // find total col weight sums based on tableHeaders
+        float weightSum = 0;
+        for (String tableHeader: tableHeaders) {
+            weightSum += itemColMap.get(tableHeader).getWidthWeight();
+        };
+        // get base column width based on contents of tableHeaders & total weightSum
+        float baseColWidth = tableWidth / weightSum;
 
         // building item table column width list
         float[] configRowWidths = new float[tableHeaders.size()];
         float curWidth = 0;
         for (int i=0; i<configRowWidths.length; i++) {
-            float colWidth =  itemMap.get(tableHeaders.get(i)).getColWidth();
+            float colWidth = itemColMap.get(tableHeaders.get(i)).getWidthWeight() * baseColWidth;
             curWidth += colWidth;
             configRowWidths[i] = colWidth;
         }
@@ -188,6 +196,8 @@ public class ProductTable {
                 }
             }
         }
+        this.tableHeaders = tableHeaders;
+        this.itemMap = itemColMap;
         this.configRow = configRowWidths;
     }
 }

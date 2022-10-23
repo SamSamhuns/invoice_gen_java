@@ -323,11 +323,11 @@ public class AmazonLayout implements InvoiceLayout {
         ProductTable pt = new ProductTable(pc, amtSuffix, tableWidth);
         List<String> tableHeaders = pt.getTableHeaders();
         float[] configRow = pt.getConfigRow();  // configRow values must add to tableWidth: 530 which is pageW - leftM - rightM
-        Map<String, ProductTable.ColumnItem> itemMap = pt.getItemMap();
+        Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
 
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
         for (String tableHeader: tableHeaders) {
-            String hdrLabel = itemMap.get(tableHeader).getColLabelHeader();
+            String hdrLabel = itemMap.get(tableHeader).getLabelHeader();
             row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), centerAlignItems);
         }
         row1.setBackgroundColor(hdrBgColor);
@@ -416,8 +416,8 @@ public class AmazonLayout implements InvoiceLayout {
             for (int i=0; i<tableHeaders.size(); i++ ) {
                 TableRowBox footerInvoice = new TableRowBox(configFooterRow, 0, 25);
                 String tableHeader = tableHeaders.get(i);
-                String hdrLabel = itemMap.get(tableHeader).getColLabelFooter();
-                String hdrValue = itemMap.get(tableHeader).getColValueFooter();
+                String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
+                String hdrValue = itemMap.get(tableHeader).getValueFooter();
                 footerInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), HAlign.RIGHT, tableHeader+"FooterLabel"), centerAlignItems);
                 footerInvoice.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.RIGHT, tableHeader+"FooterValue"), centerAlignItems);
                 verticalTableItems.addElement(footerInvoice);
@@ -438,7 +438,7 @@ public class AmazonLayout implements InvoiceLayout {
             // Footer Labels for final total amount, tax and discount
             TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
             for (String tableHeader: tableHeaders) {
-                String hdrLabel = itemMap.get(tableHeader).getColLabelFooter();
+                String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
                 titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign, tableHeader+"FooterLabel"), centerAlignItems);
             }
             verticalTableItems.addElement(titleTotalInvoice);
@@ -451,7 +451,7 @@ public class AmazonLayout implements InvoiceLayout {
             // Footer Numerical formatted values for final total amount, tax and discount
             TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
             for (String tableHeader: tableHeaders) {
-                String hdrValue = itemMap.get(tableHeader).getColValueFooter();
+                String hdrValue = itemMap.get(tableHeader).getValueFooter();
                 totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), centerAlignItems);
                 switch (tableHeader) {
                     case "Tax": modelAnnot.getTotal().setTaxPrice(hdrValue); break;

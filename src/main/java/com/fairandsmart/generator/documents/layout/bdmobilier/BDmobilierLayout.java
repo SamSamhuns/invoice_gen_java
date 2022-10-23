@@ -37,7 +37,7 @@ import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.Client;
-import com.fairandsmart.generator.documents.data.model.Company;å
+import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
@@ -254,7 +254,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         ProductTable pt = new ProductTable(pc, amtSuffix, tableWidth);
         List<String> tableHeaders = pt.getTableHeaders();
         float[] configRow2 = pt.getConfigRow();  // configRow values must add to tableWidth: 530 which is pageW - leftM - rightM
-        Map<String, ProductTable.ColumnItem> itemMap = pt.getItemMap();
+        Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
 
         // item list head
         float[] configRow = {209,56,45,70,71};
