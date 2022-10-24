@@ -106,7 +106,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         Address address = model.getCompany().getAddress();
 
         // Set fontFaces
-        HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDType1Fonts(document, this);
+        HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDFontFamily(document, this);
         PDFont fontN = fontSet.getFontNormal();
         PDFont fontB = fontSet.getFontBold();
         PDFont fontI = fontSet.getFontItalic();

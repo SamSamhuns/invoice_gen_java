@@ -110,7 +110,7 @@ public class AmazonLayout implements InvoiceLayout {
         String barCodeNum = barCodeNumGen.random();
 
         // Set fontFaces
-        HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDType1Fonts(document, this);
+        HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDFontFamily(document, this);
         PDFont fontN = fontSet.getFontNormal();
         PDFont fontB = fontSet.getFontBold();
         PDFont fontNB = (rnd.nextBoolean()) ? fontN: fontB;
