@@ -112,23 +112,27 @@ public class ProductTable {
     private final Random rnd = new Random();
     // This list also order determins which fields to display in table
     private static final List<List<String>> candidateTableHeaders = Arrays.asList(
-        Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
-        Arrays.asList("SN", "Qty", "Item", "ItemRate", "Disc", "Tax", "Total"),
-        Arrays.asList("ItemCode", "Qty", "Item", "ItemRate", "Disc", "TaxRate", "Tax", "Total"),
-        Arrays.asList("SN", "Item", "Qty", "ItemRate", "Disc", "Tax", "TaxRate", "Total"),
-        Arrays.asList("SN", "Item", "ItemCode", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
-        Arrays.asList("SN", "ItemCode", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "Total"),
-        Arrays.asList("SN", "ItemCode", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
-        Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
-        Arrays.asList("SN", "Item", "Disc", "DiscRate", "Tax", "TaxRate", "Total"),
-        Arrays.asList("SN", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
-        Arrays.asList("SN", "Item", "Qty", "ItemRate", "Tax", "Total"),
-        Arrays.asList("Item", "Qty", "ItemRate", "Tax", "TaxRate", "SubTotal", "Total"),
-        Arrays.asList("Item", "Qty", "ItemRate", "Tax", "SubTotal"),
-        Arrays.asList("Item", "Qty", "ItemRate", "Tax", "Total"),
-        Arrays.asList("SN", "Item", "Tax", "TaxRate", "Total"),
-        Arrays.asList("SN", "Item", "Tax", "Total"),
-        Arrays.asList("Item", "Tax", "Total")
+        Arrays.asList("Item",     "Tax",      "Total"),
+        Arrays.asList("SN",       "Item",     "Tax",      "Total"),
+        Arrays.asList("SN",       "ItemCode", "Tax",      "Total"),
+        Arrays.asList("SN",       "Item",     "Tax",      "SubTotal"),
+        Arrays.asList("Item",     "Qty",      "ItemRate", "Tax",      "Total"),
+        Arrays.asList("SN",       "Item",     "Tax",      "TaxRate",  "Total"),
+        Arrays.asList("Item",     "Qty",      "ItemRate", "Tax",      "SubTotal"),
+        Arrays.asList("Item",     "Qty",      "Tax",      "Disc",     "SubTotal"),
+        Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Tax",      "Total"),
+        Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Tax",      "SubTotal"),
+        Arrays.asList("SN",       "Qty",      "Item",     "ItemRate", "Disc",     "Tax",      "Total"),
+        Arrays.asList("SN",       "Item",     "Disc",     "DiscRate", "Tax",      "TaxRate",  "Total"),
+        Arrays.asList("SN",       "Qty",      "ItemRate", "Tax",      "TaxRate",  "SubTotal", "Total"),
+        Arrays.asList("Item",     "Qty",      "ItemRate", "Tax",      "TaxRate",  "SubTotal", "Total"),
+        Arrays.asList("SN",       "Qty",      "Item",     "ItemRate", "Disc",     "TaxRate",  "Tax",      "Total"),
+        Arrays.asList("ItemCode", "Qty",      "Item",     "ItemRate", "Disc",     "TaxRate",  "Tax",      "Total"),
+        Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Disc",     "Tax",      "TaxRate",  "Total"),
+        Arrays.asList("SN",       "Item",     "ItemCode", "Qty",      "ItemRate", "Tax",      "TaxRate",  "Total"),
+        Arrays.asList("SN",       "ItemCode", "Item",     "Qty",      "ItemRate", "Tax",      "TaxRate",  "Total"),
+        Arrays.asList("SN",       "ItemCode", "Item",     "Disc",     "DiscRate", "Tax",      "TaxRate",  "Total"),
+        Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Tax",      "TaxRate",  "SubTotal", "Total")
     );
 
     public List<String> getTableHeaders() {
@@ -149,8 +153,15 @@ public class ProductTable {
                 '}';
     }
 
-    public ProductTable(ProductContainer pc, String amtSuffix, float tableWidth) {
-        List<String> tableHeaders = candidateTableHeaders.get(rnd.nextInt(candidateTableHeaders.size()));
+    public ProductTable(ProductContainer pc, String amtSuffix, float tableWidth) throws Exception {
+        // All tableHeaders are considered
+        this(pc, amtSuffix,tableWidth, candidateTableHeaders.size());
+    }
+
+    public ProductTable(ProductContainer pc, String amtSuffix, float tableWidth, int candTableSize) throws Exception {
+        // candTableSize refers to the number of tableHeaders to consider, larger size would mean more proba of longer headers
+        int candSize = (int) Math.min(candTableSize, candidateTableHeaders.size());
+        List<String> tableHeaders = candidateTableHeaders.get(rnd.nextInt(candSize));
 
         // Building Header Item labels, table values and footer labels list
         Map<String, ColItem> itemColMap = new HashMap<>();
