@@ -54,8 +54,15 @@ public class HorizontalContainer extends ElementBox {
     private Color backgroundColor;
 
     public HorizontalContainer(float posX, float posY) {
+        this(posX, posY, 1, null, null);
+    }
+
+    public HorizontalContainer(float posX, float posY, float borderThickness, Color borderColor, Color backgroundColor) {
         this.elements = new ArrayList<>();
         this.box = new BoundingBox(posX, posY, 0, 0);
+        this.borderThickness = borderThickness;
+        this.borderColor = borderColor;
+        this.backgroundColor = backgroundColor;
     }
 
     public void addElement(ElementBox element) throws Exception {
@@ -111,8 +118,7 @@ public class HorizontalContainer extends ElementBox {
         if ( borderColor != null ) {
             stream.setLineWidth(borderThickness);
             stream.setStrokingColor(borderColor);
-            borderThickness += 1f;  // add an expansion factor
-            stream.addRect(box.getPosX()-borderThickness, box.getPosY() - box.getHeight() - borderThickness, box.getWidth() + borderThickness*2, box.getHeight() + borderThickness*2);
+            stream.addRect(box.getPosX()-borderThickness, box.getPosY()-box.getHeight()-borderThickness, box.getWidth()+borderThickness*2, box.getHeight() + borderThickness*2);
             stream.stroke();
         }
         if ( backgroundColor != null ) {
