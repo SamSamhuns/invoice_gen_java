@@ -114,7 +114,7 @@ public class ProductTable {
     private static final List<List<String>> candidateTableHeaders = Arrays.asList(
         Arrays.asList("Item",     "Tax",      "Total"),
         Arrays.asList("SN",       "Item",     "Tax",      "Total"),
-        Arrays.asList("SN",       "ItemCode", "Tax",      "Total"),
+        Arrays.asList("Item",     "ItemCode", "Tax",      "Total"),
         Arrays.asList("SN",       "Item",     "Tax",      "SubTotal"),
         Arrays.asList("Item",     "Qty",      "ItemRate", "Tax",      "Total"),
         Arrays.asList("SN",       "Item",     "Tax",      "TaxRate",  "Total"),
