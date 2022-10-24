@@ -45,17 +45,17 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestgenericLayout {
+public class TestGenericLayout {
 
 @Test
 public void test() throws Exception {
 
         List<String> artefact_dirs = Arrays.asList(
-                "target/new/pdf",
-                "target/new/xml",
-                "target/new/tiff",
-                "target/new/json",
-                "target/new/xmlEval");
+                "target/generic/pdf",
+                "target/generic/xml",
+                "target/generic/tiff",
+                "target/generic/json",
+                "target/generic/xmlEval");
 
         for (String dirs : artefact_dirs) {
                 Path dir = Paths.get(dirs);
@@ -69,11 +69,11 @@ public void test() throws Exception {
         int ntests = ((ntests_env == null) ? 5 : Integer.parseInt(ntests_env));
 
         for(int i=1; i<=ntests; i++) {
-                Path pdf = Paths.get("target/new/pdf/gen-"+ i + ".pdf");
-                Path xml = Paths.get("target/new/xml/gen-"+ i + ".xml");
-                Path img = Paths.get("target/new/tiff/gen-"+ i + ".tiff");
-                Path json = Paths.get("target/new/json/gen-"+ i + ".json");
-                Path xmlEval = Paths.get("target/new/xmlEval/gen-"+ i + ".xml");
+                Path pdf = Paths.get("target/generic/pdf/gen-"+ i + ".pdf");
+                Path xml = Paths.get("target/generic/xml/gen-"+ i + ".xml");
+                Path img = Paths.get("target/generic/tiff/gen-"+ i + ".tiff");
+                Path json = Paths.get("target/generic/json/gen-"+ i + ".json");
+                Path xmlEval = Paths.get("target/generic/xmlEval/gen-"+ i + ".xml");
                 try {
                         GenerationContext ctx = GenerationContext.generate();
                         InvoiceModel model = new InvoiceModel.Generator().generate(ctx);

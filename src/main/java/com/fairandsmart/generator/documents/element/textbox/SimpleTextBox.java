@@ -69,41 +69,49 @@ public class SimpleTextBox extends ElementBox {
     private HAlign halign;
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text) throws Exception {
-        this(font, fontSize, posX, posY, text, Color.BLACK, null, "undefined");
+        this(font, fontSize, posX, posY, text, Color.BLACK, null, HAlign.LEFT, "undefined", true);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, String entityName) throws Exception {
-        this(font, fontSize, posX, posY, text, Color.BLACK, null, entityName);
+        this(font, fontSize, posX, posY, text, Color.BLACK, null, HAlign.LEFT, entityName, true);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, HAlign halign) throws Exception {
-        this(font, fontSize, posX, posY, text, Color.BLACK, null, halign, "undefined");
+        this(font, fontSize, posX, posY, text, Color.BLACK, null, halign, "undefined", true);
+    }
+
+    public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, String entityName, Boolean useANSIEncoding) throws Exception {
+      this(font, fontSize, posX, posY, text, Color.BLACK, null, HAlign.LEFT, entityName, useANSIEncoding);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, HAlign halign, String entityName) throws Exception {
-        this(font, fontSize, posX, posY, text, Color.BLACK, null, halign, entityName);
+        this(font, fontSize, posX, posY, text, Color.BLACK, null, halign, entityName, true);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, Color textColor, Color backgroundColor) throws Exception {
-        this(font, fontSize, posX, posY, text, textColor, backgroundColor, HAlign.LEFT, "undefined");
+        this(font, fontSize, posX, posY, text, textColor, backgroundColor, HAlign.LEFT, "undefined", true);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, Color textColor, Color backgroundColor, String entityName) throws Exception {
-        this(font, fontSize, posX, posY, text, textColor, backgroundColor, HAlign.LEFT, entityName);
+        this(font, fontSize, posX, posY, text, textColor, backgroundColor, HAlign.LEFT, entityName, true);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, Color textColor, Color backgroundColor, HAlign halign) throws Exception {
-        this(font, fontSize, posX, posY, text, textColor, backgroundColor, halign, "undefined");
+        this(font, fontSize, posX, posY, text, textColor, backgroundColor, halign, "undefined", true);
     }
 
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, Color textColor, Color backgroundColor, HAlign halign, String entityName) throws Exception {
+        this(font, fontSize, posX, posY, text, textColor, backgroundColor, halign, entityName, true);
+    }
+
+    public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text, Color textColor, Color backgroundColor, HAlign halign, String entityName, Boolean useANSIEncoding) throws Exception {
         this.padding = new Padding();
         this.font = font;
         this.fontSize = fontSize;
         if(text == null){
             text = "";
         }
-        this.text = VerifCharEncoding.remove(text);
+        this.text = useANSIEncoding ? VerifCharEncoding.remove(text) : text;
         //this.text = text.replace("\n", "").replace("\r", "");
         this.entityName = entityName;
         this.textLines = new ArrayList<>();

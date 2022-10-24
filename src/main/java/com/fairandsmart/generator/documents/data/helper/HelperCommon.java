@@ -140,9 +140,7 @@ public class HelperCommon extends Helper {
           return resourceUri.getPath();
     }
 
-    /*
-        Colors
-    */
+    /* ////////////////////////////  Colors  ////////////////////////////*/
 
     public static Color getRandomColor(int cSize) throws Exception {
           final List<Color> colorsList = Arrays.asList(
@@ -189,14 +187,34 @@ public class HelperCommon extends Helper {
           return genMap;
     }
 
-    /*
-        Fonts
-    */
+    /* ////////////////////////////   Font   //////////////////////////// */
 
-    public static PDCustomFonts getRandomPDType1Fonts(PDDocument doc, Object classObj) throws Exception {
+    /* When rendering non ANSI text, the useANSIEncoding must be set to false when using SimpleTextBox */
+    public static PDCustomFonts getNonANSIRandomPDFontFamily(PDDocument doc, Object classObj) throws Exception {
+        final List<List<String>> ttfFontNBIList = Arrays.asList(
+                Arrays.asList("A_Nefel_Sereke.ttf", "A_Nefel_Sereke_Bold.ttf", "A_Nefel_Sereke.ttf")
+        );
+
+        List<PDFont> pdfontNormalList = new ArrayList<PDFont>();
+        List<PDFont> pdfontBoldList = new ArrayList<PDFont>();
+        List<PDFont> pdfontItalicList = new ArrayList<PDFont>();
+        for (List<String> fontNBI : ttfFontNBIList) {
+            pdfontNormalList.add(PDType0Font.load(doc, new File(HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(0)))));
+            pdfontBoldList.add(PDType0Font.load(doc, new File(HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(1)))));
+            pdfontItalicList.add(PDType0Font.load(doc, new File(HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(2)))));
+        }
+        assert pdfontNormalList.size() == pdfontBoldList.size() && pdfontNormalList.size() == pdfontItalicList.size();
+
+        int fontIdx = rnd.nextInt(pdfontNormalList.size());
+        return new PDCustomFonts(pdfontNormalList.get(fontIdx),
+                                 pdfontBoldList.get(fontIdx),
+                                 pdfontItalicList.get(fontIdx));
+    }
+
+    public static PDCustomFonts getRandomPDFontFamily(PDDocument doc, Object classObj) throws Exception {
           // IMPORTANT: fonts must be arranged in normal, bold and italic parts
 
-          final List<List<String>> ttfFontNormalBoldItalicList = Arrays.asList(
+          final List<List<String>> ttfFontNBIList = Arrays.asList(
                   Arrays.asList("Arial.ttf", "Arial Bold.ttf", "Arial Italic.ttf"),
                   Arrays.asList("Baskerville.ttf", "Baskerville Bold.ttf", "Baskerville Italic.ttf"),
                   Arrays.asList("Century Gothic.ttf", "Century Gothic Bold.ttf", "Century Gothic Italic.ttf"),
@@ -212,16 +230,10 @@ public class HelperCommon extends Helper {
           List<PDFont> pdfontNormalList = new ArrayList<PDFont>();
           List<PDFont> pdfontBoldList = new ArrayList<PDFont>();
           List<PDFont> pdfontItalicList = new ArrayList<PDFont>();
-
-          String fontNormalPath; String fontBoldPath; String fontItalicPath;
-          for (List<String> fontNBI : ttfFontNormalBoldItalicList) {
-              fontNormalPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(0));
-              fontBoldPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(1));
-              fontItalicPath = HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(2));
-
-              pdfontNormalList.add(PDType0Font.load(doc, new File(fontNormalPath)));
-              pdfontBoldList.add(PDType0Font.load(doc, new File(fontBoldPath)));
-              pdfontItalicList.add(PDType0Font.load(doc, new File(fontItalicPath)));
+          for (List<String> fontNBI : ttfFontNBIList) {
+              pdfontNormalList.add(PDType0Font.load(doc, new File(HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(0)))));
+              pdfontBoldList.add(PDType0Font.load(doc, new File(HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(1)))));
+              pdfontItalicList.add(PDType0Font.load(doc, new File(HelperCommon.getResourceFullPath(classObj, "common/font/" + fontNBI.get(2)))));
           }
 
           // add PDType1Font built-in fonts
@@ -235,11 +247,9 @@ public class HelperCommon extends Helper {
           pdfontBoldList.add(PDType1Font.TIMES_BOLD);
           pdfontItalicList.add(PDType1Font.TIMES_ITALIC);
 
-          assert pdfontNormalList.size() == pdfontBoldList.size();
-          assert pdfontNormalList.size() == pdfontItalicList.size();
+          assert pdfontNormalList.size() == pdfontBoldList.size() && pdfontNormalList.size() == pdfontItalicList.size();
 
           int fontIdx = rnd.nextInt(pdfontNormalList.size());
-
           return new PDCustomFonts(pdfontNormalList.get(fontIdx),
                                    pdfontBoldList.get(fontIdx),
                                    pdfontItalicList.get(fontIdx));
