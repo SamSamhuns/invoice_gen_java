@@ -79,8 +79,10 @@
     }
   },
   {
-    "layout": "Cdiscount",
-    "probability": {}
+    "layout": "CDiscount",
+    "probability": {
+      "line_stroke_black": 96
+    }
   },
   {
     "layout": "Darty",
