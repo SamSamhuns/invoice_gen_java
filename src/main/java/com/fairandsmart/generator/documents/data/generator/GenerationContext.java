@@ -57,6 +57,7 @@ public class GenerationContext {
     private static final List<String> currencies = new ArrayList<>();
     private static final Random rnd = new Random();
     private static List<Map<String, Object>> configMaps;
+    private static int maxProductNum = 6;
 
     {
         // countries.add("FR");
@@ -169,7 +170,15 @@ public class GenerationContext {
     }
 
     public void setConfigMaps(List<Map<String, Object>> configMaps) {
-        GenerationContext.configMaps = configMaps;
+        this.configMaps = configMaps;
+    }
+
+    public int getMaxProductNum() {
+        return maxProductNum;
+    }
+
+    public void setMaxProductNum(int maxProductNum) {
+        this.maxProductNum = maxProductNum;
     }
 
     @Override

@@ -630,7 +630,7 @@ public class ProductContainer {
             Boolean taxAvailable = true;  // ctx.getRandom().nextInt(100) < 90; TODO uncomment
             productContainer.setTaxAvailable(taxAvailable);
 
-            final int MAXPRODUCT = 6;
+            final int maxProductNum = ctx.getMaxProductNum();
             final int MAXQTYPERPRODUCT = 5;
             float price = 0;
             float taxRate = 0;
@@ -640,7 +640,7 @@ public class ProductContainer {
             float priceWithTaxAndDiscount = 0;
             Generex codeGenerex = new Generex("[A-Z0-9]"+"{"+new Generex("[4-9]").random()+"}");  // [A-Z0-9]
 
-            for (int i = 0; i < ctx.getRandom().nextInt(MAXPRODUCT - 1)+1; i++) {
+            for (int i = 0; i < ctx.getRandom().nextInt(maxProductNum - 1)+1; i++) {
                 Product product = productsLangFiltered.get(ctx.getRandom().nextInt(productsLangFiltered.size()));
                 int quantity = ctx.getRandom().nextInt(MAXQTYPERPRODUCT - 1) + 1;
                 quantity = (product.getPrice() < 250) ? quantity * 8: quantity; // 8x qty if price < 250

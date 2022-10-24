@@ -75,6 +75,7 @@ public void test() throws Exception {
                 Path json = Paths.get("target/bdmobilier/json/bdmobilier" + i + ".json");
 
                 GenerationContext ctx = GenerationContext.generate();
+                ctx.setMaxProductNum(20);  // increase max number of products to 20
                 InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
                 InvoiceLayout layout = new BDmobilierLayout();
                 InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);
