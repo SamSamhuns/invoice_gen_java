@@ -312,19 +312,20 @@ public class AmazonLayout implements InvoiceLayout {
         // check if cur should be included in table amt items
         String amtSuffix = "";
         if (genProb.get("currency_in_table_items")) {
-              amtSuffix = " "+cur;
-              modelAnnot.getTotal().setCurrency(cur);
+            amtSuffix = " "+cur;
+            modelAnnot.getTotal().setCurrency(cur);
         }
-        boolean upperCap = rnd.nextBoolean();
+        boolean upperCap = rnd.nextBoolean();  // table header items case
         HAlign tableHdrAlign = genProb.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
 
         // Building Header Item labels, table values and footer labels list
         float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
         ProductTable pt = new ProductTable(pc, amtSuffix, tableWidth);
         List<String> tableHeaders = pt.getTableHeaders();
-        float[] configRow = pt.getConfigRow();  // configRow values must add to tableWidth: 530 which is pageW - leftM - rightM
+        float[] configRow = pt.getConfigRow();
         Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
 
+        // table item list head
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
         for (String tableHeader: tableHeaders) {
             String hdrLabel = itemMap.get(tableHeader).getLabelHeader();
@@ -341,7 +342,7 @@ public class AmazonLayout implements InvoiceLayout {
                       leftPageMargin, tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2 - row1.getBoundingBox().getHeight(),
                       row1.getBoundingBox().getWidth(), row1.getBoundingBox().getHeight()).build(contentStream, writer);
 
-        // item list
+        // table item list body
         String quantity; String snNum;
         Color cellTextColor; Color cellBgColor;
         for(int w=0; w<pc.getProducts().size(); w++) {
@@ -393,7 +394,7 @@ public class AmazonLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
-                SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellAlign, tableHeader+"Item");
+                SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
                 productLine.addElement(rowBox, centerAlignItems);
             }
             modelAnnot.getItems().add(randomItem);
@@ -405,7 +406,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
         verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
-        float tableItemsBottomY = verticalTableItems.getBoundingBox().getHeight();
+        float tableItemsHeight = verticalTableItems.getBoundingBox().getHeight();
 
         verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
@@ -516,13 +517,13 @@ public class AmazonLayout implements InvoiceLayout {
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = leftPageMargin;
             float yPos = tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2;
-            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsBottomY, lineStrokeColor);
+            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos, yPos - tableItemsBottomY, lineStrokeColor);
+                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
                 xPos += configRow[i];
             }
-            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsBottomY, lineStrokeColor);
+            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
         }
 
         ////////////////////////////////////      Finished Table      ////////////////////////////////////
