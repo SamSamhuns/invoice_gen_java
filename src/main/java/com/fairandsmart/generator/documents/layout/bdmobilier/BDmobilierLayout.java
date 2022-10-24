@@ -419,6 +419,48 @@ public class BDmobilierLayout implements InvoiceLayout {
         modelAnnot.getTotal().setTotalPrice(pc.getFmtTotalWithTaxAndDiscount()+amtSuffix);
         ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
+        // Payment Address
+        if (genProb.get("payment_address")) {
+            // Set paymentAddrContainer opposite to the signature location
+            float paymentAddrXPos = (genProb.get("signature_bottom_left")) ? rightAddrX: ttx1;
+            float paymentAddrYPos = tableBottomY-40;
+
+            VerticalContainer paymentAddrContainer = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
+            paymentAddrContainer.addElement(new SimpleTextBox(fontNB, 10, 0, 0, payment.getAddressHeader(), "PH"));
+            modelAnnot.getPaymentto().setBankName(payment.getValueBankName());
+            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelBankName()+": "+payment.getValueBankName(), "PBN"));
+            modelAnnot.getPaymentto().setAccountName(payment.getValueAccountName());
+            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelAccountName()+": "+payment.getValueAccountName(), "PAName"));
+            modelAnnot.getPaymentto().setIbanNumber(payment.getValueIBANNumber());
+            if (genProb.get("payment_account_number")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelAccountNumber()+": "+payment.getValueAccountNumber(), "PANum"));
+                modelAnnot.getPaymentto().setAccountNumber(payment.getValueAccountNumber());
+            }
+            if (genProb.get("payment_branch_name")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelBranchName()+": "+payment.getValueBranchName(), "PBName"));
+                modelAnnot.getPaymentto().setBranchAddress(payment.getValueBranchName());
+            }
+            paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelIBANNumber()+": "+payment.getValueIBANNumber(), "PBNum"));
+            if (genProb.get("payment_routing_number")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelRoutingNumber()+": "+payment.getValueRoutingNumber(), "PRNum"));
+                modelAnnot.getPaymentto().setRoutingNumber(payment.getValueRoutingNumber());
+            }
+            if (genProb.get("payment_swift_number")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelSwiftCode()+": "+payment.getValueSwiftCode(), "PSNum"));
+                modelAnnot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
+            }
+            // Client TAX number bottom added randomly if client_bill_address_tax_number is NOT present
+            if (genProb.get("client_payment_tax_number") && !genProb.get("client_bill_address_tax_number")) {
+                billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"PTax"));
+                modelAnnot.getPaymentto().setCustomerTrn(client.getIdNumbers().getVatValue());
+            }
+            if (genProb.get("addresses_bordered")) {
+                paymentAddrContainer.setBorderColor(lineStrokeColor);
+                paymentAddrContainer.setBorderThickness(0.5f);
+            }
+            paymentAddrContainer.build(contentStream, writer);
+        }
+
         // Footer company info
         int footerFontSize = 7 + rnd.nextInt(3);
         HorizontalContainer infoEntreprise = new HorizontalContainer(0,0);
