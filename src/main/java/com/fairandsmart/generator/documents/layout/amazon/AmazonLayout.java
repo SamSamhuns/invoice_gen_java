@@ -155,7 +155,7 @@ public class AmazonLayout implements InvoiceLayout {
         // Text top
         VerticalContainer topTextContainer = new VerticalContainer(leftPageMargin, 810, 500);
         topTextContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, "Page 1 of 1" + ((rnd.nextBoolean()) ? ", 1-1/1": ".")));
-        String docTitle = ((rnd.nextBoolean()) ? "Tax Invoice": "Invoice");
+        String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         String textTopInvString = ((rnd.nextBoolean()) ? docTitle+" for ": docTitle+" dated ")+model.getDate().getValueInvoice();
         if (genProb.get("text_top_invoice_number") && !genProb.get("invoice_number_top")) {  // inc invoice number if not mentioned below
             textTopInvString = model.getReference().getLabelInvoice()+" "+model.getReference().getValueInvoice()+" for "+model.getDate().getValueInvoice();
@@ -199,7 +199,7 @@ public class AmazonLayout implements InvoiceLayout {
             modelAnnot.getInvoice().setInvoiceOrderId(model.getReference().getValueOrder());
         }
         // TAX number, Left side
-        if (genProb.get("tax_number_top")) {
+        if (genProb.get("vendor_tax_number_top")) {
             String vatText = company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue();
             new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, vatText, "SVAT").build(contentStream, writer);
             modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
