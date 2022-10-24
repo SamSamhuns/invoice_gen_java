@@ -84,8 +84,9 @@ public class GenerationContext {
         // currencies.add("₹");
         currencies.add("Yuan");
         currencies.add("¥");
-        currencies.add("Dhs");
         currencies.add("AED");
+        currencies.add("Aed");
+        currencies.add("Dhs");
         currencies.add("DH");
         currencies.add("Dh");
         // currencies.add("د.إ");
