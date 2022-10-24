@@ -120,7 +120,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         float rightPageMargin = 35;
 
         Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: Color.BLUE;
-        Color grayishFontColor = HelperCommon.getRandomColor(3);
+        Color grayFColor = HelperCommon.getRandomColor(3);
 
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());
@@ -155,24 +155,24 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Vendor name
         headerContainer.addElement(new SimpleTextBox(fontNB,10,0,0,company.getName(),"SN"));
         // Invoice date
-        headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,model.getDate().getValueInvoice(),grayishFontColor,Color.WHITE,"IDATE"));
+        headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,model.getDate().getValueInvoice(),grayFColor,Color.WHITE,"IDATE"));
         modelAnnot.getVendor().setVendorName(company.getName());
         modelAnnot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
 
         // Purchase Order Number
         if (genProb.get("purchase_order_number_top_right")) {
-            headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder(), "LO"));
+            headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder(),grayFColor,Color.WHITE,"LO"));
             modelAnnot.getInvoice().setInvoiceOrderId(model.getReference().getValueOrder());
         }
         // vendor tax number
         else if (genProb.get("vendor_tax_number_top_right")) {
-            headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue(),"SVAT"));
+            headerContainer.addElement(new SimpleTextBox(fontN,10,0,0,company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue(),grayFColor,Color.WHITE,"SVAT"));
             modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
         }
         // invoice id number
         HorizontalContainer numFact = new HorizontalContainer(0, 0);
-        numFact.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getLabelInvoice()+" ",grayishFontColor,Color.WHITE));
-        numFact.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getValueInvoice(),grayishFontColor,Color.WHITE,"IN"));
+        numFact.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getLabelInvoice()+" ",grayFColor,Color.WHITE));
+        numFact.addElement(new SimpleTextBox(fontN,10,0,0,model.getReference().getValueInvoice(),grayFColor,Color.WHITE,"IN"));
         modelAnnot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
 
         headerContainer.addElement(numFact);
@@ -192,7 +192,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Billing Address
         String clientBillAddr = client.getBillingAddress().getLine1()+" "+client.getBillingAddress().getZip()+" "+client.getBillingAddress().getCity();
         VerticalContainer billAddrContainer = new VerticalContainer(billX,billY,250);
-        billAddrContainer.addElement(new SimpleTextBox(fontB,9, 0,0,client.getBillingHead(),grayishFontColor,Color.WHITE));
+        billAddrContainer.addElement(new SimpleTextBox(fontB,9, 0,0,client.getBillingHead(),grayFColor,Color.WHITE));
         billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getBillingName(),"BN"));
         billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getBillingAddress().getLine1(),"BA"));
         billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getBillingAddress().getZip()+" "+client.getBillingAddress().getCity(),"BA"));
@@ -219,7 +219,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Shipping Address
         String clientShipAddr = client.getShippingAddress().getLine1()+" "+client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity();
         VerticalContainer shipAddrContainer = new VerticalContainer(shipX,shipY,250);
-        shipAddrContainer.addElement(new SimpleTextBox(fontB,9,0,0,client.getShippingHead(),grayishFontColor,Color.WHITE));
+        shipAddrContainer.addElement(new SimpleTextBox(fontB,9,0,0,client.getShippingHead(),grayFColor,Color.WHITE));
         shipAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getShippingName(),"SHN"));
         shipAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getShippingAddress().getLine1(),"SHA"));
         shipAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity(),"SHA"));
