@@ -329,7 +329,12 @@ public class AmazonLayout implements InvoiceLayout {
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
         for (String tableHeader: tableHeaders) {
             String hdrLabel = itemMap.get(tableHeader).getLabelHeader();
-            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), centerAlignItems);
+            String tableHdrLabel = upperCap ? hdrLabel.toUpperCase() : hdrLabel;
+            // if numerical header used, check if cur needs to appended at the end
+            if (genProb.get("currency_in_table_headers") && !genProb.get("currency_in_table_items") && pt.getNumericalHdrs().contains(tableHeader)) {
+                tableHdrLabel += " ("+cur+")";
+            }
+            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), centerAlignItems);
         }
         row1.setBackgroundColor(hdrBgColor);
 

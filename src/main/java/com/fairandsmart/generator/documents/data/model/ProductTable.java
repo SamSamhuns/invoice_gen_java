@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.Collection;
 
 
 public class ProductTable {
@@ -110,6 +111,7 @@ public class ProductTable {
     private Map<String, ColItem> itemMap;
 
     private final Random rnd = new Random();
+    private static Collection<String> numericalHdrs = Arrays.asList("ItemRate", "Disc", "Tax", "SubTotal", "Total");
     // This list also order determins which fields to display in table
     private static final List<List<String>> candidateTableHeaders = Arrays.asList(
         Arrays.asList("Item",     "Tax",      "Total"),
@@ -143,6 +145,9 @@ public class ProductTable {
     }
     public Map<String, ColItem> getItemMap() {
         return itemMap;
+    }
+    public Collection<String> getNumericalHdrs() {
+        return numericalHdrs;
     }
 
     @Override

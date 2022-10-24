@@ -260,9 +260,16 @@ public class BDmobilierLayout implements InvoiceLayout {
             infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
             modelAnnot.getInvoice().setInvoiceDueDate(model.getDate().getValuePaymentDue());
         }
+        // Currency Used
+        if (genProb.get("currency_left")) {
+            infoOrder.addElement(new SimpleTextBox(fontNB,leftFSize,0,0,payment.getLabelAccountCurrency()));
+            infoOrder.addElement(new SimpleTextBox(fontN,leftFSize,0,0,cur, "CUR"));
+            modelAnnot.getTotal().setCurrency(cur);
+        }
         infoOrder.addElement(new SimpleTextBox(fontNB,leftFSize,0,0,payment.getLabelPaymentType()));
         infoOrder.addElement(new SimpleTextBox(fontN,leftFSize,0,0,payment.getValuePaymentType(),"PMODE"));
-        infoOrder.addElement(new SimpleTextBox(fontN,leftFSize,0,0,pc.getFmtTotalWithTaxAndDiscount(),"TTX"));
+        infoOrder.addElement(new SimpleTextBox(fontN,leftFSize,0,0,pc.getFmtTotalWithTaxAndDiscount()+" "+cur,"TTX"));
+        modelAnnot.getTotal().setCurrency(cur);
         modelAnnot.getTotal().setTotalPrice(pc.getFmtTotalWithTaxAndDiscount());
 
         infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
@@ -308,19 +315,17 @@ public class BDmobilierLayout implements InvoiceLayout {
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
         for (String tableHeader: tableHeaders) {
             String hdrLabel = itemMap.get(tableHeader).getLabelHeader();
-            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), centerAlignItems);
+            String tableHdrLabel = upperCap ? hdrLabel.toUpperCase() : hdrLabel;
+            // if numerical header used, check if cur needs to appended at the end
+            if (genProb.get("currency_in_table_headers") && !genProb.get("currency_in_table_items") && pt.getNumericalHdrs().contains(tableHeader)) {
+                tableHdrLabel += " ("+cur+")";
+            }
+            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), centerAlignItems);
         }
         row1.setBackgroundColor(hdrBgColor);
 
-        TableRowBox row2 = new TableRowBox(configRow, 0, 0);
-        for (int i=0; i<configRow.length; i++) {
-            row2.addElement(new SimpleTextBox(fontB, 9, 0, 0, "", hdrTextColor, hdrBgColor), false);
-        }
-        row2.setBackgroundColor(hdrBgColor);
-
         VerticalContainer verticalTableItems = new VerticalContainer(ttx1, tty1, 600);
         verticalTableItems.addElement(row1);
-        verticalTableItems.addElement(row2);
         verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
 
@@ -404,15 +409,15 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         float tableBottomY = verticalTableItems.getBoundingBox().getPosY() - tableItemsHeight;
         new HorizontalLineBox(ttx1, tableBottomY, ttx2, tableBottomY, lineStrokeColor).build(contentStream,writer);
-        new BorderBox(hdrBgColor,hdrBgColor,1,405,tableBottomY-50,156,45).build(contentStream,writer);
+        new BorderBox(hdrBgColor,hdrBgColor,1,395,tableBottomY-50,166,45).build(contentStream,writer);
 
         // Totals and Taxes calculations
-        new SimpleTextBox(fontN, 9, 410, tableBottomY-6, pc.getTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, tableBottomY-6, pc.getFmtTotal()+amtSuffix, hdrTextColor,hdrBgColor,"TWTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 410, tableBottomY-19, pc.getTaxTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, tableBottomY-19, pc.getFmtTotalTax()+amtSuffix, hdrTextColor,hdrBgColor,"TTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 410, tableBottomY-33, pc.getWithTaxAndDiscountTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 508, tableBottomY-33, pc.getFmtTotalWithTaxAndDiscount()+amtSuffix, hdrTextColor,hdrBgColor,"TA").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 400, tableBottomY-6, pc.getTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 495, tableBottomY-6, pc.getFmtTotal()+amtSuffix, hdrTextColor,hdrBgColor,"TWTX").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 400, tableBottomY-19, pc.getTaxTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 495, tableBottomY-19, pc.getFmtTotalTax()+amtSuffix, hdrTextColor,hdrBgColor,"TTX").build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 400, tableBottomY-33, pc.getWithTaxAndDiscountTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
+        new SimpleTextBox(fontN, 9, 495, tableBottomY-33, pc.getFmtTotalWithTaxAndDiscount()+amtSuffix, hdrTextColor,hdrBgColor,"TA").build(contentStream,writer);
 
         modelAnnot.getTotal().setSubtotalPrice(pc.getFmtTotal()+amtSuffix);
         modelAnnot.getTotal().setTaxPrice(pc.getFmtTotalTax()+amtSuffix);
@@ -423,7 +428,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         if (genProb.get("payment_address")) {
             // Set paymentAddrContainer opposite to the signature location
             float paymentAddrXPos = (genProb.get("signature_bottom_left")) ? rightAddrX: ttx1;
-            float paymentAddrYPos = tableBottomY-40;
+            float paymentAddrYPos = tableBottomY-60;
 
             VerticalContainer paymentAddrContainer = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
             paymentAddrContainer.addElement(new SimpleTextBox(fontNB, 10, 0, 0, payment.getAddressHeader(), "PH"));
