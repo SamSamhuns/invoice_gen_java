@@ -35,6 +35,8 @@ package com.fairandsmart.generator.documents;
 
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.layout.InvoiceLayout;
+import com.fairandsmart.generator.documents.layout.fairandsmart.FairAndSmartLayout;
 import org.junit.Test;
 
 import java.nio.file.Files;
@@ -64,8 +66,8 @@ public void test() throws Exception {
 
                 GenerationContext ctx = GenerationContext.generate();
                 InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
-                //InvoiceLayout layout = new FairAndSmartLayout();
-                //InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);
+                InvoiceLayout layout = new FairAndSmartLayout();
+                InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);
         }
 }
 }

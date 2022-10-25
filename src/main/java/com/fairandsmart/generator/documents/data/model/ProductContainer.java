@@ -538,9 +538,9 @@ public class ProductContainer {
             withDiscountTotalHeads.put("(Total|Final) (w/|with) (Disc|Discount)", "en");
         }
         {
-            withTaxTotalHeads.put("Montant TTC", "fr");
-            withTaxTotalHeads.put("Total TTC", "fr");
-            withTaxTotalHeads.put("Net à payer", "fr");
+            withTaxAndDiscountTotalHeads.put("Montant TTC", "fr");
+            withTaxAndDiscountTotalHeads.put("Total TTC", "fr");
+            withTaxAndDiscountTotalHeads.put("Net à payer", "fr");
 
             withTaxAndDiscountTotalHeads.put("(Amt|Amount|Balance) to pay", "en");
             withTaxAndDiscountTotalHeads.put("(Total|Final) (Amt|Amount|Payable|Due)", "en");

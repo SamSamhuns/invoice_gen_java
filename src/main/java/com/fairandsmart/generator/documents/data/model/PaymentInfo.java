@@ -338,7 +338,7 @@ public class PaymentInfo {
             labelsPaymentType.put("Payed through", "en");
         }
         {
-            valuesPaymentType.put("Paypal", "fr");
+            valuesPaymentType.put("Paypal ", "fr");
             valuesPaymentType.put("CB", "fr");
             valuesPaymentType.put("Virement", "fr");
             valuesPaymentType.put("Chèque", "fr");
@@ -373,9 +373,9 @@ public class PaymentInfo {
             labelsAccountNumber.put("A/C No", "en");
         }
         {
-            valuesAccountNumber.put("[0-9]{13}", "FR");
+            valuesAccountNumber.put("[0-9]{12} ", "FR");
 
-            valuesAccountNumber.put("[0-9]{13}", "US");
+            valuesAccountNumber.put("[0-9]{13} ", "US");
 
             valuesAccountNumber.put("[0-9]{13}", "AE_en");
             valuesAccountNumber.put("[0]{4}[0-9]{9}", "AE_en");
@@ -389,9 +389,9 @@ public class PaymentInfo {
         }
         // valueBranchName is loaded from bank csv dataset
         {
-            labelsIBANNumber.put("IBAN", "fr");
-            labelsIBANNumber.put("IBAN No", "fr");
-            labelsIBANNumber.put("IBAN Num", "fr");
+            labelsIBANNumber.put("IBAN ", "fr");
+            labelsIBANNumber.put("IBAN No ", "fr");
+            labelsIBANNumber.put("IBAN Num ", "fr");
 
             labelsIBANNumber.put("IBAN", "en");
             labelsIBANNumber.put("IBAN #", "en");
@@ -415,12 +415,12 @@ public class PaymentInfo {
             labelsRoutingNumber.put("Routing Code", "en");
         }
         {
-            valuesRoutingNumber.put("[0-9]{9}", "FR");
+            valuesRoutingNumber.put("[0-9]{9} ", "FR");
 
             valuesRoutingNumber.put("[0-9]{9}", "AE_en");
         }
         {
-            labelsSwiftCode.put("Swift Code", "fr");
+            labelsSwiftCode.put("Code Rapide", "fr");
 
             labelsSwiftCode.put("Swift", "en");
             labelsSwiftCode.put("Swift #", "en");
@@ -428,7 +428,7 @@ public class PaymentInfo {
             labelsSwiftCode.put("Swift Number", "en");
         }
         {
-            valuesSwiftCode.put("[A-Z]{8,13}", "FR");
+            valuesSwiftCode.put("[A-Z]{8,12}", "FR");
 
             valuesSwiftCode.put("[A-Z]{8,13}", "AE_en");
         }

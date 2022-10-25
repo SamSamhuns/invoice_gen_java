@@ -35,9 +35,10 @@ package com.fairandsmart.generator.documents.layout.fairandsmart;
 
 import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
+import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -52,7 +53,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FairAndSmartLayout {//implements InvoiceLayout {
+public class FairAndSmartLayout implements InvoiceLayout {
 
     //@Override
     public String name() {
