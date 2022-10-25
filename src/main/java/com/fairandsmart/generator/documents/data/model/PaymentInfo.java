@@ -324,7 +324,7 @@ public class PaymentInfo {
 
             valuesPaymentTerm.put("[1-5] MD", "en");
             valuesPaymentTerm.put("Net (7|10|15|30|60|90)( days| )", "en");
-            valuesPaymentTerm.put("[1-30] (MFI|of Month Following Inv Date)", "en");
+            valuesPaymentTerm.put("([1-9]|[1-2][0-9]|30) (MFI|of Month Following Inv Date)", "en");
             valuesPaymentTerm.put("(EOM|End of month)", "en");
             valuesPaymentTerm.put("(Cash|Pay) (on delivery|next delivery|before shipment|in advance|with order)", "en");
         }

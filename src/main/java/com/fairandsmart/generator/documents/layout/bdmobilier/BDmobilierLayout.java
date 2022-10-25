@@ -118,6 +118,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         float pageMiddleX = pageWidth/2;
         float leftPageMargin = 10;
         float rightPageMargin = 35;
+        float topPageMargin = 10;
 
         Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: Color.BLUE;
         Color grayish = HelperCommon.getRandomColor(3);
@@ -131,10 +132,14 @@ public class BDmobilierLayout implements InvoiceLayout {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         /// Draw top left logo
-        float logoWidth = 100;
-        float logoHeight = (logoImg.getHeight() * logoWidth) / logoImg.getWidth();
-        float posLogoY = pageHeight - logoHeight - 20;
-        contentStream.drawImage(logoImg, leftPageMargin, posLogoY, logoWidth, logoHeight);
+        float maxLogoWidth = 200;
+        float maxLogoHeight = 100;
+        float logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
+        float logoWidth = logoImg.getWidth() * logoScale;
+        float logoHeight = logoImg.getHeight() * logoScale;
+        float posLogoX = leftPageMargin;
+        float posLogoY = pageHeight - logoHeight - topPageMargin;
+        contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
 
         String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         // Top center document title
@@ -146,7 +151,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         }
         // Top right company header info
         // top right document title
-        VerticalContainer headerContainer = new VerticalContainer(0, pageHeight-9, 250);  // PosX is reset later for alignment
+        VerticalContainer headerContainer = new VerticalContainer(0, pageHeight-topPageMargin, 250);  // PosX is reset later for alignment
         if (genProb.get("doc_title_top_right") && !genProb.get("doc_title_top_right")) {
             headerContainer.addElement(new SimpleTextBox(fontB,13,0,0,docTitle,"SN"));
             headerContainer.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));

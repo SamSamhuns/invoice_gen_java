@@ -118,14 +118,17 @@ public class CdiscountLayout implements InvoiceLayout {
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());
         PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
-        float logoWidth; float logoHeight;
+
         ///////////////////////////////////      Build Page components now      ////////////////////////////////////
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         // draw top logo
-        logoHeight = 60;
-        logoWidth = (logoHeight * logoImg.getWidth()) / logoImg.getHeight();
+        float maxLogoWidth = 200;
+        float maxLogoHeight = 60;
+        float logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
+        float logoWidth = logoImg.getWidth() * logoScale;
+        float logoHeight = logoImg.getHeight() * logoScale;
         float posLogoX = leftPageMargin;
         float posLogoY = pageHeight-logoHeight-3;
         contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
@@ -303,16 +306,14 @@ public class CdiscountLayout implements InvoiceLayout {
         firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "PVTTC",Color.BLACK, gray), false);
         firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "VAT", Color.BLACK, gray), false);
 
-        VerticalContainer verticalInvoiceItems = new VerticalContainer(36, 510, 600 );
+        VerticalContainer verticalInvoiceItems = new VerticalContainer(36, 510, 600);
         verticalInvoiceItems.addElement(new BorderBox(Color.LIGHT_GRAY,Color.LIGHT_GRAY,0,0,0,page.getMediaBox().getWidth()-(72),0.3f));
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 1));
         verticalInvoiceItems.addElement(firstLine);
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0,0, 0, 1));
         verticalInvoiceItems.addElement(new BorderBox(Color.LIGHT_GRAY,Color.LIGHT_GRAY,0,0,0,page.getMediaBox().getWidth()-(72),0.3f));
 
-
         for(int w=0; w< pc.getProducts().size(); w++) {
-
             Product randomProduct = pc.getProducts().get(w);
 
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
@@ -328,19 +329,20 @@ public class CdiscountLayout implements InvoiceLayout {
             verticalInvoiceItems.addElement(productLine);
             verticalInvoiceItems.addElement(new BorderBox(Color.LIGHT_GRAY,Color.LIGHT_GRAY,0,0,0,page.getMediaBox().getWidth()-(72),0.3f));
         }
-
-        String msg = this.getClass().getClassLoader().getResource("invoices/parts/cdiscount/msg.png").getFile();
-        PDImageXObject logoMsg = PDImageXObject.createFromFile(msg, document);
-        float ratioMsg= (float)logoMsg.getWidth() / (float)logoMsg.getHeight();
-        float tailleMsg = 320;
+        float ratioMsg = 8.65f;
+        float msgSize = 320;
         float posMsgX = 36;
-        float posMsgY = verticalInvoiceItems.getBoundingBox().getPosY()-verticalInvoiceItems.getBoundingBox().getHeight()-tailleMsg/ratioMsg-10;
-        contentStream.drawImage(logoMsg, posMsgX, posMsgY, tailleMsg, tailleMsg/ratioMsg);
+        float posMsgY = verticalInvoiceItems.getBoundingBox().getPosY()-verticalInvoiceItems.getBoundingBox().getHeight()-10;
+
+        VerticalContainer tableFooterMsg = new VerticalContainer(posMsgX, posMsgY, 300);
+        tableFooterMsg.addElement(new SimpleTextBox(fontN,10,0,0,"To return an item, go to the customer service section to obtain a return agreement."));
+        tableFooterMsg.addElement(new SimpleTextBox(fontN,8,0,0,"* Order preparation costs include shipping costs"));
+        tableFooterMsg.build(contentStream,writer);
 
         verticalInvoiceItems.build(contentStream,writer);
 
         float tailleCase = 13.28f;
-        float posTab = posMsgY-tailleMsg/ratioMsg-15+93;
+        float posTab = posMsgY-msgSize/ratioMsg-15+93;
         new BorderBox(Color.LIGHT_GRAY,gray,1,379,posTab-93,100,93).build(contentStream,writer);
         new BorderBox(Color.LIGHT_GRAY,Color.LIGHT_GRAY,1,379,posTab-tailleCase,100,1).build(contentStream,writer);
         new BorderBox(Color.LIGHT_GRAY,Color.LIGHT_GRAY,1,379,posTab-tailleCase*2,100,1).build(contentStream,writer);
@@ -424,17 +426,18 @@ public class CdiscountLayout implements InvoiceLayout {
         contentStream.drawImage(logofooter, posFooterX, posFooterY, tailleFooter, tailleFooter/ratioFooter);
 
         new SimpleTextBox(fontB,8,263,36,company.getWebsite()).build(contentStream,writer);
-        HorizontalContainer footercontainer = new HorizontalContainer(249,22);
-        footercontainer.addElement(new SimpleTextBox(fontN,8,0,0,"N°RCS : "));
-        footercontainer.addElement(new SimpleTextBox(fontN,8,0,0,company.getIdNumbers().getCidValue(),"SCID"));
+        HorizontalContainer footercontainer = new HorizontalContainer(0,0);
+        if (model.getLang().matches("fr")) {
+            footercontainer.addElement(new SimpleTextBox(fontN,8,0,0,"N°RCS : "));
+            footercontainer.addElement(new SimpleTextBox(fontN,8,0,0,company.getIdNumbers().getCidValue(),"SCID"));
+        }
         footercontainer.addElement(new SimpleTextBox(fontN,8,0,0," "+company.getAddress().getCity()));
+        footercontainer.translate(pageMiddleX - footercontainer.getBoundingBox().getWidth()/2, 22);
         footercontainer.build(contentStream,writer);
 
         int tailleTab2;
         for(tailleTab2=0; tailleTab2< pc.getProducts().size(); tailleTab2++) {
-
             Product randomProduct = pc.getProducts().get(tailleTab2);
-
             new SimpleTextBox(fontN, 8, 155, posMsgY-123-13*tailleTab2, randomProduct.getEan(), "SNO").build(contentStream,writer);
             new SimpleTextBox(fontN, 8, 283, posMsgY-123-13*tailleTab2, "EcoTac TODO remove later").build(contentStream,writer);
         }
