@@ -120,7 +120,10 @@ public class BDmobilierLayout implements InvoiceLayout {
         float rightPageMargin = 35;
         float topPageMargin = 10;
 
-        Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: Color.BLUE;
+        // colors
+        List<Integer> themeRGB = company.getLogo().getThemeRGB();
+        Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
+        Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: themeColor;
         Color grayish = HelperCommon.getRandomColor(3);
 
         // load logo img

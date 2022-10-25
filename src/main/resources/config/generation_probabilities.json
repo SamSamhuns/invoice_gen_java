@@ -81,7 +81,9 @@
   {
     "layout": "CDiscount",
     "probability": {
-      "line_stroke_black": 96
+      "line_stroke_black": 96,
+      "signature_bottom": 70,
+      "stamp_bottom": 55
     }
   },
   {

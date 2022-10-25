@@ -50,6 +50,7 @@ public class Logo {
 
     private String fullPath;
     private String name;
+    private List<Integer> themeRGB;
 
     public String getFullPath() {
         return fullPath;
@@ -67,11 +68,20 @@ public class Logo {
         this.name = name;
     }
 
+    public List<Integer> getThemeRGB() {
+        return themeRGB;
+    }
+
+    public void setThemeRGB(List<Integer> themeRGB) {
+        this.themeRGB = themeRGB;
+    }
+
     @Override
     public String toString() {
         return "Logo{" +
                 "fullPath='" + fullPath + '\'' +
                 ", name='" + name + '\'' +
+                ", themeRGB='" + themeRGB + '\'' +
                 '}';
     }
 
@@ -112,9 +122,10 @@ public class Logo {
         }
     }
 
-    public Logo(String fullPath, String name) {
+    public Logo(String fullPath, String name, List<Integer> themeRGB) {
         this.fullPath = fullPath;
         this.name = name;
+        this.themeRGB = themeRGB;
     }
 
     public Logo(GenerationContext ctx, String companyName) {
@@ -136,6 +147,7 @@ public class Logo {
         }
         this.fullPath = electibleLogo.fullPath;
         this.name = electibleLogo.name;
+        this.themeRGB = electibleLogo.themeRGB;
     }
 
 }

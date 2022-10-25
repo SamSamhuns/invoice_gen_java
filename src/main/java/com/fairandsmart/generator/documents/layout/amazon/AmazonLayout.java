@@ -123,7 +123,10 @@ public class AmazonLayout implements InvoiceLayout {
         float rightPageMargin = 25;
         float bottomPageMargin = 8;
 
-        Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: Color.BLUE;
+        // colors
+        List<Integer> themeRGB = company.getLogo().getThemeRGB();
+        Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
+        Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: themeColor;
         Color grayish = HelperCommon.getRandomColor(3);
 
         // always set to false but individually change SimpleTextBox HAlign
