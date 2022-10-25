@@ -305,8 +305,13 @@ public class PaymentInfo {
             addressHeaders.put("Adresse de Facturation", "fr");
 
             addressHeaders.put("Pay To", "en");
+            addressHeaders.put("Wire To", "en");
+            addressHeaders.put("ACH Payment Instruction", "en");
+            addressHeaders.put("Wire Instruction", "en");
             addressHeaders.put("Payment", "en");
             addressHeaders.put("Payment Address", "en");
+            addressHeaders.put("Payment Instruction", "en");
+            addressHeaders.put("Please Wire Funds To:", "en");
         }
         {
             labelsPaymentTerm.put("Modalités de Paiement", "fr");
@@ -340,6 +345,8 @@ public class PaymentInfo {
 
             valuesPaymentType.put("Paypal", "en");
             valuesPaymentType.put("Credit Card", "en");
+            valuesPaymentType.put("ACH Transfer", "en");
+            valuesPaymentType.put("Wire Transfer", "en");
             valuesPaymentType.put("Bank Transfer", "en");
             valuesPaymentType.put("Cheque", "en");
         }
