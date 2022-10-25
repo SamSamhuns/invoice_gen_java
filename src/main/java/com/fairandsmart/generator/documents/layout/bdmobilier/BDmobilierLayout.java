@@ -236,10 +236,12 @@ public class BDmobilierLayout implements InvoiceLayout {
             shipAddrContainer.setBorderThickness(0.5f);
         }
         // add annotations for shipping address if these fields are not empty
-        if (client.getShippingHead().length() > 0 && client.getShippingContactNumber().getPhoneLabel().length() > 0) {
+        if (client.getShippingName().length() > 0) {
             modelAnnot.getShipto().setShiptoName(client.getShippingName());
-            modelAnnot.getShipto().setShiptoAddr(clientShipAddr);
-            modelAnnot.getShipto().setShiptoPOBox(client.getShippingAddress().getZip());
+            if (client.getShippingContactNumber().getPhoneLabel().length() > 0) {
+                modelAnnot.getShipto().setShiptoPOBox(client.getShippingAddress().getZip());
+                modelAnnot.getShipto().setShiptoAddr(client.getShippingAddress().getLine1()+" "+client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity());
+            }
         }
         shipAddrContainer.build(contentStream,writer);
 
@@ -454,10 +456,10 @@ public class BDmobilierLayout implements InvoiceLayout {
                 paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelSwiftCode()+": "+payment.getValueSwiftCode(), "PSNum"));
                 modelAnnot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
             }
-            // Client TAX number bottom added randomly if client_bill_address_tax_number is NOT present
-            if (genProb.get("client_payment_tax_number") && !genProb.get("client_bill_address_tax_number")) {
-                billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"PTax"));
-                modelAnnot.getPaymentto().setCustomerTrn(client.getIdNumbers().getVatValue());
+            // Vendor TAX number bottom added randomly if vendor_tax_number_top_right is NOT present
+            if (genProb.get("vendor_payment_tax_number") && !genProb.get("vendor_tax_number_top_right")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue(),"SVAT"));
+                modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
             }
             if (genProb.get("addresses_bordered")) {
                 paymentAddrContainer.setBorderColor(lineStrokeColor);

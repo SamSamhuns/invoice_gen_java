@@ -120,7 +120,8 @@ public class AmazonLayout implements InvoiceLayout {
         float pageHeight = page.getMediaBox().getHeight();
         float pageMiddleX = pageWidth/2;
         float leftPageMargin = 25;
-        float rightPageMargin = 40;
+        float rightPageMargin = 25;
+        float bottomPageMargin = 8;
 
         Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: Color.BLUE;
         Color grayish = HelperCommon.getRandomColor(3);
@@ -132,6 +133,9 @@ public class AmazonLayout implements InvoiceLayout {
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());
         PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
         float logoWidth; float logoHeight;
+        float maxLogoWidth; float maxLogoHeight;
+        float posLogoX; float posLogoY;
+        float logoScale;
         // gen barcode img
         BufferedImage barcodeBufImg = HelperImage.generateEAN13BarcodeImage(barCodeNum);
         PDImageXObject barcodeImg = LosslessFactory.createFromImage(document, barcodeBufImg);
@@ -147,9 +151,14 @@ public class AmazonLayout implements InvoiceLayout {
         }
         // Or Logo top
         else if (genProb.get("logo_top")) {
-            logoWidth = 100;
-            logoHeight = (logoWidth * logoImg.getHeight()) / logoImg.getWidth();
-            contentStream.drawImage(logoImg, pageWidth-logoWidth-rightPageMargin, pageHeight-logoHeight-rightPageMargin, logoWidth, logoHeight);
+            maxLogoWidth = 150;
+            maxLogoHeight = 90;
+            logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
+            logoWidth = logoImg.getWidth() * logoScale;
+            logoHeight = logoImg.getHeight() * logoScale;
+            posLogoX = pageWidth-logoWidth-rightPageMargin;
+            posLogoY = pageHeight-logoHeight-rightPageMargin;
+            contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
         }
 
         // Text top
@@ -284,10 +293,12 @@ public class AmazonLayout implements InvoiceLayout {
             shipAddrContainer.setBorderThickness(0.5f);
         }
         // add annotations for shipping address if these fields are not empty
-        if (client.getShippingHead().length() > 0 && client.getShippingContactNumber().getPhoneLabel().length() > 0) {
+        if (client.getShippingName().length() > 0) {
             modelAnnot.getShipto().setShiptoName(client.getShippingName());
-            modelAnnot.getShipto().setShiptoPOBox(client.getShippingAddress().getZip());
-            modelAnnot.getShipto().setShiptoAddr(client.getShippingAddress().getLine1()+" "+client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity());
+            if (client.getShippingContactNumber().getPhoneLabel().length() > 0) {
+                modelAnnot.getShipto().setShiptoPOBox(client.getShippingAddress().getZip());
+                modelAnnot.getShipto().setShiptoAddr(client.getShippingAddress().getLine1()+" "+client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity());
+            }
         }
         shipAddrContainer.build(contentStream, writer);
 
@@ -563,10 +574,10 @@ public class AmazonLayout implements InvoiceLayout {
                 paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelSwiftCode()+": "+payment.getValueSwiftCode(), "PSNum"));
                 modelAnnot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
             }
-            // Client TAX number bottom added randomly if client_bill_address_tax_number is NOT present
-            if (genProb.get("client_payment_tax_number") && !genProb.get("client_bill_address_tax_number")) {
-                billAddrContainer.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"PTax"));
-                modelAnnot.getPaymentto().setCustomerTrn(client.getIdNumbers().getVatValue());
+            // Vendor TAX number bottom added randomly if vendor_tax_number_top is NOT present
+            if (genProb.get("vendor_payment_tax_number") && !genProb.get("vendor_tax_number_top")) {
+                paymentAddrContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue(),"SVAT"));
+                modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
             }
             if (genProb.get("addresses_bordered")) {
                 paymentAddrContainer.setBorderColor(lineStrokeColor);
@@ -607,11 +618,12 @@ public class AmazonLayout implements InvoiceLayout {
             contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
         }
 
+        float footerHLineY = 110;
         // Add footer line and info if footer_info to be used and number of items less than 5
         if (genProb.get("footer_info") & pc.getProducts().size() < 5) {
-            new HorizontalLineBox(20, 110, pageWidth-rightPageMargin, 110, lineStrokeColor).build(contentStream, writer);
+            new HorizontalLineBox(leftPageMargin, footerHLineY, pageWidth-rightPageMargin, footerHLineY, lineStrokeColor).build(contentStream, writer);
 
-            VerticalContainer verticalFooterContainer = new VerticalContainer(leftPageMargin, 100, 450);
+            VerticalContainer verticalFooterContainer = new VerticalContainer(leftPageMargin, footerHLineY-10, 450);
             String compEmail = ((company.getWebsite() == null) ? "company.domain.com" :  company.getWebsite());
             String footerLine1 = (rnd.nextBoolean()) ? String.format("To return an item, visit %s/returns", compEmail) : String.format("For feedback, visit %s/feedback", compEmail);
             String footerLine2 = (rnd.nextBoolean()) ? "For more information on orders, visit http://" : "For queries on orders, visit http://";
@@ -630,14 +642,19 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Logo Bottom if logo is not at top or barcode at top
         if (!genProb.get("logo_top") | genProb.get("barcode_top")) {
-            logoWidth = 85;
-            logoHeight = (logoWidth * logoImg.getHeight()) / logoImg.getWidth();
-            contentStream.drawImage(logoImg, pageWidth-logoWidth-rightPageMargin, 8, logoWidth, logoHeight);
+            maxLogoWidth = 120;
+            maxLogoHeight = 80;
+            logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
+            logoWidth = logoImg.getWidth() * logoScale;
+            logoHeight = logoImg.getHeight() * logoScale;
+            posLogoX = pageWidth-logoWidth-rightPageMargin;
+            posLogoY = bottomPageMargin+footerHLineY/2-logoHeight/2;
+            contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
         }
 
         // Barcode bottom
         if (genProb.get("barcode_bottom")) {
-            contentStream.drawImage(barcodeImg, leftPageMargin, 8, barcodeImg.getWidth() - 15, barcodeImg.getHeight() - 72);
+            contentStream.drawImage(barcodeImg, leftPageMargin, bottomPageMargin, barcodeImg.getWidth() - 15, barcodeImg.getHeight() - 72);
         }
 
         // Add company stamp watermark, 40% prob

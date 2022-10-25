@@ -1,5 +1,5 @@
 {
-  "title": "Document title i.e. Invoice, Tax Invoice, Delivery Note"
+  "title": "Document title i.e. Invoice, Tax Invoice, Delivery Note",
   "invoice": {
     "invoice_date": "Invoice Date",
     "invoice_id": "Invoice Id/Number",
@@ -32,7 +32,7 @@
     "iban_number": "Iban Number",
     "swift_code": "Swift Code",
     "routing_number": "Routing Number",
-    "customer_trn": "Customer TRN Number"
+    "vendor_trn": "Vendor Tax Id"
   },
   "items": [{
     "serial_number": "Serial Number of item",
