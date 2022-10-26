@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 public class InvoiceNumber {
 
     private String labelInvoice;
@@ -51,14 +52,16 @@ public class InvoiceNumber {
     private String valueOrder;
     private String labelClient;
     private String valueClient;
+    private String valueBarcode;
 
-    public InvoiceNumber(String labelInvoice, String valueInvoice, String labelOrder, String valueOrder, String labelClient, String valueClient) {
+    public InvoiceNumber(String labelInvoice, String valueInvoice, String labelOrder, String valueOrder, String labelClient, String valueClient, String valueBarcode) {
         this.labelInvoice = labelInvoice;
         this.valueInvoice = valueInvoice;
         this.labelOrder = labelOrder;
         this.valueOrder = valueOrder;
         this.labelClient = labelClient;
         this.valueClient = valueClient;
+        this.valueBarcode = valueBarcode;
     }
 
     public String getLabelInvoice() {
@@ -109,6 +112,14 @@ public class InvoiceNumber {
         this.valueClient = valueClient;
     }
 
+    public String getValueBarcode() {
+        return valueBarcode;
+    }
+
+    public void setValueBarcode(String valueBarcode) {
+        this.valueBarcode = valueBarcode;
+    }
+
     @Override
     public String toString() {
         return "InvoiceNumber{" +
@@ -118,52 +129,57 @@ public class InvoiceNumber {
                 ", valueOrder='" + valueOrder + '\'' +
                 ", labelClient='" + labelClient + '\'' +
                 ", valueClient='" + valueClient + '\'' +
+                ", valueBarcode='" + valueBarcode + '\'' +
                 '}';
     }
 
     public static class Generator implements ModelGenerator<InvoiceNumber> {
 
-        private static final List<String> formatsInvoice = new ArrayList<>();
-        private static final List<String> formatsOrder = new ArrayList<>();
-        private static final List<String> formatsClient = new ArrayList<>();
+        private static final List<String> valuesInvoice = new ArrayList<>();
+        private static final List<String> valuesOrder = new ArrayList<>();
+        private static final List<String> valuesClient = new ArrayList<>();
+        private static final List<String>  valuesBarcode = new ArrayList<>();
         private static final Map<String, String> labelsInvoice = new LinkedHashMap<>();
         private static final Map<String, String> labelsOrder = new LinkedHashMap<>();
         private static final Map<String, String> labelsClient = new LinkedHashMap<>();
         {
-            formatsInvoice.add("[A-D][H-N]-[A-Z]{2}-[0-9]{6}-[0-9]{2}");
-            formatsInvoice.add("[0-9]{3}-[0-9]{5}-1[0-9]{4}");
-            formatsInvoice.add("1[0-9]{6}");
-            formatsInvoice.add("[3-7][0-9]{7}");
-            formatsInvoice.add("[4-9][0-9]{9}");
-            formatsInvoice.add("FV201[0-7]00[0-9]{4}");
-            formatsInvoice.add("00[0-9]{5}");
-            formatsInvoice.add("FC500[0-9]{3}");
-            formatsInvoice.add("INV-[0-9]{4}");
-            formatsInvoice.add("[0-9]{4}-7[0-9]{5}");
+            valuesInvoice.add("[A-D][H-N]-[A-Z]{2}-[0-9]{6}-[0-9]{2}");
+            valuesInvoice.add("[0-9]{3}-[0-9]{5}-1[0-9]{4}");
+            valuesInvoice.add("1[0-9]{6}");
+            valuesInvoice.add("[3-7][0-9]{7}");
+            valuesInvoice.add("[4-9][0-9]{9}");
+            valuesInvoice.add("FV201[0-7]00[0-9]{4}");
+            valuesInvoice.add("00[0-9]{5}");
+            valuesInvoice.add("FC500[0-9]{3}");
+            valuesInvoice.add("INV-[0-9]{4}");
+            valuesInvoice.add("[0-9]{4}-7[0-9]{5}");
         }
         {
-            formatsOrder.add("[A-D][H-N]-[A-Z]{2}-[0-9]{2}-[0-9]{2}");
-            formatsOrder.add("[0-9]{3}-[0-9]{4}");
-            formatsOrder.add("2[0-9]{6}");
-            formatsOrder.add("[1-2][0-9]{6}");
-            formatsOrder.add("[4-9][0-9]{3}");
-            formatsOrder.add("CD201[0-7]00[0-9]{5}");
-            formatsOrder.add("99[0-9]{5}");
-            formatsOrder.add("CM5[0-9]{3}");
-            formatsOrder.add("COM-[0-9]{5}");
-            formatsOrder.add("[0-9]{3}-9[0-9]{2}");
+            valuesOrder.add("[A-D][H-N]-[A-Z]{2}-[0-9]{2}-[0-9]{2}");
+            valuesOrder.add("[0-9]{3}-[0-9]{4}");
+            valuesOrder.add("2[0-9]{6}");
+            valuesOrder.add("[1-2][0-9]{6}");
+            valuesOrder.add("[4-9][0-9]{3}");
+            valuesOrder.add("CD201[0-7]00[0-9]{5}");
+            valuesOrder.add("99[0-9]{5}");
+            valuesOrder.add("CM5[0-9]{3}");
+            valuesOrder.add("COM-[0-9]{5}");
+            valuesOrder.add("[0-9]{3}-9[0-9]{2}");
         }
         {
-            formatsClient.add("[A-D][H-N]-[A-Z]{2}-[0-9]{3}-[0-9]{2}");
-            formatsClient.add("[0-9]{3}-[0-9]{3}-1[0-9]{2}");
-            formatsClient.add("7[0-9]{4}");
-            formatsClient.add("[1-2][0-9]{4}");
-            formatsClient.add("[4-9][0-9]{4}");
-            formatsClient.add("CL10[0-7]00[0-9]{2}");
-            formatsClient.add("00[0-9]{4}");
-            formatsClient.add("CL55[0-9]{3}");
-            formatsClient.add("CL-[0-9]{4}");
-            formatsClient.add("[0-9]{3}-0[0-9]{3}");
+            valuesClient.add("[A-D][H-N]-[A-Z]{2}-[0-9]{3}-[0-9]{2}");
+            valuesClient.add("[0-9]{3}-[0-9]{3}-1[0-9]{2}");
+            valuesClient.add("7[0-9]{4}");
+            valuesClient.add("[1-2][0-9]{4}");
+            valuesClient.add("[4-9][0-9]{4}");
+            valuesClient.add("CL10[0-7]00[0-9]{2}");
+            valuesClient.add("00[0-9]{4}");
+            valuesClient.add("CL55[0-9]{3}");
+            valuesClient.add("CL-[0-9]{4}");
+            valuesClient.add("[0-9]{3}-0[0-9]{3}");
+        }
+        {
+            valuesBarcode.add("[0-9]{12}");
         }
         {
             labelsInvoice.put("Invoice Number", "en");
@@ -226,20 +242,22 @@ public class InvoiceNumber {
         @Override
         public InvoiceNumber generate(GenerationContext ctx) {
 
-            String generatedInvoiceFmt = new Generex(formatsInvoice.get(ctx.getRandom().nextInt(formatsInvoice.size()))).random();
-            String generatedOrderFmt = new Generex(formatsOrder.get(ctx.getRandom().nextInt(formatsOrder.size()))).random();
-            String generatedClientFmt = new Generex(formatsClient.get(ctx.getRandom().nextInt(formatsClient.size()))).random();
+            String generatedInvoiceFmt = new Generex(valuesInvoice.get(ctx.getRandom().nextInt(valuesInvoice.size()))).random();
+            String generatedOrderFmt = new Generex(valuesOrder.get(ctx.getRandom().nextInt(valuesOrder.size()))).random();
+            String generatedClientFmt = new Generex(valuesClient.get(ctx.getRandom().nextInt(valuesClient.size()))).random();
+            String generatedBarcodeFmt = new Generex(valuesBarcode.get(ctx.getRandom().nextInt(valuesBarcode.size()))).random();
 
-            List<String> localizedLabelsInvoice = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsClient = labelsClient.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsInvoice = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsClient = labelsClient.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
-            return new InvoiceNumber(localizedLabelsInvoice.get(ctx.getRandom().nextInt(localizedLabelsInvoice.size())),
+            return new InvoiceNumber(filteredLabelsInvoice.get(ctx.getRandom().nextInt(filteredLabelsInvoice.size())),
                                      generatedInvoiceFmt,
-                                     localizedLabelsOrder.get(ctx.getRandom().nextInt(localizedLabelsOrder.size())),
+                                     filteredLabelsOrder.get(ctx.getRandom().nextInt(filteredLabelsOrder.size())),
                                      generatedOrderFmt,
-                                     localizedLabelsClient.get(ctx.getRandom().nextInt(localizedLabelsClient.size())),
-                                     generatedClientFmt);
+                                     filteredLabelsClient.get(ctx.getRandom().nextInt(filteredLabelsClient.size())),
+                                     generatedClientFmt,
+                                     generatedBarcodeFmt);
         }
     }
 }

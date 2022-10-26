@@ -48,16 +48,21 @@ import java.util.stream.Collectors;
 
 public class IDNumbers {
 
-    private final String cidLabel;                  // Company ID (like Siren Number)
+    // specific to french invoices
+    private final String cidLabel;        // Company ID (like Siren Number)
     private final String cidValue;
-    private final String siretLabel;               // Particular to french invoice
-    private final String siretValue;               // 14 digits unique company center id Siren + Nic(5 digits)
-    private final String toaLabel;                 // Type of activity eg: APE code / NAF Code for an enterprise
+    private final String siretLabel;      // Particular to french invoice
+    private final String siretValue;      // 14 digits unique company center id Siren + Nic(5 digits)
+    private final String toaLabel;        // Type of activity eg: APE code / NAF Code for an enterprise
     private final String toaValue;
+    // for all invoices
     private String vatLabel;
     private String vatValue;
 
-    public IDNumbers(String vatValue, String vatLabel, String cidValue, String cidLabel, String siretValue, String siretLabel, String toaValue, String toaLabel) {
+    public IDNumbers(String vatValue, String vatLabel,
+                     String cidValue, String cidLabel,
+                     String siretValue, String siretLabel,
+                     String toaValue, String toaLabel) {
         this.vatValue = vatValue;
         this.vatLabel = vatLabel;
         this.cidLabel = cidLabel;
@@ -173,8 +178,8 @@ public class IDNumbers {
 
             String cidValue="", siretValue="", vatValue="", toaValue="";
             if("FR" != ctx.getCountry().intern()){
-                List<String> localizedRegex = vatValues.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
-                vatValue = new Generex(localizedRegex.get(ctx.getRandom().nextInt(localizedRegex.size()))).random();
+                List<String> filteredVatValue = vatValues.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+                vatValue = new Generex(filteredVatValue.get(ctx.getRandom().nextInt(filteredVatValue.size()))).random();
             }
             else{
                 // French Specific System
@@ -203,17 +208,17 @@ public class IDNumbers {
                 }
             }
 
-            List<String> localizedvatLabel = vatLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            String vatLabel = new Generex(localizedvatLabel.get(ctx.getRandom().nextInt(localizedvatLabel.size()))).random();
+            List<String> filteredvatLabel = vatLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            String vatLabel = new Generex(filteredvatLabel.get(ctx.getRandom().nextInt(filteredvatLabel.size()))).random();
 
-            List<String> localizedcidLabel = cidLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            String cidLabel = new Generex(localizedcidLabel.get(ctx.getRandom().nextInt(localizedcidLabel.size()))).random();
+            List<String> filteredcidLabel = cidLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            String cidLabel = new Generex(filteredcidLabel.get(ctx.getRandom().nextInt(filteredcidLabel.size()))).random();
 
-            List<String> localizedsiretLabel = siretLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            String siretLabel = new Generex(localizedsiretLabel.get(ctx.getRandom().nextInt(localizedsiretLabel.size()))).random();
+            List<String> filteredsiretLabel = siretLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            String siretLabel = new Generex(filteredsiretLabel.get(ctx.getRandom().nextInt(filteredsiretLabel.size()))).random();
 
-            List<String> localizedtoaLabel = toaLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            String toaLabel = new Generex(localizedtoaLabel.get(ctx.getRandom().nextInt(localizedtoaLabel.size()))).random();
+            List<String> filteredtoaLabel = toaLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            String toaLabel = new Generex(filteredtoaLabel.get(ctx.getRandom().nextInt(filteredtoaLabel.size()))).random();
 
             return new IDNumbers(vatValue,vatLabel,cidValue,cidLabel,siretValue,siretLabel,toaValue,toaLabel);
         }
