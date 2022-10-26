@@ -33,6 +33,7 @@ package com.fairandsmart.generator.documents.data.model;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.mifmif.common.regex.Generex;
 
 import java.util.LinkedHashMap;
 import java.util.ArrayList;
@@ -106,6 +107,7 @@ public class ProductTable {
         */
     }
 
+    private String tableTopInfo;
     private List<String> tableHeaders;
     private float[] configRow;
     private Map<String, ColItem> itemMap;
@@ -136,7 +138,28 @@ public class ProductTable {
         Arrays.asList("SN",       "ItemCode", "Item",     "Disc",     "DiscRate", "Tax",      "TaxRate",  "Total"),
         Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Tax",      "TaxRate",  "SubTotal", "Total")
     );
+    // item table list top info
+    private static final Map<String, List<String>> candidateTableTopInfo = new HashMap<>();
+    {
+        candidateTableTopInfo.put("fr", Arrays.asList(
+            "(Transaction|Nature de la Transaction|Type de Transaction) : (Achat|Vente)",
+            "(Votre commande|Commande)",
+            ""
+        ));
+        candidateTableTopInfo.put("en", Arrays.asList(
+            "(Transaction|Nature of Transaction|Transaction Type): (Purchase|Sale)",
+            "(Purchase|Sale) Order information",
+            "(Your Order|Order|Order Details|Order Summary)",
+            "Please pay upon receipt",
+            "All prices are in",
+            "Original",
+            ""
+        ));
+    }
 
+    public String getTableTopInfo() {
+        return tableTopInfo;
+    }
     public List<String> getTableHeaders() {
         return tableHeaders;
     }
@@ -153,20 +176,25 @@ public class ProductTable {
     @Override
     public String toString() {
         return "ProductTable{" +
+                "tableTopInfo=" + tableTopInfo +
                 "tableHeaders=" + tableHeaders +
                 "configRow=" + configRow +
                 '}';
     }
 
-    public ProductTable(ProductContainer pc, String amtSuffix, float tableWidth) throws Exception {
+    public ProductTable(ProductContainer pc, String amtSuffix, String lang, float tableWidth) throws Exception {
         // All tableHeaders are considered
-        this(pc, amtSuffix,tableWidth, candidateTableHeaders.size());
+        this(pc, amtSuffix, lang, tableWidth, candidateTableHeaders.size());
     }
 
-    public ProductTable(ProductContainer pc, String amtSuffix, float tableWidth, int candTableSize) throws Exception {
+    public ProductTable(ProductContainer pc, String amtSuffix, String lang, float tableWidth, int candTableSize) throws Exception {
         // candTableSize refers to the number of tableHeaders to consider, larger size would mean more proba of longer headers
         int candSize = (int) Math.min(candTableSize, candidateTableHeaders.size());
         List<String> tableHeaders = candidateTableHeaders.get(rnd.nextInt(candSize));
+
+        // randomly select tableTopInfo based on lang
+        List<String> tableTopInfos = candidateTableTopInfo.get(lang);
+        String tableTopInfo = new Generex(tableTopInfos.get(rnd.nextInt(tableTopInfos.size()))).random();
 
         // Building Header Item labels, table values and footer labels list
         Map<String, ColItem> itemColMap = new HashMap<>();
@@ -212,6 +240,7 @@ public class ProductTable {
                 }
             }
         }
+        this.tableTopInfo = tableTopInfo;
         this.tableHeaders = tableHeaders;
         this.itemMap = itemColMap;
         this.configRow = configRowWidths;
