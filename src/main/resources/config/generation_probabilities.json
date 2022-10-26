@@ -130,6 +130,12 @@
     "probability": {}
   },
   {
+    "layout": "Nature&Decouvertes",
+    "probability": {
+      "line_stroke_black": 96
+    }
+  },
+  {
     "layout": "NGeneric",
     "probability": {}
   }
