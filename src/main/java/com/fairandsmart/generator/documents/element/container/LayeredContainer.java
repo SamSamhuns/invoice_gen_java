@@ -57,20 +57,20 @@ public class LayeredContainer extends ElementBox {
 
     public void addElement(int layer, ElementBox element) {
         this.elements.put(layer, element);
-        element.getBoundingBox().setPosX(box.getPosX());
-        element.getBoundingBox().setPosY(box.getPosY());
-        if ( element.getBoundingBox().getWidth() > box.getWidth() ) {
-            box.setWidth(element.getBoundingBox().getWidth());
+        element.getBBox().setPosX(box.getPosX());
+        element.getBBox().setPosY(box.getPosY());
+        if ( element.getBBox().getWidth() > box.getWidth() ) {
+            box.setWidth(element.getBBox().getWidth());
             //TODO maybe resize all existing elements
         }
-        if ( element.getBoundingBox().getHeight() > box.getHeight() ) {
-            box.setHeight(element.getBoundingBox().getHeight());
+        if ( element.getBBox().getHeight() > box.getHeight() ) {
+            box.setHeight(element.getBBox().getHeight());
             //TODO maybe resize all existing elements
         }
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         return box;
     }
 

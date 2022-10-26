@@ -495,7 +495,7 @@ public class GenericReceiptLayout implements SSDLayout {
         HorizontalContainer hElmt = new HorizontalContainer(0,0);
         a6.alignElements("RIGHT",300f);
         hElmt.addElement(a6);
-        hElmt.setHeight(hElmt.getBoundingBox().getHeight()+30);
+        hElmt.setHeight(hElmt.getBBox().getHeight()+30);
         sumup.addElement(hElmt,true);
         receiptPage.addElement(sumup);
         if(sumUpAvailable) {

@@ -81,19 +81,19 @@ public class TableRowBox extends ElementBox {
 
         //TODO : Add Center Right & Left Horizontal alignment
 
-        if( !( element.getBoundingBox().getPosY()==0 && element.getBoundingBox().getPosX()!=0 ))
+        if( !( element.getBBox().getPosY()==0 && element.getBBox().getPosX()!=0 ))
         {   // Translate only if x is not 0 and y is 0 which is in case of image center alignment
-            element.getBoundingBox().setPosX(0);
-            element.getBoundingBox().setPosY(0);
+            element.getBBox().setPosX(0);
+            element.getBBox().setPosY(0);
         }
 
         element.translate(box.getPosX() + this.getColumnOffsetX(elements.size()-1), box.getPosY() );
 
         if ( center_align && elements.size()>1 ) {
-            element.translate(element.getBoundingBox().getWidth()/3 , box.getPosY() );
+            element.translate(element.getBBox().getWidth()/3 , box.getPosY() );
         }
-        if ( element.getBoundingBox().getHeight() > box.getHeight() ) {
-            this.getBoundingBox().setHeight(element.getBoundingBox().getHeight());
+        if ( element.getBBox().getHeight() > box.getHeight() ) {
+            this.getBBox().setHeight(element.getBBox().getHeight());
         }
 
         this.realignElements();
@@ -105,11 +105,11 @@ public class TableRowBox extends ElementBox {
             float posY = box.getPosY();
             switch ( valign ) {
                 case BOTTOM:
-                    posY = box.getPosY() - box.getHeight() + element.getBoundingBox().getHeight(); break;
+                    posY = box.getPosY() - box.getHeight() + element.getBBox().getHeight(); break;
                 case CENTER:
-                    posY = box.getPosY() - box.getHeight() + (element.getBoundingBox().getHeight()/2); break;
+                    posY = box.getPosY() - box.getHeight() + (element.getBBox().getHeight()/2); break;
             }
-            float transY = posY - element.getBoundingBox().getPosY();
+            float transY = posY - element.getBBox().getPosY();
             element.translate(0, transY);
             cpt++;
         }
@@ -128,7 +128,7 @@ public class TableRowBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         return box;
     }
 
@@ -147,7 +147,7 @@ public class TableRowBox extends ElementBox {
         for (ElementBox element : elements) {
             element.translate(offsetX, offsetY);
         }
-        this.getBoundingBox().translate(offsetX, offsetY);
+        this.getBBox().translate(offsetX, offsetY);
 
     }
 
@@ -166,8 +166,8 @@ public class TableRowBox extends ElementBox {
         }
 
         for(ElementBox element : this.elements) {
-            //if(element.getBoundingBox().getHeight() < this.getBoundingBox().getHeight()) {
-            //    element.translate(0,  this.getBoundingBox().getHeight() - element.getBoundingBox().getHeight());
+            //if(element.getBBox().getHeight() < this.getBBox().getHeight()) {
+            //    element.translate(0,  this.getBBox().getHeight() - element.getBBox().getHeight());
             //}
             element.build(stream, writer);
         }

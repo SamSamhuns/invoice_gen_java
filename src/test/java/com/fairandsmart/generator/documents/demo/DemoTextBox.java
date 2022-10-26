@@ -85,7 +85,7 @@ public class DemoTextBox implements InvoiceLayout {
         SimpleTextBox stb2 = new SimpleTextBox(
                 PDType1Font.HELVETICA,
                 12,
-                20 + stb.getBoundingBox().getWidth() + 5,
+                20 + stb.getBBox().getWidth() + 5,
                 750,
                 model.getReference().getValueInvoice(),
                 "IN");

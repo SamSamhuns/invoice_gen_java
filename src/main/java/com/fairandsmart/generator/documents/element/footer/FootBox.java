@@ -76,8 +76,8 @@ public class FootBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
-        return container.getBoundingBox();
+    public BoundingBox getBBox() {
+        return container.getBBox();
     }
 
     @Override

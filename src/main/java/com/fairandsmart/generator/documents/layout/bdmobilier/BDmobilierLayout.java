@@ -149,7 +149,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Top center document title
         if (genProb.get("doc_title_top_center")) {
             SimpleTextBox docTitleBox = new SimpleTextBox(fontB,16,0,0,docTitle,"SN");
-            docTitleBox.translate(pageMiddleX-(docTitleBox.getBoundingBox().getWidth()/2), pageHeight-80);
+            docTitleBox.translate(pageMiddleX-(docTitleBox.getBBox().getWidth()/2), pageHeight-80);
             docTitleBox.build(contentStream, writer);
             modelAnnot.setTitle(docTitle);
         }
@@ -186,7 +186,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         headerCont.addElement(invNumCont);
 
-        headerCont.translate(pageWidth - headerCont.getBoundingBox().getWidth() - rightPageMargin, 0);  // align top right header to fit properly
+        headerCont.translate(pageWidth - headerCont.getBBox().getWidth() - rightPageMargin, 0);  // align top right header to fit properly
         headerCont.build(contentStream, writer);
 
         // check if billing and shipping addresses should be switched
@@ -294,7 +294,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         infoOrder.build(contentStream,writer);
 
         // table top horizontal line, will be built after verticalTableItems
-        float ttx1 = 85; float tty1 = billAddrCont.getBoundingBox().getPosY() - billAddrCont.getBoundingBox().getHeight() - 15;
+        float ttx1 = 85; float tty1 = billAddrCont.getBBox().getPosY() - billAddrCont.getBBox().getHeight() - 15;
         float ttx2 = pageWidth-rightPageMargin; float tty2 = tty1;
         HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(ttx1, tty1, ttx2, tty2, lineStrokeColor);
 
@@ -404,7 +404,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         verticalTableItems.build(contentStream,writer);
         tableTopInfoLine.build(contentStream,writer);
 
-        float tableItemsHeight = verticalTableItems.getBoundingBox().getHeight();
+        float tableItemsHeight = verticalTableItems.getBBox().getHeight();
         // Add borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = ttx1;
@@ -412,13 +412,13 @@ public class BDmobilierLayout implements InvoiceLayout {
             HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
+                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor);
                 xPos += configRow[i];
             }
             HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
         }
 
-        float tableBottomY = verticalTableItems.getBoundingBox().getPosY() - tableItemsHeight;
+        float tableBottomY = verticalTableItems.getBBox().getPosY() - tableItemsHeight;
         new HorizontalLineBox(ttx1, tableBottomY, ttx2, tableBottomY, lineStrokeColor).build(contentStream,writer);
         new BorderBox(hdrBgColor,hdrBgColor,1,395,tableBottomY-50,166,45).build(contentStream,writer);
 
@@ -442,7 +442,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             float paymentAddrYPos = tableBottomY-60;
 
             VerticalContainer paymentAddrCont = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
-            paymentAddrCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, payment.getAddressHeader(), "PH"));
+            paymentAddrCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, payment.getAddressHeader()+":", "PH"));
             modelAnnot.getPaymentto().setBankName(payment.getValueBankName());
             paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelBankName()+": "+payment.getValueBankName(), "PBN"));
             modelAnnot.getPaymentto().setAccountName(payment.getValueAccountName());
@@ -504,9 +504,9 @@ public class BDmobilierLayout implements InvoiceLayout {
         HorizontalContainer infoEntreprise3 = new HorizontalContainer(0,0);
         infoEntreprise3.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, company.getContact().getPhoneLabel()+" : "));
         infoEntreprise3.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, company.getContact().getPhoneValue(),"SCN"));
-        infoEntreprise.translate(pageMiddleX-infoEntreprise.getBoundingBox().getWidth()/2,61);
-        infoEntreprise2.translate(pageMiddleX-infoEntreprise2.getBoundingBox().getWidth()/2,53);
-        infoEntreprise3.translate(pageMiddleX-infoEntreprise3.getBoundingBox().getWidth()/2,45);
+        infoEntreprise.translate(pageMiddleX-infoEntreprise.getBBox().getWidth()/2,61);
+        infoEntreprise2.translate(pageMiddleX-infoEntreprise2.getBBox().getWidth()/2,53);
+        infoEntreprise3.translate(pageMiddleX-infoEntreprise3.getBBox().getWidth()/2,45);
 
         String vendorAddr = company.getName()+" "+company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity();
         modelAnnot.getVendor().setVendorName(company.getName());
@@ -528,21 +528,21 @@ public class BDmobilierLayout implements InvoiceLayout {
               if (genProb.get("signature_bottom_left")) {  // bottom left
                   singatureTextxPos = leftPageMargin + 25;
               } else {                                     // bottom right
-                  singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
+                  singatureTextxPos = pageWidth - singatureTextBox.getBBox().getWidth() - 50;
               }
 
-              singatureTextBox.getBoundingBox().setPosX(singatureTextxPos);
+              singatureTextBox.getBBox().setPosX(singatureTextxPos);
               singatureTextBox.build(contentStream, writer);
               new HorizontalLineBox(
                       singatureTextxPos - 10, 135,
-                      singatureTextxPos + singatureTextBox.getBoundingBox().getWidth() + 10, 135
+                      singatureTextxPos + singatureTextBox.getBBox().getWidth() + 10, 135
                       ).build(contentStream, writer);
               String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
               PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
               int signatureWidth = 120;
               int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
               // align signature to center of singatureTextBox bbox
-              float signatureXPos = singatureTextBox.getBoundingBox().getPosX() + singatureTextBox.getBoundingBox().getWidth()/2 - signatureWidth/2;
+              float signatureXPos = singatureTextBox.getBBox().getPosX() + singatureTextBox.getBBox().getWidth()/2 - signatureWidth/2;
               float signatureYPos = 140;
               contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
         }
@@ -589,7 +589,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or the Company's stamp in order to be considered valid";
             SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontN, footerFontSize-1, 0, 80, noStampSignMsg, "Footnote");
             // align the text to the center
-            noStampSignMsgBox.getBoundingBox().setPosX(pageMiddleX - noStampSignMsgBox.getBoundingBox().getWidth()/2);
+            noStampSignMsgBox.getBBox().setPosX(pageMiddleX - noStampSignMsgBox.getBBox().getWidth()/2);
             noStampSignMsgBox.build(contentStream, writer);
         }
 

@@ -69,16 +69,16 @@ public class VerticalContainer extends ElementBox {
 
     public void addElement(ElementBox element) throws Exception {
         this.elements.add(element);
-        if ( maxWidth > 0 && element.getBoundingBox().getWidth() > maxWidth ) {
+        if ( maxWidth > 0 && element.getBBox().getWidth() > maxWidth ) {
             element.setWidth(maxWidth);
         }
-        if ( element.getBoundingBox().getWidth() > this.getBoundingBox().getWidth() ) {
-            this.getBoundingBox().setWidth(element.getBoundingBox().getWidth());
+        if ( element.getBBox().getWidth() > this.getBBox().getWidth() ) {
+            this.getBBox().setWidth(element.getBBox().getWidth());
         }
-        element.getBoundingBox().setPosX(0);
-        element.getBoundingBox().setPosY(0);
+        element.getBBox().setPosX(0);
+        element.getBBox().setPosY(0);
         element.translate(box.getPosX(), box.getPosY() - this.box.getHeight());
-        this.box.setHeight(this.box.getHeight() + element.getBoundingBox().getHeight());
+        this.box.setHeight(this.box.getHeight() + element.getBBox().getHeight());
     }
 
     public void setBorderThickness(float thick) {
@@ -98,11 +98,11 @@ public class VerticalContainer extends ElementBox {
             float posX = box.getPosX();
             switch ( align ) {
                 case "CENTER":
-                    posX = (width - box.getPosX() - element.getBoundingBox().getWidth())/2; break;
+                    posX = (width - box.getPosX() - element.getBBox().getWidth())/2; break;
                 case "RIGHT":
-                    posX = (width - box.getPosX()) - element.getBoundingBox().getWidth(); break;
+                    posX = (width - box.getPosX()) - element.getBBox().getWidth(); break;
             }
-            float transX = posX - element.getBoundingBox().getPosX();
+            float transX = posX - element.getBBox().getPosX();
             element.translate(transX, 0);
         }
     }
@@ -120,7 +120,7 @@ public class VerticalContainer extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         return box;
     }
 
@@ -130,11 +130,11 @@ public class VerticalContainer extends ElementBox {
         this.box.setWidth(width);
         for ( ElementBox element : elements ) {
             element.setWidth(width);
-            element.getBoundingBox().setPosX(0);
-            element.getBoundingBox().setPosY(0);
+            element.getBBox().setPosX(0);
+            element.getBBox().setPosY(0);
             float offsetY = this.box.getHeight();
             element.translate(box.getPosX(), box.getPosY() - offsetY);
-            this.box.setHeight(this.box.getHeight() + element.getBoundingBox().getHeight());
+            this.box.setHeight(this.box.getHeight() + element.getBBox().getHeight());
         }
     }
 

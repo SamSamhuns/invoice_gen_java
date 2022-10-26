@@ -319,7 +319,7 @@ public class NGenericLayout implements InvoiceLayout {
         invoicePage.addElement(productTable);
 
         ClientInfoBox randomClientInfo = new ClientInfoBox(getLeftInfo(false, false, false, false, true));
-        if(randomClientInfo.getBoundingBox().getWidth()!=0.0){
+        if(randomClientInfo.getBBox().getWidth()!=0.0){
             fourthPart = new TableRowBox(configRow2, 0, 0, VAlign.CENTER);
             SimpleTextBox emptyBox= new SimpleTextBox(fonts[0], fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER);
             Map<Integer, ElementBox> payInfos = new HashMap<>();
@@ -334,14 +334,14 @@ public class NGenericLayout implements InvoiceLayout {
             invoicePage.addElement(fourthPart);
         }
 
-        invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 700-invoicePage.getBoundingBox().getHeight()));
+        invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 700-invoicePage.getBBox().getHeight()));
         boolean footerLine = model.getRandom().nextBoolean();
         boolean footerInLineForm = model.getRandom().nextBoolean();
 //        footerLine=true;
 //        footerInLineForm=false;
         if(footerLine)
         {
-            invoicePage.addElement(new HorizontalLineBox(0,0, 30+invoicePage.getBoundingBox().getWidth(), 0));
+            invoicePage.addElement(new HorizontalLineBox(0,0, 30+invoicePage.getBBox().getWidth(), 0));
             invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         }
 
@@ -356,7 +356,7 @@ public class NGenericLayout implements InvoiceLayout {
                compInfo.add(companyInfoBox.getCompanyContactLine());
             }
             VerticalContainer companyFoot = companyInfoBox.concatContainersVertically(compInfo.toArray(new ElementBox[compInfo.size()]));
-            companyFoot.alignElements(alignmentOptions[model.getRandom().nextInt(alignmentOptions.length)], invoicePage.getBoundingBox().getWidth());
+            companyFoot.alignElements(alignmentOptions[model.getRandom().nextInt(alignmentOptions.length)], invoicePage.getBBox().getWidth());
             CompanyInfoBox companyAddIDCont = new CompanyInfoBox(companyFoot);
             invoicePage.addElement(companyAddIDCont);
 

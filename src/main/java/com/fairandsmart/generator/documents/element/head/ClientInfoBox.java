@@ -137,13 +137,13 @@ public class ClientInfoBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
-        return container.getBoundingBox();
+    public BoundingBox getBBox() {
+        return container.getBBox();
     }
 
     @Override
     public void setWidth(float width) throws Exception {
-        container.getBoundingBox().setWidth(width);
+        container.getBBox().setWidth(width);
     }
 
     @Override

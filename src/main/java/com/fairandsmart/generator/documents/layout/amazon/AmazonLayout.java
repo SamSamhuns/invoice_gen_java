@@ -180,8 +180,8 @@ public class AmazonLayout implements InvoiceLayout {
         topTextCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, textTopInvString, docTitle+" Number"));
         topTextCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, ((rnd.nextBoolean()) ? "Retail / "+docTitle+" / Cash Memorandum": "Retail / "+docTitle) ));
         if (genProb.get("text_top_center") && !genProb.get("barcode_top")) {  // center top text if barcode not present
-            topTextCont.alignElements("CENTER", topTextCont.getBoundingBox().getWidth());
-            topTextCont.translate(pageMiddleX - topTextCont.getBoundingBox().getWidth()/2, 0);
+            topTextCont.alignElements("CENTER", topTextCont.getBBox().getWidth());
+            topTextCont.translate(pageMiddleX - topTextCont.getBBox().getWidth()/2, 0);
         }
         modelAnnot.setTitle(docTitle);
         modelAnnot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
@@ -333,15 +333,17 @@ public class AmazonLayout implements InvoiceLayout {
         Color hdrBgColor = (hdrTextColor == white) ? black: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, white).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
 
         // table top info
-        String tableTopInfoText = (hdrBgColor == white) ? "" : pt.getTableTopInfo();
-        float tableTopInfoPosX = leftPageMargin;
-        float tableTopInfoPosY = billAddrCont.getBoundingBox().getPosY() - billAddrCont.getBoundingBox().getHeight() - 15;
+        String tableTopText = pt.getTableTopInfo();
+        tableTopText = tableTopText.equals("All prices are in")? tableTopText+" "+cur: tableTopText;
+        tableTopText = (hdrBgColor == white) ? "" : tableTopText;
+        float tableTopPosX = leftPageMargin;
+        float tableTopPosY = billAddrCont.getBBox().getPosY() - billAddrCont.getBBox().getHeight() - 15;
 
-        SimpleTextBox tableTopInfoBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopInfoPosX, tableTopInfoPosY, tableTopInfoText);
-        tableTopInfoBox.build(contentStream, writer);
+        SimpleTextBox tableTopBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopPosX, tableTopPosY, tableTopText);
+        tableTopBox.build(contentStream, writer);
 
         // table top horizontal line, will be built after verticalTableItems
-        float x1 = leftPageMargin; float y1 = tableTopInfoBox.getBoundingBox().getPosY() - tableTopInfoBox.getBoundingBox().getHeight() - 2;
+        float x1 = leftPageMargin; float y1 = tableTopBox.getBBox().getPosY() - tableTopBox.getBBox().getHeight() - 2;
         float x2 = pageWidth-rightPageMargin; float y2 = y1;
         HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(x1, y1, x2, y2, lineStrokeColor);
 
@@ -358,14 +360,14 @@ public class AmazonLayout implements InvoiceLayout {
         }
         row1.setBackgroundColor(hdrBgColor);
 
-        VerticalContainer verticalTableItems = new VerticalContainer(leftPageMargin, tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2, 600);
+        VerticalContainer verticalTableItems = new VerticalContainer(leftPageMargin, tableTopPosY - tableTopBox.getBBox().getHeight() - 2, 600);
         verticalTableItems.addElement(row1);
         verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
 
         new BorderBox(hdrBgColor, hdrBgColor, 0,
-                      leftPageMargin, tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2 - row1.getBoundingBox().getHeight(),
-                      row1.getBoundingBox().getWidth(), row1.getBoundingBox().getHeight()).build(contentStream, writer);
+                      leftPageMargin, tableTopPosY - tableTopBox.getBBox().getHeight() - 2 - row1.getBBox().getHeight(),
+                      row1.getBBox().getWidth(), row1.getBBox().getHeight()).build(contentStream, writer);
 
         // table item list body
         String quantity; String snNum;
@@ -431,7 +433,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
         verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
-        float tableItemsHeight = verticalTableItems.getBoundingBox().getHeight();
+        float tableItemsHeight = verticalTableItems.getBBox().getHeight();
 
         verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
         verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
@@ -538,14 +540,14 @@ public class AmazonLayout implements InvoiceLayout {
         verticalTableItems.build(contentStream, writer);
         tableTopInfoLine.build(contentStream, writer); // must be built after verticalTableItems
 
-        // Add borders to table cell items if table cell is CENTER aligned horizontally
+        // Add horizontal borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = leftPageMargin;
-            float yPos = tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2;
+            float yPos = tableTopPosY - tableTopBox.getBBox().getHeight() - 2;
             HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
+                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor);
                 xPos += configRow[i];
             }
             HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
@@ -556,11 +558,11 @@ public class AmazonLayout implements InvoiceLayout {
         // Payment Address
         if (genProb.get("payment_address")) {
             // Set paymentAddrCont opposite to the signature location
-            float paymentAddrXPos = (genProb.get("signature_bottom_left")) ? rightAddrX: leftPageMargin;
-            float paymentAddrYPos = verticalTableItems.getBoundingBox().getPosY() - verticalTableItems.getBoundingBox().getHeight() - 10;
+            float paymentAddrXPos = genProb.get("signature_bottom_left") ? rightAddrX: leftPageMargin;
+            float paymentAddrYPos = verticalTableItems.getBBox().getPosY() - verticalTableItems.getBBox().getHeight() - 10;
 
             VerticalContainer paymentAddrCont = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
-            paymentAddrCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, payment.getAddressHeader(), "PH"));
+            paymentAddrCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, payment.getAddressHeader()+":", "PH"));
             modelAnnot.getPaymentto().setBankName(payment.getValueBankName());
             paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelBankName()+": "+payment.getValueBankName(), "PBN"));
             modelAnnot.getPaymentto().setAccountName(payment.getValueAccountName());
@@ -607,14 +609,14 @@ public class AmazonLayout implements InvoiceLayout {
             if (genProb.get("signature_bottom_left")) {  // bottom left
                 singatureTextxPos = leftPageMargin + 25;
             } else {                                     // bottom right
-                singatureTextxPos = pageWidth - singatureTextBox.getBoundingBox().getWidth() - 50;
+                singatureTextxPos = pageWidth - singatureTextBox.getBBox().getWidth() - 50;
             }
 
-            singatureTextBox.getBoundingBox().setPosX(singatureTextxPos);
+            singatureTextBox.getBBox().setPosX(singatureTextxPos);
             singatureTextBox.build(contentStream, writer);
             new HorizontalLineBox(
                     singatureTextxPos - 10, 135,
-                    singatureTextxPos + singatureTextBox.getBoundingBox().getWidth() + 5, 135,
+                    singatureTextxPos + singatureTextBox.getBBox().getWidth() + 5, 135,
                     lineStrokeColor).build(contentStream, writer);
 
             String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
@@ -622,7 +624,7 @@ public class AmazonLayout implements InvoiceLayout {
             int signatureWidth = 120;
             int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
             // align signature to center of singatureTextBox bbox
-            float signatureXPos = singatureTextBox.getBoundingBox().getPosX() + singatureTextBox.getBoundingBox().getWidth()/2 - signatureWidth/2;
+            float signatureXPos = singatureTextBox.getBBox().getPosX() + singatureTextBox.getBBox().getWidth()/2 - signatureWidth/2;
             float signatureYPos = 140;
             contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
         }
@@ -643,8 +645,8 @@ public class AmazonLayout implements InvoiceLayout {
             verticalFooterCont.addElement(new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, 0, 0, barcodeNum));
 
             if (genProb.get("footer_info_center")) {
-                verticalFooterCont.alignElements("CENTER", verticalFooterCont.getBoundingBox().getWidth());
-                verticalFooterCont.translate(pageMiddleX - verticalFooterCont.getBoundingBox().getWidth()/2, 0);
+                verticalFooterCont.alignElements("CENTER", verticalFooterCont.getBBox().getWidth());
+                verticalFooterCont.translate(pageMiddleX - verticalFooterCont.getBBox().getWidth()/2, 0);
             }
             verticalFooterCont.build(contentStream, writer);
         }

@@ -197,7 +197,7 @@ public class EmployeeInfoPayslipBox extends ElementBox {
         companyIDContainer.addElement(Label);
         SimpleTextBox Value = new SimpleTextBox(font, fontSize, 0, 0, model.getEmployeeInformation().getEmployment());
         Value.setEntityName("EEM");
-        Value.setWidth(100-Label.getBoundingBox().getWidth());
+        Value.setWidth(100-Label.getBBox().getWidth());
         Value.setPadding(0, 0, 3, 0);
         companyIDContainer.addElement(Value);
 
@@ -902,16 +902,16 @@ public class EmployeeInfoPayslipBox extends ElementBox {
 
         idContainer.addElement(ligne2);
         idContainer.addElement(new HorizontalLineBoxV2(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), 0));
-        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0, configRow[0], idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]), idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]), idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]), idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]), idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]), idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, configRow[0], idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]), idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]), idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]), idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]), idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]), idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
-     //   idContainer.addElement(new VerticalLineBox(0,0,  510f, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+     //   idContainer.addElement(new VerticalLineBox(0,0,  510f, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
         firstPart2.addElement( new EmployeeInfoPayslipBox(concatContainersVertically(new ElementBox[]{
                 idContainer})),false);
@@ -929,18 +929,18 @@ public class EmployeeInfoPayslipBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         if(container!=null)
-        return container.getBoundingBox();
-        return hcontainer.getBoundingBox();
+        return container.getBBox();
+        return hcontainer.getBBox();
     }
 
     @Override
     public void setWidth(float width) throws Exception {
         if(container==null)
-            hcontainer.getBoundingBox().setWidth(width);
+            hcontainer.getBBox().setWidth(width);
         else
-            container.getBoundingBox().setWidth(width);
+            container.getBBox().setWidth(width);
     }
 
     @Override

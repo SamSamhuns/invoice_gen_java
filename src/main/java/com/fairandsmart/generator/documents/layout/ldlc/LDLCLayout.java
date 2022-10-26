@@ -202,7 +202,7 @@ public class LDLCLayout implements InvoiceLayout {
         verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, "N° Siret :"));
         verticalNumREF.build(contentStream, writer);
 
-        VerticalContainer verticalNumREF2 = new VerticalContainer(verticalNumREF.getBoundingBox().getPosX()+verticalNumREF.getBoundingBox().getWidth()+15, posRefY-10, 250 );
+        VerticalContainer verticalNumREF2 = new VerticalContainer(verticalNumREF.getBBox().getPosX()+verticalNumREF.getBBox().getWidth()+15, posRefY-10, 250 );
         verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueInvoice(),"IN"));
         verticalNumREF2.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getDate().getValueInvoice(),"IDATE"));
@@ -243,16 +243,16 @@ public class LDLCLayout implements InvoiceLayout {
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, page.getMediaBox().getWidth()-(25), 0));
 
-        /*new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX(), firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+70f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+280f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+308f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+353f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+388f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+438f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+478f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+518f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);
-        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBoundingBox().getPosX()+530f, firstLine.getBoundingBox().getPosY()-15, 1, 20).build(contentStream,writer);*/
+        /*new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX(), firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+70f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+280f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+308f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+353f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+388f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+438f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+478f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+518f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);
+        new BorderBox(Color.BLACK,Color.BLACK, 0,firstLine.getBBox().getPosX()+530f, firstLine.getBBox().getPosY()-15, 1, 20).build(contentStream,writer);*/
 
 
         float reduc = 10;

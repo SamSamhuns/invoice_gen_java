@@ -81,7 +81,7 @@ public abstract class ElementBox {
 
     }
 
-    public abstract BoundingBox getBoundingBox();
+    public abstract BoundingBox getBBox();
 
     public abstract void setWidth(float width) throws Exception;
 

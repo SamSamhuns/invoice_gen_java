@@ -127,18 +127,18 @@ public class EmployeeInfoBox extends ElementBox{
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         if(container!=null)
-            return container.getBoundingBox();
-        return hcontainer.getBoundingBox();
+            return container.getBBox();
+        return hcontainer.getBBox();
     }
 
     @Override
     public void setWidth(float width) throws Exception {
         if(container==null)
-            hcontainer.getBoundingBox().setWidth(width);
+            hcontainer.getBBox().setWidth(width);
         else
-            container.getBoundingBox().setWidth(width);
+            container.getBBox().setWidth(width);
     }
 
     @Override

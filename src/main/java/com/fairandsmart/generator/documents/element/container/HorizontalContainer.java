@@ -67,13 +67,13 @@ public class HorizontalContainer extends ElementBox {
 
     public void addElement(ElementBox element) throws Exception {
         this.elements.add(element);
-        element.getBoundingBox().setPosX(0);
-        element.getBoundingBox().setPosY(0);
+        element.getBBox().setPosX(0);
+        element.getBBox().setPosY(0);
         element.translate(box.getPosX() + this.box.getWidth(), box.getPosY());
-        if ( element.getBoundingBox().getHeight() > box.getHeight() ) {
-            this.box.setHeight(element.getBoundingBox().getHeight());
+        if ( element.getBBox().getHeight() > box.getHeight() ) {
+            this.box.setHeight(element.getBBox().getHeight());
         }
-        this.box.setWidth(this.box.getWidth() + element.getBoundingBox().getWidth());
+        this.box.setWidth(this.box.getWidth() + element.getBBox().getWidth());
     }
 
     public void setBorderThickness(float thick) {
@@ -89,7 +89,7 @@ public class HorizontalContainer extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         return box;
     }
 

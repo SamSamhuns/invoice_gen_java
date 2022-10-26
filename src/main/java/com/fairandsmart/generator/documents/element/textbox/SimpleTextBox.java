@@ -134,7 +134,7 @@ public class SimpleTextBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         return box;
     }
 
@@ -169,7 +169,7 @@ public class SimpleTextBox extends ElementBox {
 
     public void setPadding(float left, float top, float right, float bottom) throws IOException {
         this.padding = new Padding(left, top, right, bottom);
-        this.setWidth(this.getBoundingBox().getWidth() + padding.getHorizontalPadding());
+        this.setWidth(this.getBBox().getWidth() + padding.getHorizontalPadding());
         //this.box = new BoundingBox(box.getPosX(), box.getPosY(), box.getWidth() + padding.getHorizontalPadding(), box.getHeight() + padding.getVerticalPadding());
     }
 
@@ -187,7 +187,7 @@ public class SimpleTextBox extends ElementBox {
 
     @Override
     public void translate(float offsetX, float offsetY) {
-        this.getBoundingBox().translate(offsetX, offsetY);
+        this.getBBox().translate(offsetX, offsetY);
     }
 
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {

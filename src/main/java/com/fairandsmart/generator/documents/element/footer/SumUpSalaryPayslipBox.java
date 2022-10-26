@@ -111,9 +111,9 @@ public class SumUpSalaryPayslipBox extends ElementBox {
         idContainer.addElement(container);
         idContainer.addElement(emptyBox);
         idContainer.addElement(new HorizontalLineBoxV2(0,0, configRow[0]+configRow[1]+15, 0));
-        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0], idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0]+configRow[1]+15, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0], idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0]+configRow[1]+15, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
         return idContainer;
     }
@@ -141,9 +141,9 @@ public class SumUpSalaryPayslipBox extends ElementBox {
         idContainer.addElement(container);
         idContainer.addElement(emptyBox);
         idContainer.addElement(new HorizontalLineBoxV2(0,0, configRow[0]+configRow[1]+15, 0));
-        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0], idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-      //  idContainer.addElement(new VerticalLineBox(0,0,  configRow[0]+configRow[1]+15, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0], idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+      //  idContainer.addElement(new VerticalLineBox(0,0,  configRow[0]+configRow[1]+15, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
         return idContainer;
     }
@@ -170,9 +170,9 @@ public class SumUpSalaryPayslipBox extends ElementBox {
         idContainer.addElement(container);
         idContainer.addElement(emptyBox);
         idContainer.addElement(new HorizontalLineBoxV2(0,0, configRow[0]+configRow[1]+15, 0));
-        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0], idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-       // idContainer.addElement(new VerticalLineBox(0,0,  configRow[0]+configRow[1]+15, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0,  configRow[0], idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+       // idContainer.addElement(new VerticalLineBox(0,0,  configRow[0]+configRow[1]+15, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
         return idContainer;
     }
@@ -185,11 +185,11 @@ public class SumUpSalaryPayslipBox extends ElementBox {
         HorizontalContainer titleContainer = new HorizontalContainer(0, 0);
         HorizontalContainer acquis = new HorizontalContainer(0, 0);
 
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBoundingBox().getWidth()+10, 0));
+        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBBox().getWidth()+10, 0));
 
         idContainer.addElement(getNetAvantImpotBlock());
 
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBoundingBox().getWidth()+10, 0));
+        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBBox().getWidth()+10, 0));
 
         SimpleTextBox Label = new SimpleTextBox(font, fontSize, 0, 0, "Impot sur le revenu");
         Label.setPadding(0, 0, 2, 0);
@@ -213,7 +213,7 @@ public class SumUpSalaryPayslipBox extends ElementBox {
 
         idContainer.addElement(titleContainer);
 
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBoundingBox().getWidth()+10, 0));
+        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBBox().getWidth()+10, 0));
 
         // Ecquis
         SimpleTextBox Label4 = new SimpleTextBox(font, fontSize, 0, 0, "Impot sur le revenu prevelvé à la source");
@@ -243,14 +243,14 @@ public class SumUpSalaryPayslipBox extends ElementBox {
 
         idContainer.addElement(acquis);
 
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBoundingBox().getWidth()+10, 0));
+        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBBox().getWidth()+10, 0));
 
 
         idContainer.addElement(getNetAPayerBlock(impot));
 
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBoundingBox().getWidth()+10, 0));
-        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0,  getNetAvantImpotBlock().getBoundingBox().getWidth()+10, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+        idContainer.addElement(new HorizontalLineBoxV2(0,0, getNetAvantImpotBlock().getBBox().getWidth()+10, 0));
+        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0,  getNetAvantImpotBlock().getBBox().getWidth()+10, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
         return idContainer;
     }
@@ -328,8 +328,8 @@ public class SumUpSalaryPayslipBox extends ElementBox {
         idContainer.addElement(getNetAPayerBlock(impot));
 
         idContainer.addElement(new HorizontalLineBoxV2(0,0, 500, 0));
-        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0,  500, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0,  500, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
         return idContainer;
     }
@@ -345,18 +345,18 @@ public class SumUpSalaryPayslipBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         if(container!=null)
-        return container.getBoundingBox();
-        return hcontainer.getBoundingBox();
+        return container.getBBox();
+        return hcontainer.getBBox();
     }
 
     @Override
     public void setWidth(float width) throws Exception {
         if(container==null)
-            hcontainer.getBoundingBox().setWidth(width);
+            hcontainer.getBBox().setWidth(width);
         else
-            container.getBoundingBox().setWidth(width);
+            container.getBBox().setWidth(width);
     }
 
     @Override

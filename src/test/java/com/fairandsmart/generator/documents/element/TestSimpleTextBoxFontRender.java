@@ -108,13 +108,13 @@ public class TestSimpleTextBoxFontRender implements InvoiceLayout {
 
             stb = new SimpleTextBox(NFont, 12, 20, currentPosY, "Normal: "+fontNBI.get(0));
             stb.build(contentStream, writer);
-            currentPosY -= stb.getBoundingBox().getHeight();
+            currentPosY -= stb.getBBox().getHeight();
             stb = new SimpleTextBox(BFont, 12, 20, currentPosY, "Bold: "+fontNBI.get(1));
             stb.build(contentStream, writer);
-            currentPosY -= stb.getBoundingBox().getHeight();
+            currentPosY -= stb.getBBox().getHeight();
             stb = new SimpleTextBox(IFont, 12, 20, currentPosY, "Italic: "+fontNBI.get(2));
             stb.build(contentStream, writer);
-            currentPosY -= stb.getBoundingBox().getHeight();
+            currentPosY -= stb.getBBox().getHeight();
         }
 
         String all_currencies = "€, $, ¥, د.إ";
@@ -128,11 +128,11 @@ public class TestSimpleTextBoxFontRender implements InvoiceLayout {
 
         stb = new SimpleTextBox(NFont, 12, 20, currentPosY, "N Arabic: "+fontNonANSI+" "+ar_currency+all_currencies, "undefined", false);
         stb.build(contentStream, writer);
-        currentPosY -= stb.getBoundingBox().getHeight();
+        currentPosY -= stb.getBBox().getHeight();
 
         stb = new SimpleTextBox(BFont, 12, 20, currentPosY, "B Arabic: "+fontNonANSI+" "+ar_currency+all_currencies, "undefined", false);
         stb.build(contentStream, writer);
-        currentPosY -= stb.getBoundingBox().getHeight();
+        currentPosY -= stb.getBBox().getHeight();
 
         stb = new SimpleTextBox(IFont, 12, 20, currentPosY, "I Arabic: "+fontNonANSI+" "+ar_currency+all_currencies, "undefined", false);
         stb.build(contentStream, writer);

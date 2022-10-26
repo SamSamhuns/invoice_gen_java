@@ -170,7 +170,7 @@ public class ReceiptProductBox extends ElementBox {
             container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         }
 
-        container.addElement(new HorizontalLineBox(0,0, head.getBoundingBox().getWidth()+30, 0));
+        container.addElement(new HorizontalLineBox(0,0, head.getBBox().getWidth()+30, 0));
         container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 15));
 
         qtyTotalAvailabel = rnd.nextBoolean();
@@ -229,8 +229,8 @@ public class ReceiptProductBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
-        return container.getBoundingBox();
+    public BoundingBox getBBox() {
+        return container.getBBox();
     }
 
     @Override

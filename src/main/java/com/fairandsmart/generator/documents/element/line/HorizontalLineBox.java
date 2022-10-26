@@ -64,29 +64,29 @@ public class HorizontalLineBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         return box;
     }
 
     @Override
     public void translate(float offsetX, float offsetY) {
-        this.getBoundingBox().translate(offsetX, offsetY);
+        this.getBBox().translate(offsetX, offsetY);
     }
 
     @Override
     public void setWidth(float width) throws Exception {
-        this.getBoundingBox().setWidth(width);
+        this.getBBox().setWidth(width);
     }
 
     @Override
     public void setHeight(float height) throws Exception {
-        this.getBoundingBox().setHeight(height);
+        this.getBBox().setHeight(height);
     }
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        stream.moveTo(this.getBoundingBox().getPosX(), this.getBoundingBox().getPosY());
-        stream.lineTo(this.targetX, this.getBoundingBox().getPosY());
+        stream.moveTo(this.getBBox().getPosX(), this.getBBox().getPosY());
+        stream.lineTo(this.targetX, this.getBBox().getPosY());
         stream.setStrokingColor(this.strokeColor);
         stream.stroke();
     }

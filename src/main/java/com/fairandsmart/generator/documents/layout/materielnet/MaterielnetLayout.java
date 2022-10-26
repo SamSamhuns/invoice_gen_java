@@ -262,9 +262,9 @@ public class MaterielnetLayout implements InvoiceLayout {
         infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, idNumbers.getVatValue(),"SVAT"));
 
         float millieuPageX = page.getMediaBox().getWidth()/2;
-        infoEntreprise.translate(millieuPageX-infoEntreprise.getBoundingBox().getWidth()/2,82);
-        infoEntreprise2.translate(millieuPageX-infoEntreprise2.getBoundingBox().getWidth()/2,72);
-        infoEntreprise3.translate(millieuPageX-infoEntreprise3.getBoundingBox().getWidth()/2,62);
+        infoEntreprise.translate(millieuPageX-infoEntreprise.getBBox().getWidth()/2,82);
+        infoEntreprise2.translate(millieuPageX-infoEntreprise2.getBBox().getWidth()/2,72);
+        infoEntreprise3.translate(millieuPageX-infoEntreprise3.getBBox().getWidth()/2,62);
 
         infoEntreprise.build(contentStream,writer);
         infoEntreprise2.build(contentStream,writer);

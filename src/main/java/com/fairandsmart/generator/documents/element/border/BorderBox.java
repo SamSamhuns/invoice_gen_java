@@ -55,23 +55,23 @@ public class BorderBox extends ElementBox {
     }
 
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         return box;
     }
 
     @Override
     public void translate(float offsetX, float offsetY) {
-        this.getBoundingBox().translate(offsetX, offsetY);
+        this.getBBox().translate(offsetX, offsetY);
     }
 
     @Override
     public void setWidth(float width) throws Exception {
-        this.getBoundingBox().setWidth(width);
+        this.getBBox().setWidth(width);
     }
 
     @Override
     public void setHeight(float height) throws Exception {
-        this.getBoundingBox().setHeight(height);
+        this.getBBox().setHeight(height);
     }
 
     @Override

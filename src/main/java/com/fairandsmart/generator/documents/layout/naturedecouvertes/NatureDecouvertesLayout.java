@@ -157,9 +157,9 @@ public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWrite
         infoEntreprise3.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getContact().getPhoneValue(),"SCN"));
 
         float millieuPageX = page.getMediaBox().getWidth()/2;
-        infoEntreprise.translate(millieuPageX-infoEntreprise.getBoundingBox().getWidth()/2,58);
-        infoEntreprise2.translate(millieuPageX-infoEntreprise2.getBoundingBox().getWidth()/2,51);
-        infoEntreprise3.translate(millieuPageX-infoEntreprise3.getBoundingBox().getWidth()/2,45);
+        infoEntreprise.translate(millieuPageX-infoEntreprise.getBBox().getWidth()/2,58);
+        infoEntreprise2.translate(millieuPageX-infoEntreprise2.getBBox().getWidth()/2,51);
+        infoEntreprise3.translate(millieuPageX-infoEntreprise3.getBBox().getWidth()/2,45);
 
         infoEntreprise.build(contentStream,writer);
         infoEntreprise2.build(contentStream,writer);

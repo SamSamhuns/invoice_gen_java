@@ -467,24 +467,24 @@ public class LeaveInfoPayslipBox extends ElementBox {
 
         idContainer.addElement(encours);
         idContainer.addElement(new HorizontalLineBoxV2(0,0, 155f, 0));
-        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
-        idContainer.addElement(new VerticalLineBox(0,0,  155f, idContainer.getBoundingBox().getHeight())); //  sumUp.getBoundingBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
+        idContainer.addElement(new VerticalLineBox(0,0,  155f, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 
         return idContainer;
     }
     @Override
-    public BoundingBox getBoundingBox() {
+    public BoundingBox getBBox() {
         if(container!=null)
-        return container.getBoundingBox();
-        return hcontainer.getBoundingBox();
+        return container.getBBox();
+        return hcontainer.getBBox();
     }
 
     @Override
     public void setWidth(float width) throws Exception {
         if(container==null)
-            hcontainer.getBoundingBox().setWidth(width);
+            hcontainer.getBBox().setWidth(width);
         else
-            container.getBoundingBox().setWidth(width);
+            container.getBBox().setWidth(width);
     }
 
     @Override

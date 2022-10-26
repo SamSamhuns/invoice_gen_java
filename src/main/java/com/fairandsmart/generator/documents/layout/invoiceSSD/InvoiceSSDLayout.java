@@ -428,12 +428,12 @@ public class InvoiceSSDLayout implements SSDLayout {
         HorizontalContainer hElmt = new HorizontalContainer(0,0);
         totalsContainer.alignElements("RIGHT",500f);
         hElmt.addElement(totalsContainer);
-        hElmt.setHeight(hElmt.getBoundingBox().getHeight()+30);
+        hElmt.setHeight(hElmt.getBBox().getHeight()+30);
         sumup.addElement(hElmt,true);
         invoicePage.addElement(sumup);
         //// End totals part
         ClientInfoBox randomClientInfo = new ClientInfoBox(getLeftInfo(false, false, false, false, true));
-        if(randomClientInfo.getBoundingBox().getWidth()!=0.0){
+        if(randomClientInfo.getBBox().getWidth()!=0.0){
             fourthPart = new TableRowBox(configRow2, 0, 0, VAlign.CENTER);
             SimpleTextBox emptyBox= new SimpleTextBox(fonts[0], fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER);
             Map<Integer, ElementBox> payInfos = new HashMap<>();
@@ -452,12 +452,12 @@ public class InvoiceSSDLayout implements SSDLayout {
                 new SimpleTextBoxForEvaluation(leftInfoClasses.get(i), pos_element).build(writerEval);
             }
         }
-        invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 700-invoicePage.getBoundingBox().getHeight()));
+        invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 700-invoicePage.getBBox().getHeight()));
         boolean footerLine = model.getRandom().nextBoolean();
         boolean footerInLineForm = model.getRandom().nextBoolean();
         if(footerLine)
         {
-            invoicePage.addElement(new HorizontalLineBox(0,0, 30+invoicePage.getBoundingBox().getWidth(), 0));
+            invoicePage.addElement(new HorizontalLineBox(0,0, 30+invoicePage.getBBox().getWidth(), 0));
             invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         }
         if(footerInLineForm) {
@@ -483,7 +483,7 @@ public class InvoiceSSDLayout implements SSDLayout {
                 }
             }
             VerticalContainer companyFoot = companyInfoBox.concatContainersVertically(compInfo.toArray(new ElementBox[compInfo.size()]));
-            companyFoot.alignElements(alignmentOptions[model.getRandom().nextInt(alignmentOptions.length)], invoicePage.getBoundingBox().getWidth());
+            companyFoot.alignElements(alignmentOptions[model.getRandom().nextInt(alignmentOptions.length)], invoicePage.getBBox().getWidth());
             CompanyInfoBox companyAddIDCont = new CompanyInfoBox(companyFoot);
             invoicePage.addElement(companyAddIDCont);
         }

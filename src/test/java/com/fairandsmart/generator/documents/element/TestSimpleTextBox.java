@@ -91,27 +91,27 @@ public class TestSimpleTextBox implements InvoiceLayout {
         SimpleTextBox stb = new SimpleTextBox(font, 12, 20, currentPosY, "Simple title of text");
         stb.setBackgroundColor(Color.ORANGE);
         stb.build(contentStream, writer);
-        currentPosY -= stb.getBoundingBox().getHeight();
+        currentPosY -= stb.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb2 = new SimpleTextBox(font, 12, 20, currentPosY, "Simple title of text which is a little bit longer without max width");
         stb2.setBackgroundColor(Color.CYAN);
         stb2.build(contentStream, writer);
-        currentPosY -= stb2.getBoundingBox().getHeight();
+        currentPosY -= stb2.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb3 = new SimpleTextBox(font, 12, 60, currentPosY, "Simple title of text which is a little bit longer but WITH max width");
         stb3.setWidth(100);
         stb3.setBackgroundColor(Color.PINK);
         stb3.build(contentStream, writer);
-        currentPosY -= stb3.getBoundingBox().getHeight();
+        currentPosY -= stb3.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb4 = new SimpleTextBox(font, 12, 20, currentPosY, "Simple text with padding");
         stb4.setBackgroundColor(Color.YELLOW);
         stb4.setPadding(20, 10, 75, 50);
         stb4.build(contentStream, writer);
-        currentPosY -= stb4.getBoundingBox().getHeight();
+        currentPosY -= stb4.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb5 = new SimpleTextBox(font, 12, 20, currentPosY, "Align Right");
@@ -119,7 +119,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb5.setWidth(150);
         stb5.setHalign(HAlign.RIGHT);
         stb5.build(contentStream, writer);
-        currentPosY -= stb5.getBoundingBox().getHeight();
+        currentPosY -= stb5.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb6 = new SimpleTextBox(font, 12, 20, currentPosY, "Align right with padding");
@@ -128,7 +128,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb6.setWidth(200);
         stb6.setHalign(HAlign.RIGHT);
         stb6.build(contentStream, writer);
-        currentPosY -= stb6.getBoundingBox().getHeight();
+        currentPosY -= stb6.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb7 = new SimpleTextBox(font, 12, 20, currentPosY, "Align center");
@@ -136,7 +136,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb7.setWidth(150);
         stb7.setHalign(HAlign.CENTER);
         stb7.build(contentStream, writer);
-        currentPosY -= stb7.getBoundingBox().getHeight();
+        currentPosY -= stb7.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb8 = new SimpleTextBox(font, 12, 20, currentPosY, "Align center padding asym");
@@ -145,7 +145,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb8.setWidth(250);
         stb8.setHalign(HAlign.CENTER);
         stb8.build(contentStream, writer);
-        currentPosY -= stb8.getBoundingBox().getHeight();
+        currentPosY -= stb8.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb9 = new SimpleTextBox(font, 12, 20, currentPosY, "Align right multi line of text should be placed");
@@ -153,7 +153,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb9.setWidth(100);
         stb9.setHalign(HAlign.RIGHT);
         stb9.build(contentStream, writer);
-        currentPosY -= stb9.getBoundingBox().getHeight();
+        currentPosY -= stb9.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb10 = new SimpleTextBox(font, 12, 20, currentPosY, "Align center multi line of text should be placed");
@@ -161,7 +161,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb10.setWidth(100);
         stb10.setHalign(HAlign.CENTER);
         stb10.build(contentStream, writer);
-        currentPosY -= stb10.getBoundingBox().getHeight();
+        currentPosY -= stb10.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb11 = new SimpleTextBox(font, 12, 20, currentPosY, "Align center multi line of text with padding");

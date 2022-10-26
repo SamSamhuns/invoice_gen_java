@@ -262,7 +262,7 @@ public class DartyLayout implements InvoiceLayout {
         float ratioMsg= (float)logoMsg.getWidth() / (float)logoMsg.getHeight();
         float tailleMsg = 113;
         float posMsgX = 59;
-        float posMsgY = verticalInvoiceItems.getBoundingBox().getPosY()-verticalInvoiceItems.getBoundingBox().getHeight()-70;
+        float posMsgY = verticalInvoiceItems.getBBox().getPosY()-verticalInvoiceItems.getBBox().getHeight()-70;
         contentStream.drawImage(logoMsg, posMsgX, posMsgY, tailleMsg, tailleMsg/ratioMsg);
 
         new BorderBox(Color.BLACK,Color.WHITE,1,195,posMsgY,360,39).build(contentStream,writer);
@@ -272,10 +272,10 @@ public class DartyLayout implements InvoiceLayout {
         totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
         SimpleTextBox stb = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotal()+"","TWTX");
         totaux.addElement(stb);
-        totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,70-stb.getBoundingBox().getWidth(),0));
+        totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,70-stb.getBBox().getWidth(),0));
         SimpleTextBox stb2 = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotalTax()+"","TTX");
         totaux.addElement(stb2);
-        totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,73-stb2.getBoundingBox().getWidth(),0));
+        totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,73-stb2.getBBox().getWidth(),0));
         totaux.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotalWithTax()+"","TA"));
         totaux.build(contentStream,writer);
 
@@ -312,11 +312,11 @@ public class DartyLayout implements InvoiceLayout {
         infoEntreprise5.addElement(new SimpleTextBox(font,7,0,0, "Reimbursement/exemption of remuneration for professional use : http://www.copiefrance.fr"));
 
         float millieuPageX = page.getMediaBox().getWidth()/2;
-        infoEntreprise.translate(millieuPageX-infoEntreprise.getBoundingBox().getWidth()/2,120);
-        infoEntreprise2.translate(millieuPageX-infoEntreprise2.getBoundingBox().getWidth()/2,111);
-        infoEntreprise3.translate(millieuPageX-infoEntreprise3.getBoundingBox().getWidth()/2,102);
-        infoEntreprise4.translate(millieuPageX-infoEntreprise4.getBoundingBox().getWidth()/2,93);
-        infoEntreprise5.translate(millieuPageX-infoEntreprise5.getBoundingBox().getWidth()/2,84);
+        infoEntreprise.translate(millieuPageX-infoEntreprise.getBBox().getWidth()/2,120);
+        infoEntreprise2.translate(millieuPageX-infoEntreprise2.getBBox().getWidth()/2,111);
+        infoEntreprise3.translate(millieuPageX-infoEntreprise3.getBBox().getWidth()/2,102);
+        infoEntreprise4.translate(millieuPageX-infoEntreprise4.getBBox().getWidth()/2,93);
+        infoEntreprise5.translate(millieuPageX-infoEntreprise5.getBBox().getWidth()/2,84);
 
         infoEntreprise.build(contentStream,writer);
         infoEntreprise2.build(contentStream,writer);
