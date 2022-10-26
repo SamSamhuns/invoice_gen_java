@@ -403,9 +403,15 @@ public class ProductContainer {
             nameHeads.put("Item", "en");
             nameHeads.put("Name", "en");
             nameHeads.put("Goods", "en");
+            nameHeads.put("Activity", "en");
             nameHeads.put("Services", "en");
+            nameHeads.put("Service Type", "en");
             nameHeads.put("Description", "en");
+            nameHeads.put("Particulars", "en");
             nameHeads.put("Product Desc", "en");
+            nameHeads.put("Product Details", "en");
+            nameHeads.put("Item Description", "en");
+            nameHeads.put("Item & Description", "en");
             nameHeads.put("Product Description", "en");
             nameHeads.put("Description of Goods", "en");
         }
