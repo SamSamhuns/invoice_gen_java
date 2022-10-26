@@ -75,6 +75,7 @@ public void test() throws Exception {
                 Path json = Paths.get("target/cdiscount/json/cdiscount" + i + ".json");
 
                 GenerationContext ctx = GenerationContext.generate();
+                ctx.setMaxProductNum(8);  // increase max number of products to 8
                 InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
                 InvoiceLayout layout = new CdiscountLayout();
                 com.fairandsmart.generator.documents.InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);

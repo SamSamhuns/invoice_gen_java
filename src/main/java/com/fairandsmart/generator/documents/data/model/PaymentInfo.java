@@ -311,7 +311,7 @@ public class PaymentInfo {
             addressHeaders.put("Payment", "en");
             addressHeaders.put("Payment Address", "en");
             addressHeaders.put("Payment Instruction", "en");
-            addressHeaders.put("Please Wire Funds To:", "en");
+            addressHeaders.put("Please Wire Funds To", "en");
         }
         {
             labelsPaymentTerm.put("Modalités de Paiement", "fr");
