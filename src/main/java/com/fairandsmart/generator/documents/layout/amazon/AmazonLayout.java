@@ -74,6 +74,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 
 
 @ApplicationScoped
@@ -106,9 +107,8 @@ public class AmazonLayout implements InvoiceLayout {
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
         Map<String, Boolean> genProb = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
-        // Generate barCodeNum
-        Generex barCodeNumGen = new Generex("[0-9]{12}");
-        String barCodeNum = barCodeNumGen.random();
+        // get barcode number
+        String barcodeNum = model.getReference().getValueBarcode();
 
         // Set fontFaces
         HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDFontFamily(document, this);
@@ -125,10 +125,13 @@ public class AmazonLayout implements InvoiceLayout {
         float bottomPageMargin = 8;
 
         // colors
-        List<Integer> themeRGB = company.getLogo().getThemeRGB();
-        Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
-        Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: themeColor;
+        Color white = Color.WHITE;
+        Color black = Color.BLACK;
         Color grayish = HelperCommon.getRandomColor(3);
+        List<Integer> themeRGB = company.getLogo().getThemeRGB();
+        themeRGB = themeRGB.stream().map(v -> Math.min((int)(v*1.9f), 255)).collect(Collectors.toList()); // lighten colors
+        Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
+        Color lineStrokeColor = genProb.get("line_stroke_black") ? black: themeColor;
 
         // always set to false but individually change SimpleTextBox HAlign
         boolean centerAlignItems = false;
@@ -141,17 +144,17 @@ public class AmazonLayout implements InvoiceLayout {
         float posLogoX; float posLogoY;
         float logoScale;
         // gen barcode img
-        BufferedImage barcodeBufImg = HelperImage.generateEAN13BarcodeImage(barCodeNum);
+        BufferedImage barcodeBufImg = HelperImage.generateEAN13BarcodeImage(barcodeNum);
         PDImageXObject barcodeImg = LosslessFactory.createFromImage(document, barcodeBufImg);
 
         ///////////////////////////////////      Build Page components now      ////////////////////////////////////
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        new BorderBox(HelperCommon.getRandomColor(6), Color.WHITE, 4, 0, 0, pageWidth, pageHeight).build(contentStream, writer);
+        new BorderBox(HelperCommon.getRandomColor(6), white, 4, 0, 0, pageWidth, pageHeight).build(contentStream, writer);
 
         // Barcode top
         if (genProb.get("barcode_top")) {
-            new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), barCodeNum).build(contentStream, writer);
+            new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), barcodeNum).build(contentStream, writer);
         }
         // Or Logo top
         else if (genProb.get("logo_top")) {
@@ -307,24 +310,8 @@ public class AmazonLayout implements InvoiceLayout {
         }
         shipAddrCont.build(contentStream, writer);
 
-        // table header text colors
-        Color hdrTextColor = genProb.get("table_hdr_black_text") ? Color.BLACK: Color.WHITE; // hdrTextColor black (predominantly) or white
-        Color hdrBgColor = (hdrTextColor == Color.WHITE) ? Color.BLACK: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, Color.WHITE).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
-
-        // table top info
-        String tableTopInfoText = (hdrBgColor == Color.WHITE) ? "" : new Generex("(Transaction|Nature of Transaction|Transaction Type): (Purchase|Sale)").random();
-        float tableTopInfoPosX = leftPageMargin;
-        float tableTopInfoPosY = billAddrCont.getBoundingBox().getPosY() - billAddrCont.getBoundingBox().getHeight() - 15;
-
-        SimpleTextBox tableTopInfoBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopInfoPosX, tableTopInfoPosY, tableTopInfoText);
-        tableTopInfoBox.build(contentStream, writer);
-
-        // table top horizontal line, will be built after verticalTableItems
-        float x1 = leftPageMargin; float y1 = tableTopInfoBox.getBoundingBox().getPosY() - tableTopInfoBox.getBoundingBox().getHeight() - 2;
-        float x2 = pageWidth-rightPageMargin; float y2 = y1;
-        HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(x1, y1, x2, y2, lineStrokeColor);
-
         ////////////////////////////////////      Building Table      ////////////////////////////////////
+
         // check if cur should be included in table amt items
         String amtSuffix = "";
         if (genProb.get("currency_in_table_items")) {
@@ -336,10 +323,27 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Building Header Item labels, table values and footer labels list
         float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
-        ProductTable pt = new ProductTable(pc, amtSuffix, tableWidth);
+        ProductTable pt = new ProductTable(pc, amtSuffix, model.getLang(), tableWidth);
         List<String> tableHeaders = pt.getTableHeaders();
         float[] configRow = pt.getConfigRow();
         Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
+
+        // table header text colors
+        Color hdrTextColor = genProb.get("table_hdr_black_text") ? black: white; // hdrTextColor black (predominantly) or white
+        Color hdrBgColor = (hdrTextColor == white) ? black: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, white).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
+
+        // table top info
+        String tableTopInfoText = (hdrBgColor == white) ? "" : pt.getTableTopInfo();
+        float tableTopInfoPosX = leftPageMargin;
+        float tableTopInfoPosY = billAddrCont.getBoundingBox().getPosY() - billAddrCont.getBoundingBox().getHeight() - 15;
+
+        SimpleTextBox tableTopInfoBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopInfoPosX, tableTopInfoPosY, tableTopInfoText);
+        tableTopInfoBox.build(contentStream, writer);
+
+        // table top horizontal line, will be built after verticalTableItems
+        float x1 = leftPageMargin; float y1 = tableTopInfoBox.getBoundingBox().getPosY() - tableTopInfoBox.getBoundingBox().getHeight() - 2;
+        float x2 = pageWidth-rightPageMargin; float y2 = y1;
+        HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(x1, y1, x2, y2, lineStrokeColor);
 
         // table item list head
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
@@ -357,7 +361,7 @@ public class AmazonLayout implements InvoiceLayout {
         VerticalContainer verticalTableItems = new VerticalContainer(leftPageMargin, tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2, 600);
         verticalTableItems.addElement(row1);
         verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
 
         new BorderBox(hdrBgColor, hdrBgColor, 0,
                       leftPageMargin, tableTopInfoPosY - tableTopInfoBox.getBoundingBox().getHeight() - 2 - row1.getBoundingBox().getHeight(),
@@ -368,8 +372,8 @@ public class AmazonLayout implements InvoiceLayout {
         Color cellTextColor; Color cellBgColor;
         for(int w=0; w<pc.getProducts().size(); w++) {
             Product randomProduct = pc.getProducts().get(w);
-            cellTextColor = Color.BLACK;
-            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? Color.LIGHT_GRAY: Color.WHITE;
+            cellTextColor = black;
+            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? Color.LIGHT_GRAY: white;
             quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
             snNum = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Integer.toString(w + 1);
 
@@ -420,17 +424,17 @@ public class AmazonLayout implements InvoiceLayout {
             }
             modelAnnot.getItems().add(randomItem);
 
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(productLine);
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
         }
 
         verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
-        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
         float tableItemsHeight = verticalTableItems.getBoundingBox().getHeight();
 
         verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-        verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
         verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
 
         if (genProb.get("table_footer_multi_row")) {
@@ -466,9 +470,9 @@ public class AmazonLayout implements InvoiceLayout {
             verticalTableItems.addElement(titleTotalInvoice);
 
             verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
 
             // Footer Numerical formatted values for final total amount, tax and discount
             TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
@@ -487,15 +491,15 @@ public class AmazonLayout implements InvoiceLayout {
             }
             verticalTableItems.addElement(totalInvoice1);
 
-            verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-            verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
         }
 
         // Add registered address information
         if (genProb.get("registered_address_info")) {
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
 
             String addressFooterText = String.format("Registered Address for %s, %s, %s, %s, %s, %s",
                                                      company.getName(),
@@ -507,7 +511,7 @@ public class AmazonLayout implements InvoiceLayout {
             SimpleTextBox addressFooter = new SimpleTextBox(fontN, 10, 0, 0, addressFooterText);
             addressFooter.setWidth(500);
             verticalTableItems.addElement(addressFooter);
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
 
             modelAnnot.getVendor().setVendorName(company.getName());
@@ -516,7 +520,7 @@ public class AmazonLayout implements InvoiceLayout {
         }
         else if (genProb.get("total_in_words") & !genProb.get("registered_address_info")) {
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-            verticalTableItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
 
             String totalInWordsText = HelperCommon.spellout_number(
                     pc.getTotalWithTax(),
@@ -527,7 +531,7 @@ public class AmazonLayout implements InvoiceLayout {
             SimpleTextBox totalInWordsFooter = new SimpleTextBox(fontN, 10, 0, 0, totalInWordsText);
             totalInWordsFooter.setWidth(500);
             verticalTableItems.addElement(totalInWordsFooter);
-            verticalTableItems.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
             modelAnnot.getTotal().setCurrency(cur);
         }
@@ -636,7 +640,7 @@ public class AmazonLayout implements InvoiceLayout {
             verticalFooterCont.addElement(new SimpleTextBox(fontB, 9, 0, 0, footerLine1));
             verticalFooterCont.addElement(new SimpleTextBox(fontB, 9, 0, 0, footerLine2));
             verticalFooterCont.addElement(new SimpleTextBox(fontB, 9, 0, 0, footerLine3));
-            verticalFooterCont.addElement(new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, 0, 0, barCodeNum));
+            verticalFooterCont.addElement(new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, 0, 0, barcodeNum));
 
             if (genProb.get("footer_info_center")) {
                 verticalFooterCont.alignElements("CENTER", verticalFooterCont.getBoundingBox().getWidth());
