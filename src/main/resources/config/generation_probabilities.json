@@ -30,7 +30,7 @@
       "payment_branch_name": 40,
       "payment_routing_number": 40,
       "payment_swift_number": 40,
-      "vendor_payment_tax_number": 20,
+      "payment_vendor_tax_number": 20,
       "footer_info": 85,
       "footer_info_center": 30,
       "barcode_bottom": 50,
@@ -68,7 +68,7 @@
       "payment_branch_name": 40,
       "payment_routing_number": 40,
       "payment_swift_number": 40,
-      "vendor_payment_tax_number": 20,
+      "payment_vendor_tax_number": 20,
       "vendor_tax_number_bottom": 65,
       "signature_bottom": 70,
       "signature_bottom_left": 25,
@@ -82,9 +82,16 @@
     "layout": "Cdiscount",
     "probability": {
       "line_stroke_black": 96,
+      "payment_address": 45,
       "vendor_address_phone_fax": 30,
       "vendor_address_tax_number": 85,
       "addresses_bordered": 80,
+      "payment_address": 40,
+      "payment_account_number": 40,
+      "payment_branch_name": 40,
+      "payment_routing_number": 40,
+      "payment_swift_number": 40,
+      "payment_vendor_tax_number": 20,
       "switch_bill_ship_addresses": 10,
       "bill_address_tax_number": 50,
       "bill_address_phone_fax": 30,
@@ -93,7 +100,11 @@
       "currency_in_table_items": 60,
       "table_center_align_items": 40,
       "signature_bottom": 70,
-      "stamp_bottom": 55
+      "signature_bottom_left": 25,
+      "stamp_bottom": 55,
+      "stamp_bottom_elongated": 30,
+      "logo_watermark": 15,
+      "confidential_watermark": 3
     }
   },
   {

@@ -466,7 +466,7 @@ public class BDmobilierLayout implements InvoiceLayout {
                 modelAnnot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
             }
             // Vendor TAX number bottom added randomly if vendor_tax_number_top_right is NOT present
-            if (genProb.get("vendor_payment_tax_number") && !genProb.get("vendor_tax_number_top_right")) {
+            if (genProb.get("payment_vendor_tax_number") && !genProb.get("vendor_tax_number_top_right")) {
                 paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue(),"SVAT"));
                 modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
             }

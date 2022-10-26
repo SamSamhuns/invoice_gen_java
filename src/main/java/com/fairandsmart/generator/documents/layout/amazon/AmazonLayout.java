@@ -584,7 +584,7 @@ public class AmazonLayout implements InvoiceLayout {
                 modelAnnot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
             }
             // Vendor TAX number bottom added randomly if vendor_tax_number_top is NOT present
-            if (genProb.get("vendor_payment_tax_number") && !genProb.get("vendor_tax_number_top")) {
+            if (genProb.get("payment_vendor_tax_number") && !genProb.get("vendor_tax_number_top")) {
                 paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue(),"SVAT"));
                 modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
             }
@@ -701,7 +701,7 @@ public class AmazonLayout implements InvoiceLayout {
                 stampHeight = stampHeight - 10;
             }
             HelperImage.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
-                                               stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
+                                             stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
         }
         // if no signature and no stamp, then add a footer note
         else if (!genProb.get("signature_bottom")) {
