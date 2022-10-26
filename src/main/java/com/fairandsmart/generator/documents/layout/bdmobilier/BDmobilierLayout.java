@@ -317,7 +317,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Building Header Item labels, table values and footer labels list
         float tableWidth = pageWidth - rightPageMargin - ttx1;
         int maxHdrNum = 8;
-        ProductTable pt = new ProductTable(pc, amtSuffix, tableWidth, maxHdrNum);
+        ProductTable pt = new ProductTable(pc, amtSuffix, model.getLang(), tableWidth, maxHdrNum);
         List<String> tableHeaders = pt.getTableHeaders();
         float[] configRow = pt.getConfigRow();
         Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
