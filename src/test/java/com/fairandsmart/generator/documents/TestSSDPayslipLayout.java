@@ -52,7 +52,7 @@ public void test() throws Exception {
         List<String> artefact_dirs = Arrays.asList(
                 "target/SSDPayslip/pdf",
                 "target/SSDPayslip/xml",
-                "target/SSDPayslip/tiff",
+                "target/SSDPayslip/img",
                 "target/SSDPayslip/xmlEval");
 
         for (String dirs : artefact_dirs) {
@@ -69,7 +69,7 @@ public void test() throws Exception {
         for(int i=1; i<=ntests; i++) {
                 Path pdf = Paths.get("target/SSDPayslip/pdf/payslip-"+ i + ".pdf");
                 Path xml = Paths.get("target/SSDPayslip/xml/payslip-"+ i + ".xml");
-                Path img = Paths.get("target/SSDPayslip/tiff/payslip-"+ i + ".tiff");
+                Path img = Paths.get("target/SSDPayslip/img/payslip-"+ i + ".jpg");
                 Path xmlForEval = Paths.get("target/SSDPayslip/xmlEval/payslip-"+ i + ".xml");
 
                 GenerationContext ctx = GenerationContext.generate();

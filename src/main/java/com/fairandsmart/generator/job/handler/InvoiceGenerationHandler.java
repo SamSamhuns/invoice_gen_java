@@ -127,7 +127,7 @@ public class InvoiceGenerationHandler implements JobHandler {
                 for ( int i=start; i<stop; i++) {
                     Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".pdf");
                     Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".xml");
-                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".tiff");
+                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".jpg");
                     Path json = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".json");
                     //TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();

@@ -83,7 +83,7 @@ public void generateUsingRoundRobinOnAllLayout() throws Exception {
         for(int i=1; i<=ntests; i++) {
                 Path pdf = Paths.get("target/generated/basic-"+ i + ".pdf");
                 Path xml = Paths.get("target/generated/basic-"+ i + ".xml");
-                Path img = Paths.get("target/generated/basic-"+ i + ".tiff");
+                Path img = Paths.get("target/generated/basic-"+ i + ".jpg");
                 Path json = Paths.get("target/generated/basic-"+ i + ".json");
 
                 GenerationContext ctx = GenerationContext.generate();

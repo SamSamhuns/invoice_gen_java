@@ -53,7 +53,7 @@ public void test() throws Exception {
         List<String> artefact_dirs = Arrays.asList(
                 "target/generic/pdf",
                 "target/generic/xml",
-                "target/generic/tiff",
+                "target/generic/img",
                 "target/generic/json",
                 "target/generic/xmlEval");
 
@@ -71,7 +71,7 @@ public void test() throws Exception {
         for(int i=1; i<=ntests; i++) {
                 Path pdf = Paths.get("target/generic/pdf/gen-"+ i + ".pdf");
                 Path xml = Paths.get("target/generic/xml/gen-"+ i + ".xml");
-                Path img = Paths.get("target/generic/tiff/gen-"+ i + ".tiff");
+                Path img = Paths.get("target/generic/img/gen-"+ i + ".jpg");
                 Path json = Paths.get("target/generic/json/gen-"+ i + ".json");
                 Path xmlEval = Paths.get("target/generic/xmlEval/gen-"+ i + ".xml");
                 try {

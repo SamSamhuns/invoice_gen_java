@@ -103,7 +103,7 @@ public class TestProductBox implements InvoiceLayout {
         for (int i = 0; i < ntests; i++) {
             Path pdf = Paths.get("target/productbox/productbox-" + i + ".pdf");
             Path xml = Paths.get("target/productbox/productbox-" + i + ".xml");
-            Path img = Paths.get("target/productbox/productbox-" + i + ".tiff");
+            Path img = Paths.get("target/productbox/productbox-" + i + ".jpg");
             Path json = Paths.get("target/productbox/productbox-" + i + ".json");
 
             GenerationContext ctx = GenerationContext.generate();

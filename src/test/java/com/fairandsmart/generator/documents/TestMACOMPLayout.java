@@ -54,7 +54,7 @@ public void test() throws Exception {
         List<String> artefact_dirs = Arrays.asList(
                 "target/macomp/pdf",
                 "target/macomp/xml",
-                "target/macomp/tiff",
+                "target/macomp/img",
                 "target/macomp/json");
 
         for (String dirs : artefact_dirs) {
@@ -71,7 +71,7 @@ public void test() throws Exception {
         for(int i=1; i<=ntests; i++) {
                 Path pdf = Paths.get("target/macomp/pdf/macomp-"+ i + ".pdf");
                 Path xml = Paths.get("target/macomp/xml/macomp-"+ i + ".xml");
-                Path img = Paths.get("target/macomp/tiff/macomp-"+ i + ".tiff");
+                Path img = Paths.get("target/macomp/img/macomp-"+ i + ".jpg");
                 Path json = Paths.get("target/macomp/json/macomp-"+ i + ".json");
 
                 GenerationContext ctx = GenerationContext.generate();

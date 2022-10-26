@@ -125,7 +125,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
         Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
         Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: themeColor;
-        Color grayish = HelperCommon.getRandomColor(3);
+        Color grayish = HelperCommon.getRandomGrayishColor();
 
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());

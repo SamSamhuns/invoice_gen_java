@@ -114,7 +114,7 @@ public class TestVerticalContainer implements InvoiceLayout {
 
         Path pdf = Paths.get("target/textvertical/textvertical.pdf");
         Path xml = Paths.get("target/textvertical/textvertical.xml");
-        Path img = Paths.get("target/textvertical/textvertical.tiff");
+        Path img = Paths.get("target/textvertical/textvertical.jpg");
         Path json = Paths.get("target/textvertical/textvertical.json");
 
         GenerationContext ctx = GenerationContext.generate();

@@ -185,7 +185,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
 
         Path pdf = Paths.get("target/textbox/textbox.pdf");
         Path xml = Paths.get("target/textbox/textbox.xml");
-        Path img = Paths.get("target/textbox/textbox.tiff");
+        Path img = Paths.get("target/textbox/textbox.jpg");
         Path json = Paths.get("target/textbox/textbox.json");
 
         GenerationContext ctx = GenerationContext.generate();

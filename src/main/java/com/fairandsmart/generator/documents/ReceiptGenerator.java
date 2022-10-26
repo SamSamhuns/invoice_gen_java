@@ -114,7 +114,7 @@ public class ReceiptGenerator {
         layout.builtSSD(model, document, xmlout,xmloutEval);
         document.save(pdf.toFile());
 
-        //Export as TIFF
+        //Export as img
         //PDFRenderer pdfRenderer = new PDFRenderer(document);
         //BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
         /////
@@ -123,7 +123,7 @@ public class ReceiptGenerator {
         page.setCropBox(new PDRectangle(0f, 100f, 400f, 1000f)); // Here you draw a rectangle around the area you want to specify
         PDFRenderer renderer = new PDFRenderer(document);
         BufferedImage image = renderer.renderImageWithDPI(0, 150);
-        ImageIO.write(image, "TIFF", new File(img.toString()));
+        ImageIO.write(image, "img", new File(img.toString()));
         document.close();
 
         /////
@@ -160,7 +160,7 @@ public class ReceiptGenerator {
             Path pdf = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".pdf");
             Path xml = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
             Path xmlForEval = Paths.get("target/generated/" + args[0] + "/basic-2"+ i + ".xml");
-            Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".tiff");
+            Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".jpg");
             GenerationContext ctx = GenerationContext.generate();
             ReceiptModel model = new ReceiptModel.Generator().generate(ctx);
             ReceiptGenerator.getInstance().generateReceipt(new com.fairandsmart.generator.documents.layout.receipt.GenericReceiptLayout(), model, pdf, xml, img,xmlForEval);

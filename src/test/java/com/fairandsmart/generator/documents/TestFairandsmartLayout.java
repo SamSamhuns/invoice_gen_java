@@ -61,7 +61,7 @@ public void test() throws Exception {
 
                 Path pdf = Paths.get("target/fairandsmart/fairandsmart" + i + ".pdf");
                 Path xml = Paths.get("target/fairandsmart/fairandsmart" + i + ".xml");
-                Path img = Paths.get("target/fairandsmart/fairandsmart" + i + ".tiff");
+                Path img = Paths.get("target/fairandsmart/fairandsmart" + i + ".jpg");
                 Path json = Paths.get("target/fairandsmart/fairandsmart" + i + ".json");
 
                 GenerationContext ctx = GenerationContext.generate();

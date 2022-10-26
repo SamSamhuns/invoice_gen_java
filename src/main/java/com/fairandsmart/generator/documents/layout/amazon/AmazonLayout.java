@@ -127,7 +127,7 @@ public class AmazonLayout implements InvoiceLayout {
         // colors
         Color white = Color.WHITE;
         Color black = Color.BLACK;
-        Color grayish = HelperCommon.getRandomColor(3);
+        Color grayish = HelperCommon.getRandomGrayishColor();
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
         themeRGB = themeRGB.stream().map(v -> Math.min((int)(v*1.9f), 255)).collect(Collectors.toList()); // lighten colors
         Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));

@@ -335,7 +335,9 @@ public class PaymentInfo {
 
             labelsPaymentType.put("Payment type", "en");
             labelsPaymentType.put("Payment means", "en");
-            labelsPaymentType.put("Payed through", "en");
+            labelsPaymentType.put("Pay through", "en");
+            labelsPaymentType.put("Pay with", "en");
+            labelsPaymentType.put("Pay by", "en");
         }
         {
             valuesPaymentType.put("Paypal ", "fr");

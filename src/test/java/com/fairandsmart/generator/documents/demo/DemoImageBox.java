@@ -92,7 +92,7 @@ public class DemoImageBox implements InvoiceLayout {
 
         Path pdf = Paths.get("target/demoimgbox/demoimgbox.pdf");
         Path xml = Paths.get("target/demoimgbox/demoimgbox.xml");
-        Path img = Paths.get("target/demoimgbox/demoimgbox.tiff");
+        Path img = Paths.get("target/demoimgbox/demoimgbox.jpg");
         Path json = Paths.get("target/demoimgbox/demoimgbox.json");
 
         GenerationContext ctx = GenerationContext.generate();

@@ -139,7 +139,7 @@ public class PayslipGenerationHandler implements JobHandler {
                     Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslip") + "-" + i + ".xml");
                     Path xmlEval = null;
                     //Path xmlEval = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslipEval") + "-" + i + ".xml");
-                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslip") + "-" + i + ".tiff");
+                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslip") + "-" + i + ".jpg");
                     //TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();
                     PayslipModel model = new PayslipModel.Generator().generate(ctx);

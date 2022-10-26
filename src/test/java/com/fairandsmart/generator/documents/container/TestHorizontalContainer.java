@@ -113,7 +113,7 @@ public class TestHorizontalContainer implements InvoiceLayout {
 
         Path pdf = Paths.get("target/texthorizontal/texthorizontal.pdf");
         Path xml = Paths.get("target/texthorizontal/texthorizontal.xml");
-        Path img = Paths.get("target/texthorizontal/texthorizontal.tiff");
+        Path img = Paths.get("target/texthorizontal/texthorizontal.jpg");
         Path json = Paths.get("target/texthorizontal/texthorizontal.json");
 
         GenerationContext ctx = GenerationContext.generate();

@@ -104,7 +104,7 @@ public class DemoTextBox implements InvoiceLayout {
 
         Path pdf = Paths.get("target/demotextbox/demotextbox.pdf");
         Path xml = Paths.get("target/demotextbox/demotextbox.xml");
-        Path img = Paths.get("target/demotextbox/demotextbox.tiff");
+        Path img = Paths.get("target/demotextbox/demotextbox.jpg");
         Path json = Paths.get("target/demotextbox/demotextbox.json");
 
         GenerationContext ctx = GenerationContext.generate();

@@ -112,7 +112,7 @@ public class PayslipGenerator {
         layout.builtSSD(model, document, xmlout,xmloutEval);
         document.save(pdf.toFile());
 
-        //Export as TIFF
+        //Export as img
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
         ImageIOUtil.writeImage(bim, img.toString(), 300);
@@ -148,7 +148,7 @@ public class PayslipGenerator {
             Path pdf = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".pdf");
             Path xml = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
             Path xmlEval = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
-            Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".tiff");
+            Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".jpg");
             GenerationContext ctx = GenerationContext.generate();
             PayslipModel model = new PayslipModel.Generator().generate(ctx);
             PayslipGenerator.getInstance().generatePayslip(new com.fairandsmart.generator.documents.layout.payslip.GenericPayslipLayout(), model, pdf, xml, img,xmlEval);

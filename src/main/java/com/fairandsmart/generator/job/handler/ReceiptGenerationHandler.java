@@ -137,7 +137,7 @@ public class ReceiptGenerationHandler implements JobHandler {
                     Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receipt") + "-" + i + ".xml");
                     //Path xmlEval = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receiptEval") + "-" + i + ".xml");
                     Path xmlEval = null;
-                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receipt") + "-" + i + ".tiff");
+                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receipt") + "-" + i + ".jpg");
                     //TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();
                     ReceiptModel model = new ReceiptModel.Generator().generate(ctx);

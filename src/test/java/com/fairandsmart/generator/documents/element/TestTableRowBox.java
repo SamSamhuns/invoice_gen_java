@@ -150,7 +150,7 @@ public class TestTableRowBox implements InvoiceLayout {
 
         Path pdf = Paths.get("target/tablerow/tablerow.pdf");
         Path xml = Paths.get("target/tablerow/tablerow.xml");
-        Path img = Paths.get("target/tablerow/tablerow.tiff");
+        Path img = Paths.get("target/tablerow/tablerow.jpg");
         Path json = Paths.get("target/tablerow/tablerow.json");
 
         GenerationContext ctx = GenerationContext.generate();

@@ -54,7 +54,7 @@ public void test() throws Exception {
         List<String> artefact_dirs = Arrays.asList(
                 "target/SSDInvoice/pdf",
                 "target/SSDInvoice/xml",
-                "target/SSDInvoice/tiff",
+                "target/SSDInvoice/img",
                 "target/SSDInvoice/json",
                 "target/SSDInvoice/xmlEval");
 
@@ -72,7 +72,7 @@ public void test() throws Exception {
         for (int i=1; i<=ntests; i++) {
                 Path pdf = Paths.get("target/SSDInvoice/pdf/invoice-"+ i + ".pdf");
                 Path xml = Paths.get("target/SSDInvoice/xml/invoice-"+ i + ".xml");
-                Path img = Paths.get("target/SSDInvoice/tiff/invoice-"+ i + ".tiff");
+                Path img = Paths.get("target/SSDInvoice/img/invoice-"+ i + ".jpg");
                 Path json = Paths.get("target/SSDInvoice/json/invoice-"+ i + ".json");
                 Path xmlEval = Paths.get("target/SSDInvoice/xmlEval/invoice-"+ i + ".xml");
                 try {

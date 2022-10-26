@@ -142,22 +142,27 @@ public class HelperCommon extends Helper {
 
     /* ////////////////////////////  Colors  ////////////////////////////*/
 
+    public static Color getRandomGrayishColor() throws Exception {
+        final List<Color> colorsList = Arrays.asList(
+            new Color(220,220,220), // gainsboro
+            new Color(211,211,211), // lightgray
+            new Color(192,192,192), // silver
+            new Color(169,169,169)  // darkgray
+        );
+        return colorsList.get(rnd.nextInt(colorsList.size()));
+    }
+
     public static Color getRandomColor(int cSize) throws Exception {
-          final List<Color> colorsList = Arrays.asList(
-                Color.GRAY,
-                Color.LIGHT_GRAY,
-                Color.DARK_GRAY,
-                Color.WHITE,
-                Color.ORANGE,
-                Color.YELLOW,
-                Color.BLACK
-                // Color.RED,
-                // Color.GREEN,
-                // Color.BLUE,
-                // Color.MAGENTA,
-                // Color.CYAN,
-                );
-          return colorsList.get(rnd.nextInt(Math.min(cSize, colorsList.size())));
+        final List<Color> colorsList = Arrays.asList(
+              Color.GRAY,
+              Color.LIGHT_GRAY,
+              Color.DARK_GRAY,
+              Color.WHITE,
+              Color.ORANGE,
+              Color.YELLOW,
+              Color.BLACK
+              );
+        return colorsList.get(rnd.nextInt(Math.min(cSize, colorsList.size())));
     }
 
     /**

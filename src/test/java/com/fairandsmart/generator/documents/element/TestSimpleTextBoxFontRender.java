@@ -150,7 +150,7 @@ public class TestSimpleTextBoxFontRender implements InvoiceLayout {
 
         Path pdf = Paths.get("target/textbox-font/textbox.pdf");
         Path xml = Paths.get("target/textbox-font/textbox.xml");
-        Path img = Paths.get("target/textbox-font/textbox.tiff");
+        Path img = Paths.get("target/textbox-font/textbox.jpg");
         Path json = Paths.get("target/textbox-font/textbox.json");
 
         GenerationContext ctx = GenerationContext.generate();
