@@ -132,7 +132,8 @@
   {
     "layout": "Nature&Decouvertes",
     "probability": {
-      "line_stroke_black": 96
+      "line_stroke_black": 96,
+      "logo_top": 80
     }
   },
   {
