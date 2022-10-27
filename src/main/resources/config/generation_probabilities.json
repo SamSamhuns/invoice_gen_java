@@ -133,7 +133,28 @@
     "layout": "Nature&Decouvertes",
     "probability": {
       "line_stroke_black": 96,
-      "logo_top": 80
+      "logo_top": 80,
+      "vendor_address_top": 65,
+      "vendor_address_phone_fax": 30,
+      "vendor_address_tax_number": 85,
+      "addresses_bordered": 80,
+      "payment_address": 40,
+      "payment_account_number": 40,
+      "payment_branch_name": 40,
+      "payment_routing_number": 40,
+      "payment_swift_number": 40,
+      "payment_vendor_tax_number": 20,
+      "switch_bill_ship_addresses": 20,
+      "bill_address_tax_number": 50,
+      "bill_address_phone_fax": 30,
+      "ship_address_phone_fax": 30,
+      "currency_top": 50,
+      "invoice_number_top": 85,
+      "purchase_order_number_top": 70,
+      "table_hdr_black_text": 90,
+      "currency_in_table_headers": 60,
+      "currency_in_table_items": 60,
+      "table_center_align_items": 40
     }
   },
   {
