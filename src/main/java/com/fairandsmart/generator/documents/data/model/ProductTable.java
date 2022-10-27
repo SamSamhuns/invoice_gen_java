@@ -115,6 +115,7 @@ public class ProductTable {
     private final Random rnd = new Random();
     private static Collection<String> numericalHdrs = Arrays.asList("ItemRate", "Disc", "Tax", "SubTotal", "Total");
     // This list also order determins which fields to display in table
+    // candTableSize allows to further filter the ppssible values, lower candTableSize means table with fewer cols
     private static final List<List<String>> candidateTableHeaders = Arrays.asList(
         Arrays.asList("Item",     "Tax",      "Total"),
         Arrays.asList("SN",       "Item",     "Tax",      "Total"),
@@ -198,16 +199,16 @@ public class ProductTable {
 
         // Building Header Item labels, table values and footer labels list
         Map<String, ColItem> itemColMap = new HashMap<>();
-        //      Hdr Identifier          Width-Weight  Column Label Head         Col Label Footer                     Col Value Footer
-        itemColMap.put("SN",       new ColItem(1f,    pc.getsnHead(),           "",                                  ""));
-        itemColMap.put("Qty",      new ColItem(1f,    pc.getQtyHead(),          "",                                  ""));
-        itemColMap.put("ItemCode", new ColItem(1f,    pc.getCodeHead(),         "",                                  ""));
-        itemColMap.put("Item",     new ColItem(3.5f,  pc.getNameHead(),         "",                                  ""));
+        //      Hdr Identifier          Width-weight  Column Label Head         Col Label Footer                     Col Value Footer
+        itemColMap.put("SN",       new ColItem(1.00f, pc.getsnHead(),           "",                                  ""));
+        itemColMap.put("Qty",      new ColItem(1.00f, pc.getQtyHead(),          "",                                  ""));
+        itemColMap.put("ItemCode", new ColItem(1.10f, pc.getCodeHead(),         "",                                  ""));
+        itemColMap.put("Item",     new ColItem(3.50f, pc.getNameHead(),         "",                                  ""));
         itemColMap.put("ItemRate", new ColItem(1.55f, pc.getUPHead(),           pc.getTotalHead(),                   pc.getFmtTotal()+amtSuffix));
         itemColMap.put("Disc",     new ColItem(1.55f, pc.getDiscountHead(),     pc.getDiscountTotalHead(),           pc.getFmtTotalDiscount()+amtSuffix));
-        itemColMap.put("DiscRate", new ColItem(1.55f, pc.getDiscountRateHead(), pc.getDiscountRateTotalHead(),       pc.getFmtTotalDiscountRate()));
+        itemColMap.put("DiscRate", new ColItem(1.50f, pc.getDiscountRateHead(), pc.getDiscountRateTotalHead(),       pc.getFmtTotalDiscountRate()));
         itemColMap.put("Tax",      new ColItem(1.55f, pc.getTaxHead(),          pc.getTaxTotalHead(),                pc.getFmtTotalTax()+amtSuffix));
-        itemColMap.put("TaxRate",  new ColItem(1.55f, pc.getTaxRateHead(),      pc.getTaxRateTotalHead(),            pc.getFmtTotalTaxRate()));
+        itemColMap.put("TaxRate",  new ColItem(1.50f, pc.getTaxRateHead(),      pc.getTaxRateTotalHead(),            pc.getFmtTotalTaxRate()));
         itemColMap.put("SubTotal", new ColItem(1.55f, pc.getTotalHead(),        pc.getTotalHead(),                   pc.getFmtTotalWithDiscount()+amtSuffix));
         itemColMap.put("Total",    new ColItem(1.55f, pc.getWithTaxTotalHead(), pc.getWithTaxAndDiscountTotalHead(), pc.getFmtTotalWithTaxAndDiscount()+amtSuffix));
 
@@ -228,8 +229,6 @@ public class ProductTable {
             configRowWidths[i] = colWidth;
         }
 
-        // Values must add to tableWidth
-        assert (curWidth <= tableWidth);
         // if curWidth < tableWidth, increment size of each col till curWidth >= tableWidth
         while (curWidth < tableWidth) {
             for (int i=0; i<configRowWidths.length; i++) {
