@@ -43,11 +43,13 @@ import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.Company;
+import com.fairandsmart.generator.documents.data.model.ContactNumber;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
+import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
@@ -263,20 +265,21 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Billing Address
         Address bAddr = client.getBillingAddress();
+        ContactNumber bCN = client.getBillingContactNumber();;
         VerticalContainer billAddrCont = new VerticalContainer(billX, billY, 250);
         billAddrCont.addElement(new SimpleTextBox(fontNB, 9, 0, 0, client.getBillingHead(), "BH" ));
         billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getBillingName(), "BN" ));
         billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bAddr.getLine1(), "BA" ));
         billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bAddr.getZip()+" "+bAddr.getCity(), "BA" ));
-        if (genProb.get("bill_address_tax_number")) {
+        if (genProb.get("bill_address_phone_fax")) {
+            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getPhoneLabel()+": "+bCN.getPhoneValue(), "BC"));
+            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getFaxLabel()+": "+bCN.getFaxValue(), "BF"));
+        }
+        else if (genProb.get("bill_address_tax_number")) {
             billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"BT"));
             modelAnnot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
         }
-        else if (genProb.get("bill_address_phone_fax")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getBillingContactNumber().getPhoneLabel()+": "+client.getBillingContactNumber().getPhoneValue(), "BC"));
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getBillingContactNumber().getFaxLabel()+": "+client.getBillingContactNumber().getFaxValue(), "BF"));
-        }
-        if (genProb.get("addresses_bordered") & client.getBillingHead().length() > 0) {
+        if (genProb.get("addresses_bordered") && client.getBillingHead().length() > 0) {
             billAddrCont.setBorderColor(lineStrokeColor);
             billAddrCont.setBorderThickness(0.5f);
         }
@@ -286,26 +289,28 @@ public class AmazonLayout implements InvoiceLayout {
         billAddrCont.build(contentStream, writer);
 
         // Shipping Address
+        Address sAddr = client.getShippingAddress();
+        ContactNumber sCN = client.getShippingContactNumber();
         VerticalContainer shipAddrCont = new VerticalContainer(shipX, shipY, 250);
         shipAddrCont.addElement(new SimpleTextBox(fontNB, 9, 0, 0, client.getShippingHead(), "SHH" ));
         shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingName(), "SHN" ));
-        shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingAddress().getLine1(), "SHA" ));
-        shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity(), "SHA" ));
-        if (genProb.get("bill_address_phone_fax") & genProb.get("ship_address_phone_fax")) {
-            String connec = (client.getShippingContactNumber().getPhoneLabel().length() > 0) ? ": ": "";
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingContactNumber().getPhoneLabel()+connec+client.getShippingContactNumber().getPhoneValue(), "BC"));
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingContactNumber().getFaxLabel()+connec+client.getShippingContactNumber().getFaxValue(), "BF"));
+        shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sAddr.getLine1(), "SHA" ));
+        shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sAddr.getZip()+" "+sAddr.getCity(), "SHA" ));
+        if (genProb.get("bill_address_phone_fax") && genProb.get("ship_address_phone_fax")) {
+            String connec = (sCN.getPhoneLabel().length() > 0) ? ": ": "";
+            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getPhoneLabel()+connec+sCN.getPhoneValue(), "BC"));
+            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getFaxLabel()+connec+sCN.getFaxValue(), "BF"));
         }
-        if (genProb.get("addresses_bordered") & client.getShippingHead().length() > 0) {
+        if (genProb.get("addresses_bordered") && client.getShippingHead().length() > 0) {
             shipAddrCont.setBorderColor(lineStrokeColor);
             shipAddrCont.setBorderThickness(0.5f);
         }
         // add annotations for shipping address if these fields are not empty
         if (client.getShippingName().length() > 0) {
             modelAnnot.getShipto().setShiptoName(client.getShippingName());
-            if (client.getShippingContactNumber().getPhoneLabel().length() > 0) {
-                modelAnnot.getShipto().setShiptoPOBox(client.getShippingAddress().getZip());
-                modelAnnot.getShipto().setShiptoAddr(client.getShippingAddress().getLine1()+" "+client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity());
+            if (sCN.getPhoneLabel().length() > 0) {
+                modelAnnot.getShipto().setShiptoPOBox(sAddr.getZip());
+                modelAnnot.getShipto().setShiptoAddr(sAddr.getLine1()+" "+sAddr.getZip()+" "+sAddr.getCity());
             }
         }
         shipAddrCont.build(contentStream, writer);
@@ -520,7 +525,7 @@ public class AmazonLayout implements InvoiceLayout {
             modelAnnot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity()+" "+company.getAddress().getCountry());
             modelAnnot.getVendor().setVendorPOBox(company.getAddress().getZip());
         }
-        else if (genProb.get("total_in_words") & !genProb.get("registered_address_info")) {
+        else if (genProb.get("total_in_words") && !genProb.get("registered_address_info")) {
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
 
@@ -562,32 +567,61 @@ public class AmazonLayout implements InvoiceLayout {
             float paymentAddrYPos = verticalTableItems.getBBox().getPosY() - verticalTableItems.getBBox().getHeight() - 10;
 
             VerticalContainer paymentAddrCont = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
-            paymentAddrCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, payment.getAddressHeader()+":", "PH"));
+
+            paymentAddrCont.addElement(new SimpleTextBox(fontB,10,0,0, payment.getAddressHeader(), "PH"));
+
+            HorizontalContainer bankName = new HorizontalContainer(0,0);
+            bankName.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelBankName()+": ", "PBN"));
+            bankName.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueBankName(), "PBN"));
+            paymentAddrCont.addElement(bankName);
             modelAnnot.getPaymentto().setBankName(payment.getValueBankName());
-            paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelBankName()+": "+payment.getValueBankName(), "PBN"));
+
+            HorizontalContainer accountName = new HorizontalContainer(0,0);
+            accountName.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelAccountName()+": ", "PAName"));
+            accountName.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueAccountName(), "PAName"));
+            paymentAddrCont.addElement(accountName);
             modelAnnot.getPaymentto().setAccountName(payment.getValueAccountName());
-            paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelAccountName()+": "+payment.getValueAccountName(), "PAName"));
-            modelAnnot.getPaymentto().setIbanNumber(payment.getValueIBANNumber());
+
             if (genProb.get("payment_account_number")) {
-                paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelAccountNumber()+": "+payment.getValueAccountNumber(), "PANum"));
+                HorizontalContainer accountNumber = new HorizontalContainer(0,0);
+                accountNumber.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelAccountNumber()+": ", "PANum"));
+                accountNumber.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueAccountNumber(), "PANum"));
+                paymentAddrCont.addElement(accountNumber);
                 modelAnnot.getPaymentto().setAccountNumber(payment.getValueAccountNumber());
             }
             if (genProb.get("payment_branch_name")) {
-                paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelBranchName()+": "+payment.getValueBranchName(), "PBName"));
+                HorizontalContainer branchName = new HorizontalContainer(0,0);
+                branchName.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelBranchName()+": ", "PBName"));
+                branchName.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueBranchName(), "PBName"));
+                paymentAddrCont.addElement(branchName);
                 modelAnnot.getPaymentto().setBranchAddress(payment.getValueBranchName());
             }
-            paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelIBANNumber()+": "+payment.getValueIBANNumber(), "PBNum"));
+
+            HorizontalContainer ibanNumber = new HorizontalContainer(0,0);
+            ibanNumber.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelIBANNumber()+": ", "PBNum"));
+            ibanNumber.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueIBANNumber(), "PBNum"));
+            paymentAddrCont.addElement(ibanNumber);
+            modelAnnot.getPaymentto().setIbanNumber(payment.getValueIBANNumber());
+
             if (genProb.get("payment_routing_number")) {
-                paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelRoutingNumber()+": "+payment.getValueRoutingNumber(), "PRNum"));
+                HorizontalContainer routingNumber = new HorizontalContainer(0,0);
+                routingNumber.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelRoutingNumber()+": ", "PBNum"));
+                routingNumber.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueRoutingNumber(), "PBNum"));
+                paymentAddrCont.addElement(routingNumber);
                 modelAnnot.getPaymentto().setRoutingNumber(payment.getValueRoutingNumber());
             }
             if (genProb.get("payment_swift_number")) {
-                paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, payment.getLabelSwiftCode()+": "+payment.getValueSwiftCode(), "PSNum"));
+                HorizontalContainer swiftCode = new HorizontalContainer(0,0);
+                swiftCode.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelSwiftCode()+": ", "PSNum"));
+                swiftCode.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueSwiftCode(), "PSNum"));
+                paymentAddrCont.addElement(swiftCode);
                 modelAnnot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
             }
-            // Vendor TAX number bottom added randomly if vendor_tax_number_top is NOT present
             if (genProb.get("payment_vendor_tax_number") && !genProb.get("vendor_tax_number_top")) {
-                paymentAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue(),"SVAT"));
+                HorizontalContainer vatNumber = new HorizontalContainer(0,0);
+                vatNumber.addElement(new SimpleTextBox(fontNB,9,0,0, company.getIdNumbers().getVatLabel()+": ", "SVAT"));
+                vatNumber.addElement(new SimpleTextBox(fontN,9,0,0, company.getIdNumbers().getVatValue(), "SVAT"));
+                paymentAddrCont.addElement(vatNumber);
                 modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
             }
             if (genProb.get("addresses_bordered")) {
@@ -631,7 +665,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         float footerHLineY = 110;
         // Add footer line and info if footer_info to be used and number of items less than 5
-        if (genProb.get("footer_info") & pc.getProducts().size() < 5) {
+        if (genProb.get("footer_info") && pc.getProducts().size() < 5) {
             new HorizontalLineBox(leftPageMargin, footerHLineY, pageWidth-rightPageMargin, footerHLineY, lineStrokeColor).build(contentStream, writer);
 
             VerticalContainer verticalFooterCont = new VerticalContainer(leftPageMargin, footerHLineY-10, 450);
