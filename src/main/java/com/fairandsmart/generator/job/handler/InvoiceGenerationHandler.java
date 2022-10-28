@@ -50,6 +50,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -63,6 +64,7 @@ public class InvoiceGenerationHandler implements JobHandler {
     public static final String PARAM_QTY = "qty";
     public static final String PARAM_START_IDX = "start-idx";
     public static final String PARAM_OUTPUT = "output";
+    private static final Collection<String> SUPPORTED_LAYOUTS = Arrays.asList("Amazon", "BDMobilier", "Cdiscount", "Nature&Decouvertes");
 
     private Long jobId;
     private String root;
@@ -105,7 +107,7 @@ public class InvoiceGenerationHandler implements JobHandler {
         StringBuffer report = new StringBuffer();
         try {
             try {
-                LOGGER.log(Level.INFO, "InvoiceGeneration started");
+                LOGGER.log(Level.INFO, "Invoice Generation started");
                 if ( !params.containsKey(PARAM_QTY) ) {
                     report.append("Missing parameters: " + PARAM_QTY);
                     manager.fail(jobId, report.toString());
@@ -118,17 +120,21 @@ public class InvoiceGenerationHandler implements JobHandler {
                 int stop = start + qty;
                 //TODO Filter layouts according to param
                 List<InvoiceLayout> availableLayouts = layouts.stream().collect(Collectors.toList());
+                // currently filtering acc to SUPPORTED_LAYOUTS variable
+                availableLayouts = layouts.stream().filter(l -> SUPPORTED_LAYOUTS.contains(l.name())).collect(Collectors.toList());
                 LOGGER.log(Level.INFO, "availableLayouts.size() = "+availableLayouts.size());
+
                 if ( availableLayouts.size() == 0 ) {
                     report.append("Unable to find available layouts for this job.");
                     manager.fail(jobId, report.toString());
                     return;
                 }
                 for ( int i=start; i<stop; i++) {
-                    Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".pdf");
-                    Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".xml");
-                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".jpg");
-                    Path json = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + ".json");
+                    String layoutName = availableLayouts.get(i % availableLayouts.size()).name();
+                    Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".pdf");
+                    Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".xml");
+                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".jpg");
+                    Path json = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".json");
                     //TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();
                     InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
