@@ -1,6 +1,19 @@
-## Automatic generator of semi-structured documents (SSDs)
+# Automatic generator of semi-structured documents (SSDs)
 
 Generate semi-structured documents (invoices, payslips, and receipts). This repo is a Java implementation of the two papers mentioned in the acknowledgements.
+
+## Docker (Recommended)
+
+Setup docker in the local system.
+
+```shell
+bash scripts/build_docker.sh
+bash scripts/run_docker.sh -p EXPOSED_HTTP_PORT
+```
+
+The API will be hosted at <http://localhost:9080/api/ws/> that can be accessed with a default username: `admin` and password: `admin`.
+
+## Local build
 
 ### Requirements
 
