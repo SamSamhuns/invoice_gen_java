@@ -202,7 +202,7 @@ public class ProductTable {
         //      Hdr Identifier          Width-weight  Column Label Head         Col Label Footer                     Col Value Footer
         itemColMap.put("SN",       new ColItem(1.00f, pc.getsnHead(),           "",                                  ""));
         itemColMap.put("Qty",      new ColItem(1.00f, pc.getQtyHead(),          "",                                  ""));
-        itemColMap.put("ItemCode", new ColItem(1.10f, pc.getCodeHead(),         "",                                  ""));
+        itemColMap.put("ItemCode", new ColItem(1.09f, pc.getCodeHead(),         "",                                  ""));
         itemColMap.put("Item",     new ColItem(3.50f, pc.getNameHead(),         "",                                  ""));
         itemColMap.put("ItemRate", new ColItem(1.55f, pc.getUPHead(),           pc.getTotalHead(),                   pc.getFmtTotal()+amtSuffix));
         itemColMap.put("Disc",     new ColItem(1.55f, pc.getDiscountHead(),     pc.getDiscountTotalHead(),           pc.getFmtTotalDiscount()+amtSuffix));
@@ -218,7 +218,7 @@ public class ProductTable {
             weightSum += itemColMap.get(tableHeader).getWidthWeight();
         };
         // get base column width based on contents of tableHeaders & total weightSum
-        float baseColWidth = tableWidth / weightSum;
+        float baseColWidth = (float) Math.floor(tableWidth / weightSum);
 
         // building item table column width list
         float[] configRowWidths = new float[tableHeaders.size()];
@@ -230,15 +230,20 @@ public class ProductTable {
         }
 
         // if curWidth < tableWidth, increment size of each col till curWidth >= tableWidth
-        while (curWidth < tableWidth) {
+        if (curWidth < tableWidth) {
+            float diff = tableWidth - curWidth;
+            float addEach = diff/configRowWidths.length;
             for (int i=0; i<configRowWidths.length; i++) {
-                configRowWidths[i] += 1;
-                curWidth += 1;
+                configRowWidths[i] += addEach;
+                curWidth += addEach;
                 if (curWidth >= tableWidth) {
+                    configRowWidths[i] -= addEach;
+                    curWidth -= addEach;
                     break;
                 }
             }
         }
+        assert curWidth <= tableWidth;
         this.tableTopInfo = tableTopInfo;
         this.tableHeaders = tableHeaders;
         this.itemMap = itemColMap;
