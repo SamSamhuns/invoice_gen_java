@@ -135,9 +135,6 @@ public class AmazonLayout implements InvoiceLayout {
         Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
         Color lineStrokeColor = genProb.get("line_stroke_black") ? black: themeColor;
 
-        // always set to false but individually change SimpleTextBox HAlign
-        boolean centerAlignItems = false;
-
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());
         PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
@@ -361,7 +358,7 @@ public class AmazonLayout implements InvoiceLayout {
             if (genProb.get("currency_in_table_headers") && !genProb.get("currency_in_table_items") && pt.getNumericalHdrs().contains(tableHeader)) {
                 tableHdrLabel += " ("+cur+")";
             }
-            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), centerAlignItems);
+            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), false);
         }
         row1.setBackgroundColor(hdrBgColor);
 
@@ -427,7 +424,7 @@ public class AmazonLayout implements InvoiceLayout {
                         randomItem.setTotal(cellText); break;
                 }
                 SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
-                productLine.addElement(rowBox, centerAlignItems);
+                productLine.addElement(rowBox, false);
             }
             modelAnnot.getItems().add(randomItem);
 
@@ -451,8 +448,8 @@ public class AmazonLayout implements InvoiceLayout {
                 String tableHeader = tableHeaders.get(i);
                 String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
                 String hdrValue = itemMap.get(tableHeader).getValueFooter();
-                footerInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), HAlign.RIGHT, tableHeader+"FooterLabel"), centerAlignItems);
-                footerInvoice.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.RIGHT, tableHeader+"FooterValue"), centerAlignItems);
+                footerInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), HAlign.RIGHT, tableHeader+"FooterLabel"), false);
+                footerInvoice.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.RIGHT, tableHeader+"FooterValue"), false);
                 verticalTableItems.addElement(footerInvoice);
 
                 switch (tableHeader) {
@@ -472,7 +469,7 @@ public class AmazonLayout implements InvoiceLayout {
             TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
             for (String tableHeader: tableHeaders) {
                 String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
-                titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign, tableHeader+"FooterLabel"), centerAlignItems);
+                titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign, tableHeader+"FooterLabel"), false);
             }
             verticalTableItems.addElement(titleTotalInvoice);
 
@@ -485,7 +482,7 @@ public class AmazonLayout implements InvoiceLayout {
             TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
             for (String tableHeader: tableHeaders) {
                 String hdrValue = itemMap.get(tableHeader).getValueFooter();
-                totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), centerAlignItems);
+                totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), false);
                 switch (tableHeader) {
                     case "Tax": modelAnnot.getTotal().setTaxPrice(hdrValue); break;
                     case "TaxRate": modelAnnot.getTotal().setTaxRate(hdrValue); break;
@@ -635,32 +632,35 @@ public class AmazonLayout implements InvoiceLayout {
         if (genProb.get("signature_bottom")) {
             String compSignatureName = company.getName();
             compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
-            SimpleTextBox singatureTextBox = new SimpleTextBox(
-                    fontN, 8, 0, 130,
-                    company.getSignature().getLabel()+" "+compSignatureName, "Signature");
+            SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
 
-            float singatureTextxPos;
+            float sigTX;
+            float sigTY = 130;
             if (genProb.get("signature_bottom_left")) {  // bottom left
-                singatureTextxPos = leftPageMargin + 25;
+                sigTX = leftPageMargin + 25;
             } else {                                     // bottom right
-                singatureTextxPos = pageWidth - singatureTextBox.getBBox().getWidth() - 50;
+                sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
             }
+            sigTextBox.translate(sigTX, sigTY);
+            sigTextBox.build(contentStream, writer);
 
-            singatureTextBox.getBBox().setPosX(singatureTextxPos);
-            singatureTextBox.build(contentStream, writer);
             new HorizontalLineBox(
-                    singatureTextxPos - 10, 135,
-                    singatureTextxPos + singatureTextBox.getBBox().getWidth() + 5, 135,
+                    sigTX - 10, sigTY + 5,
+                    sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 5,
                     lineStrokeColor).build(contentStream, writer);
 
-            String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
-            PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
-            int signatureWidth = 120;
-            int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
-            // align signature to center of singatureTextBox bbox
-            float signatureXPos = singatureTextBox.getBBox().getPosX() + singatureTextBox.getBBox().getWidth()/2 - signatureWidth/2;
-            float signatureYPos = 140;
-            contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
+            String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
+            PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
+
+            float maxSW = 110, maxSH = 65;
+            float sigScale = Math.min(maxSW/sigImg.getWidth(), maxSH/sigImg.getHeight());
+            float sigW = sigImg.getWidth() * sigScale;
+            float sigH = sigImg.getHeight() * sigScale;
+            // align signature to center of sigTextBox bbox
+            float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
+            float sigIY = sigTY + 10;
+
+            contentStream.drawImage(sigImg, sigIX, sigIY, sigW, sigH);
         }
 
         float footerHLineY = 110;
@@ -707,9 +707,9 @@ public class AmazonLayout implements InvoiceLayout {
             String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + company.getStamp().getFullPath());
             PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
 
-            float minAStamp = 0.6f; float maxAStamp = 0.8f;
+            float minAStamp = 0.6f, maxAStamp = 0.8f;
             float resDim = 105 + rnd.nextInt(20);
-            float xPosStamp; float yPosStamp;
+            float xPosStamp, yPosStamp;
             // draw to lower right if signature in bottom or lower left if signature in bottom left
             if (genProb.get("signature_bottom") && rnd.nextInt(3) < 2) {
                 xPosStamp = ((genProb.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);

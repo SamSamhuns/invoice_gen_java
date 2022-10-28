@@ -549,31 +549,35 @@ public class BDmobilierLayout implements InvoiceLayout {
         if (genProb.get("signature_bottom")) {
               String compSignatureName = company.getName();
               compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
-              SimpleTextBox singatureTextBox = new SimpleTextBox(
-                      fontN, 8, 0, 130,
-                      company.getSignature().getLabel()+" "+compSignatureName, "Signature");
+              SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
 
-              float singatureTextxPos;
+              float sigTX;
+              float sigTY = 130;
               if (genProb.get("signature_bottom_left")) {  // bottom left
-                  singatureTextxPos = leftPageMargin + 25;
+                  sigTX = leftPageMargin + 25;
               } else {                                     // bottom right
-                  singatureTextxPos = pageWidth - singatureTextBox.getBBox().getWidth() - 50;
+                  sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
               }
+              sigTextBox.translate(sigTX, sigTY);
+              sigTextBox.build(contentStream, writer);
 
-              singatureTextBox.getBBox().setPosX(singatureTextxPos);
-              singatureTextBox.build(contentStream, writer);
               new HorizontalLineBox(
-                      singatureTextxPos - 10, 135,
-                      singatureTextxPos + singatureTextBox.getBBox().getWidth() + 10, 135
+                      sigTX - 10, sigTY + 5,
+                      sigTX + sigTextBox.getBBox().getWidth() + 10, sigTY + 5
                       ).build(contentStream, writer);
-              String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
-              PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
-              int signatureWidth = 120;
-              int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
-              // align signature to center of singatureTextBox bbox
-              float signatureXPos = singatureTextBox.getBBox().getPosX() + singatureTextBox.getBBox().getWidth()/2 - signatureWidth/2;
-              float signatureYPos = 140;
-              contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
+
+              String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
+              PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
+
+              float maxSW = 110, maxSH = 65;
+              float sigScale = Math.min(maxSW/sigImg.getWidth(), maxSH/sigImg.getHeight());
+              float sigW = sigImg.getWidth() * sigScale;
+              float sigH = sigImg.getHeight() * sigScale;
+              // align signature to center of sigTextBox bbox
+              float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
+              float sigIY = sigTY + 10;
+
+              contentStream.drawImage(sigImg, sigIX, sigIY, sigW, sigH);
         }
 
         // Add company stamp watermark, 40% prob

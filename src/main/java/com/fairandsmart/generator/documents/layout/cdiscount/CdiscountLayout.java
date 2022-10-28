@@ -226,7 +226,7 @@ public class CdiscountLayout implements InvoiceLayout {
         // border box around invoice body
         new BorderBox(black,white,1,leftPageMargin,bottomPageMargin,pageWidth-rightPageMargin-leftPageMargin,655).build(contentStream,writer);
 
-        // Payment Address top right
+        // Payment Address top right or Bottom left or Bottom right
         if (genProb.get("payment_address_top") || (genProb.get("payment_address_bottom") && pc.getProducts().size() < 6)) {
             float fSize = 8;
             float paymentAddrXPos = 0, paymentAddrYPos = 0;
@@ -236,7 +236,7 @@ public class CdiscountLayout implements InvoiceLayout {
             }
             else if (genProb.get("payment_address_bottom")) {
                 paymentAddrXPos = genProb.get("signature_bottom_left") ? posHdrX: 90;
-                paymentAddrYPos = bottomPageMargin + 100 + rnd.nextInt(5);
+                paymentAddrYPos = bottomPageMargin + 120 + rnd.nextInt(5);
             }
 
             VerticalContainer paymentAddrCont = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 400);
@@ -686,30 +686,28 @@ public class CdiscountLayout implements InvoiceLayout {
         if (genProb.get("signature_bottom")) {
             String compSignatureName = company.getName();
             compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
-            SimpleTextBox singatureTextBox = new SimpleTextBox(
-                    fontN, 8, 0, bottomPageMargin + 43,
-                    company.getSignature().getLabel()+" "+compSignatureName, "Signature");
+            SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
 
-            float singatureTextxPos;
+            float sigTX;
             if (genProb.get("signature_bottom_left")) {  // bottom left
-                singatureTextxPos = leftPageMargin + 55;
+                sigTX = leftPageMargin + 55;
             } else {                                     // bottom right
-                singatureTextxPos = pageWidth - singatureTextBox.getBBox().getWidth() - 75;
+                sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 75;
             }
-            singatureTextBox.translate(singatureTextxPos,0);
-            singatureTextBox.build(contentStream, writer);
+            sigTextBox.translate(sigTX,bottomPageMargin + 43);
+            sigTextBox.build(contentStream, writer);
 
             new HorizontalLineBox(
-                    singatureTextxPos - 10, bottomPageMargin + 44,
-                    singatureTextxPos + singatureTextBox.getBBox().getWidth() + 5, bottomPageMargin + 44,
+                    sigTX - 10, bottomPageMargin + 44,
+                    sigTX + sigTextBox.getBBox().getWidth() + 5, bottomPageMargin + 44,
                     lineStrokeColor).build(contentStream, writer);
 
             String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
             PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
             int signatureWidth = 120;
             int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
-            // align signature to center of singatureTextBox bbox
-            float signatureXPos = singatureTextBox.getBBox().getPosX() + singatureTextBox.getBBox().getWidth()/2 - signatureWidth/2;
+            // align signature to center of sigTextBox bbox
+            float signatureXPos = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - signatureWidth/2;
             float signatureYPos = bottomPageMargin + 45;
             contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
         }
