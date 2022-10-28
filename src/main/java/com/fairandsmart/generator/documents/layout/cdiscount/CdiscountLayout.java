@@ -550,11 +550,13 @@ public class CdiscountLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
+                cellBgColor = genProb.get("alternate_table_items_bg_color") && w % 2 == 0 ? gray: cellBgColor;
                 SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
                 productLine.addElement(rowBox, false);
             }
             modelAnnot.getItems().add(randomItem);
 
+            productLine.setBackgroundColor(cellBgColor);
             verticalTableItems.addElement(productLine);
             verticalTableItems.addElement(new BorderBox(lgray,lgray,0,0,0,pageWidth-(72),0.3f));
         }

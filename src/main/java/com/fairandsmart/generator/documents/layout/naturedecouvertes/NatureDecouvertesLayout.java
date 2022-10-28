@@ -129,6 +129,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         // colors
         Color white = Color.WHITE;
         Color black = Color.BLACK;
+        Color lgray = new Color(239,239,239);
         Color grayish = HelperCommon.getRandomGrayishColor();
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
         themeRGB = themeRGB.stream().map(v -> Math.min((int)(v*1.9f), 255)).collect(Collectors.toList()); // lighten colors
@@ -439,11 +440,13 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
+                cellBgColor = genProb.get("alternate_table_items_bg_color") && w % 2 == 0 ? lgray: cellBgColor;
                 SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
                 productLine.addElement(rowBox, false);
             }
             modelAnnot.getItems().add(randomItem);
 
+            productLine.setBackgroundColor(cellBgColor);
             verticalTableItems.addElement(productLine);
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
         }
@@ -478,7 +481,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             xPos += configRow[i];
         }
         HelperImage.drawLine(contentStream, xPos, yPos, xPos, tableBottomY, lineStrokeColor);  // final line extends down more
-
+        // add table bottom horizontal lines
         new HorizontalLineBox(leftPageMargin, yPos - tableHeight, pageWidth-rightPageMargin, yPos - tableHeight, lineStrokeColor).build(contentStream,writer);
         new HorizontalLineBox(leftPageMargin, tableBottomY, pageWidth-rightPageMargin, tableBottomY, lineStrokeColor).build(contentStream,writer);
 
@@ -497,8 +500,6 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         // footer table with total amt + total taxFCont info
         float[] footerConfigRow = {55,55,45,60};
         float tFX = 345, tFY = tableBottomY - 10;
-        // new BorderBox(black,white, 1,1440*ratioPage, pageHeight-3000*ratioPage, 900*ratioPage,228*ratioPage).build(contentStream,writer);
-        // new BorderBox(black,grayish, 1,1440*ratioPage, pageHeight-2890*ratioPage, 900*ratioPage,118*ratioPage).build(contentStream,writer);
 
         VerticalContainer taxFCont = new VerticalContainer(tFX, tFY, 230);
         HAlign taxAlign = HAlign.CENTER;
@@ -614,15 +615,17 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         }
 
         // footer company name, info, address & contact information
+        Address cAddr = company.getAddress();
+
         HorizontalContainer infoEntreprise1 = new HorizontalContainer(0,0);
         infoEntreprise1.addElement(new SimpleTextBox(fontN,7,0,0, company.getName(),"SN"));
         infoEntreprise1.addElement(new SimpleTextBox(fontN,7,0,0, " - "));
-        infoEntreprise1.addElement(new SimpleTextBox(fontN,7,0,0, company.getAddress().getCountry(),"SA"));
+        infoEntreprise1.addElement(new SimpleTextBox(fontN,7,0,0, cAddr.getCountry(),"SA"));
 
         HorizontalContainer infoEntreprise2 = new HorizontalContainer(0,0);
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, company.getAddress().getLine1()+" ","SA"));
+        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, cAddr.getLine1()+" ","SA"));
         infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, " - "));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, company.getAddress().getZip() + " " +company.getAddress().getCity(),"SA"));
+        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, cAddr.getZip() + " " +cAddr.getCity(),"SA"));
         if (model.getLang().equals("fr")) {  // specific to FR invoices
             infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, " "+company.getIdNumbers().getSiretLabel()+" "));
             infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, company.getIdNumbers().getSiretValue(),"SSIRET"));
@@ -645,8 +648,8 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         infoEntreprise3.build(contentStream,writer);
 
         modelAnnot.getVendor().setVendorName(company.getName());
-        modelAnnot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity());
-        modelAnnot.getVendor().setVendorPOBox(company.getAddress().getZip());
+        modelAnnot.getVendor().setVendorAddr(cAddr.getLine1()+" "+cAddr.getZip()+" "+cAddr.getCity()+" "+cAddr.getCountry());
+        modelAnnot.getVendor().setVendorPOBox(cAddr.getZip());
         modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
 
         contentStream.close();

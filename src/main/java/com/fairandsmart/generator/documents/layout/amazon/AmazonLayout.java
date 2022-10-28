@@ -129,6 +129,7 @@ public class AmazonLayout implements InvoiceLayout {
         // colors
         Color white = Color.WHITE;
         Color black = Color.BLACK;
+        Color lgray = new Color(239,239,239);
         Color grayish = HelperCommon.getRandomGrayishColor();
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
         themeRGB = themeRGB.stream().map(v -> Math.min((int)(v*1.9f), 255)).collect(Collectors.toList()); // lighten colors
@@ -332,7 +333,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // table header text colors
         Color hdrTextColor = genProb.get("table_hdr_black_text") ? black: white; // hdrTextColor black (predominantly) or white
-        Color hdrBgColor = (hdrTextColor == white) ? black: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, white).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
+        Color hdrBgColor = (hdrTextColor == white) ? black: Arrays.asList(Color.GRAY, lgray, white).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
 
         // table top info
         String tableTopText = pt.getTableTopInfo();
@@ -377,7 +378,7 @@ public class AmazonLayout implements InvoiceLayout {
         for(int w=0; w<pc.getProducts().size(); w++) {
             Product randomProduct = pc.getProducts().get(w);
             cellTextColor = black;
-            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? Color.LIGHT_GRAY: white;
+            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? lgray: white;
             quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
             snNum = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Integer.toString(w + 1);
 
@@ -423,12 +424,14 @@ public class AmazonLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
+                cellBgColor = genProb.get("alternate_table_items_bg_color") && w % 2 == 0 ? lgray: cellBgColor;
                 SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
                 productLine.addElement(rowBox, false);
             }
             modelAnnot.getItems().add(randomItem);
 
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
+            productLine.setBackgroundColor(cellBgColor);
             verticalTableItems.addElement(productLine);
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
         }
