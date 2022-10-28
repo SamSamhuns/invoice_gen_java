@@ -75,6 +75,7 @@ import java.awt.Color;
 import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 
@@ -94,6 +95,13 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         writer.writeAttribute("pageID", "1");
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
+
+        // init invoice annotation objects
+        modelAnnot.setVendor(new InvoiceAnnotModel.Vendor());
+        modelAnnot.setInvoice(new InvoiceAnnotModel.Invoice());
+        modelAnnot.setBillto(new InvoiceAnnotModel.Billto());
+        modelAnnot.setTotal(new InvoiceAnnotModel.Total());
+        modelAnnot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
 
         // set frequently accessed vars
         Random rnd = model.getRandom();
@@ -197,6 +205,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             vendorAddrCont.build(contentStream,writer);
         }
         else { // add the payment info address
+            modelAnnot.setPaymentto(new InvoiceAnnotModel.Paymentto());
             float paymentAddrXPos = topAddrX;
             float paymentAddrYPos = topAddrY;
 
@@ -318,6 +327,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         }
         // add annotations for shipping address if these fields are not empty
         if (client.getShippingName().length() > 0) {
+            modelAnnot.setShipto(new InvoiceAnnotModel.Shipto());
             modelAnnot.getShipto().setShiptoName(client.getShippingName().toUpperCase());
             if (sCN.getPhoneLabel().length() > 0) {
                 modelAnnot.getShipto().setShiptoPOBox(sAddr.getZip());

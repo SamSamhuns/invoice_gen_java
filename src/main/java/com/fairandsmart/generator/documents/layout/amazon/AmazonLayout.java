@@ -75,6 +75,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
@@ -97,6 +98,13 @@ public class AmazonLayout implements InvoiceLayout {
         writer.writeAttribute("pageID", "1");
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
+
+        // init invoice annotation objects
+        modelAnnot.setVendor(new InvoiceAnnotModel.Vendor());
+        modelAnnot.setInvoice(new InvoiceAnnotModel.Invoice());
+        modelAnnot.setBillto(new InvoiceAnnotModel.Billto());
+        modelAnnot.setTotal(new InvoiceAnnotModel.Total());
+        modelAnnot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
 
         // set frequently accessed vars
         Random rnd = model.getRandom();
@@ -305,6 +313,7 @@ public class AmazonLayout implements InvoiceLayout {
         }
         // add annotations for shipping address if these fields are not empty
         if (client.getShippingName().length() > 0) {
+            modelAnnot.setShipto(new InvoiceAnnotModel.Shipto());
             modelAnnot.getShipto().setShiptoName(client.getShippingName());
             if (sCN.getPhoneLabel().length() > 0) {
                 modelAnnot.getShipto().setShiptoPOBox(sAddr.getZip());
@@ -562,6 +571,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Payment Address
         if (genProb.get("payment_address")) {
+            modelAnnot.setPaymentto(new InvoiceAnnotModel.Paymentto());
             // Set paymentAddrCont opposite to the signature location
             float paymentAddrXPos = genProb.get("signature_bottom_left") ? rightAddrX: leftPageMargin;
             float paymentAddrYPos = verticalTableItems.getBBox().getPosY() - verticalTableItems.getBBox().getHeight() - 10;

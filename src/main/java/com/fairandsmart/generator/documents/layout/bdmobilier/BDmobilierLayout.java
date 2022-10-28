@@ -72,6 +72,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
 
 
 @ApplicationScoped
@@ -92,6 +93,13 @@ public class BDmobilierLayout implements InvoiceLayout {
         writer.writeAttribute("pageID", "1");
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
+
+        // init invoice annotation objects
+        modelAnnot.setVendor(new InvoiceAnnotModel.Vendor());
+        modelAnnot.setInvoice(new InvoiceAnnotModel.Invoice());
+        modelAnnot.setBillto(new InvoiceAnnotModel.Billto());
+        modelAnnot.setTotal(new InvoiceAnnotModel.Total());
+        modelAnnot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
 
         // set frequently accessed vars
         Random rnd = model.getRandom();
@@ -246,6 +254,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         }
         // add annotations for shipping address if these fields are not empty
         if (client.getShippingName().length() > 0) {
+            modelAnnot.setShipto(new InvoiceAnnotModel.Shipto());
             modelAnnot.getShipto().setShiptoName(client.getShippingName());
             if (client.getShippingContactNumber().getPhoneLabel().length() > 0) {
                 modelAnnot.getShipto().setShiptoPOBox(client.getShippingAddress().getZip());
@@ -437,6 +446,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Payment Address
         if (genProb.get("payment_address")) {
+            modelAnnot.setPaymentto(new InvoiceAnnotModel.Paymentto());
             // Set paymentAddrCont opposite to the signature location
             float paymentAddrXPos = (genProb.get("signature_bottom_left")) ? rightAddrX: ttx1;
             float paymentAddrYPos = tableBottomY-60;

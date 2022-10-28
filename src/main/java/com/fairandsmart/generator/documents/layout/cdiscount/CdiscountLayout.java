@@ -92,6 +92,13 @@ public class CdiscountLayout implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
+        // init invoice annotation objects
+        modelAnnot.setVendor(new InvoiceAnnotModel.Vendor());
+        modelAnnot.setInvoice(new InvoiceAnnotModel.Invoice());
+        modelAnnot.setBillto(new InvoiceAnnotModel.Billto());
+        modelAnnot.setTotal(new InvoiceAnnotModel.Total());
+        modelAnnot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
+
         // set frequently accessed vars
         Random rnd = model.getRandom();
         Client client = model.getClient();
@@ -228,6 +235,7 @@ public class CdiscountLayout implements InvoiceLayout {
 
         // Payment Address top right or Bottom left or Bottom right
         if (genProb.get("payment_address_top") || (genProb.get("payment_address_bottom") && pc.getProducts().size() < 6)) {
+            modelAnnot.setPaymentto(new InvoiceAnnotModel.Paymentto());
             float fSize = 8;
             float paymentAddrXPos = 0, paymentAddrYPos = 0;
             if (genProb.get("payment_address_top")) {
@@ -352,6 +360,7 @@ public class CdiscountLayout implements InvoiceLayout {
         }
         // add annotations for shipping address if these fields are not empty
         if (client.getShippingName().length() > 0) {
+            modelAnnot.setShipto(new InvoiceAnnotModel.Shipto());
             modelAnnot.getShipto().setShiptoName(client.getShippingName());
             if (client.getShippingContactNumber().getPhoneLabel().length() > 0) {
                 modelAnnot.getShipto().setShiptoPOBox(sAddr.getZip());

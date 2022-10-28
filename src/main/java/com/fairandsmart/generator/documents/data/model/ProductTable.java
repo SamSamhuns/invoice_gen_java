@@ -113,7 +113,7 @@ public class ProductTable {
     private Map<String, ColItem> itemMap;
 
     private final Random rnd = new Random();
-    private static Collection<String> numericalHdrs = Arrays.asList("ItemRate", "Disc", "Tax", "SubTotal", "Total");
+    private static final Collection<String> numericalHdrs = Arrays.asList("ItemRate", "Disc", "Tax", "SubTotal", "Total");
     // This list also order determins which fields to display in table
     // candTableSize allows to further filter the ppssible values, lower candTableSize means table with fewer cols
     private static final List<List<String>> candidateTableHeaders = Arrays.asList(
