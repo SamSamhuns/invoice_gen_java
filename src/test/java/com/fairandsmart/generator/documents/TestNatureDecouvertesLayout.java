@@ -73,6 +73,7 @@ public void test() throws Exception {
                 Path json = Paths.get("target/natureDecouvertes/json/natureDecouvertes-"+ i + ".json");
 
                 GenerationContext ctx = GenerationContext.generate();
+                ctx.setMaxProductNum(10);  // increase max number of products to 10
                 InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
                 InvoiceLayout layout = new NatureDecouvertesLayout();
                 InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);

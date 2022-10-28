@@ -154,7 +154,12 @@
       "table_hdr_black_text": 90,
       "currency_in_table_headers": 60,
       "currency_in_table_items": 60,
-      "table_center_align_items": 40
+      "table_center_align_items": 40,
+      "signature_bottom": 70,
+      "stamp_bottom": 55,
+      "stamp_bottom_elongated": 30,
+      "logo_watermark": 15,
+      "confidential_watermark": 3
     }
   },
   {
