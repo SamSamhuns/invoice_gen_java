@@ -612,14 +612,16 @@ public class InvoiceAnnotModel{
         this.total = total;
     }
 
-    public InvoiceAnnotModel() {
-        this.title = "";
-        this.invoice = new Invoice();
-        this.vendor = new Vendor();
-        this.billto = new Billto();
-        this.shipto = new Shipto();
-        this.paymentto = new Paymentto();
-        this.items = new ArrayList<Item>();
-        this.total = new Total();
+    public InvoiceAnnotModel(Boolean areInitFieldsNull) {
+        if (!areInitFieldsNull) {
+            this.title = "";
+            this.invoice = new Invoice();
+            this.vendor = new Vendor();
+            this.billto = new Billto();
+            this.shipto = new Shipto();
+            this.paymentto = new Paymentto();
+            this.items = new ArrayList<Item>();
+            this.total = new Total();
+        }
     }
 }

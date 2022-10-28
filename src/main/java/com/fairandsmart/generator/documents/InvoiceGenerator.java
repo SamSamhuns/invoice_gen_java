@@ -43,6 +43,7 @@ import com.fairandsmart.generator.documents.layout.amazon.AmazonLayout;
 import com.fairandsmart.generator.documents.layout.bdmobilier.BDmobilierLayout;
 import com.fairandsmart.generator.documents.layout.cdiscount.CdiscountLayout;
 import com.fairandsmart.generator.documents.layout.darty.DartyLayout;
+import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;
 import com.fairandsmart.generator.documents.layout.macomp.MACOMPLayout;
 import com.fairandsmart.generator.documents.layout.materielnet.MaterielnetLayout;
 import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;
@@ -103,8 +104,10 @@ public class InvoiceGenerator {
         xmlOut.writeAttribute("NrOfPages", "1");
         xmlOut.writeAttribute("docTag", "xml");
 
+        Boolean areInitFieldsNull = true; // if set to false, empty fields are also exported to json annot
+
         PDDocument document = new PDDocument();
-        InvoiceAnnotModel modelAnnot = new InvoiceAnnotModel();
+        InvoiceAnnotModel modelAnnot = new InvoiceAnnotModel(areInitFieldsNull);
 
         // Build invoice layout and populate pdf
         layout.buildInvoice(model, document, xmlOut, modelAnnot);
@@ -139,7 +142,7 @@ public class InvoiceGenerator {
         availablesLayout.add(new BDmobilierLayout());
         availablesLayout.add(new CdiscountLayout());
         availablesLayout.add(new DartyLayout());
-        //availablesLayout.add(new GenericLayout());
+        availablesLayout.add(new NGenericLayout());
         availablesLayout.add(new LDLCLayout());
         availablesLayout.add(new MACOMPLayout());
         availablesLayout.add(new MaterielnetLayout());
