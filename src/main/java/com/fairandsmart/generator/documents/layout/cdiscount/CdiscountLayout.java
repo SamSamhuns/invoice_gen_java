@@ -41,7 +41,7 @@ import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.Product;
-import com.fairandsmart.generator.documents.data.model.ProductTable;
+import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;

@@ -44,7 +44,7 @@ import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
-import com.fairandsmart.generator.documents.data.model.ProductTable;
+import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;

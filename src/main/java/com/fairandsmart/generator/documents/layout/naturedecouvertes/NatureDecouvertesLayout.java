@@ -38,7 +38,7 @@ import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
-import com.fairandsmart.generator.documents.data.model.ProductTable;
+import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Company;

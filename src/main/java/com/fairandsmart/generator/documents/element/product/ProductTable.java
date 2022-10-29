@@ -1,4 +1,4 @@
-package com.fairandsmart.generator.documents.data.model;
+package com.fairandsmart.generator.documents.element.product;
 
 /*-
  * #%L
@@ -33,6 +33,9 @@ package com.fairandsmart.generator.documents.data.model;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import com.fairandsmart.generator.documents.data.model.ProductContainer;
+
 import com.mifmif.common.regex.Generex;
 
 import java.util.LinkedHashMap;
