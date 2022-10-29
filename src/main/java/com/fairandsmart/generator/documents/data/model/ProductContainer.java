@@ -421,9 +421,9 @@ public class ProductContainer {
             codeHeads.put("ID", "en");
             codeHeads.put("Item ID", "en");
             codeHeads.put("Item Ref", "en");
-            codeHeads.put("Product Ref", "en");
-            codeHeads.put("Product ID", "en");
-            codeHeads.put("Product Code", "en");
+            codeHeads.put("Product\n Ref", "en");
+            codeHeads.put("Product\n ID", "en");
+            codeHeads.put("Product\n Code", "en");
         }
         {
             qtyHeads.put("Qté", "fr");
@@ -440,7 +440,7 @@ public class ProductContainer {
 
             unitPriceHeads.put("Rate", "en");
             unitPriceHeads.put("Unit Price", "en");
-            unitPriceHeads.put("Price per unit", "en");
+            unitPriceHeads.put("Price\n per unit", "en");
         }
         {
             lineTotalHeads.put("Montant H.T.", "fr");
@@ -461,7 +461,7 @@ public class ProductContainer {
             snHeads.put("SN.", "en");
             snHeads.put("S.No.", "en");
             snHeads.put("SI No.", "en");
-            snHeads.put("Serial No.", "en");
+            snHeads.put("Serial\n No.", "en");
         }
         // tax heads //
         {

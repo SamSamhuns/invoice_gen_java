@@ -140,7 +140,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         Color lgray = new Color(239,239,239);
         Color grayish = HelperCommon.getRandomGrayishColor();
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
-        themeRGB = themeRGB.stream().map(v -> Math.min((int)(v*1.9f), 255)).collect(Collectors.toList()); // lighten colors
+        themeRGB = themeRGB.stream().map(v -> Math.max((int)(v*0.7f), 0)).collect(Collectors.toList()); // darken colors
         Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
         Color lineStrokeColor = genProb.get("line_stroke_black") ? black: themeColor;
 

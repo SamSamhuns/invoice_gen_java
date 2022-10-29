@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 
 @ApplicationScoped
@@ -132,6 +133,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // colors
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
         Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
+        themeRGB = themeRGB.stream().map(v -> Math.max((int)(v*0.7f), 0)).collect(Collectors.toList()); // darken colors
         Color lineStrokeColor = genProb.get("line_stroke_black") ? Color.BLACK: themeColor;
         Color grayish = HelperCommon.getRandomGrayishColor();
 
