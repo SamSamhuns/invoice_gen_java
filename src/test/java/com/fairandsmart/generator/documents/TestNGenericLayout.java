@@ -45,7 +45,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestGenericLayout {
+public class TestNGenericLayout {
 
 @Test
 public void test() throws Exception {
