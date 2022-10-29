@@ -3,9 +3,9 @@ package com.fairandsmart.generator.documents.element.footer;
 /*-
  * #%L
  * FacoGen / A tool for annotated GEDI based invoice generation.
- * 
+ *
  * Authors:
- * 
+ *
  * Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
  * Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
  * Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
@@ -21,12 +21,12 @@ package com.fairandsmart.generator.documents.element.footer;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -48,17 +48,17 @@ import javax.xml.stream.XMLStreamWriter;
 public class FootBox extends ElementBox {
 
     private final PDFont font;
-    private final PDFont pdFontBold;
-    private final PDFont fontItalic1;
+    private final PDFont fontB;
+    private final PDFont fontI;
     private final float fontSize;
     private final InvoiceModel model;
     private VerticalContainer container;
     private final PDDocument document;
 
-    public FootBox(PDFont font, PDFont pdFontBold, PDFont fontItalic1, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
+    public FootBox(PDFont font, PDFont fontB, PDFont fontI, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
         this.font = font;
-        this.pdFontBold = pdFontBold;
-        this.fontItalic1 = fontItalic1;
+        this.fontB = fontB;
+        this.fontI = fontI;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;

@@ -60,7 +60,7 @@ import java.util.List;
 public class EmployeeInfoPayslipBox extends ElementBox {
 
     private PDFont font;
-    private PDFont pdFontBold;
+    private PDFont fontB;
     private float fontSize;
     private PayslipModel model;
     private VerticalContainer container;
@@ -85,9 +85,9 @@ public class EmployeeInfoPayslipBox extends ElementBox {
     public EmployeeInfoPayslipBox(HorizontalContainer hcontainer){this.hcontainer = hcontainer;}
     public EmployeeInfoPayslipBox(VerticalContainer container){this.container = container;}
 
-    public EmployeeInfoPayslipBox(PDFont font, PDFont pdFontBold, float fontSize, PayslipModel model, PDDocument document) throws Exception {
+    public EmployeeInfoPayslipBox(PDFont font, PDFont fontB, float fontSize, PayslipModel model, PDDocument document) throws Exception {
         this.font = font;
-        this.pdFontBold = pdFontBold;
+        this.fontB = fontB;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;

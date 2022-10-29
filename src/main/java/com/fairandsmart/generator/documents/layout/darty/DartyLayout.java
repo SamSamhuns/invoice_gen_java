@@ -82,8 +82,8 @@ public class DartyLayout implements InvoiceLayout {
         Color gris = new Color(220,220,220);
 
         PDFont font = PDType1Font.HELVETICA;
-        PDFont pdFontBold = PDType1Font.HELVETICA_BOLD;
-        PDFont fontItalic1 = PDType1Font.HELVETICA_OBLIQUE;
+        PDFont fontB = PDType1Font.HELVETICA_BOLD;
+        PDFont fontI = PDType1Font.HELVETICA_OBLIQUE;
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         String logo = this.getClass().getClassLoader().getResource("common/logo/fr/Darty.png").getFile();
@@ -140,49 +140,49 @@ public class DartyLayout implements InvoiceLayout {
         float posRectGris = page.getMediaBox().getHeight()-175;
 
         new BorderBox(gris,gris,1,42,posRectGris-42,240,42).build(contentStream,writer);
-        new SimpleTextBox(pdFontBold, 9, 136, posRectGris-3,"Invoice" ).build(contentStream,writer);
+        new SimpleTextBox(fontB, 9, 136, posRectGris-3,"Invoice" ).build(contentStream,writer);
 
         HorizontalContainer HorizontalNumDateContainer = new HorizontalContainer(42+240/4, posRectGris-25 );
-        HorizontalNumDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, "N°"));
-        HorizontalNumDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, model.getReference().getValueInvoice(), "IN" ));
-        HorizontalNumDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, " du " ));
-        HorizontalNumDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, model.getDate().getValueInvoice(), "IDATE" ));
+        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, "N°"));
+        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, model.getReference().getValueInvoice(), "IN" ));
+        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, " du " ));
+        HorizontalNumDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, model.getDate().getValueInvoice(), "IDATE" ));
         HorizontalNumDateContainer.build(contentStream,writer);
 
         HorizontalContainer HorizontalComDateContainer = new HorizontalContainer(42, 595 );
-        HorizontalComDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, model.getReference().getLabelOrder()+" "));
-        HorizontalComDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, model.getReference().getValueOrder(),"ONUM" ));
-        HorizontalComDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, " du " ));
-        HorizontalComDateContainer.addElement(new SimpleTextBox(pdFontBold, 9, 0, 0, model.getDate().getValueInvoice(), "IDATE" ));
+        HorizontalComDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, model.getReference().getLabelOrder()+" "));
+        HorizontalComDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, model.getReference().getValueOrder(),"ONUM" ));
+        HorizontalComDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, " du " ));
+        HorizontalComDateContainer.addElement(new SimpleTextBox(fontB, 9, 0, 0, model.getDate().getValueInvoice(), "IDATE" ));
         HorizontalComDateContainer.build(contentStream,writer);
 
         float[] configRow = {56f, 22f, 141f, 80f, 62f, 90f, 51f};
         TableRowBox firstLine = new TableRowBox(configRow, 0, 0);
-        firstLine.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Reference", Color.BLACK, Color.WHITE), true);
-        firstLine.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Qty", Color.BLACK, Color.WHITE), true);
-        firstLine.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Labels", Color.BLACK, Color.WHITE), false);
-        firstLine.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Guarantee", Color.BLACK, Color.WHITE), true);
-        firstLine.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Total HT", Color.BLACK, Color.WHITE), true);
-        firstLine.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Basis/Rate",Color.BLACK, Color.WHITE), true);
-        firstLine.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Total TTC", Color.BLACK, Color.WHITE), true);
+        firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Reference", Color.BLACK, Color.WHITE), true);
+        firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Qty", Color.BLACK, Color.WHITE), true);
+        firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Labels", Color.BLACK, Color.WHITE), false);
+        firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Guarantee", Color.BLACK, Color.WHITE), true);
+        firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Total HT", Color.BLACK, Color.WHITE), true);
+        firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Basis/Rate",Color.BLACK, Color.WHITE), true);
+        firstLine.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Total TTC", Color.BLACK, Color.WHITE), true);
 
         TableRowBox line2 = new TableRowBox(configRow, 0, 0);
-        line2.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line2.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line2.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line2.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "Darty", Color.BLACK, Color.WHITE), true);
-        line2.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line2.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "VAT or TCA",Color.BLACK, Color.WHITE), true);
-        line2.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line2.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line2.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line2.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line2.addElement(new SimpleTextBox(fontB, 8, 2, 0, "Darty", Color.BLACK, Color.WHITE), true);
+        line2.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line2.addElement(new SimpleTextBox(fontB, 8, 2, 0, "VAT or TCA",Color.BLACK, Color.WHITE), true);
+        line2.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
 
         TableRowBox line3 = new TableRowBox(configRow, 0, 0);
-        line3.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line3.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line3.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line3.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "until", Color.BLACK, Color.WHITE), true);
-        line3.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
-        line3.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "",Color.BLACK, Color.WHITE), true);
-        line3.addElement(new SimpleTextBox(pdFontBold, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line3.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line3.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line3.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line3.addElement(new SimpleTextBox(fontB, 8, 2, 0, "until", Color.BLACK, Color.WHITE), true);
+        line3.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
+        line3.addElement(new SimpleTextBox(fontB, 8, 2, 0, "",Color.BLACK, Color.WHITE), true);
+        line3.addElement(new SimpleTextBox(fontB, 8, 2, 0, "", Color.BLACK, Color.WHITE), true);
 
         VerticalContainer verticalInvoiceItems = new VerticalContainer(42, 566, 600 );
         verticalInvoiceItems.addElement(new HorizontalLineBox(0,0, page.getMediaBox().getWidth()-(42), 0));
@@ -268,7 +268,7 @@ public class DartyLayout implements InvoiceLayout {
         new BorderBox(Color.BLACK,Color.WHITE,1,195,posMsgY,360,39).build(contentStream,writer);
 
         HorizontalContainer totaux = new HorizontalContainer(250,posMsgY+39-3);
-        totaux.addElement(new SimpleTextBox(pdFontBold,9,0,0,"Total invoice : "));
+        totaux.addElement(new SimpleTextBox(fontB,9,0,0,"Total invoice : "));
         totaux.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,50,0));
         SimpleTextBox stb = new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotal()+"","TWTX");
         totaux.addElement(stb);
@@ -279,11 +279,11 @@ public class DartyLayout implements InvoiceLayout {
         totaux.addElement(new SimpleTextBox(font,9,0,0,model.getProductContainer().getFmtTotalWithTax()+"","TA"));
         totaux.build(contentStream,writer);
 
-        new SimpleTextBox(pdFontBold,9,226,posMsgY-33,"Amount paid by: ").build(contentStream,writer);
-        new SimpleTextBox(pdFontBold,9,340,posMsgY-33,model.getPaymentInfo().getValuePaymentType(),"PMODE").build(contentStream,writer);
-        new SimpleTextBox(pdFontBold,9,411,posMsgY-66,"Balances to be paid : ").build(contentStream,writer);
-        new SimpleTextBox(pdFontBold,9,page.getMediaBox().getWidth()-90,posMsgY-33,model.getProductContainer().getFmtTotalWithTax(),"TA").build(contentStream,writer);
-        new SimpleTextBox(pdFontBold,9,page.getMediaBox().getWidth()-90,posMsgY-66,"0,00 €").build(contentStream,writer);
+        new SimpleTextBox(fontB,9,226,posMsgY-33,"Amount paid by: ").build(contentStream,writer);
+        new SimpleTextBox(fontB,9,340,posMsgY-33,model.getPaymentInfo().getValuePaymentType(),"PMODE").build(contentStream,writer);
+        new SimpleTextBox(fontB,9,411,posMsgY-66,"Balances to be paid : ").build(contentStream,writer);
+        new SimpleTextBox(fontB,9,page.getMediaBox().getWidth()-90,posMsgY-33,model.getProductContainer().getFmtTotalWithTax(),"TA").build(contentStream,writer);
+        new SimpleTextBox(fontB,9,page.getMediaBox().getWidth()-90,posMsgY-66,"0,00 €").build(contentStream,writer);
 
 
         HorizontalContainer infoEntreprise = new HorizontalContainer(0,0);

@@ -83,7 +83,7 @@ public class LDLCLayout implements InvoiceLayout {
 
         PDFont font = PDType1Font.HELVETICA;
         PDFont fontBold = PDType1Font.HELVETICA_BOLD;
-        PDFont fontItalic = PDType1Font.HELVETICA_OBLIQUE;
+        PDFont fontI = PDType1Font.HELVETICA_OBLIQUE;
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         String logo = this.getClass().getClassLoader().getResource("common/logo/fr/LDLC.png").getFile();
@@ -141,10 +141,10 @@ public class LDLCLayout implements InvoiceLayout {
         new BorderBox(Color.BLACK, Color.WHITE, 1,posBHX, posBHY, posBarcodeX-20,hBH).build(contentStream, writer);
         VerticalContainer verticalAddressContainer = new VerticalContainer(28, posBarcodeY-12, 250 );
         verticalAddressContainer.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Client Delivery:"));
-        verticalAddressContainer.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getBillingName().toUpperCase(), "BN" ));
-        verticalAddressContainer.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getBillingAddress().getLine1().toUpperCase(), "BA" ));
-        verticalAddressContainer.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getBillingAddress().getZip().toUpperCase() + " "+model.getClient().getBillingAddress().getCity().toUpperCase(), "BA" ));
-        verticalAddressContainer.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getBillingAddress().getCountry().toUpperCase(), "BA" ));
+        verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingName().toUpperCase(), "BN" ));
+        verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingAddress().getLine1().toUpperCase(), "BA" ));
+        verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingAddress().getZip().toUpperCase() + " "+model.getClient().getBillingAddress().getCity().toUpperCase(), "BA" ));
+        verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingAddress().getCountry().toUpperCase(), "BA" ));
         verticalAddressContainer.build(contentStream, writer);
 
         //Shipping Address
@@ -155,10 +155,10 @@ public class LDLCLayout implements InvoiceLayout {
         new BorderBox(Color.BLACK, Color.WHITE, 1,posSHX, posSHY, wSH,hSH).build(contentStream, writer);
         VerticalContainer verticalAddressContainer2 = new VerticalContainer(posBarcodeX+tailleBarcode+2, posBarcodeY-12, 250 );
         verticalAddressContainer2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Client Invoice :"));
-        verticalAddressContainer2.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getShippingName().toUpperCase(),"SHN" ));
-        verticalAddressContainer2.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getShippingAddress().getLine1().toUpperCase(),"SHA" ));
-        verticalAddressContainer2.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getShippingAddress().getZip().toUpperCase() + " "+model.getClient().getShippingAddress().getCity().toUpperCase(),"SHA" ));
-        verticalAddressContainer2.addElement(new SimpleTextBox(fontItalic, 9, 0, 0, model.getClient().getShippingAddress().getCountry().toUpperCase(), "SHA" ));
+        verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingName().toUpperCase(),"SHN" ));
+        verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingAddress().getLine1().toUpperCase(),"SHA" ));
+        verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingAddress().getZip().toUpperCase() + " "+model.getClient().getShippingAddress().getCity().toUpperCase(),"SHA" ));
+        verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingAddress().getCountry().toUpperCase(), "SHA" ));
         verticalAddressContainer2.build(contentStream, writer);
 
         //REF
@@ -403,7 +403,7 @@ public class LDLCLayout implements InvoiceLayout {
 
         infoFooter.build(contentStream,writer);
 
-        new SimpleTextBox(fontItalic, 6, 238, 56, "Do not throw on the public highway").build(contentStream,writer);
+        new SimpleTextBox(fontI, 6, 238, 56, "Do not throw on the public highway").build(contentStream,writer);
 
         contentStream.close();
 

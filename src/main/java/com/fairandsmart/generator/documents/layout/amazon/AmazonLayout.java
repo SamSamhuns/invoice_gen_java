@@ -771,6 +771,4 @@ public class AmazonLayout implements InvoiceLayout {
         contentStream.close();
         writer.writeEndElement();
     }
-
-
 }

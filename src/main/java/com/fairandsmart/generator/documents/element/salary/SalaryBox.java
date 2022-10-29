@@ -64,7 +64,7 @@ public class SalaryBox extends ElementBox {
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
     private final PDFont font;
-    private final PDFont pdFontBold;
+    private final PDFont fontB;
     private final float fontSize;
     private Color headBackgroundColor;
     private Color bodyBackgroundColor;
@@ -92,11 +92,11 @@ public class SalaryBox extends ElementBox {
         return rnd;
     }
 
-    public SalaryBox(float posX, float posY, SalaryCotisationTable salaryContainer, PDFont font, PDFont pdFontBold, float fontSize) throws Exception {
+    public SalaryBox(float posX, float posY, SalaryCotisationTable salaryContainer, PDFont font, PDFont fontB, float fontSize) throws Exception {
         container = new VerticalContainer(posX, posY, 0);
         this.salaryContainer = salaryContainer;
         this.font = font;
-        this.pdFontBold = pdFontBold;
+        this.fontB = fontB;
         this.fontSize = fontSize;
         this.init();
     }
@@ -169,7 +169,7 @@ public class SalaryBox extends ElementBox {
 
         for(String colname: chosenFormat)
         {
-            head.addElement(new SimpleTextBox(pdFontBold, fontSize+1, 0, 0, headLabels.get(colname), Color.black, null, HAlign.CENTER), false);
+            head.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, headLabels.get(colname), Color.black, null, HAlign.CENTER), false);
 
         }
         container.addElement(head);
@@ -184,8 +184,8 @@ public class SalaryBox extends ElementBox {
             {
                 salaryElement = getProductElement(salaryLine, colname);
                 halign = HAlign.LEFT;
-               // productLine.addElement(new SimpleTextBox(pdFontBold, fontSize, 0, 0, salaryElement, Color.BLACK, null, halign, colname), false);
-                productLine.addElement(new SimpleTextBox(pdFontBold, fontSize, 0, 0, salaryElement, Color.BLACK, null, halign), false);
+               // productLine.addElement(new SimpleTextBox(fontB, fontSize, 0, 0, salaryElement, Color.BLACK, null, halign, colname), false);
+                productLine.addElement(new SimpleTextBox(fontB, fontSize, 0, 0, salaryElement, Color.BLACK, null, halign), false);
 
             }
            // container.addElement(new HorizontalLineBox(0,0, head.getBBox().getWidth()+30, 0));

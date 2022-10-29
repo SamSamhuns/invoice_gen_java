@@ -55,7 +55,7 @@ import java.util.List;
 public class CompanyInfoBoxPayslip extends ElementBox {
 
     private PDFont font;
-    private PDFont pdFontBold;
+    private PDFont fontB;
     private float fontSize;
     private Model model;
     private VerticalContainer container;
@@ -81,9 +81,9 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     public CompanyInfoBoxPayslip(HorizontalContainer hcontainer){this.hcontainer = hcontainer;}
     public CompanyInfoBoxPayslip(VerticalContainer container){this.container = container;}
 
-    public CompanyInfoBoxPayslip(PDFont font, PDFont pdFontBold, float fontSize, Model model, PDDocument document) throws Exception {
+    public CompanyInfoBoxPayslip(PDFont font, PDFont fontB, float fontSize, Model model, PDDocument document) throws Exception {
         this.font = font;
-        this.pdFontBold = pdFontBold;
+        this.fontB = fontB;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;
@@ -114,7 +114,7 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     public VerticalContainer getCompanyAddressBlock() throws Exception
     {
         VerticalContainer addContainer = new VerticalContainer(0,0,0);
-        SimpleTextBox name = new SimpleTextBox(pdFontBold, fontSize, 0, 0, model.getCompany().getName(), "SN");
+        SimpleTextBox name = new SimpleTextBox(fontB, fontSize, 0, 0, model.getCompany().getName(), "SN");
         //name.setEntityName("SN");
         addContainer.addElement(name);
         SimpleTextBox adresse1 = new SimpleTextBox(font, fontSize, 0, 0, model.getCompany().getAddress().getLine1(), "SA");
@@ -154,7 +154,7 @@ public class CompanyInfoBoxPayslip extends ElementBox {
     public HorizontalContainer getCompanyNameLine() throws Exception
     {
         HorizontalContainer companyNameContainer = new HorizontalContainer(0, 0);
-        SimpleTextBox name = new SimpleTextBox(pdFontBold, fontSize, 0, 0, model.getCompany().getName(),"SN");
+        SimpleTextBox name = new SimpleTextBox(fontB, fontSize, 0, 0, model.getCompany().getName(),"SN");
         //name.setEntityName("SN");
         companyNameContainer.addElement(name);
         return companyNameContainer;

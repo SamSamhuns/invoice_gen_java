@@ -33,7 +33,18 @@ package com.fairandsmart.generator.documents.layout.macomp;
  * #L%
  */
 
+import com.fairandsmart.generator.documents.data.helper.HelperCommon;
+import com.fairandsmart.generator.documents.data.helper.HelperImage;
+import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.data.model.Product;
+import com.fairandsmart.generator.documents.data.model.PaymentInfo;
+import com.fairandsmart.generator.documents.data.model.Client;
+import com.fairandsmart.generator.documents.data.model.Address;
+import com.fairandsmart.generator.documents.data.model.Company;
+import com.fairandsmart.generator.documents.data.model.ContactNumber;
+import com.fairandsmart.generator.documents.data.model.ProductContainer;
+import com.fairandsmart.generator.documents.data.model.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -44,29 +55,28 @@ import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.product.ProductBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
-import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.xml.stream.XMLStreamWriter;
+import java.awt.image.BufferedImage;
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.Random;
+import java.util.Map;
 import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MACOMPLayout implements InvoiceLayout {
-
-    private static final List<PDFont[]> FONTS = new ArrayList<>();
-    {
-        FONTS.add(new PDFont[] {PDType1Font.HELVETICA, PDType1Font.HELVETICA_BOLD, PDType1Font.HELVETICA_OBLIQUE} );
-        FONTS.add(new PDFont[] {PDType1Font.COURIER, PDType1Font.COURIER_BOLD, PDType1Font.COURIER_OBLIQUE} );
-        FONTS.add(new PDFont[] {PDType1Font.TIMES_ROMAN, PDType1Font.TIMES_BOLD, PDType1Font.TIMES_ITALIC} );
-    }
 
     @Override
     public String name() {
@@ -75,38 +85,95 @@ public class MACOMPLayout implements InvoiceLayout {
 
     @Override
     public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws Exception {
-
-        float fontSize = 10;
         PDPage page = new PDPage(PDRectangle.A4);
+
         document.addPage(page);
         writer.writeStartElement("DL_PAGE");
         writer.writeAttribute("gedi_type", "DL_PAGE");
         writer.writeAttribute("pageID", "1");
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
-        PDFont[] fonts = FONTS.get(model.getRandom().nextInt(FONTS.size()));
+
+        // init invoice annotation objects
+        modelAnnot.setVendor(new InvoiceAnnotModel.Vendor());
+        modelAnnot.setInvoice(new InvoiceAnnotModel.Invoice());
+        modelAnnot.setBillto(new InvoiceAnnotModel.Billto());
+        modelAnnot.setTotal(new InvoiceAnnotModel.Total());
+        modelAnnot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
+
+        // set frequently accessed vars
+        Random rnd = model.getRandom();
+        Client client = model.getClient();
+        Company company = model.getCompany();
+        PaymentInfo payment = model.getPaymentInfo();
+        ProductContainer pc = model.getProductContainer();
+        String cur = pc.getCurrency();
+
+        // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
+        Map<String, Boolean> genProb = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
+
+        // get barcode number
+        String barcodeNum = model.getReference().getValueBarcode();
+
+        // Set fontFaces
+        HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDFontFamily(document, this);
+        PDFont fontN = fontSet.getFontNormal();
+        PDFont fontB = fontSet.getFontBold();
+        PDFont fontI = fontSet.getFontItalic();
+        PDFont fontNB = (rnd.nextBoolean()) ? fontN: fontB;
+
+        // Page coords
+        float pageWidth = page.getMediaBox().getWidth();
+        float pageHeight = page.getMediaBox().getHeight();
+        float pageMiddleX = pageWidth/2;
+        float leftPageMargin = 25;
+        float rightPageMargin = 25;
+        float bottomPageMargin = 8;
+
+        // colors
+        Color white = Color.WHITE;
+        Color black = Color.BLACK;
+        Color lgray = new Color(239,239,239);
+        Color grayish = HelperCommon.getRandomGrayishColor();
+        List<Integer> themeRGB = company.getLogo().getThemeRGB();
+        themeRGB = themeRGB.stream().map(v -> Math.max((int)(v*0.7f), 0)).collect(Collectors.toList()); // darken colors
+        Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
+        Color lineStrokeColor = genProb.get("line_stroke_black") ? black: themeColor;
+
+        // load logo img
+        String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());
+        PDImageXObject logoImg = PDImageXObject.createFromFile(logoPath, document);
+        float logoWidth; float logoHeight;
+        float maxLogoWidth; float maxLogoHeight;
+        float posLogoX; float posLogoY;
+        float logoScale;
+        // gen barcode img
+        BufferedImage barcodeBufImg = HelperImage.generateEAN13BarcodeImage(barcodeNum);
+        PDImageXObject barcodeImg = LosslessFactory.createFromImage(document, barcodeBufImg);
+
+        ///////////////////////////////////      Build Page components now      ////////////////////////////////////
+
+        float fontSize = 8;
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         // Invoice No. 123
-        new SimpleTextBox(fonts[1], fontSize+2, 310, 748, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream, writer);
-       // new SimpleTextBox(fonts[1], fontSize+2, 310, 730, model.getReference().getLabelOrder()+" : "+ model.getReference().getValueOrder()).build(contentStream, writer);
-        //new SimpleTextBox(fonts[1], fontSize+2, 310, 712, model.getReference().getLabelClient()+" : "+ model.getReference().getValueClient()).build(contentStream, writer);
+        new SimpleTextBox(fontB, fontSize+2, 310, 748, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream, writer);
 
         // Company Info Box
-        CompanyInfoBox companyInfoBox = new CompanyInfoBox(fonts[2], fonts[1], fontSize, model, document);
-        companyInfoBox.build(contentStream, writer);
+        CompanyInfoBox companyInfoBox = new CompanyInfoBox(fontI, fontB, fontSize, model, document);
+        // companyInfoBox.build(contentStream, writer);
         companyInfoBox.translate(50, 785);
         companyInfoBox.build(contentStream, writer);
 
         // Billing Address Block
-        ClientInfoBox billingInfoBox = new ClientInfoBox(fonts[2], fonts[1], fontSize, model, document, "Billing");
-        billingInfoBox.build(contentStream, writer);
+        ClientInfoBox billingInfoBox = new ClientInfoBox(fontI, fontB, fontSize, model, document, "Billing");
+        // billingInfoBox.build(contentStream, writer);
         billingInfoBox.translate(50, 610);
         billingInfoBox.build(contentStream, writer);
 
         // Shipping Address Block
-        ClientInfoBox shippingInfoBox = new ClientInfoBox(fonts[2], fonts[1], fontSize, model, document, "Shipping");
-        shippingInfoBox.build(contentStream, writer);
+        ClientInfoBox shippingInfoBox = new ClientInfoBox(fontI, fontB, fontSize, model, document, "Shipping");
+        // shippingInfoBox.build(contentStream, writer);
         shippingInfoBox.translate(50, 540);
         shippingInfoBox.build(contentStream, writer);
 
@@ -114,53 +181,51 @@ public class MACOMPLayout implements InvoiceLayout {
 
         float[] configRow = {150f, 200f};
         TableRowBox elementInfoContainer = new TableRowBox(configRow, 0, 0);
-        SimpleTextBox Label = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getDate().getLabelInvoice(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Label = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getDate().getLabelInvoice(),black, null, HAlign.LEFT);
         elementInfoContainer.addElement(Label, false);
-        SimpleTextBox Value = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getDate().getValueInvoice());
+        SimpleTextBox Value = new SimpleTextBox(fontN, fontSize, 0,0, model.getDate().getValueInvoice());
         elementInfoContainer.addElement(Value, false);
         invoiceInfo.addElement(elementInfoContainer);
-        invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
         TableRowBox elementInfoContainer1 = new TableRowBox(configRow,0, 0);
-        SimpleTextBox Label1 = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getReference().getLabelClient(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Label1 = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getReference().getLabelClient(),black, null, HAlign.LEFT);
         elementInfoContainer1.addElement(Label1, false);
-        SimpleTextBox Value1 = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getReference().getValueClient());
+        SimpleTextBox Value1 = new SimpleTextBox(fontN, fontSize, 0,0, model.getReference().getValueClient());
         elementInfoContainer1.addElement(Value1, false);
         invoiceInfo.addElement(elementInfoContainer1);
-        invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
         TableRowBox elementInfoContainer2 = new TableRowBox(configRow,0, 0);
-        SimpleTextBox Label2 = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getReference().getLabelOrder(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Label2 = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getReference().getLabelOrder(),black, null, HAlign.LEFT);
         elementInfoContainer2.addElement(Label2, false);
-        SimpleTextBox Value2 = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getReference().getValueOrder(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Value2 = new SimpleTextBox(fontN, fontSize, 0,0, model.getReference().getValueOrder(),black, null, HAlign.LEFT);
         elementInfoContainer2.addElement(Value2, false);
         invoiceInfo.addElement(elementInfoContainer2);
-        invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
         TableRowBox elementInfoContainer3 = new TableRowBox(configRow,0, 0);
-        SimpleTextBox Label3 = new SimpleTextBox(fonts[1], fontSize+1, 0,0, model.getPaymentInfo().getLabelPaymentType(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Label3 = new SimpleTextBox(fontB, fontSize+1, 0,0, payment.getLabelPaymentType(),black, null, HAlign.LEFT);
         elementInfoContainer3.addElement(Label3, false);
-        SimpleTextBox Value3 = new SimpleTextBox(fonts[0], fontSize, 0,0, model.getPaymentInfo().getValuePaymentType(),Color.BLACK, null, HAlign.LEFT);
+        SimpleTextBox Value3 = new SimpleTextBox(fontN, fontSize, 0,0, payment.getValuePaymentType(),black, null, HAlign.LEFT);
         elementInfoContainer3.addElement(Value3, false);
         invoiceInfo.addElement(elementInfoContainer3);
-        invoiceInfo.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
         invoiceInfo.build(contentStream, writer);
 
-        ProductBox products = new ProductBox(30, 400, model.getProductContainer(),fonts[2], fonts[1], fontSize);
+        ProductBox products = new ProductBox(30, 400, pc,fontI, fontB, fontSize);
         products.build(contentStream, writer);
 
         VerticalContainer footer = new VerticalContainer(50, 100, 1000);
         footer.addElement(new HorizontalLineBox(0,0,530, 0));
-        footer.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 3));
-        FootBox footBox = new FootBox(fonts[0], fonts[1], fonts[2], 11, model, document);
-       // footBox.translate(30,150);
-      //  footBox.build(contentStream, writer);
+        footer.addElement(new BorderBox(white,white, 0,0, 0, 0, 3));
+        FootBox footBox = new FootBox(fontN, fontB, fontI, 11, model, document);
+
         footer.addElement(footBox);
         footer.build(contentStream, writer);
 
         contentStream.close();
         writer.writeEndElement();
-
     }
 }

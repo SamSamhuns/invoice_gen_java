@@ -125,7 +125,9 @@
   },
   {
     "layout": "MACOMP",
-    "probability": {}
+    "probability": {
+      "line_stroke_black": 96
+    }
   },
   {
     "layout": "Materielnet",

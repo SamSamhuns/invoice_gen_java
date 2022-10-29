@@ -66,12 +66,12 @@ public class HelperCommon extends Helper {
     public static class PDCustomFonts {
         private PDFont fontNormal;
         private PDFont fontBold;
-        private PDFont fontItalic;
+        private PDFont fontI;
 
-        public PDCustomFonts (PDFont fontNormal, PDFont fontBold, PDFont fontItalic) {
+        public PDCustomFonts (PDFont fontNormal, PDFont fontBold, PDFont fontI) {
             this.fontNormal = fontNormal;
             this.fontBold = fontBold;
-            this.fontItalic = fontItalic;
+            this.fontI = fontI;
         }
 
         public PDFont getFontNormal() {
@@ -91,11 +91,11 @@ public class HelperCommon extends Helper {
         }
 
         public PDFont getFontItalic() {
-            return this.fontItalic;
+            return this.fontI;
         }
 
         public void setfontItalic(PDFont font) {
-            this.fontItalic = font;
+            this.fontI = font;
         }
     }
 

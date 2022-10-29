@@ -61,7 +61,7 @@ public class ProductBoxSSD extends ElementBox {
 
     private static final Logger LOGGER = Logger.getLogger(VerticalContainer.class.getName());
     private final PDFont font;
-    private final PDFont pdFontBold;
+    private final PDFont fontB;
     private final float fontSize;
     private Color headBackgroundColor;
     private Color bodyBackgroundColor;
@@ -90,11 +90,11 @@ public class ProductBoxSSD extends ElementBox {
         return rnd;
     }
 
-    public ProductBoxSSD(float posX, float posY, ProductContainer productContainer, PDFont font, PDFont pdFontBold, float fontSize) throws Exception {
+    public ProductBoxSSD(float posX, float posY, ProductContainer productContainer, PDFont font, PDFont fontB, float fontSize) throws Exception {
         container = new VerticalContainer(posX, posY, 0);
         this.productContainer = productContainer;
         this.font = font;
-        this.pdFontBold = pdFontBold;
+        this.fontB = fontB;
         this.fontSize = fontSize;
         this.init();
     }
@@ -142,7 +142,7 @@ public class ProductBoxSSD extends ElementBox {
 
         for(String colname: chosenFormat)
         {
-            head.addElement(new SimpleTextBox(pdFontBold, fontSize+1, 0, 0, headLabels.get(colname), Color.WHITE, null, HAlign.CENTER), false);
+            head.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, headLabels.get(colname), Color.WHITE, null, HAlign.CENTER), false);
         }
         container.addElement(head);
 
@@ -161,7 +161,7 @@ public class ProductBoxSSD extends ElementBox {
                 if(colname.equals("PD"))
                     halign = HAlign.LEFT;
                 //System.out.println(colname + productElement);
-                productLine.addElement(new SimpleTextBox(pdFontBold, fontSize, 0, 0, productElement, Color.BLACK, null, halign), false);//, colname), false);
+                productLine.addElement(new SimpleTextBox(fontB, fontSize, 0, 0, productElement, Color.BLACK, null, halign), false);//, colname), false);
             }
             container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
             container.addElement(productLine);
@@ -175,7 +175,7 @@ public class ProductBoxSSD extends ElementBox {
         totalHT.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalHT.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalHT.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
-        totalHT.addElement(new SimpleTextBox(pdFontBold, fontSize+1, 0, 0, productContainer.getTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
+        totalHT.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, productContainer.getTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
         totalHT.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFmtTotal(), Color.BLACK, null, HAlign.CENTER , "TWTX"), false);
 
         container.addElement(totalHT);
@@ -184,7 +184,7 @@ public class ProductBoxSSD extends ElementBox {
         totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
-        totalTax.addElement(new SimpleTextBox(pdFontBold, fontSize+1, 0, 0, productContainer.getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
+        totalTax.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, productContainer.getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
         totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFmtTotalTax(), Color.BLACK, null, HAlign.CENTER , "TTX"), false);
 
         container.addElement(totalTax);
@@ -193,7 +193,7 @@ public class ProductBoxSSD extends ElementBox {
         totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.RIGHT), false);
         totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
         totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
-        totalTTC.addElement(new SimpleTextBox(pdFontBold, fontSize+1, 0, 0, productContainer.getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
+        totalTTC.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, productContainer.getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
         totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFmtTotalWithTax(), Color.BLACK, null, HAlign.CENTER,"TA" ), false);
 
         container.addElement(totalTTC);*/

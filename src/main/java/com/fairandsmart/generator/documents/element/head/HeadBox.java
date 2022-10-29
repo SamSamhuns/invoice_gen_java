@@ -47,17 +47,17 @@ import javax.xml.stream.XMLStreamWriter;
 public class HeadBox extends ElementBox {
 
     private final PDFont font;
-    private final PDFont pdFontBold;
-    private final PDFont fontItalic1;
+    private final PDFont fontB;
+    private final PDFont fontI;
     private final float fontSize;
     private final InvoiceModel model;
     private VerticalContainer container;
     private final PDDocument document;
 
-    public HeadBox(PDFont font, PDFont pdFontBold, PDFont fontItalic1, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
+    public HeadBox(PDFont font, PDFont fontB, PDFont fontI, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
         this.font = font;
-        this.pdFontBold = pdFontBold;
-        this.fontItalic1 = fontItalic1;
+        this.fontB = fontB;
+        this.fontI = fontI;
         this.fontSize = fontSize;
         this.model = model;
         this.document = document;
@@ -67,9 +67,9 @@ public class HeadBox extends ElementBox {
     private void init() throws Exception {
         container = new VerticalContainer(0,0, 0);
         HorizontalContainer top = new HorizontalContainer(0,0);
-        CompanyInfoBox companyInfoBox = new CompanyInfoBox(font, pdFontBold, 11, model, document);
+        CompanyInfoBox companyInfoBox = new CompanyInfoBox(font, fontB, 11, model, document);
         companyInfoBox.setWidth(250);
-        CompanyInfoBox companyInfoBox2 = new CompanyInfoBox(font, pdFontBold, 11, model, document);
+        CompanyInfoBox companyInfoBox2 = new CompanyInfoBox(font, fontB, 11, model, document);
         companyInfoBox2.setWidth(250);
         top.addElement(companyInfoBox);
         top.addElement(companyInfoBox2);
