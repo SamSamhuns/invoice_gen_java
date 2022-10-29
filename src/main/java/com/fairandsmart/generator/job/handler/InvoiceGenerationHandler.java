@@ -131,10 +131,10 @@ public class InvoiceGenerationHandler implements JobHandler {
                 }
                 for ( int i=start; i<stop; i++) {
                     String layoutName = availableLayouts.get(i % availableLayouts.size()).name();
-                    Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".pdf");
-                    Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".xml");
-                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".jpg");
-                    Path json = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + i + layoutName + ".json");
+                    Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".pdf");
+                    Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".xml");
+                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".jpg");
+                    Path json = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".json");
                     //TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();
                     InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
