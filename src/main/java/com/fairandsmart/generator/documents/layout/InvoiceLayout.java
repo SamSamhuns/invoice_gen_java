@@ -45,6 +45,6 @@ public interface InvoiceLayout {
 
   String name();
 
-  void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws Exception;
+  void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel annot) throws Exception;
 
 }

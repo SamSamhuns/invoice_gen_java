@@ -84,7 +84,7 @@ public class MACOMPLayout implements InvoiceLayout {
     }
 
     @Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel annot) throws Exception {
         PDPage page = new PDPage(PDRectangle.A4);
 
         document.addPage(page);
@@ -95,11 +95,11 @@ public class MACOMPLayout implements InvoiceLayout {
         writer.writeAttribute("height", "3508");
 
         // init invoice annotation objects
-        modelAnnot.setVendor(new InvoiceAnnotModel.Vendor());
-        modelAnnot.setInvoice(new InvoiceAnnotModel.Invoice());
-        modelAnnot.setBillto(new InvoiceAnnotModel.Billto());
-        modelAnnot.setTotal(new InvoiceAnnotModel.Total());
-        modelAnnot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
+        annot.setVendor(new InvoiceAnnotModel.Vendor());
+        annot.setInvoice(new InvoiceAnnotModel.Invoice());
+        annot.setBillto(new InvoiceAnnotModel.Billto());
+        annot.setTotal(new InvoiceAnnotModel.Total());
+        annot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
 
         // set frequently accessed vars
         Random rnd = model.getRandom();
@@ -110,7 +110,7 @@ public class MACOMPLayout implements InvoiceLayout {
         String cur = pc.getCurrency();
 
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
-        Map<String, Boolean> genProb = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
+        Map<String, Boolean> proba = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
         // get barcode number
         String barcodeNum = model.getReference().getValueBarcode();
@@ -138,7 +138,7 @@ public class MACOMPLayout implements InvoiceLayout {
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
         themeRGB = themeRGB.stream().map(v -> Math.max((int)(v*0.7f), 0)).collect(Collectors.toList()); // darken colors
         Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
-        Color lineStrokeColor = genProb.get("line_stroke_black") ? black: themeColor;
+        Color lineStrokeColor = proba.get("line_stroke_black") ? black: themeColor;
 
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());

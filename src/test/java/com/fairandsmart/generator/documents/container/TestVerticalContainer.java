@@ -67,7 +67,7 @@ public class TestVerticalContainer implements InvoiceLayout {
     }
 
     @Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel annot) throws Exception {
 
         PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);

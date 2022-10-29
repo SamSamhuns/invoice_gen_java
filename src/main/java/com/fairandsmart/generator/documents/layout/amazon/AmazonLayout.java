@@ -36,6 +36,7 @@ package com.fairandsmart.generator.documents.layout.amazon;
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
+
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.Product;
@@ -45,6 +46,8 @@ import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
+
+import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
@@ -89,7 +92,7 @@ public class AmazonLayout implements InvoiceLayout {
     }
 
     @Override
-    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel modelAnnot) throws Exception {
+    public void buildInvoice(InvoiceModel model, PDDocument document, XMLStreamWriter writer, InvoiceAnnotModel annot) throws Exception {
         PDPage page = new PDPage(PDRectangle.A4);
 
         document.addPage(page);
@@ -100,11 +103,11 @@ public class AmazonLayout implements InvoiceLayout {
         writer.writeAttribute("height", "3508");
 
         // init invoice annotation objects
-        modelAnnot.setVendor(new InvoiceAnnotModel.Vendor());
-        modelAnnot.setInvoice(new InvoiceAnnotModel.Invoice());
-        modelAnnot.setBillto(new InvoiceAnnotModel.Billto());
-        modelAnnot.setTotal(new InvoiceAnnotModel.Total());
-        modelAnnot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
+        annot.setVendor(new InvoiceAnnotModel.Vendor());
+        annot.setInvoice(new InvoiceAnnotModel.Invoice());
+        annot.setBillto(new InvoiceAnnotModel.Billto());
+        annot.setTotal(new InvoiceAnnotModel.Total());
+        annot.setItems(new ArrayList<InvoiceAnnotModel.Item>());
 
         // set frequently accessed vars
         Random rnd = model.getRandom();
@@ -115,7 +118,7 @@ public class AmazonLayout implements InvoiceLayout {
         String cur = pc.getCurrency();
 
         // get gen config probability map loading from config json file, int value out of 100, 60 -> 60% proba
-        Map<String, Boolean> genProb = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
+        Map<String, Boolean> proba = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
         // get barcode number
         String barcodeNum = model.getReference().getValueBarcode();
@@ -124,6 +127,7 @@ public class AmazonLayout implements InvoiceLayout {
         HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDFontFamily(document, this);
         PDFont fontN = fontSet.getFontNormal();
         PDFont fontB = fontSet.getFontBold();
+        PDFont fontI = fontSet.getFontItalic();
         PDFont fontNB = (rnd.nextBoolean()) ? fontN: fontB;
 
         // Page coords
@@ -142,7 +146,7 @@ public class AmazonLayout implements InvoiceLayout {
         List<Integer> themeRGB = company.getLogo().getThemeRGB();
         themeRGB = themeRGB.stream().map(v -> Math.max((int)(v*0.7f), 0)).collect(Collectors.toList()); // darken colors
         Color themeColor = new Color(themeRGB.get(0), themeRGB.get(1), themeRGB.get(2));
-        Color lineStrokeColor = genProb.get("line_stroke_black") ? black: themeColor;
+        Color lineStrokeColor = proba.get("line_stroke_black") ? black: themeColor;
 
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());
@@ -161,11 +165,11 @@ public class AmazonLayout implements InvoiceLayout {
         new BorderBox(HelperCommon.getRandomColor(6), white, 4, 0, 0, pageWidth, pageHeight).build(contentStream, writer);
 
         // Barcode top
-        if (genProb.get("barcode_top")) {
+        if (proba.get("barcode_top")) {
             new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), barcodeNum).build(contentStream, writer);
         }
         // Or Logo top
-        else if (genProb.get("logo_top")) {
+        else if (proba.get("logo_top")) {
             maxLogoWidth = 150;
             maxLogoHeight = 90;
             logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
@@ -181,18 +185,18 @@ public class AmazonLayout implements InvoiceLayout {
         topTextCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, "Page 1 of 1" + ((rnd.nextBoolean()) ? ", 1-1/1": ".")));
         String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         String textTopInvString = ((rnd.nextBoolean()) ? docTitle+" for ": docTitle+" dated ")+model.getDate().getValueInvoice();
-        if (genProb.get("text_top_invoice_number") && !genProb.get("invoice_number_top")) {  // inc invoice number if not mentioned below
+        if (proba.get("text_top_invoice_number") && !proba.get("invoice_number_top")) {  // inc invoice number if not mentioned below
             textTopInvString = model.getReference().getLabelInvoice()+" "+model.getReference().getValueInvoice()+" for "+model.getDate().getValueInvoice();
-            modelAnnot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
+            annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
         }
         topTextCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, textTopInvString, docTitle+" Number"));
         topTextCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, ((rnd.nextBoolean()) ? "Retail / "+docTitle+" / Cash Memorandum": "Retail / "+docTitle) ));
-        if (genProb.get("text_top_center") && !genProb.get("barcode_top")) {  // center top text if barcode not present
+        if (proba.get("text_top_center") && !proba.get("barcode_top")) {  // center top text if barcode not present
             topTextCont.alignElements("CENTER", topTextCont.getBBox().getWidth());
             topTextCont.translate(pageMiddleX - topTextCont.getBBox().getWidth()/2, 0);
         }
-        modelAnnot.setTitle(docTitle);
-        modelAnnot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
+        annot.setTitle(docTitle);
+        annot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
         topTextCont.build(contentStream, writer);
 
         // Vendor/Company Address
@@ -201,61 +205,61 @@ public class AmazonLayout implements InvoiceLayout {
         vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getName(), "SN"));
         vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getAddress().getLine1(), "SA" ));
         vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getAddress().getZip()+" "+company.getAddress().getCity(), "SA"));
-        if (genProb.get("vendor_address_phone_fax")) {
+        if (proba.get("vendor_address_phone_fax")) {
             vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getContact().getPhoneLabel()+": "+company.getContact().getPhoneValue(), "SC"));
             vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getContact().getFaxLabel()+": "+company.getContact().getFaxValue(), "SF"));
         }
-        if (genProb.get("addresses_bordered")) {
+        if (proba.get("addresses_bordered")) {
             vendorAddrCont.setBorderColor(lineStrokeColor);
             vendorAddrCont.setBorderThickness(0.5f);
         }
-        modelAnnot.getVendor().setVendorName(company.getName());
-        modelAnnot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity());
-        modelAnnot.getVendor().setVendorPOBox(company.getAddress().getZip());
+        annot.getVendor().setVendorName(company.getName());
+        annot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity());
+        annot.getVendor().setVendorPOBox(company.getAddress().getZip());
         vendorAddrCont.build(contentStream, writer);
 
         float leftTopInfoY = 670; // Progressively inc by 10 pts after each left-side box
         // if no "vendor_address_phone_fax" then Purchase Order Number, Left side
-        if (genProb.get("purchase_order_number_top") && !genProb.get("vendor_address_phone_fax")) {
+        if (proba.get("purchase_order_number_top") && !proba.get("vendor_address_phone_fax")) {
             String purchaseOrderText = model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder();
             new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, purchaseOrderText, "LO").build(contentStream, writer);
             leftTopInfoY += 10;
-            modelAnnot.getInvoice().setInvoiceOrderId(model.getReference().getValueOrder());
+            annot.getInvoice().setInvoiceOrderId(model.getReference().getValueOrder());
         }
         // TAX number, Left side
-        if (genProb.get("vendor_tax_number_top")) {
+        if (proba.get("vendor_tax_number_top")) {
             String vatText = company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue();
             new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, vatText, "SVAT").build(contentStream, writer);
-            modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
+            annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
         }
 
         float rightTopInfoY = 670; // Progressively inc by 10 pts after each right-side box, building from bottom
         // Currency Used, Right side
-        if (genProb.get("currency_top")) {
+        if (proba.get("currency_top")) {
             String currencyText = payment.getLabelAccountCurrency()+": "+cur;
             new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, currencyText, "CUR").build(contentStream, writer);
             rightTopInfoY += 10;
-            modelAnnot.getTotal().setCurrency(cur);
+            annot.getTotal().setCurrency(cur);
         }
         // Payment Terms, Right side
-        if (genProb.get("payment_terms_top")) {
+        if (proba.get("payment_terms_top")) {
             String paymentTermText = payment.getLabelPaymentTerm()+": "+payment.getValuePaymentTerm();
             new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentTermText, "PT").build(contentStream, writer);
             rightTopInfoY += 10;
-            modelAnnot.getInvoice().setPaymentTerm(payment.getValuePaymentTerm());
+            annot.getInvoice().setPaymentTerm(payment.getValuePaymentTerm());
         }
         // Payment Due Date if Payment Terms is not mentioned
-        else if (genProb.get("payment_due_top")) {
+        else if (proba.get("payment_due_top")) {
             String paymentDueText = model.getDate().getLabelPaymentDue()+": "+model.getDate().getValuePaymentDue();
             new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentDueText, "PT").build(contentStream, writer);
             rightTopInfoY += 10;
-            modelAnnot.getInvoice().setInvoiceDueDate(model.getDate().getValuePaymentDue());
+            annot.getInvoice().setInvoiceDueDate(model.getDate().getValuePaymentDue());
         }
         // invoice number, Right side
-        if (genProb.get("invoice_number_top")) {
+        if (proba.get("invoice_number_top")) {
             String invoiceText = model.getReference().getLabelInvoice() + ": " +model.getReference().getValueInvoice();
             new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, invoiceText, "INV").build(contentStream, writer);
-            modelAnnot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
+            annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
         }
 
         HelperImage.drawLine(contentStream, leftPageMargin, 650, pageWidth-rightPageMargin, 650, lineStrokeColor);
@@ -263,7 +267,7 @@ public class AmazonLayout implements InvoiceLayout {
         // check if billing and shipping addresses should be switched
         float leftAddrX = leftPageMargin;
         float rightAddrX = pageWidth/2 + rnd.nextInt(5);
-        if (genProb.get("switch_bill_ship_addresses")) {
+        if (proba.get("switch_bill_ship_addresses")) {
             float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
         }
         float billX = leftAddrX; float billY = 645;
@@ -277,21 +281,21 @@ public class AmazonLayout implements InvoiceLayout {
         billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getBillingName(), "BN" ));
         billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bAddr.getLine1(), "BA" ));
         billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bAddr.getZip()+" "+bAddr.getCity(), "BA" ));
-        if (genProb.get("bill_address_phone_fax")) {
+        if (proba.get("bill_address_phone_fax")) {
             billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getPhoneLabel()+": "+bCN.getPhoneValue(), "BC"));
             billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getFaxLabel()+": "+bCN.getFaxValue(), "BF"));
         }
-        else if (genProb.get("bill_address_tax_number")) {
+        else if (proba.get("bill_address_tax_number")) {
             billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"BT"));
-            modelAnnot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
+            annot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
         }
-        if (genProb.get("addresses_bordered") && client.getBillingHead().length() > 0) {
+        if (proba.get("addresses_bordered") && client.getBillingHead().length() > 0) {
             billAddrCont.setBorderColor(lineStrokeColor);
             billAddrCont.setBorderThickness(0.5f);
         }
-        modelAnnot.getBillto().setCustomerName(client.getBillingName());
-        modelAnnot.getBillto().setCustomerAddr(bAddr.getLine1()+" "+bAddr.getZip()+" "+bAddr.getCity());
-        modelAnnot.getBillto().setCustomerPOBox(bAddr.getZip());
+        annot.getBillto().setCustomerName(client.getBillingName());
+        annot.getBillto().setCustomerAddr(bAddr.getLine1()+" "+bAddr.getZip()+" "+bAddr.getCity());
+        annot.getBillto().setCustomerPOBox(bAddr.getZip());
         billAddrCont.build(contentStream, writer);
 
         // Shipping Address
@@ -302,22 +306,22 @@ public class AmazonLayout implements InvoiceLayout {
         shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingName(), "SHN" ));
         shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sAddr.getLine1(), "SHA" ));
         shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sAddr.getZip()+" "+sAddr.getCity(), "SHA" ));
-        if (genProb.get("bill_address_phone_fax") && genProb.get("ship_address_phone_fax")) {
+        if (proba.get("bill_address_phone_fax") && proba.get("ship_address_phone_fax")) {
             String connec = (sCN.getPhoneLabel().length() > 0) ? ": ": "";
             shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getPhoneLabel()+connec+sCN.getPhoneValue(), "BC"));
             shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getFaxLabel()+connec+sCN.getFaxValue(), "BF"));
         }
-        if (genProb.get("addresses_bordered") && client.getShippingHead().length() > 0) {
+        if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {
             shipAddrCont.setBorderColor(lineStrokeColor);
             shipAddrCont.setBorderThickness(0.5f);
         }
         // add annotations for shipping address if these fields are not empty
         if (client.getShippingName().length() > 0) {
-            modelAnnot.setShipto(new InvoiceAnnotModel.Shipto());
-            modelAnnot.getShipto().setShiptoName(client.getShippingName());
+            annot.setShipto(new InvoiceAnnotModel.Shipto());
+            annot.getShipto().setShiptoName(client.getShippingName());
             if (sCN.getPhoneLabel().length() > 0) {
-                modelAnnot.getShipto().setShiptoPOBox(sAddr.getZip());
-                modelAnnot.getShipto().setShiptoAddr(sAddr.getLine1()+" "+sAddr.getZip()+" "+sAddr.getCity());
+                annot.getShipto().setShiptoPOBox(sAddr.getZip());
+                annot.getShipto().setShiptoAddr(sAddr.getLine1()+" "+sAddr.getZip()+" "+sAddr.getCity());
             }
         }
         shipAddrCont.build(contentStream, writer);
@@ -326,12 +330,12 @@ public class AmazonLayout implements InvoiceLayout {
 
         // check if cur should be included in table amt items
         String amtSuffix = "";
-        if (genProb.get("currency_in_table_items")) {
+        if (proba.get("currency_in_table_items")) {
             amtSuffix = " "+cur;
-            modelAnnot.getTotal().setCurrency(cur);
+            annot.getTotal().setCurrency(cur);
         }
         boolean upperCap = rnd.nextBoolean();  // table header items case
-        HAlign tableHdrAlign = genProb.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
+        HAlign tableHdrAlign = proba.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
 
         // Building Header Item labels, table values and footer labels list
         float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
@@ -341,7 +345,7 @@ public class AmazonLayout implements InvoiceLayout {
         Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
 
         // table header text colors
-        Color hdrTextColor = genProb.get("table_hdr_black_text") ? black: white; // hdrTextColor black (predominantly) or white
+        Color hdrTextColor = proba.get("table_hdr_black_text") ? black: white; // hdrTextColor black (predominantly) or white
         Color hdrBgColor = (hdrTextColor == white) ? black: Arrays.asList(Color.GRAY, lgray, white).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
 
         // table top info
@@ -365,7 +369,7 @@ public class AmazonLayout implements InvoiceLayout {
             String hdrLabel = itemMap.get(tableHeader).getLabelHeader();
             String tableHdrLabel = upperCap ? hdrLabel.toUpperCase() : hdrLabel;
             // if numerical header used, check if cur needs to appended at the end
-            if (genProb.get("currency_in_table_headers") && !genProb.get("currency_in_table_items") && pt.getNumericalHdrs().contains(tableHeader)) {
+            if (proba.get("currency_in_table_headers") && !proba.get("currency_in_table_items") && pt.getNumericalHdrs().contains(tableHeader)) {
                 tableHdrLabel += " ("+cur+")";
             }
             row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), false);
@@ -433,11 +437,11 @@ public class AmazonLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
-                cellBgColor = genProb.get("alternate_table_items_bg_color") && w % 2 == 0 ? lgray: cellBgColor;
+                cellBgColor = proba.get("alternate_table_items_bg_color") && w % 2 == 0 ? lgray: cellBgColor;
                 SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
                 productLine.addElement(rowBox, false);
             }
-            modelAnnot.getItems().add(randomItem);
+            annot.getItems().add(randomItem);
 
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
             productLine.setBackgroundColor(cellBgColor);
@@ -453,7 +457,7 @@ public class AmazonLayout implements InvoiceLayout {
         verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
         verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
 
-        if (genProb.get("table_footer_multi_row")) {
+        if (proba.get("table_footer_multi_row")) {
             float[] configFooterRow = {450f, 80f}; // Adds up to 530 which is pageW - leftM - rightM
             for (int i=0; i<tableHeaders.size(); i++ ) {
                 TableRowBox footerInvoice = new TableRowBox(configFooterRow, 0, 25);
@@ -465,13 +469,13 @@ public class AmazonLayout implements InvoiceLayout {
                 verticalTableItems.addElement(footerInvoice);
 
                 switch (tableHeader) {
-                    case "Tax": modelAnnot.getTotal().setTaxPrice(hdrValue); break;
-                    case "TaxRate": modelAnnot.getTotal().setTaxRate(hdrValue); break;
-                    case "Disc": modelAnnot.getTotal().setDiscountPrice(hdrValue); break;
-                    case "DiscRate": modelAnnot.getTotal().setDiscountRate(hdrValue); break;
-                    case "ItemRate": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
-                    case "SubTotal": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
-                    case "Total": modelAnnot.getTotal().setTotalPrice(hdrValue); break;
+                    case "Tax": annot.getTotal().setTaxPrice(hdrValue); break;
+                    case "TaxRate": annot.getTotal().setTaxRate(hdrValue); break;
+                    case "Disc": annot.getTotal().setDiscountPrice(hdrValue); break;
+                    case "DiscRate": annot.getTotal().setDiscountRate(hdrValue); break;
+                    case "ItemRate": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "SubTotal": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "Total": annot.getTotal().setTotalPrice(hdrValue); break;
                 }
             }
         }
@@ -496,13 +500,13 @@ public class AmazonLayout implements InvoiceLayout {
                 String hdrValue = itemMap.get(tableHeader).getValueFooter();
                 totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), false);
                 switch (tableHeader) {
-                    case "Tax": modelAnnot.getTotal().setTaxPrice(hdrValue); break;
-                    case "TaxRate": modelAnnot.getTotal().setTaxRate(hdrValue); break;
-                    case "Disc": modelAnnot.getTotal().setDiscountPrice(hdrValue); break;
-                    case "DiscRate": modelAnnot.getTotal().setDiscountRate(hdrValue); break;
-                    case "ItemRate": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
-                    case "SubTotal": modelAnnot.getTotal().setSubtotalPrice(hdrValue); break;
-                    case "Total": modelAnnot.getTotal().setTotalPrice(hdrValue); break;
+                    case "Tax": annot.getTotal().setTaxPrice(hdrValue); break;
+                    case "TaxRate": annot.getTotal().setTaxRate(hdrValue); break;
+                    case "Disc": annot.getTotal().setDiscountPrice(hdrValue); break;
+                    case "DiscRate": annot.getTotal().setDiscountRate(hdrValue); break;
+                    case "ItemRate": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "SubTotal": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "Total": annot.getTotal().setTotalPrice(hdrValue); break;
                 }
             }
             verticalTableItems.addElement(totalInvoice1);
@@ -513,7 +517,7 @@ public class AmazonLayout implements InvoiceLayout {
         }
 
         // Add registered address information
-        if (genProb.get("registered_address_info")) {
+        if (proba.get("registered_address_info")) {
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
 
@@ -530,11 +534,11 @@ public class AmazonLayout implements InvoiceLayout {
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
 
-            modelAnnot.getVendor().setVendorName(company.getName());
-            modelAnnot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity()+" "+company.getAddress().getCountry());
-            modelAnnot.getVendor().setVendorPOBox(company.getAddress().getZip());
+            annot.getVendor().setVendorName(company.getName());
+            annot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity()+" "+company.getAddress().getCountry());
+            annot.getVendor().setVendorPOBox(company.getAddress().getZip());
         }
-        else if (genProb.get("total_in_words") && !genProb.get("registered_address_info")) {
+        else if (proba.get("total_in_words") && !proba.get("registered_address_info")) {
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
 
@@ -549,7 +553,7 @@ public class AmazonLayout implements InvoiceLayout {
             verticalTableItems.addElement(totalInWordsFooter);
             verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
-            modelAnnot.getTotal().setCurrency(cur);
+            annot.getTotal().setCurrency(cur);
         }
         verticalTableItems.build(contentStream, writer);
         tableTopInfoLine.build(contentStream, writer); // must be built after verticalTableItems
@@ -569,87 +573,26 @@ public class AmazonLayout implements InvoiceLayout {
 
         ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
-        // Payment Address
-        if (genProb.get("payment_address")) {
-            modelAnnot.setPaymentto(new InvoiceAnnotModel.Paymentto());
-            // Set paymentAddrCont opposite to the signature location
-            float paymentAddrXPos = genProb.get("signature_bottom_left") ? rightAddrX: leftPageMargin;
-            float paymentAddrYPos = verticalTableItems.getBBox().getPosY() - verticalTableItems.getBBox().getHeight() - 10;
+        // Payment Info and Address
+        if (proba.get("payment_address")) {
+            float pAW = 300;
+            float pAX = proba.get("signature_bottom_left") ? rightAddrX: leftPageMargin;
+            float pAY = verticalTableItems.getBBox().getPosY() - verticalTableItems.getBBox().getHeight() - 10;
 
-            VerticalContainer paymentAddrCont = new VerticalContainer(paymentAddrXPos, paymentAddrYPos, 300);
-
-            paymentAddrCont.addElement(new SimpleTextBox(fontB,10,0,0, payment.getAddressHeader(), "PH"));
-
-            HorizontalContainer bankName = new HorizontalContainer(0,0);
-            bankName.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelBankName()+": ", "PBN"));
-            bankName.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueBankName(), "PBN"));
-            paymentAddrCont.addElement(bankName);
-            modelAnnot.getPaymentto().setBankName(payment.getValueBankName());
-
-            HorizontalContainer accountName = new HorizontalContainer(0,0);
-            accountName.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelAccountName()+": ", "PAName"));
-            accountName.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueAccountName(), "PAName"));
-            paymentAddrCont.addElement(accountName);
-            modelAnnot.getPaymentto().setAccountName(payment.getValueAccountName());
-
-            if (genProb.get("payment_account_number")) {
-                HorizontalContainer accountNumber = new HorizontalContainer(0,0);
-                accountNumber.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelAccountNumber()+": ", "PANum"));
-                accountNumber.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueAccountNumber(), "PANum"));
-                paymentAddrCont.addElement(accountNumber);
-                modelAnnot.getPaymentto().setAccountNumber(payment.getValueAccountNumber());
-            }
-            if (genProb.get("payment_branch_name")) {
-                HorizontalContainer branchName = new HorizontalContainer(0,0);
-                branchName.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelBranchName()+": ", "PBName"));
-                branchName.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueBranchName(), "PBName"));
-                paymentAddrCont.addElement(branchName);
-                modelAnnot.getPaymentto().setBranchAddress(payment.getValueBranchName());
-            }
-
-            HorizontalContainer ibanNumber = new HorizontalContainer(0,0);
-            ibanNumber.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelIBANNumber()+": ", "PBNum"));
-            ibanNumber.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueIBANNumber(), "PBNum"));
-            paymentAddrCont.addElement(ibanNumber);
-            modelAnnot.getPaymentto().setIbanNumber(payment.getValueIBANNumber());
-
-            if (genProb.get("payment_routing_number")) {
-                HorizontalContainer routingNumber = new HorizontalContainer(0,0);
-                routingNumber.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelRoutingNumber()+": ", "PBNum"));
-                routingNumber.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueRoutingNumber(), "PBNum"));
-                paymentAddrCont.addElement(routingNumber);
-                modelAnnot.getPaymentto().setRoutingNumber(payment.getValueRoutingNumber());
-            }
-            if (genProb.get("payment_swift_number")) {
-                HorizontalContainer swiftCode = new HorizontalContainer(0,0);
-                swiftCode.addElement(new SimpleTextBox(fontNB,9,0,0, payment.getLabelSwiftCode()+": ", "PSNum"));
-                swiftCode.addElement(new SimpleTextBox(fontN,9,0,0, payment.getValueSwiftCode(), "PSNum"));
-                paymentAddrCont.addElement(swiftCode);
-                modelAnnot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
-            }
-            if (genProb.get("payment_vendor_tax_number") && !genProb.get("vendor_tax_number_top")) {
-                HorizontalContainer vatNumber = new HorizontalContainer(0,0);
-                vatNumber.addElement(new SimpleTextBox(fontNB,9,0,0, company.getIdNumbers().getVatLabel()+": ", "SVAT"));
-                vatNumber.addElement(new SimpleTextBox(fontN,9,0,0, company.getIdNumbers().getVatValue(), "SVAT"));
-                paymentAddrCont.addElement(vatNumber);
-                modelAnnot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
-            }
-            if (genProb.get("addresses_bordered")) {
-                paymentAddrCont.setBorderColor(lineStrokeColor);
-                paymentAddrCont.setBorderThickness(0.5f);
-            }
-            paymentAddrCont.build(contentStream, writer);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            paymentBox.translate(pAX, pAY);
+            paymentBox.build(contentStream,writer);
         }
 
         // Add Signature at bottom
-        if (genProb.get("signature_bottom")) {
+        if (proba.get("signature_bottom")) {
             String compSignatureName = company.getName();
             compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
             SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
 
             float sigTX;
             float sigTY = 130;
-            if (genProb.get("signature_bottom_left")) {  // bottom left
+            if (proba.get("signature_bottom_left")) {  // bottom left
                 sigTX = leftPageMargin + 25;
             } else {                                     // bottom right
                 sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
@@ -678,7 +621,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         float footerHLineY = 110;
         // Add footer line and info if footer_info to be used and number of items less than 5
-        if (genProb.get("footer_info") && pc.getProducts().size() < 5) {
+        if (proba.get("footer_info") && pc.getProducts().size() < 5) {
             new HorizontalLineBox(leftPageMargin, footerHLineY, pageWidth-rightPageMargin, footerHLineY, lineStrokeColor).build(contentStream, writer);
 
             VerticalContainer verticalFooterCont = new VerticalContainer(leftPageMargin, footerHLineY-10, 450);
@@ -691,7 +634,7 @@ public class AmazonLayout implements InvoiceLayout {
             verticalFooterCont.addElement(new SimpleTextBox(fontB, 9, 0, 0, footerLine3));
             verticalFooterCont.addElement(new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, 0, 0, barcodeNum));
 
-            if (genProb.get("footer_info_center")) {
+            if (proba.get("footer_info_center")) {
                 verticalFooterCont.alignElements("CENTER", verticalFooterCont.getBBox().getWidth());
                 verticalFooterCont.translate(pageMiddleX - verticalFooterCont.getBBox().getWidth()/2, 0);
             }
@@ -699,7 +642,7 @@ public class AmazonLayout implements InvoiceLayout {
         }
 
         // Logo Bottom if logo is not at top or barcode at top
-        if (!genProb.get("logo_top") | genProb.get("barcode_top")) {
+        if (!proba.get("logo_top") | proba.get("barcode_top")) {
             maxLogoWidth = 120;
             maxLogoHeight = 80;
             logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
@@ -711,12 +654,12 @@ public class AmazonLayout implements InvoiceLayout {
         }
 
         // Barcode bottom
-        if (genProb.get("barcode_bottom")) {
+        if (proba.get("barcode_bottom")) {
             contentStream.drawImage(barcodeImg, leftPageMargin, bottomPageMargin, barcodeImg.getWidth() - 15, barcodeImg.getHeight() - 72);
         }
 
         // Add company stamp watermark, 40% prob
-        if (genProb.get("stamp_bottom")) {
+        if (proba.get("stamp_bottom")) {
             String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + company.getStamp().getFullPath());
             PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
 
@@ -724,8 +667,8 @@ public class AmazonLayout implements InvoiceLayout {
             float resDim = 105 + rnd.nextInt(20);
             float xPosStamp, yPosStamp;
             // draw to lower right if signature in bottom or lower left if signature in bottom left
-            if (genProb.get("signature_bottom") && rnd.nextInt(3) < 2) {
-                xPosStamp = ((genProb.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
+            if (proba.get("signature_bottom") && rnd.nextInt(3) < 2) {
+                xPosStamp = ((proba.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
             }
             else {  // draw to lower center
@@ -742,7 +685,7 @@ public class AmazonLayout implements InvoiceLayout {
                 stampWidth += rnd.nextInt(20);
                 stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
             }
-            else if (genProb.get("stamp_bottom_elongated")) {
+            else if (proba.get("stamp_bottom_elongated")) {
                 // elongate stamps if the stamp is a not a Rectangular one
                 // and set rotation to 0
                 rotAngle = 0;
@@ -753,17 +696,17 @@ public class AmazonLayout implements InvoiceLayout {
                                              stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
         }
         // if no signature and no stamp, then add a footer note
-        else if (!genProb.get("signature_bottom")) {
+        else if (!proba.get("signature_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
             new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream, writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
-        if (genProb.get("confidential_watermark")) {
+        if (proba.get("confidential_watermark")) {
             // Add confidential watermark
             HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
         }
-        else if (genProb.get("logo_watermark")) {
+        else if (proba.get("logo_watermark")) {
             // Add watermarked background logo
             HelperImage.addWatermarkImagePDF(document, page, logoImg);
         }

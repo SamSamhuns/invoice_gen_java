@@ -50,7 +50,7 @@
       "doc_title_top_center": 40,
       "doc_title_top_right": 40,
       "purchase_order_number_top_right": 15,
-      "vendor_tax_number_top_right": 55,
+      "vendor_tax_number_top": 55,
       "purchase_order_number_left": 30,
       "payment_due_left": 50,
       "currency_left": 60,

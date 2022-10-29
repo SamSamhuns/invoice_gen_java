@@ -107,18 +107,18 @@ public class InvoiceGenerator {
         Boolean areInitFieldsNull = true; // if set to false, empty fields are also exported to json annot
 
         PDDocument document = new PDDocument();
-        InvoiceAnnotModel modelAnnot = new InvoiceAnnotModel(areInitFieldsNull);
+        InvoiceAnnotModel annot = new InvoiceAnnotModel(areInitFieldsNull);
 
         // Build invoice layout and populate pdf
-        layout.buildInvoice(model, document, xmlOut, modelAnnot);
+        layout.buildInvoice(model, document, xmlOut, annot);
 
         // Export as PDF
         document.save(pdf.toFile());
 
-        // Export prettified modelAnnot annotations object to JSON file
+        // Export prettified annot annotations object to JSON file
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         FileWriter json_file = new FileWriter(json.toString());
-        gsonBuilder.toJson(modelAnnot, json_file);
+        gsonBuilder.toJson(annot, json_file);
         json_file.flush();
         json_file.close();
 
