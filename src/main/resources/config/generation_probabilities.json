@@ -126,7 +126,14 @@
   {
     "layout": "MACOMP",
     "probability": {
-      "line_stroke_black": 96
+      "line_stroke_black": 96,
+      "vendor_address_phone_fax": 30,
+      "vendor_address_tax_number": 85,
+      "addresses_bordered": 80,
+      "switch_bill_ship_addresses": 20,
+      "bill_address_tax_number": 50,
+      "bill_address_phone_fax": 30,
+      "ship_address_phone_fax": 30
     }
   },
   {
