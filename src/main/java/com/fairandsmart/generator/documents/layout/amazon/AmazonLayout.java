@@ -47,8 +47,9 @@ import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
-import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.product.ProductTable;
+import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
+import com.fairandsmart.generator.documents.element.footer.SignatureBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -586,9 +587,8 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Add Signature at bottom
         if (proba.get("signature_bottom")) {
-            String compSignatureName = company.getName();
-            compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
-            SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
+            String sigText = company.getSignature().getLabel()+" "+(company.getName().length() < 25 ? company.getName() : "");
+            SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0,sigText, "Signature");
 
             float sigTX;
             float sigTY = 130;

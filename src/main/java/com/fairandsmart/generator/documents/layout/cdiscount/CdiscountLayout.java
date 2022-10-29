@@ -185,12 +185,9 @@ public class CdiscountLayout implements InvoiceLayout {
             naf.addElement(new SimpleTextBox(fontN,8,0,0, company.getIdNumbers().getToaValue(), "STOA"));
             vendorAddrCont.addElement(naf);
         }
-        // vendor tax id number
         if (proba.get("vendor_address_tax_number")) {
-            HorizontalContainer vatText = new HorizontalContainer(0,0);
-            vatText.addElement(new SimpleTextBox(fontN,8,0,0, company.getIdNumbers().getVatLabel()+" : "));
-            vatText.addElement(new SimpleTextBox(fontN,8,0,0, company.getIdNumbers().getVatValue(), "SVAT"));
-            vendorAddrCont.addElement(vatText);
+            String vatText = company.getIdNumbers().getVatLabel()+": "+company.getIdNumbers().getVatValue();
+            vendorAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, vatText, "SVAT"));
             annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
         }
         if (proba.get("addresses_bordered")) {
@@ -641,18 +638,18 @@ public class CdiscountLayout implements InvoiceLayout {
             compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
             SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
 
-            float sigTX;
+            float sigTX, sigTY = bottomPageMargin + 43;
             if (proba.get("signature_bottom_left")) {  // bottom left
                 sigTX = leftPageMargin + 55;
             } else {                                     // bottom right
                 sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 75;
             }
-            sigTextBox.translate(sigTX,bottomPageMargin + 43);
+            sigTextBox.translate(sigTX,sigTY);
             sigTextBox.build(contentStream, writer);
 
             new HorizontalLineBox(
-                    sigTX - 10, bottomPageMargin + 44,
-                    sigTX + sigTextBox.getBBox().getWidth() + 5, bottomPageMargin + 44,
+                    sigTX - 10, sigTY + 2,
+                    sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 2,
                     lineStrokeColor).build(contentStream, writer);
 
             String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());

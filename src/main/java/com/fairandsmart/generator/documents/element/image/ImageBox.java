@@ -75,9 +75,9 @@ public class ImageBox extends ElementBox {
         else{
             translate((width- box.getWidth())/2, 0);// Center align
         }
-        //float scale = width / box.getWidth();
-      //  box.setHeight(box.getHeight() * scale);
-       // box.setWidth(box.getWidth() * scale);
+        // float scale = width / box.getWidth();
+        // box.setHeight(box.getHeight() * scale);
+        // box.setWidth(box.getWidth() * scale);
     }
 
     @Override
@@ -101,7 +101,6 @@ public class ImageBox extends ElementBox {
         }
 
         stream.drawImage(image, box.getPosX(), box.getPosY(), box.getWidth(), box.getHeight());
-        //box.setPosY(box.getPosY() + box.getHeight());
         this.writeXMLZone(writer, "ocr_carea", text, box, "img");
     }
 

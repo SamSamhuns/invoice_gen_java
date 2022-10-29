@@ -37,6 +37,7 @@ import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Company;
+
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
@@ -63,7 +64,6 @@ public class PaymentInfoBox extends ElementBox {
     private final float width;
     private final Color lineStrokeColor;
 
-    private VerticalContainer vContainer;
     private final InvoiceModel model;
     private final PDDocument document;
     private final PaymentInfo payment;
@@ -71,10 +71,12 @@ public class PaymentInfoBox extends ElementBox {
     private final InvoiceAnnotModel annot;
     private final Map<String, Boolean> proba;
 
+    private VerticalContainer vContainer;
     private final Random rnd = new Random();
 
     public PaymentInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
-                          float fontSizeSmall, float fontSizeBig, float width, Color lineStrokeColor,
+                          float fontSizeSmall, float fontSizeBig,
+                          float width, Color lineStrokeColor,
                           InvoiceModel model, PDDocument document,
                           PaymentInfo payment, Company company,
                           InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
@@ -86,8 +88,8 @@ public class PaymentInfoBox extends ElementBox {
         this.width = width;
         this.lineStrokeColor = lineStrokeColor;
 
-        this.document = document;
         this.model = model;
+        this.document = document;
 
         this.payment = payment;
         this.company = company;
