@@ -69,32 +69,32 @@ public class HelperImage extends Helper {
         return canvas.getBufferedImage();
     }
 
-    public static void drawLine(PDPageContentStream cs, float x1, float y1, float x2, float y2) throws Exception {
-        drawLine(cs, x1, y1, x2, y2, Color.BLACK);
+    public static void drawLine(PDPageContentStream stream, float x1, float y1, float x2, float y2) throws Exception {
+        drawLine(stream, x1, y1, x2, y2, Color.BLACK);
     }
 
-    public static void drawLine(PDPageContentStream cs, float x1, float y1, float x2, float y2, Color strokeColor) throws Exception {
-        cs.moveTo(x1, y1);
-        cs.lineTo(x2, y2);
-        cs.closePath();
-        cs.setStrokingColor(strokeColor);
-        cs.stroke();
+    public static void drawLine(PDPageContentStream stream, float x1, float y1, float x2, float y2, Color strokeColor) throws Exception {
+        stream.moveTo(x1, y1);
+        stream.lineTo(x2, y2);
+        stream.closePath();
+        stream.setStrokingColor(strokeColor);
+        stream.stroke();
     }
 
-    public static void drawPolygon(PDPageContentStream cs, float[] x, float[] y) throws IOException {
+    public static void drawPolygon(PDPageContentStream stream, float[] x, float[] y) throws IOException {
         if (x.length != y.length) {
             throw new IllegalArgumentException("Error: some points are missing coordinate");
         }
         for (int i = 0; i < x.length; i++) {
             if (i == 0) {
-                cs.moveTo(x[i], y[i]);
+                stream.moveTo(x[i], y[i]);
             }
             else {
-                cs.lineTo(x[i], y[i]);
+                stream.lineTo(x[i], y[i]);
             }
         }
-        cs.closePath();
-        cs.stroke();
+        stream.closePath();
+        stream.stroke();
     }
 
     public static BufferedImage getRotatedImage(BufferedImage buffImage, double angle) {
@@ -149,31 +149,31 @@ public class HelperImage extends Helper {
             final PDDocument doc, final PDPage page, final PDImageXObject imgPDF,
             final float xPos, final float yPos, final float imgW, final float imgH,
             final float minAlpha, final float maxAlpha, final double rotAngle) throws IOException {
-        try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
+        try (PDPageContentStream stream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
                 true)) {
-            contentStream.saveGraphicsState();
-            final PDExtendedGraphicsState pdExtGfxState = new PDExtendedGraphicsState();
-            pdExtGfxState.setBlendMode(BlendMode.MULTIPLY);
+            stream.saveGraphicsState();
+            final PDExtendedGraphicsState pdState = new PDExtendedGraphicsState();
+            pdState.setBlendMode(BlendMode.MULTIPLY);
             float alpha = HelperCommon.rand_uniform(minAlpha, maxAlpha);
-            pdExtGfxState.setNonStrokingAlphaConstant(alpha);
-            contentStream.setGraphicsStateParameters(pdExtGfxState);
+            pdState.setNonStrokingAlphaConstant(alpha);
+            stream.setGraphicsStateParameters(pdState);
 
             // draw on document,check if rotation is required or not
             if (rotAngle != 0.0) {
                 BufferedImage imgBuf = HelperImage.getRotatedImage(imgPDF.getImage(), rotAngle);
                 PDImageXObject imgPDFRot = LosslessFactory.createFromImage(doc, imgBuf);
-                contentStream.drawImage(imgPDFRot, xPos, yPos, imgW, imgH);
+                stream.drawImage(imgPDFRot, xPos, yPos, imgW, imgH);
             }
             else {
-                contentStream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
+                stream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
             }
-            contentStream.restoreGraphicsState();
-            contentStream.close();
+            stream.restoreGraphicsState();
+            stream.close();
         }
     }
 
     public static void addWatermarkTextPDF(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
-          try (PDPageContentStream cs = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
+          try (PDPageContentStream stream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
                   true)) {
               final float fontHeight = 90 + rnd.nextInt(20); // arbitrary for short text
               final float width = page.getMediaBox().getWidth();
@@ -183,10 +183,10 @@ public class HelperImage extends Helper {
               final float angle = (float) Math.atan2(height, width) + (float) rnd.nextInt(5)/100;
               final float x = (diagonalLength - stringWidth) / 2; // "horizontal" position in rotated world
               final float y = -fontHeight / 4; // 4 is a trial-and-error thing, this lowers the text a bit
-              cs.transform(Matrix.getRotateInstance(angle, 0, 0));
-              cs.setFont(font, fontHeight);
+              stream.transform(Matrix.getRotateInstance(angle, 0, 0));
+              stream.setFont(font, fontHeight);
               if (rnd.nextInt(10) < 3) {
-                  cs.setRenderingMode(RenderingMode.STROKE); // for "hollow" effect
+                  stream.setRenderingMode(RenderingMode.STROKE); // for "hollow" effect
               }
               final PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
 
@@ -195,15 +195,15 @@ public class HelperImage extends Helper {
               gs.setStrokingAlphaConstant(alpha);
               gs.setBlendMode(BlendMode.MULTIPLY);
               gs.setLineWidth(3f);
-              cs.setGraphicsStateParameters(gs);
+              stream.setGraphicsStateParameters(gs);
 
-              cs.setNonStrokingColor(Color.red);
-              cs.setStrokingColor(Color.red);
+              stream.setNonStrokingColor(Color.red);
+              stream.setStrokingColor(Color.red);
 
-              cs.beginText();
-              cs.newLineAtOffset(x, y);
-              cs.showText(text);
-              cs.endText();
+              stream.beginText();
+              stream.newLineAtOffset(x, y);
+              stream.showText(text);
+              stream.endText();
           }
     }
 }
