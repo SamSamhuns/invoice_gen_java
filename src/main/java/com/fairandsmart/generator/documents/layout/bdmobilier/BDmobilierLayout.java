@@ -35,11 +35,9 @@ package com.fairandsmart.generator.documents.layout.bdmobilier;
 
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
-import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.IDNumbers;
-import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Product;
@@ -50,6 +48,7 @@ import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -535,13 +534,10 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Add company stamp watermark, 40% prob
         if (proba.get("stamp_bottom")) {
-            String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + company.getStamp().getFullPath());
-            PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
-
-            float minAStamp = 0.6f; float maxAStamp = 0.8f;
+            float alpha = HelperCommon.rand_uniform(0.6f, 0.8f);
             float resDim = 105 + rnd.nextInt(20);
-            float xPosStamp; float yPosStamp;
-            // draw to lower right if signature if present
+            float xPosStamp, yPosStamp;
+            // draw to lower right if signature in bottom or lower left if signature in bottom left
             if (proba.get("signature_bottom") && rnd.nextInt(3) < 2) {
                 xPosStamp = ((proba.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
                 yPosStamp = 125 + rnd.nextInt(5);
@@ -550,25 +546,9 @@ public class BDmobilierLayout implements InvoiceLayout {
                 xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = 125 + rnd.nextInt(5);
             }
-            double rotAngle = 10 + rnd.nextInt(80);
-            float stampWidth = resDim;
-            float stampHeight = resDim;
-            if (company.getStamp().getName().matches("(.*)" + "_rect")) {
-                // For Rectangular stamps, set rotation angle to 0 and
-                // resize stamp maintaining aspect ratio
-                rotAngle = 0;
-                stampWidth += rnd.nextInt(20);
-                stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
-            }
-            else if (proba.get("stamp_bottom_elongated")) {
-                // elongate stamps if the stamp is a not a Rectangular one
-                // and set rotation to 0
-                rotAngle = 0;
-                stampWidth = stampWidth + 50;
-                stampHeight = stampHeight - 10;
-            }
-            HelperImage.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
-                                               stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
+            StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
+            stampBox.translate(xPosStamp,yPosStamp);
+            stampBox.build(contentStream,writer);
         }
         // if no signature and no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {

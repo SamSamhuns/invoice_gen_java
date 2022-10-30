@@ -37,7 +37,6 @@ import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.Address;
-import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.Product;
@@ -49,6 +48,7 @@ import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
@@ -670,10 +670,7 @@ public class CdiscountLayout implements InvoiceLayout {
         }
         // Add company stamp watermark, 40% prob
         if (proba.get("stamp_bottom")) {
-            String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + company.getStamp().getFullPath());
-            PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
-
-            float minAStamp = 0.6f, maxAStamp = 0.8f;
+            float alpha = HelperCommon.rand_uniform(0.6f, 0.8f);
             float resDim = 105 + rnd.nextInt(20);
             float xPosStamp, yPosStamp;
             // draw to lower right if signature in bottom or lower left if signature in bottom left
@@ -685,25 +682,9 @@ public class CdiscountLayout implements InvoiceLayout {
                 xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = bottomPageMargin + 50 + rnd.nextInt(5);
             }
-            double rotAngle = 10 + rnd.nextInt(80);
-            float stampWidth = resDim;
-            float stampHeight = resDim;
-            if (company.getStamp().getName().matches("(.*)" + "_rect")) {
-                // For Rectangular stamps, set rotation angle to 0 and
-                // resize stamp maintaining aspect ratio
-                rotAngle = 0;
-                stampWidth += rnd.nextInt(20);
-                stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
-            }
-            else if (proba.get("stamp_bottom_elongated")) {
-                // elongate stamps if the stamp is a not a Rectangular one
-                // and set rotation to 0
-                rotAngle = 0;
-                stampWidth = stampWidth + 50;
-                stampHeight = stampHeight - 10;
-            }
-            HelperImage.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
-                                             stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
+            StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
+            stampBox.translate(xPosStamp,yPosStamp);
+            stampBox.build(contentStream,writer);
         }
         // Add bg logo watermark or confidential stamp, but not both at once
         if (proba.get("confidential_watermark")) {

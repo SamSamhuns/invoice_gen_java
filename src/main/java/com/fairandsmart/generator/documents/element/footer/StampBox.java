@@ -32,64 +32,55 @@ package com.fairandsmart.generator.documents.element.footer;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
-import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
-import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.head.CompanyInfoBox;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-import java.awt.Color;
+import java.awt.image.BufferedImage;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.Map;
+import java.util.Random;
 
-// TODO fix stamp box proper display
+
 public class StampBox extends ElementBox {
 
-    private final PDFont font;
-    private final float fontSize;
-    private final String sigText;
-
-    private final float sigTextX;
-    private final float sigTextY;
-    private final float sigImgWidth;
-    private final float sigImgHeight;
-    private final Color lineStrokeColor;
+    private float stampWidth;
+    private float stampHeight;
+    private float alpha;
+    private double rotAngle;
 
     private final InvoiceModel model;
     private final PDDocument document;
     private final Company company;
+    private final Map<String, Boolean> proba;
+
+    private final Random rnd = new Random();
 
     private VerticalContainer vContainer;
 
-    public StampBox(PDFont font, float fontSize, String sigText,
-                    float sigTextX, float sigTextY,
-                    float sigImgWidth, float sigImgHeight,
-                    Color lineStrokeColor,
+    public StampBox(float stampWidth, float stampHeight, float alpha,
                     InvoiceModel model, PDDocument document,
-                    Company company) throws Exception {
-        this.font = font;
-        this.fontSize = fontSize;
-        this.sigText = sigText;
+                    Company company, Map<String, Boolean> proba) throws Exception {
 
-        this.sigTextX = sigTextX;
-        this.sigTextY = sigTextY;
-        this.sigImgWidth = sigImgWidth;
-        this.sigImgHeight = sigImgHeight;
-        this.lineStrokeColor = lineStrokeColor;
+        this.stampWidth = stampWidth;
+        this.stampHeight = stampHeight;
+        this.alpha = alpha;
+        this.rotAngle = 10 + rnd.nextInt(130);
 
         this.model = model;
         this.document = document;
         this.company = company;
+        this.proba = proba;
 
         this.init();
     }
@@ -97,30 +88,30 @@ public class StampBox extends ElementBox {
     private void init() throws Exception {
         vContainer = new VerticalContainer(0,0,0);
 
-        SimpleTextBox sigTextBox = new SimpleTextBox(font,fontSize,0,0,sigText,"Signature");
+        String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + company.getStamp().getFullPath());
+        PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
 
-        HorizontalLineBox sigLine = new HorizontalLineBox(
-                sigTextX - 10, sigTextY + 5,
-                sigTextX + sigTextBox.getBBox().getWidth() + 10, sigTextY + 5,
-                lineStrokeColor);
-
-        String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
-        PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
-
-        // resize maintaining aspect to (sigImgWidth, sigImgHeight)
-        float sigScale = Math.min(sigImgWidth/sigImg.getWidth(), sigImgHeight/sigImg.getHeight());
-        float sigW = sigImg.getWidth() * sigScale;
-        float sigH = sigImg.getHeight() * sigScale;
-        // align signature to center of sigTextBox bbox
-        float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
-        float sigIY = sigTextY + 10;
-        System.out.println("ow: "+ sigImg.getWidth() + ", oh:"+ sigImg.getHeight());
-        System.out.println("w: "+sigW + ", h:" + sigH);
-        ImageBox sigImgBox = new ImageBox(sigImg, 0, 0, sigW, sigH, "Signature Image");
-
-        vContainer.addElement(sigImgBox);
-        vContainer.addElement(sigLine);
-        vContainer.addElement(sigTextBox);
+        if (company.getStamp().getName().matches("(.*)" + "_rect")) {
+            // For Rectangular stamps, set rotation angle to 0 and
+            // resize stamp maintaining aspect ratio
+            rotAngle = 0;
+            stampWidth += rnd.nextInt(20);
+            stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
+        }
+        else if (proba.get("stamp_bottom_elongated")) {
+            // elongate stamps if the stamp is a not a Rectangular one
+            // and set rotation to 0
+            rotAngle = 0;
+            stampWidth = stampWidth + 50;
+            stampHeight = stampHeight - 10;
+        }
+        // rotate if rotAngle is nonzero
+        if (rotAngle != 0.0) {
+            BufferedImage imgBuf = HelperImage.getRotatedImage(stampImg.getImage(), rotAngle);
+            stampImg = LosslessFactory.createFromImage(document, imgBuf);
+        }
+        ImageBox stampImgBox = new ImageBox(stampImg,0,0,stampWidth,stampHeight,alpha,"stamp");
+        vContainer.addElement(stampImgBox);
     }
 
     @Override

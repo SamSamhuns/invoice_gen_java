@@ -49,18 +49,15 @@ import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
 import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
-import com.fairandsmart.generator.documents.element.footer.SignatureBox;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
-
-import com.mifmif.common.regex.Generex;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -81,7 +78,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 
@@ -194,7 +190,7 @@ public class AmazonLayout implements InvoiceLayout {
         topTextCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, textTopInvString, docTitle+" Number"));
         topTextCont.addElement(new SimpleTextBox(fontNB, 10, 0, 0, ((rnd.nextBoolean()) ? "Retail / "+docTitle+" / Cash Memorandum": "Retail / "+docTitle) ));
         if (proba.get("text_top_center") && !proba.get("barcode_top")) {  // center top text if barcode not present
-            topTextCont.alignElements("CENTER", topTextCont.getBBox().getWidth());
+            topTextCont.alignElements(HAlign.CENTER, topTextCont.getBBox().getWidth());
             topTextCont.translate(pageMiddleX - topTextCont.getBBox().getWidth()/2, 0);
         }
         annot.setTitle(docTitle);
@@ -636,7 +632,7 @@ public class AmazonLayout implements InvoiceLayout {
             verticalFooterCont.addElement(new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, 0, 0, barcodeNum));
 
             if (proba.get("footer_info_center")) {
-                verticalFooterCont.alignElements("CENTER", verticalFooterCont.getBBox().getWidth());
+                verticalFooterCont.alignElements(HAlign.CENTER, verticalFooterCont.getBBox().getWidth());
                 verticalFooterCont.translate(pageMiddleX - verticalFooterCont.getBBox().getWidth()/2, 0);
             }
             verticalFooterCont.build(contentStream, writer);
@@ -659,12 +655,9 @@ public class AmazonLayout implements InvoiceLayout {
             contentStream.drawImage(barcodeImg, leftPageMargin, bottomPageMargin, barcodeImg.getWidth() - 15, barcodeImg.getHeight() - 72);
         }
 
-        // Add company stamp watermark, 40% prob
+        // Add company stamp watermark
         if (proba.get("stamp_bottom")) {
-            String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + company.getStamp().getFullPath());
-            PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
-
-            float minAStamp = 0.6f, maxAStamp = 0.8f;
+            float alpha = HelperCommon.rand_uniform(0.6f, 0.8f);
             float resDim = 105 + rnd.nextInt(20);
             float xPosStamp, yPosStamp;
             // draw to lower right if signature in bottom or lower left if signature in bottom left
@@ -676,27 +669,11 @@ public class AmazonLayout implements InvoiceLayout {
                 xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
                 yPosStamp = 125 + rnd.nextInt(5);
             }
-            double rotAngle = 10 + rnd.nextInt(80);
-            float stampWidth = resDim;
-            float stampHeight = resDim;
-            if (company.getStamp().getName().matches("(.*)" + "_rect")) {
-                // For Rectangular stamps, set rotation angle to 0 and
-                // resize stamp maintaining aspect ratio
-                rotAngle = 0;
-                stampWidth += rnd.nextInt(20);
-                stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
-            }
-            else if (proba.get("stamp_bottom_elongated")) {
-                // elongate stamps if the stamp is a not a Rectangular one
-                // and set rotation to 0
-                rotAngle = 0;
-                stampWidth = stampWidth + 50;
-                stampHeight = stampHeight - 10;
-            }
-            HelperImage.addWatermarkImagePDF(document, page, stampImg, xPosStamp, yPosStamp,
-                                             stampWidth, stampHeight, minAStamp, maxAStamp, rotAngle);
+            StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
+            stampBox.translate(xPosStamp,yPosStamp);
+            stampBox.build(contentStream,writer);
         }
-        // if no signature and no stamp, then add a footer note
+        // if no signature anåd no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
             new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream, writer);
