@@ -51,6 +51,7 @@ import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.footer.FootBox;
+import com.fairandsmart.generator.documents.element.footer.SignatureBox;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
@@ -189,14 +190,20 @@ public class MACOMPLayout implements InvoiceLayout {
 
         // Payment Info and Address
         if (proba.get("payment_address")) {
-            float pAW = 300;
-            float pAX = 310;
-            float pAY = 630;
+            float pAW = 300, pAX = 310, pAY = 630;
+            proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
 
             PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(contentStream,writer);
         }
+
+        String sigText = company.getSignature().getLabel()+" "+(company.getName().length() < 25 ? company.getName() : "");
+        SignatureBox sigB = new SignatureBox(
+                fontN, 8, sigText, 50,400, 90,30,
+                lineStrokeColor, model, document, company);
+        sigB.translate(50, 150);
+        sigB.build(contentStream,writer);
 
         VerticalContainer invoiceInfo = new VerticalContainer(310, 580, 400);
 
