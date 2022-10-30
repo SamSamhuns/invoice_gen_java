@@ -139,7 +139,11 @@
       "payment_branch_name": 40,
       "payment_routing_number": 40,
       "payment_swift_number": 40,
-      "payment_vendor_tax_number": 20
+      "payment_vendor_tax_number": 20,
+      "signature_bottom": 70,
+      "signature_bottom_left": 25,
+      "stamp_bottom": 55,
+      "stamp_bottom_elongated": 25
     }
   },
   {

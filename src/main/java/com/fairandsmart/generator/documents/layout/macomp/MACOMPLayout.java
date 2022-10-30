@@ -37,21 +37,17 @@ import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Client;
-import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.Company;
-import com.fairandsmart.generator.documents.data.model.ContactNumber;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
-import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.footer.FootBox;
 import com.fairandsmart.generator.documents.element.footer.SignatureBox;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
@@ -66,7 +62,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -77,7 +72,6 @@ import java.awt.Color;
 import java.util.Random;
 import java.util.Map;
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -202,8 +196,32 @@ public class MACOMPLayout implements InvoiceLayout {
         SignatureBox sigB = new SignatureBox(
                 fontN, 8, sigText, 50,400, 90,30,
                 lineStrokeColor, model, document, company);
-        sigB.translate(50, 150);
+        sigB.translate(100, 170);
         sigB.build(contentStream,writer);
+
+        // Add company stamp watermark
+        if (proba.get("stamp_bottom")) {
+            float alpha = HelperCommon.rand_uniform(0.6f, 0.8f);
+            float resDim = 105 + rnd.nextInt(20);
+            float xPosStamp, yPosStamp;
+            // draw to lower right if signature in bottom or lower left if signature in bottom left
+            if (proba.get("signature_bottom") && rnd.nextInt(3) < 2) {
+                xPosStamp = ((proba.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
+                yPosStamp = 125 + rnd.nextInt(5);
+            }
+            else {  // draw to lower center
+                xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
+                yPosStamp = 125 + rnd.nextInt(5);
+            }
+            StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
+            stampBox.translate(xPosStamp,yPosStamp);
+            stampBox.build(contentStream,writer);
+        }
+        // if no signature anåd no stamp, then add a footer note
+        else if (!proba.get("signature_bottom")) {
+            String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
+            new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream, writer);
+        }
 
         VerticalContainer invoiceInfo = new VerticalContainer(310, 580, 400);
 
