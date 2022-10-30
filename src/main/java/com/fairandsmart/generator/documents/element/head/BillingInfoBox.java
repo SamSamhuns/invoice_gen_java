@@ -36,6 +36,7 @@ import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Address;
+import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
 
 import com.fairandsmart.generator.documents.element.BoundingBox;
@@ -108,26 +109,36 @@ public class BillingInfoBox extends ElementBox {
         vContainer = new VerticalContainer(0,0,width);
 
         Address address = client.getBillingAddress();
+        IDNumbers idNumber = client.getIdNumbers();
         ContactNumber contact = client.getBillingContactNumber();
+        String clientAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
 
         vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig,0,0, client.getBillingHead(), "BH" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, client.getBillingName(), "BN" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(), "BA" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip()+" "+address.getCity(), "BA" ));
-        if (proba.get("bill_address_phone_fax")) {
+        if (proba.get("bill_address_phone")) {
             vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+": "+contact.getPhoneValue(), "BC"));
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "BF"));
         }
-        else if (proba.get("bill_address_tax_number")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"BT"));
-            annot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
+        else if (proba.get("bill_address_country")) {
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,address.getCountry(),"BA"));
+            clientAddr += " " + address.getCountry();
         }
+
+        if (proba.get("bill_address_tax_number")) {
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,idNumber.getVatLabel()+": "+idNumber.getVatValue(),"BT"));
+            annot.getBillto().setCustomerTrn(idNumber.getVatValue());
+        }
+        else if (proba.get("bill_address_fax")) {
+          vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "BF"));
+        }
+
         if (proba.get("addresses_bordered") && client.getBillingHead().length() > 0) {
             vContainer.setBorderColor(lineStrokeColor);
             vContainer.setBorderThickness(0.5f);
         }
         annot.getBillto().setCustomerName(client.getBillingName());
-        annot.getBillto().setCustomerAddr(address.getLine1()+" "+address.getZip()+" "+address.getCity());
+        annot.getBillto().setCustomerAddr(clientAddr);
         annot.getBillto().setCustomerPOBox(address.getZip());
     }
 

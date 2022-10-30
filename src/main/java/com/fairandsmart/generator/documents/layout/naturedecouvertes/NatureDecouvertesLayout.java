@@ -48,6 +48,9 @@ import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 
 import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
+import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
+import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
+import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
@@ -227,60 +230,17 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         float shipX = rightAddrX; float shipY = billY;
 
         // billing address
-        Address bAddr = client.getBillingAddress();
-        ContactNumber bCN = client.getBillingContactNumber();
-        VerticalContainer billAddrCont = new VerticalContainer(billX,billY,250);
-        billAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,client.getBillingHead(),"BH"));
-        billAddrCont.addElement(new SimpleTextBox(fontB,11,0,0,client.getBillingName().toUpperCase(),"BN"));
-        billAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,bAddr.getLine1().toUpperCase(),"BA"));
-        billAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,bAddr.getZip()+" "+bAddr.getCity().toUpperCase(),"BA"));
-        if (proba.get("bill_address_phone_fax")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getPhoneLabel()+": "+bCN.getPhoneValue(), "BC"));
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getFaxLabel()+": "+bCN.getFaxValue(), "BF"));
-        }
-        else if (proba.get("bill_address_tax_number")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"BT"));
-            annot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
-        }
-        if (proba.get("addresses_bordered") && client.getBillingHead().length() > 0) {
-            billAddrCont.setBorderColor(lineStrokeColor);
-            billAddrCont.setBorderThickness(0.5f);
-        }
-        annot.getBillto().setCustomerName(client.getBillingName().toUpperCase());
-        annot.getBillto().setCustomerAddr(bAddr.getLine1().toUpperCase()+" "+bAddr.getZip()+" "+bAddr.getCity().toUpperCase());
-        annot.getBillto().setCustomerPOBox(bAddr.getZip());
-        billAddrCont.build(contentStream,writer);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,11,250,lineStrokeColor,model,document,client,annot,proba);
+        billingInfoBox.translate(billX, billY);
+        billingInfoBox.build(contentStream,writer);
 
         // shipping address
-        Address sAddr = client.getShippingAddress();
-        ContactNumber sCN = client.getShippingContactNumber();
-        VerticalContainer shipAddrCont = new VerticalContainer(shipX,shipY,250);
-        shipAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,client.getShippingHead(),"SHH"));
-        shipAddrCont.addElement(new SimpleTextBox(fontB,11,0,0,client.getShippingName().toUpperCase(),"SHN"));
-        shipAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,sAddr.getLine1().toUpperCase(),"SHA"));
-        shipAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,sAddr.getZip()+" "+sAddr.getCity().toUpperCase(),"SHA"));
-        if (proba.get("bill_address_phone_fax") && proba.get("ship_address_phone_fax")) {
-            String connec = (sCN.getPhoneLabel().length() > 0) ? ": ": "";
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getPhoneLabel()+connec+sCN.getPhoneValue(), "BC"));
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getFaxLabel()+connec+sCN.getFaxValue(), "BF"));
-        }
-        if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {
-            shipAddrCont.setBorderColor(lineStrokeColor);
-            shipAddrCont.setBorderThickness(0.5f);
-        }
-        // add annotations for shipping address if these fields are not empty
-        if (client.getShippingName().length() > 0) {
-            annot.setShipto(new InvoiceAnnotModel.Shipto());
-            annot.getShipto().setShiptoName(client.getShippingName().toUpperCase());
-            if (sCN.getPhoneLabel().length() > 0) {
-                annot.getShipto().setShiptoPOBox(sAddr.getZip());
-                annot.getShipto().setShiptoAddr(sAddr.getLine1()+" "+sAddr.getZip()+" "+sAddr.getCity());
-            }
-        }
-        shipAddrCont.build(contentStream,writer);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,11,250,lineStrokeColor,model,document,client,annot,proba);
+        shippingInfoBox.translate(shipX, shipY);
+        shippingInfoBox.build(contentStream,writer);
 
         // table top order num, order id, invoice id, inv date and due date info
-        float tableTopY = billAddrCont.getBBox().getPosY() - billAddrCont.getBBox().getHeight() - 25;
+        float tableTopY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 25;
 
         if (proba.get("currency_top")) {
             new SimpleTextBox(fontB,12, leftPageMargin,tableTopY, payment.getLabelAccountCurrency()+": "+cur,"CUR").build(contentStream,writer);

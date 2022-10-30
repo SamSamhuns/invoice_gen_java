@@ -121,8 +121,10 @@ public class VendorInfoBox extends ElementBox {
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(),"SA"));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip() +"  "+ address.getCity(),"SA"));
         vContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,3));
-        if (proba.get("vendor_address_phone_fax")) {
+        if (proba.get("vendor_address_phone")) {
             vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+": "+contact.getPhoneValue(), "SC"));
+        }
+        if (proba.get("vendor_address_fax")) {
             vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "SF"));
         }
         if (proba.get("vendor_address_tax_number")) {
@@ -130,6 +132,11 @@ public class VendorInfoBox extends ElementBox {
             vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, vatText, "SVAT"));
             annot.getVendor().setVendorTrn(idNumber.getVatValue());
         }
+        // else if (proba.get("vendor_address_country")) {
+        //     vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,client.getBillingAddress().getCountry(),"BA"));
+        //     clientAddr += " " + address.getCountry();
+        // }
+
         if (proba.get("addresses_bordered")) {
             vContainer.setBorderColor(lineStrokeColor);
             vContainer.setBorderThickness(0.5f);

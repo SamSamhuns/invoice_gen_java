@@ -47,6 +47,9 @@ import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.product.ProductTable;
+import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
+import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
+import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.footer.StampBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
@@ -252,65 +255,19 @@ public class CdiscountLayout implements InvoiceLayout {
         }
 
         // Billing address
-        Address bAddr = client.getBillingAddress();
         float bAddrPosX = 90, bAddrPosY, bAddrHeight;
-        VerticalContainer billAddrCont = new VerticalContainer(bAddrPosX, pageHeight-158, 250);
-
-        billAddrCont.addElement(new SimpleTextBox(fontB,9,0,0, client.getBillingHead(),themeColor,null));
-        billAddrCont.addElement(new SimpleTextBox(fontNB,9,0,0, client.getBillingName(),"BN"));
-        billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, bAddr.getLine1(),"BA"));
-        billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, bAddr.getZip()+" "+bAddr.getCity().toUpperCase() ,"BA"));
-        if (proba.get("bill_address_tax_number")) {
-          billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"BT"));
-          annot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
-        }
-        else if (proba.get("bill_address_phone_fax")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, client.getBillingContactNumber().getPhoneLabel()+": "+client.getBillingContactNumber().getPhoneValue(), "BC"));
-            billAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, client.getBillingContactNumber().getFaxLabel()+": "+client.getBillingContactNumber().getFaxValue(), "BF"));
-        }
-        if (proba.get("addresses_bordered")) {
-            bAddrPosY = billAddrCont.getBBox().getPosY();
-            bAddrHeight = billAddrCont.getBBox().getHeight();
-            new BorderBox(themeColor,white,1,87,bAddrPosY-bAddrHeight,229,bAddrHeight).build(contentStream,writer);
-        }
-        annot.getBillto().setCustomerName(client.getBillingName());
-        annot.getBillto().setCustomerAddr(bAddr.getLine1()+" "+bAddr.getZip()+" "+bAddr.getCity());
-        annot.getBillto().setCustomerPOBox(bAddr.getZip());
-        billAddrCont.build(contentStream,writer);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        billingInfoBox.translate(bAddrPosX, pageHeight-158);
+        billingInfoBox.build(contentStream,writer);
 
         // Shipping Address
-        Address sAddr = client.getShippingAddress();
-        VerticalContainer shipAddrCont = new VerticalContainer(320, pageHeight-158, 250);
-
-        shipAddrCont.addElement(new SimpleTextBox(fontB,9,0,0, client.getShippingHead(),themeColor,null));
-        shipAddrCont.addElement(new SimpleTextBox(fontNB,9,0,0, client.getShippingName(),"SHN"));
-        shipAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, sAddr.getLine1(),"SHA"));
-        shipAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, sAddr.getZip()+" "+sAddr.getCity().toUpperCase() ,"SHA"));
-        if (proba.get("bill_address_phone_fax") && proba.get("ship_address_phone_fax")) {
-            String connec = (client.getShippingContactNumber().getPhoneLabel().length() > 0) ? ": ": "";
-            shipAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, client.getShippingContactNumber().getPhoneLabel()+connec+client.getShippingContactNumber().getPhoneValue(), "BC"));
-            shipAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, client.getShippingContactNumber().getFaxLabel()+connec+client.getShippingContactNumber().getFaxValue(), "BF"));
-        }
-        if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {
-            // match address box of billing address
-            bAddrPosY = billAddrCont.getBBox().getPosY();
-            bAddrHeight = billAddrCont.getBBox().getHeight();
-            new BorderBox(themeColor,white,1,87+230,bAddrPosY-bAddrHeight,192,bAddrHeight).build(contentStream,writer);
-        }
-        // add annotations for shipping address if these fields are not empty
-        if (client.getShippingName().length() > 0) {
-            annot.setShipto(new InvoiceAnnotModel.Shipto());
-            annot.getShipto().setShiptoName(client.getShippingName());
-            if (client.getShippingContactNumber().getPhoneLabel().length() > 0) {
-                annot.getShipto().setShiptoPOBox(sAddr.getZip());
-                annot.getShipto().setShiptoAddr(sAddr.getLine1()+" "+sAddr.getZip()+" "+sAddr.getCity());
-            }
-        }
-        shipAddrCont.build(contentStream,writer);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        shippingInfoBox.translate(320, pageHeight-158);
+        shippingInfoBox.build(contentStream,writer);
 
         // client mail & payment info under billing addr
         float box1PosX = 87;
-        float box1PosY = billAddrCont.getBBox().getPosY() - billAddrCont.getBBox().getHeight() - 4;
+        float box1PosY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 4;
         float box1W = 85;
         float box1H = 11;
         Color box1Color = grayish;

@@ -36,6 +36,7 @@ import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Address;
+import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
 
 import com.fairandsmart.generator.documents.element.BoundingBox;
@@ -109,16 +110,25 @@ public class ShippingInfoBox extends ElementBox {
 
         Address address = client.getShippingAddress();
         ContactNumber contact = client.getShippingContactNumber();
+        String connec = (contact.getPhoneLabel().length() > 0) ? ": ": "";
+        String clientAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
 
         vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig,0,0, client.getShippingHead(), "SHH" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, client.getShippingName(), "SHN" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(), "SHA" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip()+" "+address.getCity(), "SHA" ));
-        if (proba.get("bill_address_phone_fax") && proba.get("ship_address_phone_fax")) {
-            String connec = (contact.getPhoneLabel().length() > 0) ? ": ": "";
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+connec+contact.getPhoneValue(), "BC"));
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+connec+contact.getFaxValue(), "BF"));
+        if (proba.get("ship_address_phone") && proba.get("bill_address_phone")) {
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+connec+contact.getPhoneValue(), "SHC"));
         }
+        else if (proba.get("ship_address_country")) {
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,address.getCountry(),"SA"));
+            clientAddr += " " + address.getCountry();
+        }
+
+        if (proba.get("ship_address_fax") && proba.get("bill_address_fax")) {
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+connec+contact.getFaxValue(), "SHF"));
+        }
+
         if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {
             vContainer.setBorderColor(lineStrokeColor);
             vContainer.setBorderThickness(0.5f);
@@ -128,8 +138,8 @@ public class ShippingInfoBox extends ElementBox {
             annot.setShipto(new InvoiceAnnotModel.Shipto());
             annot.getShipto().setShiptoName(client.getShippingName());
             if (contact.getPhoneLabel().length() > 0) {
+                annot.getShipto().setShiptoAddr(clientAddr);
                 annot.getShipto().setShiptoPOBox(address.getZip());
-                annot.getShipto().setShiptoAddr(address.getLine1()+" "+address.getZip()+" "+address.getCity());
             }
         }
     }

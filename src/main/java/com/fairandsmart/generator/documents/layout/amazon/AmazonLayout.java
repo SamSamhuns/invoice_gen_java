@@ -49,6 +49,9 @@ import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
 import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
+import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
+import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
+import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.footer.StampBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
@@ -198,27 +201,14 @@ public class AmazonLayout implements InvoiceLayout {
         topTextCont.build(contentStream, writer);
 
         // Vendor/Company Address
-        VerticalContainer vendorAddrCont = new VerticalContainer(leftPageMargin, 761, 300);
-        vendorAddrCont.addElement(new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 10, 0, 0, company.getAddressHeader(), "SH"));
-        vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getName(), "SN"));
-        vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getAddress().getLine1(), "SA" ));
-        vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getAddress().getZip()+" "+company.getAddress().getCity(), "SA"));
-        if (proba.get("vendor_address_phone_fax")) {
-            vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getContact().getPhoneLabel()+": "+company.getContact().getPhoneValue(), "SC"));
-            vendorAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, company.getContact().getFaxLabel()+": "+company.getContact().getFaxValue(), "SF"));
-        }
-        if (proba.get("addresses_bordered")) {
-            vendorAddrCont.setBorderColor(lineStrokeColor);
-            vendorAddrCont.setBorderThickness(0.5f);
-        }
-        annot.getVendor().setVendorName(company.getName());
-        annot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity());
-        annot.getVendor().setVendorPOBox(company.getAddress().getZip());
-        vendorAddrCont.build(contentStream, writer);
+        proba.put("vendor_address_tax_number", false);
+        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,9,300,lineStrokeColor,model,document,company,annot,proba);
+        vendorInfoBox.translate(leftPageMargin, 760);
+        vendorInfoBox.build(contentStream,writer);
 
         float leftTopInfoY = 670; // Progressively inc by 10 pts after each left-side box
         // if no "vendor_address_phone_fax" then Purchase Order Number, Left side
-        if (proba.get("purchase_order_number_top") && !proba.get("vendor_address_phone_fax")) {
+        if (proba.get("purchase_order_number_top") && !proba.get("vendor_address_phone") && !proba.get("vendor_address_fax")) {
             String purchaseOrderText = model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder();
             new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, purchaseOrderText, "LO").build(contentStream, writer);
             leftTopInfoY += 10;
@@ -272,57 +262,14 @@ public class AmazonLayout implements InvoiceLayout {
         float shipX = rightAddrX; float shipY = 645;
 
         // Billing Address
-        Address bAddr = client.getBillingAddress();
-        ContactNumber bCN = client.getBillingContactNumber();;
-        VerticalContainer billAddrCont = new VerticalContainer(billX, billY, 250);
-        billAddrCont.addElement(new SimpleTextBox(fontNB, 9, 0, 0, client.getBillingHead(), "BH" ));
-        billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getBillingName(), "BN" ));
-        billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bAddr.getLine1(), "BA" ));
-        billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bAddr.getZip()+" "+bAddr.getCity(), "BA" ));
-        if (proba.get("bill_address_phone_fax")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getPhoneLabel()+": "+bCN.getPhoneValue(), "BC"));
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, bCN.getFaxLabel()+": "+bCN.getFaxValue(), "BF"));
-        }
-        else if (proba.get("bill_address_tax_number")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"BT"));
-            annot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
-        }
-        if (proba.get("addresses_bordered") && client.getBillingHead().length() > 0) {
-            billAddrCont.setBorderColor(lineStrokeColor);
-            billAddrCont.setBorderThickness(0.5f);
-        }
-        annot.getBillto().setCustomerName(client.getBillingName());
-        annot.getBillto().setCustomerAddr(bAddr.getLine1()+" "+bAddr.getZip()+" "+bAddr.getCity());
-        annot.getBillto().setCustomerPOBox(bAddr.getZip());
-        billAddrCont.build(contentStream, writer);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        billingInfoBox.translate(billX, billY);
+        billingInfoBox.build(contentStream,writer);
 
         // Shipping Address
-        Address sAddr = client.getShippingAddress();
-        ContactNumber sCN = client.getShippingContactNumber();
-        VerticalContainer shipAddrCont = new VerticalContainer(shipX, shipY, 250);
-        shipAddrCont.addElement(new SimpleTextBox(fontNB, 9, 0, 0, client.getShippingHead(), "SHH" ));
-        shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingName(), "SHN" ));
-        shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sAddr.getLine1(), "SHA" ));
-        shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sAddr.getZip()+" "+sAddr.getCity(), "SHA" ));
-        if (proba.get("bill_address_phone_fax") && proba.get("ship_address_phone_fax")) {
-            String connec = (sCN.getPhoneLabel().length() > 0) ? ": ": "";
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getPhoneLabel()+connec+sCN.getPhoneValue(), "BC"));
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, sCN.getFaxLabel()+connec+sCN.getFaxValue(), "BF"));
-        }
-        if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {
-            shipAddrCont.setBorderColor(lineStrokeColor);
-            shipAddrCont.setBorderThickness(0.5f);
-        }
-        // add annotations for shipping address if these fields are not empty
-        if (client.getShippingName().length() > 0) {
-            annot.setShipto(new InvoiceAnnotModel.Shipto());
-            annot.getShipto().setShiptoName(client.getShippingName());
-            if (sCN.getPhoneLabel().length() > 0) {
-                annot.getShipto().setShiptoPOBox(sAddr.getZip());
-                annot.getShipto().setShiptoAddr(sAddr.getLine1()+" "+sAddr.getZip()+" "+sAddr.getCity());
-            }
-        }
-        shipAddrCont.build(contentStream, writer);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        shippingInfoBox.translate(shipX, shipY);
+        shippingInfoBox.build(contentStream,writer);
 
         ////////////////////////////////////      Building Table      ////////////////////////////////////
 
@@ -351,7 +298,7 @@ public class AmazonLayout implements InvoiceLayout {
         tableTopText = tableTopText.equals("All prices are in")? tableTopText+" "+cur: tableTopText;
         tableTopText = (hdrBgColor == white) ? "" : tableTopText;
         float tableTopPosX = leftPageMargin;
-        float tableTopPosY = billAddrCont.getBBox().getPosY() - billAddrCont.getBBox().getHeight() - 15;
+        float tableTopPosY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 15;
 
         SimpleTextBox tableTopBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopPosX, tableTopPosY, tableTopText);
         tableTopBox.build(contentStream, writer);
@@ -568,7 +515,6 @@ public class AmazonLayout implements InvoiceLayout {
             }
             new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
         }
-
         ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
         // Payment Info and Address

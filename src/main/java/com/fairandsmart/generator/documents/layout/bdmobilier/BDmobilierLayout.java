@@ -48,6 +48,9 @@ import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
+import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
+import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
+import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.footer.StampBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
@@ -56,6 +59,7 @@ import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
+import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -210,61 +214,14 @@ public class BDmobilierLayout implements InvoiceLayout {
         float shipX = rightAddrX; float shipY = pageHeight-110;
 
         // Billing Address
-        String clientBillAddr = client.getBillingAddress().getLine1()+" "+client.getBillingAddress().getZip()+" "+client.getBillingAddress().getCity();
-        VerticalContainer billAddrCont = new VerticalContainer(billX,billY,250);
-        billAddrCont.addElement(new SimpleTextBox(fontB,9, 0,0,client.getBillingHead(),grayish,Color.WHITE));
-        billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getBillingName(),"BN"));
-        billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getBillingAddress().getLine1(),"BA"));
-        billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getBillingAddress().getZip()+" "+client.getBillingAddress().getCity(),"BA"));
-        if (proba.get("bill_address_phone_fax")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getBillingContactNumber().getPhoneLabel()+": "+client.getBillingContactNumber().getPhoneValue(), "BC"));
-            billAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getBillingContactNumber().getFaxLabel()+": "+client.getBillingContactNumber().getFaxValue(), "BF"));
-        } else {
-            billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getBillingAddress().getCountry(),"BA"));
-            clientBillAddr += " " + client.getBillingAddress().getCountry();
-        }
-        if (proba.get("bill_address_tax_number")) {
-            billAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getIdNumbers().getVatLabel()+": "+client.getIdNumbers().getVatValue(),"BA"));
-            annot.getBillto().setCustomerTrn(client.getIdNumbers().getVatValue());
-        }
-        if (proba.get("addresses_bordered") && client.getBillingHead().length() > 0) {
-            billAddrCont.setBorderColor(lineStrokeColor);
-            billAddrCont.setBorderThickness(0.5f);
-        }
-        annot.getBillto().setCustomerName(client.getBillingName());
-        annot.getBillto().setCustomerAddr(clientBillAddr);
-        annot.getBillto().setCustomerPOBox(client.getBillingAddress().getZip());
-        billAddrCont.build(contentStream,writer);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        billingInfoBox.translate(billX, billY);
+        billingInfoBox.build(contentStream,writer);
 
         // Shipping Address
-        String clientShipAddr = client.getShippingAddress().getLine1()+" "+client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity();
-        VerticalContainer shipAddrCont = new VerticalContainer(shipX,shipY,250);
-        shipAddrCont.addElement(new SimpleTextBox(fontB,9,0,0,client.getShippingHead(),grayish,Color.WHITE));
-        shipAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getShippingName(),"SHN"));
-        shipAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getShippingAddress().getLine1(),"SHA"));
-        shipAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity(),"SHA"));
-        if (proba.get("bill_address_phone_fax") && proba.get("ship_address_phone_fax")) {
-            String connec = (client.getShippingContactNumber().getPhoneLabel().length() > 0) ? ": ": "";
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingContactNumber().getPhoneLabel()+connec+client.getShippingContactNumber().getPhoneValue(), "SHC"));
-            shipAddrCont.addElement(new SimpleTextBox(fontN, 9, 0, 0, client.getShippingContactNumber().getFaxLabel()+connec+client.getShippingContactNumber().getFaxValue(), "SHF"));
-        } else {
-            shipAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,client.getShippingAddress().getCountry(),"SHA"));
-            clientShipAddr += " " + client.getShippingAddress().getCountry();
-        }
-        if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {
-            shipAddrCont.setBorderColor(lineStrokeColor);
-            shipAddrCont.setBorderThickness(0.5f);
-        }
-        // add annotations for shipping address if these fields are not empty
-        if (client.getShippingName().length() > 0) {
-            annot.setShipto(new InvoiceAnnotModel.Shipto());
-            annot.getShipto().setShiptoName(client.getShippingName());
-            if (client.getShippingContactNumber().getPhoneLabel().length() > 0) {
-                annot.getShipto().setShiptoPOBox(client.getShippingAddress().getZip());
-                annot.getShipto().setShiptoAddr(client.getShippingAddress().getLine1()+" "+client.getShippingAddress().getZip()+" "+client.getShippingAddress().getCity());
-            }
-        }
-        shipAddrCont.build(contentStream,writer);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        shippingInfoBox.translate(shipX, shipY);
+        shippingInfoBox.build(contentStream,writer);
 
         // Left side info
         int leftFSize = 7;
@@ -306,7 +263,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         infoOrder.build(contentStream,writer);
 
         // table top horizontal line, will be built after verticalTableItems
-        float ttx1 = 85; float tty1 = billAddrCont.getBBox().getPosY() - billAddrCont.getBBox().getHeight() - 15;
+        float ttx1 = 85; float tty1 = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 15;
         float ttx2 = pageWidth-rightPageMargin; float tty2 = tty1;
         HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(ttx1, tty1, ttx2, tty2, lineStrokeColor);
 
@@ -421,13 +378,13 @@ public class BDmobilierLayout implements InvoiceLayout {
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = ttx1;
             float yPos = tty1;
-            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor);
+                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
                 xPos += configRow[i];
             }
-            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
         }
 
         float tableBottomY = verticalTableItems.getBBox().getPosY() - tableItemsHeight;
