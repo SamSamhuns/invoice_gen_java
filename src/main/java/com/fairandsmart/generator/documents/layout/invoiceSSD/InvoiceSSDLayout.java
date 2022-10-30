@@ -52,7 +52,6 @@ import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBoxForEvaluation;
 import com.fairandsmart.generator.documents.layout.SSDLayout;
 
-import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -426,7 +425,7 @@ public class InvoiceSSDLayout implements SSDLayout {
         pos_element++;
         new SimpleTextBoxForEvaluation("TA",pos_element).build(writerEval);
         HorizontalContainer hElmt = new HorizontalContainer(0,0);
-        totalsContainer.alignElements("RIGHT",500f);
+        totalsContainer.alignElements(HAlign.RIGHT,500f);
         hElmt.addElement(totalsContainer);
         hElmt.setHeight(hElmt.getBBox().getHeight()+30);
         sumup.addElement(hElmt,true);
@@ -461,7 +460,7 @@ public class InvoiceSSDLayout implements SSDLayout {
             invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         }
         if(footerInLineForm) {
-            String[] alignmentOptions = {"LEFT", "CENTER", "RIGHT"};
+            HAlign[] alignmentOptions = {HAlign.LEFT, HAlign.CENTER, HAlign.RIGHT};
             List<ElementBox> compInfo = new ArrayList<ElementBox>();
             compInfo.add(companyInfoBox.getCompanyNameLine());
             compInfo.add(companyInfoBox.getCompanyAddLine());

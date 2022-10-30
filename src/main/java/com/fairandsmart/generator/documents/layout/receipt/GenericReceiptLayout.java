@@ -209,7 +209,7 @@ public class GenericReceiptLayout implements SSDLayout {
                 new SimpleTextBoxForEvaluation("orderNumber", pos_element).build(writerEval);
             }
         }
-        a.alignElements("CENTER",300f);
+        a.alignElements(HAlign.CENTER,300f);
         HorizontalContainer b = new HorizontalContainer(0,0);
         b.addElement(a);
         firstPart.addElement(a,true);
@@ -230,7 +230,7 @@ public class GenericReceiptLayout implements SSDLayout {
         a1.addElement(companyAddressline1);
         a1.addElement(companyAddressline2);
         a1.addElement(companyAddressline3);
-        a1.alignElements("CENTER",300f);
+        a1.alignElements(HAlign.CENTER,300f);
         HorizontalContainer b1 = new HorizontalContainer(0,0);
         b1.addElement(a1);
         secondPart.addElement(b1,true);
@@ -260,7 +260,7 @@ public class GenericReceiptLayout implements SSDLayout {
         }
         VerticalContainer a4 = new VerticalContainer(0,0,300f);
         a4.addElement(b2);
-        a4.alignElements("CENTER",300f);
+        a4.alignElements(HAlign.CENTER,300f);
         thirdPart.addElement(a4, true);
         receiptPage.addElement(thirdPart);
         fourthPart = new TableRowBox(configRow1v1, 0, 0);
@@ -353,7 +353,7 @@ public class GenericReceiptLayout implements SSDLayout {
                 for (int i=0;i<infolist.size();i++){
                     infoBlock.addElement(infolist.get(i));
                 }
-                infoBlock.alignElements("LEFT",300f);
+                infoBlock.alignElements(HAlign.LEFT,300f);
                 infoBlockHF.addElement(infoBlock);
             }else {
                 VerticalContainer infoBlockR = new VerticalContainer(0,0,150f);
@@ -368,7 +368,7 @@ public class GenericReceiptLayout implements SSDLayout {
                 infoBlockH.addElement(infoBlockL);
                 infoBlockH.addElement(infoBlockR);
                 infoBlock.addElement(infoBlockH);
-                infoBlock.alignElements("CENTER",300f);
+                infoBlock.alignElements(HAlign.CENTER,300f);
                 infoBlockHF.addElement(infoBlock);
             }
             if(modeEval) {
@@ -493,7 +493,7 @@ public class GenericReceiptLayout implements SSDLayout {
             new SimpleTextBoxForEvaluation("change", pos_element).build(writerEval);
         }
         HorizontalContainer hElmt = new HorizontalContainer(0,0);
-        a6.alignElements("RIGHT",300f);
+        a6.alignElements(HAlign.RIGHT,300f);
         hElmt.addElement(a6);
         hElmt.setHeight(hElmt.getBBox().getHeight()+30);
         sumup.addElement(hElmt,true);
@@ -519,7 +519,7 @@ public class GenericReceiptLayout implements SSDLayout {
             dateH.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 5, 0));
             dateH.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, this.model.getReference().getValueOrder(),Color.BLACK, null, HAlign.CENTER ));
             dateTime.addElement(dateH);
-            dateTime.alignElements("LEFT",300);
+            dateTime.alignElements(HAlign.LEFT,300);
             receiptPage.addElement(dateTime);
             if(modeEval) {
                 pos_element++;
@@ -554,7 +554,7 @@ public class GenericReceiptLayout implements SSDLayout {
                 new SimpleTextBoxForEvaluation("toa", pos_element).build(writerEval);
             }
             companyInfoV.addElement(companyInfoH);
-            companyInfoV.alignElements("CENTER",300);
+            companyInfoV.alignElements(HAlign.CENTER,300);
             companyInfoPart.addElement(companyInfoV,true);
             receiptPage.addElement(companyInfoPart);
         }
@@ -566,7 +566,7 @@ public class GenericReceiptLayout implements SSDLayout {
             hCon.addElement(new SimpleTextBox(fonts[0], 9, 0, 0, footnotes.get(i), Color.BLACK, null, HAlign.CENTER));
             foot.addElement(hCon);
         }
-        foot.alignElements("CENTER",300f);
+        foot.alignElements(HAlign.CENTER,300f);
         if(modeEval) {
             pos_element++;
             new SimpleTextBoxForEvaluation("footnote", pos_element).build(writerEval);

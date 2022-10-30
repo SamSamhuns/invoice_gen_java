@@ -34,6 +34,8 @@ package com.fairandsmart.generator.documents.layout.ngeneric;
  */
 
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.layout.InvoiceLayout;
+
 import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.VAlign;
@@ -47,7 +49,6 @@ import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.product.ProductBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
-import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -346,7 +347,7 @@ public class NGenericLayout implements InvoiceLayout {
         }
 
         if(footerInLineForm) {
-            String[] alignmentOptions = {"LEFT", "CENTER", "RIGHT"};
+            HAlign[] alignmentOptions = {HAlign.LEFT, HAlign.CENTER, HAlign.RIGHT};
             List<ElementBox> compInfo = new ArrayList<ElementBox>();
             compInfo.add(companyInfoBox.getCompanyNameLine());
             compInfo.add(companyInfoBox.getCompanyAddLine());

@@ -35,6 +35,7 @@ package com.fairandsmart.generator.documents.element.container;
 
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;
+import com.fairandsmart.generator.documents.element.HAlign;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import javax.xml.stream.XMLStreamWriter;
@@ -93,13 +94,18 @@ public class VerticalContainer extends ElementBox {
         this.backgroundColor = color;
     }
 
-    public void alignElements(String align, float width) {
+    public void alignElements(HAlign align) {
+        alignElements(align, maxWidth);
+    }
+
+    public void alignElements(HAlign align, float width) {
+        // default alignment is LEFT
         for ( ElementBox element : elements ) {
             float posX = box.getPosX();
             switch ( align ) {
-                case "CENTER":
+                case CENTER:
                     posX = (width - box.getPosX() - element.getBBox().getWidth())/2; break;
-                case "RIGHT":
+                case RIGHT:
                     posX = (width - box.getPosX()) - element.getBBox().getWidth(); break;
             }
             float transX = posX - element.getBBox().getPosX();
