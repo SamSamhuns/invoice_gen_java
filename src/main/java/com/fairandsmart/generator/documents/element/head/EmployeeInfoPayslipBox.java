@@ -41,7 +41,7 @@ import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.line.HorizontalLineBoxV2;
+import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
@@ -773,8 +773,8 @@ public class EmployeeInfoPayslipBox extends ElementBox {
         TableRowBox firstPart2 = new TableRowBox(configRow, 0, 0);
         SimpleTextBox emptyBox= new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER);
 
-        firstPart2.addElement( new EmployeeInfoPayslipBox(concatContainersVertically(new ElementBox[]{new HorizontalLineBoxV2(0,0, 550f, 0),
-                getAssignementBlock(),getJobBlock(),getCoeffBlock(),getClassificationBlock(),new HorizontalLineBoxV2(0,0, 550f, 0),})), false);
+        firstPart2.addElement( new EmployeeInfoPayslipBox(concatContainersVertically(new ElementBox[]{new HorizontalLineBox(0,0, 550f, 0),
+                getAssignementBlock(),getJobBlock(),getCoeffBlock(),getClassificationBlock(),new HorizontalLineBox(0,0, 550f, 0),})), false);
         listOptClasses.add("Assignement");
         listOptClasses.add("Job");
         listOptClasses.add("Classification");
@@ -804,7 +804,7 @@ public class EmployeeInfoPayslipBox extends ElementBox {
         HorizontalContainer ligne1 = new HorizontalContainer(0, 0);
 
 
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), 0));
+        idContainer.addElement(new HorizontalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), 0));
 
         // Ecquis
         SimpleTextBox Label4 = new SimpleTextBox(font, fontSize, 0, 0, model.getEmployeeInformation().getMinCoeffLabel() );
@@ -856,7 +856,7 @@ public class EmployeeInfoPayslipBox extends ElementBox {
         listOptClasses.add("HalfTime");
 
         idContainer.addElement(ligne1);
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), 0));
+        idContainer.addElement(new HorizontalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), 0));
 
         // Encours
         SimpleTextBox Label5 = new SimpleTextBox(font, fontSize, 0, 0, model.getEmployeeInformation().getMincoef());
@@ -901,7 +901,7 @@ public class EmployeeInfoPayslipBox extends ElementBox {
         ligne2.addElement(Value11);
 
         idContainer.addElement(ligne2);
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), 0));
+        idContainer.addElement(new HorizontalLineBox(0,0, (configRow[0]+configRow[1]+configRow[2]+configRow[3]+configRow[4]+configRow[5]+configRow[6]), 0));
         idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
         idContainer.addElement(new VerticalLineBox(0,0, configRow[0], idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
         idContainer.addElement(new VerticalLineBox(0,0, (configRow[0]+configRow[1]), idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()

@@ -40,7 +40,7 @@ import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.line.HorizontalLineBoxV2;
+import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -387,7 +387,7 @@ public class LeaveInfoPayslipBox extends ElementBox {
         HorizontalContainer acquis = new HorizontalContainer(0, 0);
 
 
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, 155f, 0));
+        idContainer.addElement(new HorizontalLineBox(0,0, 155f, 0));
 
         SimpleTextBox Label = new SimpleTextBox(font, fontSize, 0, 0, "Congé payés");
         Label.setPadding(0, 0, 2, 0);
@@ -466,7 +466,7 @@ public class LeaveInfoPayslipBox extends ElementBox {
         encours.addElement(Value5);
 
         idContainer.addElement(encours);
-        idContainer.addElement(new HorizontalLineBoxV2(0,0, 155f, 0));
+        idContainer.addElement(new HorizontalLineBox(0,0, 155f, 0));
         idContainer.addElement(new VerticalLineBox(0,0, 0, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
         idContainer.addElement(new VerticalLineBox(0,0,  155f, idContainer.getBBox().getHeight())); //  sumUp.getBBox().getPosY()
 

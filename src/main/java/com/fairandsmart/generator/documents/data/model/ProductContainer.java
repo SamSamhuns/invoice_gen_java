@@ -695,7 +695,7 @@ public class ProductContainer {
                 shippingProduct.setDiscountRate(0);  // discount for shipping is always 0
                 shippingProduct.setPriceWithTax(price);
                 shippingProduct.setPriceWithDiscount(price);
-                shippingProduct.setPriceWithTaxAndDiscount(priceWithTax);
+                shippingProduct.setPriceWithTaxAndDiscount(price);
 
                 productContainer.addProduct(shippingProduct);
             }
