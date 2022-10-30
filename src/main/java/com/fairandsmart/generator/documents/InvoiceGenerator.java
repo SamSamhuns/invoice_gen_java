@@ -43,7 +43,6 @@ import com.fairandsmart.generator.documents.layout.amazon.AmazonLayout;
 import com.fairandsmart.generator.documents.layout.bdmobilier.BDmobilierLayout;
 import com.fairandsmart.generator.documents.layout.cdiscount.CdiscountLayout;
 import com.fairandsmart.generator.documents.layout.darty.DartyLayout;
-import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;
 import com.fairandsmart.generator.documents.layout.macomp.MACOMPLayout;
 import com.fairandsmart.generator.documents.layout.materielnet.MaterielnetLayout;
 import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;

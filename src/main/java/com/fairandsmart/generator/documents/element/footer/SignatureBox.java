@@ -41,7 +41,6 @@ import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.head.CompanyInfoBox;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -50,9 +49,8 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.awt.Color;
 import javax.xml.stream.XMLStreamWriter;
-import java.util.Map;
 
-// TODO fix signature box proper display
+
 public class SignatureBox extends ElementBox {
 
     private final PDFont font;
@@ -95,7 +93,7 @@ public class SignatureBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        vContainer = new VerticalContainer(0,0,0);
+        vContainer = new VerticalContainer(0,0,sigImgWidth);
 
         SimpleTextBox sigTextBox = new SimpleTextBox(font,fontSize,sigTextX,sigTextY,sigText,"Signature");
 

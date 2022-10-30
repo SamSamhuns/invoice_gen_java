@@ -32,7 +32,6 @@ package com.fairandsmart.generator.documents.element.head;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Client;
@@ -41,16 +40,12 @@ import com.fairandsmart.generator.documents.data.model.ContactNumber;
 
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.element.ElementBox;
-import com.fairandsmart.generator.documents.element.image.ImageBox;
-import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.border.BorderBox;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.awt.Color;
 import javax.xml.stream.XMLStreamWriter;
