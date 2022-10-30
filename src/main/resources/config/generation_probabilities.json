@@ -133,7 +133,13 @@
       "switch_bill_ship_addresses": 20,
       "bill_address_tax_number": 50,
       "bill_address_phone_fax": 30,
-      "ship_address_phone_fax": 30
+      "ship_address_phone_fax": 30,
+      "payment_address": 40,
+      "payment_account_number": 40,
+      "payment_branch_name": 40,
+      "payment_routing_number": 40,
+      "payment_swift_number": 40,
+      "payment_vendor_tax_number": 20
     }
   },
   {

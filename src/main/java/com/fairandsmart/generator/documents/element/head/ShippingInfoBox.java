@@ -35,8 +35,7 @@ package com.fairandsmart.generator.documents.element.head;
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-import com.fairandsmart.generator.documents.data.model.Company;
-import com.fairandsmart.generator.documents.data.model.IDNumbers;
+import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
 
@@ -46,7 +45,6 @@ import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.head.CompanyInfoBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -57,10 +55,9 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import java.awt.Color;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.Map;
-import java.util.Random;
 
 
-public class VendorInfoBox extends ElementBox {
+public class ShippingInfoBox extends ElementBox {
 
     private final PDFont fontN;
     private final PDFont fontB;
@@ -72,12 +69,11 @@ public class VendorInfoBox extends ElementBox {
 
     private final InvoiceModel model;
     private final PDDocument document;
-    private final Company company;
+    private final Client client;
     private final InvoiceAnnotModel annot;
     private final Map<String, Boolean> proba;
 
     private VerticalContainer vContainer;
-    private final Random rnd = new Random();
 
     public void setBorderThickness(float thick) {
         vContainer.setBorderThickness(thick);
@@ -91,11 +87,11 @@ public class VendorInfoBox extends ElementBox {
         vContainer.setBackgroundColor(color);
     }
 
-    public VendorInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
-                         float fontSizeSmall, float fontSizeBig,
-                         float width, Color lineStrokeColor,
-                         InvoiceModel model, PDDocument document, Company company,
-                         InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+    public ShippingInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
+                           float fontSizeSmall, float fontSizeBig,
+                           float width, Color lineStrokeColor,
+                           InvoiceModel model, PDDocument document, Client client,
+                           InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         this.fontN = fontN;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -106,7 +102,7 @@ public class VendorInfoBox extends ElementBox {
 
         this.model = model;
         this.document = document;
-        this.company = company;
+        this.client = client;
 
         this.annot = annot;
         this.proba = proba;
@@ -114,34 +110,33 @@ public class VendorInfoBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        PDFont fontNB = rnd.nextBoolean() ? fontN: fontB;
-
         vContainer = new VerticalContainer(0,0,width);
 
-        Address address = company.getAddress();
-        IDNumbers idNumber = company.getIdNumbers();
-        ContactNumber contact = company.getContact();
+        Address address = client.getShippingAddress();
+        ContactNumber contact = client.getShippingContactNumber();
 
-        vContainer.addElement(new SimpleTextBox(fontNB,fontSizeBig,0,0, company.getName()+"","SN"));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(),"SA"));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip() +"  "+ address.getCity(),"SA"));
-        vContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,3));
-        if (proba.get("vendor_address_phone_fax")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+": "+contact.getPhoneValue(), "SC"));
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "SF"));
+        vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig,0,0, client.getShippingHead(), "SHH" ));
+        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, client.getShippingName(), "SHN" ));
+        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(), "SHA" ));
+        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip()+" "+address.getCity(), "SHA" ));
+        if (proba.get("bill_address_phone_fax") && proba.get("ship_address_phone_fax")) {
+            String connec = (contact.getPhoneLabel().length() > 0) ? ": ": "";
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+connec+contact.getPhoneValue(), "BC"));
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+connec+contact.getFaxValue(), "BF"));
         }
-        if (proba.get("vendor_address_tax_number")) {
-            String vatText = idNumber.getVatLabel()+": "+idNumber.getVatValue();
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, vatText, "SVAT"));
-            annot.getVendor().setVendorTrn(idNumber.getVatValue());
-        }
-        if (proba.get("addresses_bordered")) {
+        if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {
             vContainer.setBorderColor(lineStrokeColor);
             vContainer.setBorderThickness(0.5f);
         }
-        annot.getVendor().setVendorName(company.getName());
-        annot.getVendor().setVendorAddr(address.getLine1()+" "+address.getZip()+" "+address.getCity());
-        annot.getVendor().setVendorPOBox(address.getZip());
+        // add annotations for shipping address if these fields are not empty
+        if (client.getShippingName().length() > 0) {
+            annot.setShipto(new InvoiceAnnotModel.Shipto());
+            annot.getShipto().setShiptoName(client.getShippingName());
+            if (contact.getPhoneLabel().length() > 0) {
+                annot.getShipto().setShiptoPOBox(address.getZip());
+                annot.getShipto().setShiptoAddr(address.getLine1()+" "+address.getZip()+" "+address.getCity());
+            }
+        }
     }
 
     @Override
