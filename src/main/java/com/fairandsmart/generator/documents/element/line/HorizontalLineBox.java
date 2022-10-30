@@ -86,8 +86,9 @@ public class HorizontalLineBox extends ElementBox {
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
         stream.moveTo(this.getBBox().getPosX(), this.getBBox().getPosY());
-        stream.lineTo(this.targetX, this.getBBox().getPosY());
-        stream.setStrokingColor(this.strokeColor);
+        stream.lineTo(targetX, this.getBBox().getPosY());
+        stream.closePath();
+        stream.setStrokingColor(strokeColor);
         stream.stroke();
     }
 

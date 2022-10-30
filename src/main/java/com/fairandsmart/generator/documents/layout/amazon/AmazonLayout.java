@@ -58,6 +58,7 @@ import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
+import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 
 import com.mifmif.common.regex.Generex;
 
@@ -263,7 +264,7 @@ public class AmazonLayout implements InvoiceLayout {
             annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
         }
 
-        HelperImage.drawLine(contentStream, leftPageMargin, 650, pageWidth-rightPageMargin, 650, lineStrokeColor);
+        new HorizontalLineBox(leftPageMargin, 650, pageWidth-rightPageMargin, 650, lineStrokeColor).build(contentStream,writer);
 
         // check if billing and shipping addresses should be switched
         float leftAddrX = leftPageMargin;
@@ -563,13 +564,13 @@ public class AmazonLayout implements InvoiceLayout {
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = leftPageMargin;
             float yPos = tableTopPosY - tableTopBox.getBBox().getHeight() - 2;
-            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor);
+                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
                 xPos += configRow[i];
             }
-            HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
         }
 
         ////////////////////////////////////      Finished Table      ////////////////////////////////////

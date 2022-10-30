@@ -85,9 +85,10 @@ public class VerticalLineBox extends ElementBox {
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        stream.moveTo(this.getBBox().getPosX()+this.targetX, this.getBBox().getPosY());
-        stream.lineTo( this.getBBox().getPosX()+this.targetX,this.getBBox().getPosY() + this.targetY);
-        stream.setStrokingColor(this.strokeColor);
+        stream.moveTo(this.getBBox().getPosX(), this.getBBox().getPosY());
+        stream.lineTo(this.getBBox().getPosX(), targetY);
+        stream.closePath();
+        stream.setStrokingColor(strokeColor);
         stream.stroke();
     }
 
