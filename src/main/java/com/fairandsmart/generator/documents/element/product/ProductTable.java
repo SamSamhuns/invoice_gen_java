@@ -120,16 +120,18 @@ public class ProductTable {
     // This list also order determins which fields to display in table
     // candTableSize allows to further filter the ppssible values, lower candTableSize means table with fewer cols
     private static final List<List<String>> candidateTableHeaders = Arrays.asList(
+        Arrays.asList("SN",       "Tax",      "Total"),
         Arrays.asList("Item",     "Tax",      "Total"),
+        Arrays.asList("Item",     "TaxRate",  "Total"),
         Arrays.asList("SN",       "Item",     "Tax",      "Total"),
         Arrays.asList("Item",     "ItemCode", "Tax",      "Total"),
-        Arrays.asList("SN",       "Item",     "Tax",      "SubTotal"),
+        Arrays.asList("SN",       "Item",     "Disc",     "SubTotal"),
         Arrays.asList("Item",     "Qty",      "ItemRate", "Tax",      "Total"),
         Arrays.asList("SN",       "Item",     "Tax",      "TaxRate",  "Total"),
-        Arrays.asList("Item",     "Qty",      "ItemRate", "Tax",      "SubTotal"),
+        Arrays.asList("Item",     "Qty",      "ItemRate", "Disc",     "SubTotal"),
         Arrays.asList("Item",     "Qty",      "Tax",      "Disc",     "SubTotal"),
         Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Tax",      "Total"),
-        Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Tax",      "SubTotal"),
+        Arrays.asList("SN",       "Item",     "Qty",      "ItemRate", "Disc",      "SubTotal"),
         Arrays.asList("SN",       "Qty",      "Item",     "ItemRate", "Disc",     "Tax",      "Total"),
         Arrays.asList("SN",       "Item",     "Disc",     "DiscRate", "Tax",      "TaxRate",  "Total"),
         Arrays.asList("SN",       "Qty",      "ItemRate", "Tax",      "TaxRate",  "SubTotal", "Total"),
