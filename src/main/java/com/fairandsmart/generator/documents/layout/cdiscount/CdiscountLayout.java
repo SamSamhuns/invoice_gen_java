@@ -230,19 +230,29 @@ public class CdiscountLayout implements InvoiceLayout {
         float billX = leftAddrX+addrShift; float billY = pageHeight-158;
         float shipX = rightAddrX+addrShift; float shipY = billY;
 
+        // save orig bordered mode and reset later
+        Boolean origBorderMode = proba.get("addresses_bordered");
+        proba.put("addresses_bordered", false);
         // Billing address
-        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,8,9,250,themeColor,model,document,client,annot,proba);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,7,8,250,themeColor,model,document,client,annot,proba);
         billingInfoBox.translate(billX, billY);
-        billingInfoBox.build(contentStream,writer);
 
         // Shipping Address
-        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,8,9,250,themeColor,model,document,client,annot,proba);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,7,8,250,themeColor,model,document,client,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
+
+        // draw borders around bill+ship addresses & thrn build addresses
+        float bAY = billY;
+        float bAH = billingInfoBox.getBBox().getHeight();
+        new BorderBox(themeColor,white,1, leftPageMargin+27,    bAY-bAH, 227,bAH+2).build(contentStream,writer);
+        new BorderBox(themeColor,white,1, leftPageMargin+27+245,bAY-bAH, 227,bAH+2).build(contentStream,writer);
+        billingInfoBox.build(contentStream,writer);
         shippingInfoBox.build(contentStream,writer);
+        proba.put("addresses_bordered", origBorderMode);  // reset to origBorderMode
 
         // client mail & payment info under billing addr
         float box1PosX = billX;
-        float box1PosY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 4;
+        float box1PosY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 6;
         float box1W = 85;
         float box1H = 11;
         Color box1Color = grayish;
@@ -594,14 +604,6 @@ public class CdiscountLayout implements InvoiceLayout {
             float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
             float sigIY = sigTY + sigH + 10;
 
-            // String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
-            // PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
-            // int signatureWidth = 120;
-            // int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
-            // // align signature to center of sigTextBox bbox
-            // float signatureXPos = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - signatureWidth/2;
-            // float signatureYPos = bottomPageMargin + signatureWidth + 10;
-
             new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
         }
         // no stamp or signature req info
@@ -632,7 +634,7 @@ public class CdiscountLayout implements InvoiceLayout {
         // Add bg logo watermark or confidential stamp, but not both at once
         if (proba.get("confidential_watermark")) {
             // Add confidential watermark
-            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
+            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "confidential");
         }
         else if (proba.get("logo_watermark")) {
             // Add watermarked background logo
