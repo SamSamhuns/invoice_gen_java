@@ -195,8 +195,8 @@ public class MACOMPLayout implements InvoiceLayout {
         annot.getInvoice().setInvoiceId(ref.getValueInvoice());
 
         // Vendor/company address
-        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,8,9,260,lineStrokeColor,model,document,company,annot,proba);
-        vendorInfoBox.translate(50, 785);
+        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,10,260,lineStrokeColor,model,document,company,annot,proba);
+        vendorInfoBox.translate(leftPageMargin, pageHeight-topPageMargin);
         vendorInfoBox.build(contentStream,writer);
 
         // check if billing and shipping addresses should be switched
@@ -204,8 +204,8 @@ public class MACOMPLayout implements InvoiceLayout {
         if (proba.get("switch_bill_ship_addresses")) {
             float tmp = topY; topY=botY; botY=tmp;
         }
-        float billX = 50; float billY = topY;
-        float shipX = 50; float shipY = botY;
+        float billX = leftPageMargin; float billY = topY;
+        float shipX = leftPageMargin; float shipY = botY;
 
         // Billing Address
         BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,8,9,260,lineStrokeColor,model,document,client,annot,proba);
@@ -231,41 +231,51 @@ public class MACOMPLayout implements InvoiceLayout {
         VerticalContainer invoiceInfoCont = new VerticalContainer(pageMiddleX, Math.min(billY, shipY), 400);
 
         float[] configRowInfo = {150f, 200f};
-        // invoice date
-        TableRowBox infoRow1 = new TableRowBox(configRowInfo, 0, 0);
-        SimpleTextBox Label = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getDate().getLabelInvoice(),black, null, HAlign.LEFT);
-        infoRow1.addElement(Label, false);
-        SimpleTextBox Value = new SimpleTextBox(fontN, fontSize, 0,0, model.getDate().getValueInvoice());
-        infoRow1.addElement(Value, false);
-        invoiceInfoCont.addElement(infoRow1);
-        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
-        annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
+        if (proba.get("invoice_date_top")) {
+            TableRowBox infoRow1 = new TableRowBox(configRowInfo, 0, 0);
+            infoRow1.addElement(new SimpleTextBox(fontB, fontSize+1, 0,0, model.getDate().getLabelInvoice(),black, null, HAlign.LEFT));
+            infoRow1.addElement(new SimpleTextBox(fontN, fontSize, 0,0, model.getDate().getValueInvoice()));
+            invoiceInfoCont.addElement(infoRow1);
+            invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0,0,2));
+            annot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
+        }
+        else {  // payment due date
+            TableRowBox infoRow1 = new TableRowBox(configRowInfo, 0, 0);
+            infoRow1.addElement(new SimpleTextBox(fontB, fontSize+1, 0,0, model.getDate().getLabelPaymentDue(),black, null, HAlign.LEFT));
+            infoRow1.addElement(new SimpleTextBox(fontN, fontSize, 0,0, model.getDate().getValuePaymentDue()));
+            invoiceInfoCont.addElement(infoRow1);
+            invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0,0,2));
+            annot.getInvoice().setInvoiceDueDate(model.getDate().getValuePaymentDue());
+        }
         // client number
         TableRowBox infoRow2 = new TableRowBox(configRowInfo,0, 0);
-        SimpleTextBox Label1 = new SimpleTextBox(fontB, fontSize+1, 0,0, ref.getLabelClient(),black, null, HAlign.LEFT);
-        infoRow2.addElement(Label1, false);
-        SimpleTextBox Value1 = new SimpleTextBox(fontN, fontSize, 0,0, ref.getValueClient());
-        infoRow2.addElement(Value1, false);
+        infoRow2.addElement(new SimpleTextBox(fontB, fontSize+1, 0,0, ref.getLabelClient(),black, null, HAlign.LEFT));
+        infoRow2.addElement(new SimpleTextBox(fontN, fontSize, 0,0, ref.getValueClient()));
         invoiceInfoCont.addElement(infoRow2);
-        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
-        // order number
+        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0,0,2));
+        // purchase order id
         TableRowBox infoRow3 = new TableRowBox(configRowInfo,0, 0);
-        SimpleTextBox Label2 = new SimpleTextBox(fontB, fontSize+1, 0,0, ref.getLabelOrder(),black, null, HAlign.LEFT);
-        infoRow3.addElement(Label2, false);
-        SimpleTextBox Value2 = new SimpleTextBox(fontN, fontSize, 0,0, ref.getValueOrder(),black, null, HAlign.LEFT);
-        infoRow3.addElement(Value2, false);
+        infoRow3.addElement(new SimpleTextBox(fontB, fontSize+1, 0,0, ref.getLabelOrder(),black, null, HAlign.LEFT));
+        infoRow3.addElement(new SimpleTextBox(fontN, fontSize, 0,0, ref.getValueOrder(),black, null, HAlign.LEFT));
         invoiceInfoCont.addElement(infoRow3);
-        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
+        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0,0,2));
         annot.getInvoice().setInvoiceOrderId(ref.getValueOrder());
-        // payment type
-        TableRowBox infoRow4 = new TableRowBox(configRowInfo,0, 0);
-        SimpleTextBox Label3 = new SimpleTextBox(fontB, fontSize+1, 0,0, payment.getLabelPaymentType(),black, null, HAlign.LEFT);
-        infoRow4.addElement(Label3, false);
-        SimpleTextBox Value3 = new SimpleTextBox(fontN, fontSize, 0,0, payment.getValuePaymentType(),black, null, HAlign.LEFT);
-        infoRow4.addElement(Value3, false);
-        invoiceInfoCont.addElement(infoRow4);
-        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
+        if (proba.get("payment_terms_top")) {
+            TableRowBox infoRow4 = new TableRowBox(configRowInfo,0, 0);
+            infoRow4.addElement(new SimpleTextBox(fontB, fontSize+1, 0,0, payment.getLabelPaymentTerm(),black, null, HAlign.LEFT));
+            infoRow4.addElement(new SimpleTextBox(fontN, fontSize, 0,0, payment.getValuePaymentTerm(),black, null, HAlign.LEFT));
+            invoiceInfoCont.addElement(infoRow4);
+            invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0,0,2));
+            annot.getInvoice().setPaymentTerm(payment.getValuePaymentTerm());
+        }
+        else {  // payment type
+            TableRowBox infoRow4 = new TableRowBox(configRowInfo,0, 0);
+            infoRow4.addElement(new SimpleTextBox(fontB, fontSize+1, 0,0, payment.getLabelPaymentType(),black, null, HAlign.LEFT));
+            infoRow4.addElement(new SimpleTextBox(fontN, fontSize, 0,0, payment.getValuePaymentType(),black, null, HAlign.LEFT));
+            invoiceInfoCont.addElement(infoRow4);
+            invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 2));
+        }
         invoiceInfoCont.build(contentStream,writer);
 
         ////////////////////////////////////      Building Table      ////////////////////////////////////

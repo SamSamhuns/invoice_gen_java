@@ -177,6 +177,8 @@
       "payment_routing_number": 40,
       "payment_swift_number": 40,
       "payment_vendor_tax_number": 20,
+      "invoice_date_top": 50,
+      "payment_terms_top": 50,
       "table_hdr_black_text": 90,
       "currency_in_table_headers": 60,
       "currency_in_table_items": 60,
