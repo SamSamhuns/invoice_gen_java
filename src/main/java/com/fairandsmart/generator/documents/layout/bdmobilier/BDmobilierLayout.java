@@ -392,26 +392,38 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         float tableBottomY = verticalTableItems.getBBox().getPosY() - tableItemsHeight;
         new HorizontalLineBox(ttx1, tableBottomY, ttx2, tableBottomY, lineStrokeColor).build(contentStream,writer);
-        new BorderBox(hdrBgColor,hdrBgColor,1,395,tableBottomY-50,166,45).build(contentStream,writer);
 
-        // Table footer Totals calculations
-        // totals labels
-        new SimpleTextBox(fontNB, 9, 400, tableBottomY-6,  pc.getTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
-        new SimpleTextBox(fontNB, 9, 400, tableBottomY-19, pc.getTaxTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
-        new SimpleTextBox(fontNB, 9, 400, tableBottomY-33, pc.getWithTaxAndDiscountTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
-        // totals values
-        new SimpleTextBox(fontN, 9, 495, tableBottomY-6,  pc.getFmtTotal()+amtSuffix, hdrTextColor,hdrBgColor,"TWTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 495, tableBottomY-19, pc.getFmtTotalTax()+amtSuffix, hdrTextColor,hdrBgColor,"TTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 495, tableBottomY-33, pc.getFmtTotalWithTaxAndDiscount()+amtSuffix, hdrTextColor,hdrBgColor,"TA").build(contentStream,writer);
+        // Table footer total labels and values
+        VerticalContainer footerInfoCont = new VerticalContainer(pageWidth-rightPageMargin-175, tableBottomY-5, 600);
+        float[] configFooterRow = {100f, 75f};
+        for (int i=0; i<tableHeaders.size(); i++ ) {
+            TableRowBox footerInvoiceRow = new TableRowBox(configFooterRow,0,0);
+            String tableHeader = tableHeaders.get(i);
+            String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
+            String hdrValue = itemMap.get(tableHeader).getValueFooter();
+            if (hdrLabel.length() > 0 && hdrValue.length() > 0) {
+                footerInvoiceRow.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel)+":  ", HAlign.RIGHT, tableHeader+"FooterLabel"), false);
+                footerInvoiceRow.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.LEFT, tableHeader+"FooterValue"), false);
+                footerInvoiceRow.setBackgroundColor(grayish);
+                footerInfoCont.addElement(footerInvoiceRow);
+            }
 
-        annot.getTotal().setSubtotalPrice(pc.getFmtTotal()+amtSuffix);
-        annot.getTotal().setTaxPrice(pc.getFmtTotalTax()+amtSuffix);
-        annot.getTotal().setTotalPrice(pc.getFmtTotalWithTaxAndDiscount()+amtSuffix);
+            switch (tableHeader) {
+                case "Tax": annot.getTotal().setTaxPrice(hdrValue); break;
+                case "TaxRate": annot.getTotal().setTaxRate(hdrValue); break;
+                case "Disc": annot.getTotal().setDiscountPrice(hdrValue); break;
+                case "DiscRate": annot.getTotal().setDiscountRate(hdrValue); break;
+                case "ItemRate": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                case "SubTotal": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                case "Total": annot.getTotal().setTotalPrice(hdrValue); break;
+            }
+        }
+        footerInfoCont.build(contentStream,writer);
         ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
         // Payment Info and Address
         if (proba.get("payment_address")) {
-            float pAW = 300;
+            float pAW = 320;
             float pAX = (proba.get("signature_bottom_left")) ? rightAddrX: ttx1;
             float pAY = tableBottomY-60;
 
