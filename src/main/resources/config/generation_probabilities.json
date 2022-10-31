@@ -151,6 +151,7 @@
     "layout": "MACOMP",
     "probability": {
       "line_stroke_black": 96,
+      "logo_top": 50,
       "vendor_address_country": 10,
       "vendor_address_phone": 35,
       "vendor_address_fax": 20,
@@ -174,6 +175,8 @@
       "signature_bottom_left": 25,
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 25,
+      "logo_watermark": 15,
+      "confidential_watermark": 3,
       "vendor_info_footer": 70,
       "vendor_tax_number_bottom": 50
     }

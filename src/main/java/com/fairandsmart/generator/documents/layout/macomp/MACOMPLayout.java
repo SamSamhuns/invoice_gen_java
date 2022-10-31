@@ -35,6 +35,7 @@ package com.fairandsmart.generator.documents.layout.macomp;
 
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
+
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
@@ -61,8 +62,9 @@ import com.fairandsmart.generator.documents.element.footer.FootCompanyBox;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -129,6 +131,7 @@ public class MACOMPLayout implements InvoiceLayout {
         float leftPageMargin = 25;
         float rightPageMargin = 25;
         float bottomPageMargin = 8;
+        float topPageMargin = 8;
         float fontSize = 8;
 
         // colors
@@ -156,8 +159,20 @@ public class MACOMPLayout implements InvoiceLayout {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
+        // Logo top
+        if (proba.get("logo_top")) {
+            maxLogoWidth = 150;
+            maxLogoHeight = 90;
+            logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
+            logoWidth = logoImg.getWidth() * logoScale;
+            logoHeight = logoImg.getHeight() * logoScale;
+            posLogoX = pageWidth-logoWidth-rightPageMargin;
+            posLogoY = pageHeight-topPageMargin;
+            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
+        }
+
         // Invoice number
-        new SimpleTextBox(fontB, fontSize+2, 310, 748, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream,writer);
+        new SimpleTextBox(fontB, fontSize+2, 310, 730, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream,writer);
         annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
 
         // Vendor/company address
@@ -183,43 +198,8 @@ public class MACOMPLayout implements InvoiceLayout {
         shippingInfoBox.translate(shipX, shipY);
         shippingInfoBox.build(contentStream,writer);
 
-        // Payment Info and Address
-        if (proba.get("payment_address")) {
-            float pAW = 300, pAX = 310, pAY = 630;
-            proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
-
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
-            paymentBox.translate(pAX, pAY);
-            paymentBox.build(contentStream,writer);
-        }
-
-        // Add signature here TODO
-
-        // Add company stamp watermark
-        if (proba.get("stamp_bottom")) {
-            float alpha = HelperCommon.rand_uniform(0.6f, 0.8f);
-            float resDim = 105 + rnd.nextInt(20);
-            float xPosStamp, yPosStamp;
-            // draw to lower right if signature in bottom or lower left if signature in bottom left
-            if (proba.get("signature_bottom") && rnd.nextInt(3) < 2) {
-                xPosStamp = ((proba.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
-                yPosStamp = 125 + rnd.nextInt(5);
-            }
-            else {  // draw to lower center
-                xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
-                yPosStamp = 125 + rnd.nextInt(5);
-            }
-            StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
-            stampBox.translate(xPosStamp,yPosStamp);
-            stampBox.build(contentStream,writer);
-        }
-        // if no signature anåd no stamp, then add a footer note
-        else if (!proba.get("signature_bottom")) {
-            String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
-            new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream,writer);
-        }
-
-        VerticalContainer invoiceInfo = new VerticalContainer(310, 580, 400);
+        // table top invoice info
+        VerticalContainer invoiceInfo = new VerticalContainer(310, 530, 400);
 
         float[] configRow = {150f, 200f};
         TableRowBox elementInfoContainer = new TableRowBox(configRow, 0, 0);
@@ -256,10 +236,103 @@ public class MACOMPLayout implements InvoiceLayout {
 
         invoiceInfo.build(contentStream,writer);
 
+        // Payment Info and Address
+        if (proba.get("payment_address")) {
+            float pAW = 300, pAX = 310, pAY = 630;
+            proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
+
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            paymentBox.translate(pAX, pAY);
+            paymentBox.build(contentStream,writer);
+        }
+
+        // table
         ProductBox products = new ProductBox(30, 400, pc,fontI, fontB, fontSize);
         products.build(contentStream,writer);
 
         new HorizontalLineBox(50,100,530,100).build(contentStream,writer);
+
+        // Add Signature at bottom
+        if (proba.get("signature_bottom")) {
+            String sigText = company.getSignature().getLabel()+" "+(company.getName().length() < 25 ? company.getName() : "");
+            SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0,sigText, "Signature");
+
+            float sigTX;
+            float sigTY = 130;
+            if (proba.get("signature_bottom_left")) {  // bottom left
+                sigTX = leftPageMargin + 25;
+            } else {                                     // bottom right
+                sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
+            }
+            sigTextBox.translate(sigTX, sigTY);
+            sigTextBox.build(contentStream,writer);
+
+            new HorizontalLineBox(
+                    sigTX - 10, sigTY + 5,
+                    sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 5,
+                    lineStrokeColor).build(contentStream,writer);
+
+            String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
+            PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
+
+            float maxSW = 110, maxSH = 65;
+            float sigScale = Math.min(maxSW/sigImg.getWidth(), maxSH/sigImg.getHeight());
+            float sigW = sigImg.getWidth() * sigScale;
+            float sigH = sigImg.getHeight() * sigScale;
+            // align signature to center of sigTextBox bbox
+            float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
+            float sigIY = sigTY + sigH + 10;
+
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
+        }
+
+        // Logo Bottom if logo is not at top
+        if (!proba.get("logo_top")) {
+            maxLogoWidth = 120;
+            maxLogoHeight = 80;
+            logoScale = Math.min(maxLogoWidth/logoImg.getWidth(), maxLogoHeight/logoImg.getHeight());
+            logoWidth = logoImg.getWidth() * logoScale;
+            logoHeight = logoImg.getHeight() * logoScale;
+            posLogoX = pageWidth-logoWidth-rightPageMargin;
+            posLogoY = bottomPageMargin+logoHeight;
+            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
+        }
+
+        // Add company stamp watermark
+        if (proba.get("stamp_bottom")) {
+            float alpha = HelperCommon.rand_uniform(0.6f, 0.8f);
+            float resDim = 105 + rnd.nextInt(20);
+            float xPosStamp, yPosStamp;
+            // draw to lower right if signature in bottom or lower left if signature in bottom left
+            if (proba.get("signature_bottom") && rnd.nextInt(3) < 2) {
+                xPosStamp = ((proba.get("signature_bottom_left")) ? leftPageMargin + 5 : 405) + rnd.nextInt(10);
+                yPosStamp = 125 + rnd.nextInt(5);
+            }
+            else {  // draw to lower center
+                xPosStamp = pageWidth/2 - (resDim/2) + rnd.nextInt(5) - 5;
+                yPosStamp = 125 + rnd.nextInt(5);
+            }
+            StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
+            stampBox.translate(xPosStamp,yPosStamp);
+            stampBox.build(contentStream,writer);
+        }
+        // if no signature anåd no stamp, then add a footer note
+        else if (!proba.get("signature_bottom")) {
+            String noStampMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
+            SimpleTextBox noStampMsgBox = new SimpleTextBox(fontN,7,0,0, noStampMsg, "footnote");
+            noStampMsgBox.translate(pageMiddleX-noStampMsgBox.getBBox().getWidth()/2, 120);
+            noStampMsgBox.build(contentStream,writer);
+        }
+
+        // Add bg logo watermark or confidential stamp, but not both at once
+        if (proba.get("confidential_watermark")) {
+            // Add confidential watermark
+            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "confidential");
+        }
+        else if (proba.get("logo_watermark")) {
+            // Add watermarked background logo
+            HelperImage.addWatermarkImagePDF(document, page, logoImg);
+        }
 
         // footer company name, info, address & contact information at bottom center
         if (proba.get("vendor_info_footer")) {
