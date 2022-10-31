@@ -150,8 +150,10 @@
   {
     "layout": "MACOMP",
     "probability": {
+      "doc_title_top": 40,
       "line_stroke_black": 96,
       "logo_top": 50,
+      "barcode_top": 40,
       "vendor_address_country": 10,
       "vendor_address_phone": 35,
       "vendor_address_fax": 20,
