@@ -574,7 +574,7 @@ public class GenericReceiptLayout implements SSDLayout {
         sixthPart.addElement(foot,true);
         receiptPage.addElement(sixthPart);
         receiptPage.translate(20,785); //830
-        receiptPage.build(contentStream, writer);
+        receiptPage.build(contentStream,writer);
         contentStream.close();
         writer.writeEndElement();
         if(modeEval) {

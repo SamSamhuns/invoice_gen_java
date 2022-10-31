@@ -407,7 +407,7 @@ public class GenericPayslipLayout implements SSDLayout {
             }
         }
         payslipPage.translate(30,830);
-        payslipPage.build(contentStream, writer);
+        payslipPage.build(contentStream,writer);
         contentStream.close();
         writer.writeEndElement();
         if(modeEval) {

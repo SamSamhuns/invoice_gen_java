@@ -388,7 +388,7 @@ public class NGenericLayout implements InvoiceLayout {
 
 
         invoicePage.translate(30,785);
-        invoicePage.build(contentStream, writer);
+        invoicePage.build(contentStream,writer);
         contentStream.close();
         writer.writeEndElement();
 

@@ -518,7 +518,7 @@ public class InvoiceSSDLayout implements SSDLayout {
             invoicePage.addElement(fifthPart);
         }
         invoicePage.translate(30,785);
-        invoicePage.build(contentStream, writer);
+        invoicePage.build(contentStream,writer);
         contentStream.close();
         writer.writeEndElement();
     }

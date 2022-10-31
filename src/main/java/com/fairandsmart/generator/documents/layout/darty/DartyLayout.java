@@ -121,7 +121,7 @@ public class DartyLayout implements InvoiceLayout {
         float largeurBH = 226;
         float posBHX = 325;
         float posBHY = posFactLivY+tailleFactLiv-hauteurBH;
-        new BorderBox(Color.BLACK, Color.WHITE, 1,posBHX, posBHY, largeurBH,hauteurBH).build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.WHITE, 1,posBHX, posBHY, largeurBH,hauteurBH).build(contentStream,writer);
         VerticalContainer verticalAddressContainer = new VerticalContainer(posBHX+5, posBHY+hauteurBH-11, 500 );
         verticalAddressContainer.addElement(new SimpleTextBox(font, 9, 0, 0, model.getClient().getShippingName().toUpperCase(),"SHN" ));
         verticalAddressContainer.addElement(new SimpleTextBox(font, 9, 0, 0, model.getClient().getShippingAddress().getLine1().toUpperCase(),"SHA" ));
@@ -133,7 +133,7 @@ public class DartyLayout implements InvoiceLayout {
         verticalAddressContainer.addElement(new SimpleTextBox(font, 9, 0, 0, model.getClient().getBillingAddress().getZip().toUpperCase() + " "+model.getClient().getBillingAddress().getCity().toUpperCase(), "BA" ));
         verticalAddressContainer.addElement(new SimpleTextBox(font, 9, 0, 0, model.getClient().getBillingAddress().getCountry().toUpperCase(), "BA" ));
 
-        verticalAddressContainer.build(contentStream, writer);
+        verticalAddressContainer.build(contentStream,writer);
 
         new BorderBox(Color.BLACK,Color.BLACK,1,posBHX,posBHY+hauteurBH/2,largeurBH,1).build(contentStream,writer);
 
@@ -254,7 +254,7 @@ public class DartyLayout implements InvoiceLayout {
         verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalInvoiceItems.addElement(new HorizontalLineBox(0,0,page.getMediaBox().getWidth()-(42), 0));
 
-        verticalInvoiceItems.build(contentStream, writer);
+        verticalInvoiceItems.build(contentStream,writer);
 
 
         String msg = this.getClass().getClassLoader().getResource("invoices/parts/darty/msg.png").getFile();

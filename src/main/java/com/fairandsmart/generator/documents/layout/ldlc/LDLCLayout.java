@@ -131,59 +131,59 @@ public class LDLCLayout implements InvoiceLayout {
         int tailleBarcode = 150;
         float posBarcodeX = page.getMediaBox().getWidth()/2-tailleBarcode/2;
         float posBarcodeY = posHeaderY-(tailleBarcode/ratioBarcode)/2;
-        new ImageBox(pdBarcode, posBarcodeX, posBarcodeY, tailleBarcode, tailleBarcode/ratioBarcode,"").build(contentStream, writer);
+        new ImageBox(pdBarcode, posBarcodeX, posBarcodeY, tailleBarcode, tailleBarcode/ratioBarcode,"").build(contentStream,writer);
 
         //Billing Address
         int hBH = tailleBarcode-65 ;
         int wBH = (int) (posBarcodeX-20);
         float posBHX = 25;
         float posBHY = (posBarcodeY-hBH-10);
-        new BorderBox(Color.BLACK, Color.WHITE, 1,posBHX, posBHY, posBarcodeX-20,hBH).build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.WHITE, 1,posBHX, posBHY, posBarcodeX-20,hBH).build(contentStream,writer);
         VerticalContainer verticalAddressContainer = new VerticalContainer(28, posBarcodeY-12, 250 );
         verticalAddressContainer.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Client Delivery:"));
         verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingName().toUpperCase(), "BN" ));
         verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingAddress().getLine1().toUpperCase(), "BA" ));
         verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingAddress().getZip().toUpperCase() + " "+model.getClient().getBillingAddress().getCity().toUpperCase(), "BA" ));
         verticalAddressContainer.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getBillingAddress().getCountry().toUpperCase(), "BA" ));
-        verticalAddressContainer.build(contentStream, writer);
+        verticalAddressContainer.build(contentStream,writer);
 
         //Shipping Address
         int wSH = wBH;
         int hSH = hBH;
         float posSHX = posBarcodeX+tailleBarcode;
         float posSHY = posBarcodeY-hSH-10;
-        new BorderBox(Color.BLACK, Color.WHITE, 1,posSHX, posSHY, wSH,hSH).build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.WHITE, 1,posSHX, posSHY, wSH,hSH).build(contentStream,writer);
         VerticalContainer verticalAddressContainer2 = new VerticalContainer(posBarcodeX+tailleBarcode+2, posBarcodeY-12, 250 );
         verticalAddressContainer2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Client Invoice :"));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingName().toUpperCase(),"SHN" ));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingAddress().getLine1().toUpperCase(),"SHA" ));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingAddress().getZip().toUpperCase() + " "+model.getClient().getShippingAddress().getCity().toUpperCase(),"SHA" ));
         verticalAddressContainer2.addElement(new SimpleTextBox(fontI, 9, 0, 0, model.getClient().getShippingAddress().getCountry().toUpperCase(), "SHA" ));
-        verticalAddressContainer2.build(contentStream, writer);
+        verticalAddressContainer2.build(contentStream,writer);
 
         //REF
         float posRefX = page.getMediaBox().getWidth()-page.getMediaBox().getWidth()/3+20;
         float posRefY = page.getMediaBox().getHeight()-49;
-        new BorderBox(Color.BLACK, Color.WHITE, 1,posRefX, posRefY, page.getMediaBox().getWidth()-page.getMediaBox().getWidth()/3,50).build(contentStream, writer);
-        new SimpleTextBox(font, 9, posRefX+5, posRefY+48, "Reference to remember when paying").build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.WHITE, 1,posRefX, posRefY, page.getMediaBox().getWidth()-page.getMediaBox().getWidth()/3,50).build(contentStream,writer);
+        new SimpleTextBox(font, 9, posRefX+5, posRefY+48, "Reference to remember when paying").build(contentStream,writer);
         VerticalContainer verticalREF1 = new VerticalContainer(posRefX+5, posRefY+38, 250 );
         verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelClient()));
         verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelInvoice()));
         verticalREF1.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getLabelInvoice()));
-        verticalREF1.build(contentStream, writer);
+        verticalREF1.build(contentStream,writer);
 
         VerticalContainer verticalREF2 = new VerticalContainer(posRefX+100, posRefY+38, 250 );
         verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueClient(),"CNUM"));
         verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueInvoice(),"IN"));
         verticalREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getDate().getValueInvoice(),"IDATE"));
-        verticalREF2.build(contentStream, writer);
+        verticalREF2.build(contentStream,writer);
 
         //Numero et Ref
         float posNumRefX = posSHX+10;
         float posNumRefY = posSHY+hSH+5;
         int hNumRef = (int) (posRefY-posNumRefY-5);
         BorderBox bdNumRef = new BorderBox(Color.BLACK, Color.WHITE, 1,posNumRefX, posNumRefY, wSH-10,hNumRef);
-        bdNumRef.build(contentStream, writer);
+        bdNumRef.build(contentStream,writer);
         VerticalContainer verticalNumREF = new VerticalContainer(posNumRefX+5, posRefY-10, 250 );
         verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, model.getReference().getLabelInvoice()));
         verticalNumREF.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
@@ -200,7 +200,7 @@ public class LDLCLayout implements InvoiceLayout {
         verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, "N° Intra Comm :"));
         verticalNumREF.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalNumREF.addElement(new SimpleTextBox(font, 9, 0, 0, "N° Siret :"));
-        verticalNumREF.build(contentStream, writer);
+        verticalNumREF.build(contentStream,writer);
 
         VerticalContainer verticalNumREF2 = new VerticalContainer(verticalNumREF.getBBox().getPosX()+verticalNumREF.getBBox().getWidth()+15, posRefY-10, 250 );
         verticalNumREF2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getReference().getValueInvoice(),"IN"));
@@ -214,7 +214,7 @@ public class LDLCLayout implements InvoiceLayout {
         verticalNumREF2.addElement(new SimpleTextBox(font, 9, 0, 0, ""));
         verticalNumREF2.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         verticalNumREF2.addElement(new SimpleTextBox(font, 9, 0, 0, "INTERNET"));
-        verticalNumREF2.build(contentStream, writer);
+        verticalNumREF2.build(contentStream,writer);
 
         //num facture ss code barre
         new SimpleTextBox(font, 9, posBarcodeX+tailleBarcode/2-model.getReference().getValueInvoice().length()*2, posBarcodeY-tailleBarcode/ratioBarcode, model.getReference().getValueInvoice(),"IN").build(contentStream,writer);
@@ -287,7 +287,7 @@ public class LDLCLayout implements InvoiceLayout {
             verticalInvoiceItems.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
         }
 
-        verticalInvoiceItems.build(contentStream, writer);
+        verticalInvoiceItems.build(contentStream,writer);
 
         new HorizontalLineBox(25,255, page.getMediaBox().getWidth()-(25), 0).build(contentStream,writer);
 
@@ -321,12 +321,12 @@ public class LDLCLayout implements InvoiceLayout {
         verticalInvoiceTVA.addElement(TVALine);
         verticalInvoiceTVA.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
 
-        verticalInvoiceTVA.build(contentStream, writer);
+        verticalInvoiceTVA.build(contentStream,writer);
 
         //TOTAUX
         float posTotauxX = 340;
         float posTotauxY = 165;
-        new BorderBox(Color.BLACK, Color.WHITE, 1,posTotauxX, posTotauxY, 225,85).build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.WHITE, 1,posTotauxX, posTotauxY, 225,85).build(contentStream,writer);
         VerticalContainer verticalTotaux = new VerticalContainer(posTotauxX+2, posTotauxY+85-2, 250 );
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Discount amount"));
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Postage amount"));
@@ -335,7 +335,7 @@ public class LDLCLayout implements InvoiceLayout {
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getProductContainer().getTaxRateHead()));
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getProductContainer().getWithTaxTotalHead()));
         verticalTotaux.addElement(new SimpleTextBox(fontBold, 9, 0, 0,"Your payment"));
-        verticalTotaux.build(contentStream, writer);
+        verticalTotaux.build(contentStream,writer);
 
         VerticalContainer verticalTotaux2 = new VerticalContainer(posTotauxX+190, posTotauxY+85-2, 250 );
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, "0,00"));
@@ -345,28 +345,28 @@ public class LDLCLayout implements InvoiceLayout {
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, (float)((int)model.getProductContainer().getTotalTax()*100)/100+"", "TTX"));
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0, (float)((int)model.getProductContainer().getTotalWithTax()*100)/100+"","TA"));
         verticalTotaux2.addElement(new SimpleTextBox(font, 9, 0, 0,(float)((int)model.getProductContainer().getTotalWithTax()*100)/100+"", "TA"));
-        verticalTotaux2.build(contentStream, writer);
+        verticalTotaux2.build(contentStream,writer);
 
-        new BorderBox(Color.BLACK, Color.WHITE, 1,posTotauxX, posTotauxY-30, 225,28).build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.WHITE, 1,posTotauxX, posTotauxY-30, 225,28).build(contentStream,writer);
         VerticalContainer verticalNet = new VerticalContainer(posTotauxX+3, posTotauxY-5, 250 );
         verticalNet.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "NET TO PAY"));
         verticalNet.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "Payment deadline"));
-        verticalNet.build(contentStream, writer);
+        verticalNet.build(contentStream,writer);
 
         VerticalContainer verticalNet2 = new VerticalContainer(posTotauxX+170, posTotauxY-5, 250 );
         verticalNet2.addElement(new SimpleTextBox(fontBold, 9, 0, 0, "0,00 "));
         verticalNet2.addElement(new SimpleTextBox(font, 9, 0, 0, model.getDate().getValueInvoice(),"IDATE"));
-        verticalNet2.build(contentStream, writer);
+        verticalNet2.build(contentStream,writer);
 
         new SimpleTextBox(fontBold, 9, 30, 182, "Our invoices are denominated in Euros.").build(contentStream,writer);
         new SimpleTextBox(fontBold, 9, 30, 162, "No discount for early payment will be granted.").build(contentStream,writer);
 
-        new BorderBox(Color.BLACK, Color.WHITE, 1,25, 56, 160,80).build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.WHITE, 1,25, 56, 160,80).build(contentStream,writer);
         VerticalContainer verticalPaiement = new VerticalContainer(25+3, 140-5, 250 );
         verticalPaiement.addElement(new SimpleTextBox(font, 9, 0, 0, "PROVIDED SETTLEMENT"));
         verticalPaiement.addElement(new SimpleTextBox(fontBold, 9, 0, 0, model.getPaymentInfo().getValuePaymentType()));
-        new BorderBox(Color.BLACK, Color.BLACK, 1,25, 113, 160,1).build(contentStream, writer);
-        verticalPaiement.build(contentStream, writer);
+        new BorderBox(Color.BLACK, Color.BLACK, 1,25, 113, 160,1).build(contentStream,writer);
+        verticalPaiement.build(contentStream,writer);
 
         String footer2 = this.getClass().getClassLoader().getResource("invoices/parts/ldlc/footer2.jpg").getFile();
         PDImageXObject logoFooter2 = PDImageXObject.createFromFile(footer2, document);

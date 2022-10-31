@@ -70,7 +70,7 @@ public class LoriaLayout implements InvoiceLayout {
 
         PDFont font = PDType1Font.HELVETICA;
 
-        new SimpleTextBox(font,16,20,20, model.getCompany().getName()).build(contentStream, writer);
+        new SimpleTextBox(font,16,20,20, model.getCompany().getName()).build(contentStream,writer);
 
         contentStream.close();
 

@@ -156,7 +156,7 @@ public class MACOMPLayout implements InvoiceLayout {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         // Invoice number
-        new SimpleTextBox(fontB, fontSize+2, 310, 748, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream, writer);
+        new SimpleTextBox(fontB, fontSize+2, 310, 748, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream,writer);
         annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
 
         // Vendor/company address
@@ -220,7 +220,7 @@ public class MACOMPLayout implements InvoiceLayout {
         // if no signature anåd no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
-            new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream, writer);
+            new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream,writer);
         }
 
         VerticalContainer invoiceInfo = new VerticalContainer(310, 580, 400);
@@ -258,10 +258,10 @@ public class MACOMPLayout implements InvoiceLayout {
         invoiceInfo.addElement(elementInfoContainer3);
         invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
-        invoiceInfo.build(contentStream, writer);
+        invoiceInfo.build(contentStream,writer);
 
         ProductBox products = new ProductBox(30, 400, pc,fontI, fontB, fontSize);
-        products.build(contentStream, writer);
+        products.build(contentStream,writer);
 
         VerticalContainer footer = new VerticalContainer(50, 100, 1000);
         footer.addElement(new HorizontalLineBox(0,0,530, 0));
@@ -269,7 +269,7 @@ public class MACOMPLayout implements InvoiceLayout {
         FootBox footBox = new FootBox(fontN, fontB, fontI, 11, model, document);
 
         footer.addElement(footBox);
-        footer.build(contentStream, writer);
+        footer.build(contentStream,writer);
 
         contentStream.close();
         writer.writeEndElement();
