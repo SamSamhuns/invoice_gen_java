@@ -394,12 +394,14 @@ public class BDmobilierLayout implements InvoiceLayout {
         new HorizontalLineBox(ttx1, tableBottomY, ttx2, tableBottomY, lineStrokeColor).build(contentStream,writer);
         new BorderBox(hdrBgColor,hdrBgColor,1,395,tableBottomY-50,166,45).build(contentStream,writer);
 
-        // Totals and Taxes calculations
-        new SimpleTextBox(fontN, 9, 400, tableBottomY-6, pc.getTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 495, tableBottomY-6, pc.getFmtTotal()+amtSuffix, hdrTextColor,hdrBgColor,"TWTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 400, tableBottomY-19, pc.getTaxTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
+        // Table footer Totals calculations
+        // totals labels
+        new SimpleTextBox(fontNB, 9, 400, tableBottomY-6,  pc.getTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
+        new SimpleTextBox(fontNB, 9, 400, tableBottomY-19, pc.getTaxTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
+        new SimpleTextBox(fontNB, 9, 400, tableBottomY-33, pc.getWithTaxAndDiscountTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
+        // totals values
+        new SimpleTextBox(fontN, 9, 495, tableBottomY-6,  pc.getFmtTotal()+amtSuffix, hdrTextColor,hdrBgColor,"TWTX").build(contentStream,writer);
         new SimpleTextBox(fontN, 9, 495, tableBottomY-19, pc.getFmtTotalTax()+amtSuffix, hdrTextColor,hdrBgColor,"TTX").build(contentStream,writer);
-        new SimpleTextBox(fontN, 9, 400, tableBottomY-33, pc.getWithTaxAndDiscountTotalHead(), hdrTextColor,hdrBgColor).build(contentStream,writer);
         new SimpleTextBox(fontN, 9, 495, tableBottomY-33, pc.getFmtTotalWithTaxAndDiscount()+amtSuffix, hdrTextColor,hdrBgColor,"TA").build(contentStream,writer);
 
         annot.getTotal().setSubtotalPrice(pc.getFmtTotal()+amtSuffix);
