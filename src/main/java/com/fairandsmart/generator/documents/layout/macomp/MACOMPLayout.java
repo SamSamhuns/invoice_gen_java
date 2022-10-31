@@ -39,7 +39,9 @@ import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
+import com.fairandsmart.generator.documents.data.model.InvoiceNumber;
 import com.fairandsmart.generator.documents.data.model.Client;
+import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
@@ -49,6 +51,7 @@ import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
+import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.product.ProductBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
@@ -75,6 +78,8 @@ import java.awt.Color;
 import java.util.Random;
 import java.util.Map;
 import java.util.List;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -107,6 +112,7 @@ public class MACOMPLayout implements InvoiceLayout {
         Random rnd = model.getRandom();
         Client client = model.getClient();
         Company company = model.getCompany();
+        InvoiceNumber ref = model.getReference();
         PaymentInfo payment = model.getPaymentInfo();
         ProductContainer pc = model.getProductContainer();
         String cur = pc.getCurrency();
@@ -115,7 +121,7 @@ public class MACOMPLayout implements InvoiceLayout {
         Map<String, Boolean> proba = HelperCommon.getMatchedConfigMap(model.getConfigMaps(), this.name());
 
         // get barcode number
-        String barcodeNum = model.getReference().getValueBarcode();
+        String barcodeNum = ref.getValueBarcode();
 
         // Set fontFaces
         HelperCommon.PDCustomFonts fontSet = HelperCommon.getRandomPDFontFamily(document, this);
@@ -161,7 +167,7 @@ public class MACOMPLayout implements InvoiceLayout {
 
         String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         if (proba.get("doc_title_top")) {
-            SimpleTextBox docTitleBox = new SimpleTextBox(fontB, 12,0,0, docTitle,"title");
+            SimpleTextBox docTitleBox = new SimpleTextBox(fontB, 15,0,0, docTitle,"title");
             docTitleBox.translate(pageMiddleX-docTitleBox.getBBox().getWidth()/2, pageHeight-topPageMargin);
             docTitleBox.build(contentStream,writer);
             annot.setTitle(docTitle);
@@ -185,8 +191,8 @@ public class MACOMPLayout implements InvoiceLayout {
         }
 
         // Invoice number
-        new SimpleTextBox(fontB, fontSize+2, pageMiddleX, 740, model.getReference().getLabelInvoice()+" : "+ model.getReference().getValueInvoice()).build(contentStream,writer);
-        annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
+        new SimpleTextBox(fontB, fontSize+2, pageMiddleX, 740, ref.getLabelInvoice()+" : "+ ref.getValueInvoice()).build(contentStream,writer);
+        annot.getInvoice().setInvoiceId(ref.getValueInvoice());
 
         // Vendor/company address
         VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,8,9,260,lineStrokeColor,model,document,company,annot,proba);
@@ -216,7 +222,7 @@ public class MACOMPLayout implements InvoiceLayout {
             float pAW = 300, pAX = pageMiddleX, pAY = Math.max(billY, shipY);
             proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
 
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,8,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(contentStream,writer);
         }
@@ -224,32 +230,35 @@ public class MACOMPLayout implements InvoiceLayout {
         // table top invoice info
         VerticalContainer invoiceInfoCont = new VerticalContainer(pageMiddleX, Math.min(billY, shipY), 400);
 
-        float[] configRow = {150f, 200f};
-        TableRowBox infoRow1 = new TableRowBox(configRow, 0, 0);
+        float[] configRowInfo = {150f, 200f};
+        // invoice date
+        TableRowBox infoRow1 = new TableRowBox(configRowInfo, 0, 0);
         SimpleTextBox Label = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getDate().getLabelInvoice(),black, null, HAlign.LEFT);
         infoRow1.addElement(Label, false);
         SimpleTextBox Value = new SimpleTextBox(fontN, fontSize, 0,0, model.getDate().getValueInvoice());
         infoRow1.addElement(Value, false);
         invoiceInfoCont.addElement(infoRow1);
         invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
-
-        TableRowBox infoRow2 = new TableRowBox(configRow,0, 0);
-        SimpleTextBox Label1 = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getReference().getLabelClient(),black, null, HAlign.LEFT);
+        annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
+        // client number
+        TableRowBox infoRow2 = new TableRowBox(configRowInfo,0, 0);
+        SimpleTextBox Label1 = new SimpleTextBox(fontB, fontSize+1, 0,0, ref.getLabelClient(),black, null, HAlign.LEFT);
         infoRow2.addElement(Label1, false);
-        SimpleTextBox Value1 = new SimpleTextBox(fontN, fontSize, 0,0, model.getReference().getValueClient());
+        SimpleTextBox Value1 = new SimpleTextBox(fontN, fontSize, 0,0, ref.getValueClient());
         infoRow2.addElement(Value1, false);
         invoiceInfoCont.addElement(infoRow2);
         invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
-
-        TableRowBox infoRow3 = new TableRowBox(configRow,0, 0);
-        SimpleTextBox Label2 = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getReference().getLabelOrder(),black, null, HAlign.LEFT);
+        // order number
+        TableRowBox infoRow3 = new TableRowBox(configRowInfo,0, 0);
+        SimpleTextBox Label2 = new SimpleTextBox(fontB, fontSize+1, 0,0, ref.getLabelOrder(),black, null, HAlign.LEFT);
         infoRow3.addElement(Label2, false);
-        SimpleTextBox Value2 = new SimpleTextBox(fontN, fontSize, 0,0, model.getReference().getValueOrder(),black, null, HAlign.LEFT);
+        SimpleTextBox Value2 = new SimpleTextBox(fontN, fontSize, 0,0, ref.getValueOrder(),black, null, HAlign.LEFT);
         infoRow3.addElement(Value2, false);
         invoiceInfoCont.addElement(infoRow3);
         invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
-
-        TableRowBox infoRow4 = new TableRowBox(configRow,0, 0);
+        annot.getInvoice().setInvoiceOrderId(ref.getValueOrder());
+        // payment type
+        TableRowBox infoRow4 = new TableRowBox(configRowInfo,0, 0);
         SimpleTextBox Label3 = new SimpleTextBox(fontB, fontSize+1, 0,0, payment.getLabelPaymentType(),black, null, HAlign.LEFT);
         infoRow4.addElement(Label3, false);
         SimpleTextBox Value3 = new SimpleTextBox(fontN, fontSize, 0,0, payment.getValuePaymentType(),black, null, HAlign.LEFT);
@@ -259,9 +268,230 @@ public class MACOMPLayout implements InvoiceLayout {
 
         invoiceInfoCont.build(contentStream,writer);
 
-        // table
-        ProductBox products = new ProductBox(30, 470, pc,fontI, fontB, fontSize);
-        products.build(contentStream,writer);
+        ////////////////////////////////////      Building Table      ////////////////////////////////////
+
+        // check if cur should be included in table amt items
+        String amtSuffix = "";
+        if (proba.get("currency_in_table_items")) {
+            amtSuffix = " "+cur;
+            annot.getTotal().setCurrency(cur);
+        }
+        boolean upperCap = rnd.nextBoolean();  // table header items case
+        HAlign tableHdrAlign = proba.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
+
+        // Building Header Item labels, table values and footer labels list
+        float tableWidth = pageWidth - leftPageMargin - rightPageMargin;
+        ProductTable pt = new ProductTable(pc, amtSuffix, model.getLang(), tableWidth);
+        List<String> tableHeaders = pt.getTableHeaders();
+        float[] configRow = pt.getConfigRow();
+        Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
+
+        // table header text colors
+        Color hdrTextColor = proba.get("table_hdr_black_text") ? black: white; // hdrTextColor black (predominantly) or white
+        Color hdrBgColor = (hdrTextColor == white) ? black: Arrays.asList(Color.GRAY, lgray, white).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
+
+        // table top info
+        String tableTopText = pt.getTableTopInfo();
+        tableTopText = tableTopText.equals("All prices are in")? tableTopText+" "+cur: tableTopText;
+        tableTopText = (hdrBgColor == white) ? "" : tableTopText;
+        float tableTopPosX = leftPageMargin;
+        float tableTopPosY = invoiceInfoCont.getBBox().getPosY() - invoiceInfoCont.getBBox().getHeight() - 10;
+
+        SimpleTextBox tableTopBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopPosX, tableTopPosY, tableTopText);
+        tableTopBox.build(contentStream,writer);
+
+        // table top horizontal line, will be built after verticalTableItems
+        float x1 = leftPageMargin; float y1 = tableTopBox.getBBox().getPosY() - tableTopBox.getBBox().getHeight() - 2;
+        float x2 = pageWidth-rightPageMargin; float y2 = y1;
+        HorizontalLineBox tableTopInfoLine = new HorizontalLineBox(x1, y1, x2, y2, lineStrokeColor);
+
+        // table item list head
+        TableRowBox row1 = new TableRowBox(configRow, 0, 0);
+        for (String tableHeader: tableHeaders) {
+            String hdrLabel = itemMap.get(tableHeader).getLabelHeader();
+            String tableHdrLabel = upperCap ? hdrLabel.toUpperCase() : hdrLabel;
+            // if numerical header used, check if cur needs to appended at the end
+            if (proba.get("currency_in_table_headers") && !proba.get("currency_in_table_items") && pt.getNumericalHdrs().contains(tableHeader)) {
+                tableHdrLabel += " ("+cur+")";
+            }
+            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), false);
+        }
+        row1.setBackgroundColor(hdrBgColor);
+
+        VerticalContainer verticalTableItems = new VerticalContainer(leftPageMargin, tableTopPosY - tableTopBox.getBBox().getHeight() - 2, 600);
+        verticalTableItems.addElement(row1);
+        verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+        verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+
+        new BorderBox(hdrBgColor, hdrBgColor, 0,
+                      leftPageMargin, tableTopPosY - tableTopBox.getBBox().getHeight() - 2 - row1.getBBox().getHeight(),
+                      row1.getBBox().getWidth(), row1.getBBox().getHeight()).build(contentStream,writer);
+
+        // table item list body
+        String quantity; String snNum;
+        Color cellTextColor; Color cellBgColor;
+        for(int w=0; w<pc.getProducts().size(); w++) {
+            Product randomProduct = pc.getProducts().get(w);
+            cellTextColor = black;
+            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? lgray: white;
+            quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
+            snNum = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Integer.toString(w + 1);
+
+            InvoiceAnnotModel.Item randomItem = new InvoiceAnnotModel.Item();
+            TableRowBox productLine = new TableRowBox(configRow, 0, 0);
+            for (String tableHeader: tableHeaders) {
+                String cellText = "";
+                PDFont cellFont = fontN;
+                HAlign cellAlign = tableHdrAlign;
+                switch (tableHeader) {
+                    case "SN":
+                        cellText = snNum;
+                        randomItem.setSerialNumber(cellText); break;
+                    case "Qty":
+                        cellText = quantity;
+                        randomItem.setQuantity(cellText); break;
+                    case "ItemCode":
+                        cellText = randomProduct.getCode();
+                        randomItem.setItemCode(cellText); break;
+                    case "Item":
+                        cellFont = fontNB;
+                        cellText = randomProduct.getName();
+                        randomItem.setDescription(cellText); break;
+                    case "ItemRate":
+                        cellText = randomProduct.getFmtPrice()+amtSuffix;
+                        randomItem.setUnitPrice(cellText); break;
+                    case "Disc":
+                        cellText = randomProduct.getFmtTotalDiscount()+amtSuffix;
+                        randomItem.setDiscount(cellText); break;
+                    case "DiscRate":
+                        cellText = randomProduct.getFmtDiscountRate();
+                        randomItem.setDiscountRate(cellText); break;
+                    case "Tax":
+                        cellText = randomProduct.getFmtTotalTax()+amtSuffix;
+                        randomItem.setTax(cellText); break;
+                    case "TaxRate":
+                        cellText = randomProduct.getFmtTaxRate();
+                        randomItem.setTaxRate(cellText); break;
+                    case "SubTotal":
+                        cellText = randomProduct.getFmtTotalPriceWithDiscount()+amtSuffix;
+                        randomItem.setSubTotal(cellText); break;
+                    case "Total":
+                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
+                        randomItem.setTotal(cellText); break;
+                }
+                cellBgColor = proba.get("alternate_table_items_bg_color") && w % 2 == 0 ? lgray: cellBgColor;
+                SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
+                productLine.addElement(rowBox, false);
+            }
+            annot.getItems().add(randomItem);
+
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
+            productLine.setBackgroundColor(cellBgColor);
+            verticalTableItems.addElement(productLine);
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
+        }
+
+        verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+        verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+        float tableItemsHeight = verticalTableItems.getBBox().getHeight();
+
+        verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+        verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+        verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+
+        if (proba.get("table_footer_multi_row")) {
+            float[] configFooterRow = {450f, 80f}; // Adds up to 530 which is pageW - leftM - rightM
+            for (int i=0; i<tableHeaders.size(); i++ ) {
+                TableRowBox footerInvoice = new TableRowBox(configFooterRow, 0, 25);
+                String tableHeader = tableHeaders.get(i);
+                String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
+                String hdrValue = itemMap.get(tableHeader).getValueFooter();
+                footerInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), HAlign.RIGHT, tableHeader+"FooterLabel"), false);
+                footerInvoice.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.RIGHT, tableHeader+"FooterValue"), false);
+                verticalTableItems.addElement(footerInvoice);
+
+                switch (tableHeader) {
+                    case "Tax": annot.getTotal().setTaxPrice(hdrValue); break;
+                    case "TaxRate": annot.getTotal().setTaxRate(hdrValue); break;
+                    case "Disc": annot.getTotal().setDiscountPrice(hdrValue); break;
+                    case "DiscRate": annot.getTotal().setDiscountRate(hdrValue); break;
+                    case "ItemRate": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "SubTotal": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "Total": annot.getTotal().setTotalPrice(hdrValue); break;
+                }
+            }
+        }
+        else {
+            // Table Footer Single Row
+            // Footer Labels for final total amount, tax and discount
+            TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
+            for (String tableHeader: tableHeaders) {
+                String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
+                titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign, tableHeader+"FooterLabel"), false);
+            }
+            verticalTableItems.addElement(titleTotalInvoice);
+
+            verticalTableItems.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0,0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
+
+            // Footer Numerical formatted values for final total amount, tax and discount
+            TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
+            for (String tableHeader: tableHeaders) {
+                String hdrValue = itemMap.get(tableHeader).getValueFooter();
+                totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), false);
+                switch (tableHeader) {
+                    case "Tax": annot.getTotal().setTaxPrice(hdrValue); break;
+                    case "TaxRate": annot.getTotal().setTaxRate(hdrValue); break;
+                    case "Disc": annot.getTotal().setDiscountPrice(hdrValue); break;
+                    case "DiscRate": annot.getTotal().setDiscountRate(hdrValue); break;
+                    case "ItemRate": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "SubTotal": annot.getTotal().setSubtotalPrice(hdrValue); break;
+                    case "Total": annot.getTotal().setTotalPrice(hdrValue); break;
+                }
+            }
+            verticalTableItems.addElement(totalInvoice1);
+
+            verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+        }
+
+        if (proba.get("total_in_words")) {
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
+
+            String totalInWordsText = HelperCommon.spellout_number(
+                    pc.getTotalWithTax(),
+                    new Locale(model.getLocale()));
+            totalInWordsText = "Total in Words: " + totalInWordsText+" "+cur;
+            totalInWordsText = (rnd.nextInt(100) < 50) ? totalInWordsText.toUpperCase() : totalInWordsText;
+
+            SimpleTextBox totalInWordsFooter = new SimpleTextBox(fontN, 10, 0, 0, totalInWordsText);
+            totalInWordsFooter.setWidth(500);
+            verticalTableItems.addElement(totalInWordsFooter);
+            verticalTableItems.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+            verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
+            annot.getTotal().setCurrency(cur);
+        }
+        verticalTableItems.build(contentStream,writer);
+        tableTopInfoLine.build(contentStream,writer); // must be built after verticalTableItems
+
+        // Add vertical borders to table cell items if table cell is CENTER aligned horizontally
+        if ( tableHdrAlign == HAlign.CENTER ) {
+            float xPos = leftPageMargin;
+            float yPos = tableTopPosY - tableTopBox.getBBox().getHeight() - 2;
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+            xPos += configRow[0];
+            for (int i=1; i < configRow.length; i++) {
+                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+                xPos += configRow[i];
+            }
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+        }
+
+        ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
         new HorizontalLineBox(leftPageMargin,100,pageWidth-rightPageMargin,100).build(contentStream,writer);
 
@@ -349,7 +579,9 @@ public class MACOMPLayout implements InvoiceLayout {
 
         // footer company name, info, address & contact information at bottom center
         if (proba.get("vendor_info_footer")) {
-            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,7,8, themeColor, pageWidth-leftPageMargin-rightPageMargin,model,document,company,annot,proba);
+            FootCompanyBox footCompanyBox = new FootCompanyBox(
+                        fontN,fontB,fontI,7,8, themeColor, pageWidth-leftPageMargin-rightPageMargin,
+                        model,document,company,annot,proba);
             float fW = footCompanyBox.getBBox().getWidth();
             footCompanyBox.alignElements(HAlign.CENTER, fW);
             footCompanyBox.translate(pageMiddleX-fW/2,55);
