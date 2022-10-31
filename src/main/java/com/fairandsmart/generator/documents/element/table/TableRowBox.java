@@ -72,7 +72,11 @@ public class TableRowBox extends ElementBox {
         this.valign = valign;
     }
 
-    public void addElement(ElementBox element, boolean center_align) throws Exception {
+    public void addElement(ElementBox element) throws Exception {
+            addElement(element, false);
+        }
+
+    public void addElement(ElementBox element, Boolean center_align) throws Exception {
         if ( elements.size() == config.length ) {
             throw new Exception("Row is full, no more element allowed");
         }
