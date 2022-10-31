@@ -111,10 +111,12 @@ public class ShippingInfoBox extends ElementBox {
         Address address = client.getShippingAddress();
         ContactNumber contact = client.getShippingContactNumber();
         String connec = (contact.getPhoneLabel().length() > 0) ? ": ": "";
+        String clientName = client.getShippingName();
         String clientAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
+        String clientZip = address.getZip();
 
         vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig,0,0, client.getShippingHead(), "SHH" ));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, client.getShippingName(), "SHN" ));
+        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, clientName, "SHN" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(), "SHA" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip()+" "+address.getCity(), "SHA" ));
         if (proba.get("ship_address_phone") && proba.get("bill_address_phone")) {
@@ -136,10 +138,10 @@ public class ShippingInfoBox extends ElementBox {
         // add annotations for shipping address if these fields are not empty
         if (client.getShippingName().length() > 0) {
             annot.setShipto(new InvoiceAnnotModel.Shipto());
-            annot.getShipto().setShiptoName(client.getShippingName());
+            annot.getShipto().setShiptoName(clientName);
             if (contact.getPhoneLabel().length() > 0) {
                 annot.getShipto().setShiptoAddr(clientAddr);
-                annot.getShipto().setShiptoPOBox(address.getZip());
+                annot.getShipto().setShiptoPOBox(clientZip);
             }
         }
     }

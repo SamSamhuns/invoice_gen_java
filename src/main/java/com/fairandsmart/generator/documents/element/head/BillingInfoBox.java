@@ -111,35 +111,37 @@ public class BillingInfoBox extends ElementBox {
         Address address = client.getBillingAddress();
         IDNumbers idNumber = client.getIdNumbers();
         ContactNumber contact = client.getBillingContactNumber();
+        String clientName = client.getBillingName();
         String clientAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
+        String clientZip = address.getZip();
 
         vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig,0,0, client.getBillingHead(), "BH" ));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, client.getBillingName(), "BN" ));
+        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, clientName, "BN" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(), "BA" ));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip()+" "+address.getCity(), "BA" ));
         if (proba.get("bill_address_phone")) {
             vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+": "+contact.getPhoneValue(), "BC"));
         }
         else if (proba.get("bill_address_country")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,address.getCountry(),"BA"));
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, address.getCountry(),"BA"));
             clientAddr += " " + address.getCountry();
         }
 
         if (proba.get("bill_address_tax_number")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,idNumber.getVatLabel()+": "+idNumber.getVatValue(),"BT"));
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, idNumber.getVatLabel()+": "+idNumber.getVatValue(),"BT"));
             annot.getBillto().setCustomerTrn(idNumber.getVatValue());
         }
         else if (proba.get("bill_address_fax")) {
-          vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "BF"));
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "BF"));
         }
 
         if (proba.get("addresses_bordered") && client.getBillingHead().length() > 0) {
             vContainer.setBorderColor(lineStrokeColor);
             vContainer.setBorderThickness(0.5f);
         }
-        annot.getBillto().setCustomerName(client.getBillingName());
+        annot.getBillto().setCustomerName(clientName);
         annot.getBillto().setCustomerAddr(clientAddr);
-        annot.getBillto().setCustomerPOBox(address.getZip());
+        annot.getBillto().setCustomerPOBox(clientZip);
     }
 
     @Override

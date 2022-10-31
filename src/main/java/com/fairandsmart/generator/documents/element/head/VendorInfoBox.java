@@ -116,34 +116,39 @@ public class VendorInfoBox extends ElementBox {
         Address address = company.getAddress();
         IDNumbers idNumber = company.getIdNumbers();
         ContactNumber contact = company.getContact();
+        String compName = company.getName();
+        String compAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
+        String compZip = address.getZip();
 
-        vContainer.addElement(new SimpleTextBox(fontNB,fontSizeBig,0,0, company.getName()+"","SN"));
+        vContainer.addElement(new SimpleTextBox(fontNB,fontSizeBig,0,0, compName+"","SN"));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(),"SA"));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip() +"  "+ address.getCity(),"SA"));
         vContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,3));
-        if (proba.get("vendor_address_phone")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+": "+contact.getPhoneValue(), "SC"));
+        if (proba.get("vendor_address_country")) {
+            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,address.getCountry(),"BA"));
+            compAddr += " " + address.getCountry();
         }
-        if (proba.get("vendor_address_fax")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "SF"));
+        else {
+            if (proba.get("vendor_address_phone")) {
+                vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+": "+contact.getPhoneValue(), "SC"));
+            }
+            if (proba.get("vendor_address_fax")) {
+                vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "SF"));
+            }
         }
         if (proba.get("vendor_address_tax_number")) {
             String vatText = idNumber.getVatLabel()+": "+idNumber.getVatValue();
             vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, vatText, "SVAT"));
             annot.getVendor().setVendorTrn(idNumber.getVatValue());
         }
-        // else if (proba.get("vendor_address_country")) {
-        //     vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,client.getBillingAddress().getCountry(),"BA"));
-        //     clientAddr += " " + address.getCountry();
-        // }
 
         if (proba.get("addresses_bordered")) {
             vContainer.setBorderColor(lineStrokeColor);
             vContainer.setBorderThickness(0.5f);
         }
-        annot.getVendor().setVendorName(company.getName());
-        annot.getVendor().setVendorAddr(address.getLine1()+" "+address.getZip()+" "+address.getCity());
-        annot.getVendor().setVendorPOBox(address.getZip());
+        annot.getVendor().setVendorName(compName);
+        annot.getVendor().setVendorAddr(compAddr);
+        annot.getVendor().setVendorPOBox(compZip);
     }
 
     @Override
