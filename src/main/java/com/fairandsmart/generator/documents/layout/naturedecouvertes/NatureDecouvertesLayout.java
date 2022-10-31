@@ -46,20 +46,21 @@ import com.fairandsmart.generator.documents.data.model.ContactNumber;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 
-import com.fairandsmart.generator.documents.element.product.ProductTable;
-import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
+import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
-import com.fairandsmart.generator.documents.element.HAlign;
-import com.fairandsmart.generator.documents.element.border.BorderBox;
-import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.image.ImageBox;
-import com.fairandsmart.generator.documents.element.footer.StampBox;
-import com.fairandsmart.generator.documents.element.table.TableRowBox;
+import com.fairandsmart.generator.documents.element.product.ProductTable;
+import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
+import com.fairandsmart.generator.documents.element.border.BorderBox;
+import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
+import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
+import com.fairandsmart.generator.documents.element.image.ImageBox;
+import com.fairandsmart.generator.documents.element.table.TableRowBox;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
 
 import com.mifmif.common.regex.Generex;
 
@@ -150,8 +151,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         Color lineStrokeColor = proba.get("line_stroke_black") ? black: themeColor;
 
         // always set to false but individually change SimpleTextBox HAlign
-        float ratioPage = 0.24f; // pageWidth/2480;
-        // pageHeight 841.8898, pageWidth 595.27563
+        float ratioPage = 0.24f; // pageWidth/2480;  pageHeight 841; pageWidth 595;
 
         // load logo img
         String logoPath = HelperCommon.getResourceFullPath(this, "common/logo/" + company.getLogo().getFullPath());
@@ -176,38 +176,19 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             logoWidth = logoImg.getWidth() * logoScale;
             logoHeight = logoImg.getHeight() * logoScale;
             posLogoX = leftPageMargin;
-            posLogoY = pageHeight-logoHeight-topPageMargin;
-            contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
+            posLogoY = pageHeight-topPageMargin;
+            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
         } else {  // Barcode top
-            new ImageBox(barcodeImg, leftPageMargin, pageHeight-topPageMargin, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), barcodeNum).build(contentStream, writer);
+            new ImageBox(barcodeImg, leftPageMargin, pageHeight-topPageMargin, barcodeImg.getWidth(), (float)(barcodeImg.getHeight()/2), barcodeNum).build(contentStream,writer);
         }
 
         float topAddrX = 307;
         float topAddrY = pageHeight - topPageMargin;
         // company/vendor info top (switch with billing address sometimes)
         if (proba.get("vendor_address_top")) {
-            VerticalContainer vendorAddrCont = new VerticalContainer(topAddrX,topAddrY,250);
-            vendorAddrCont.addElement(new SimpleTextBox(fontB,12,0,0,company.getName(),"SN"));
-            vendorAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,company.getAddress().getLine1(),"SA"));
-            vendorAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,company.getAddress().getZip()+" "+company.getAddress().getCity(),"SA"));
-            vendorAddrCont.addElement(new SimpleTextBox(fontN,10,0,0,company.getAddress().getCountry(),"SA"));
-            if (proba.get("vendor_address_phone_fax")) {
-                vendorAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, company.getContact().getPhoneLabel()+": "+company.getContact().getPhoneValue(), "SC"));
-                vendorAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, company.getContact().getFaxLabel()+": "+company.getContact().getFaxValue(), "SF"));
-            }
-            else if (proba.get("vendor_address_tax_number")) {
-                String vatText = company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue();
-                vendorAddrCont.addElement(new SimpleTextBox(fontN,9,0,0,vatText, "SVAT"));
-                annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
-            }
-            if (proba.get("addresses_bordered")) {
-                vendorAddrCont.setBorderColor(lineStrokeColor);
-                vendorAddrCont.setBorderThickness(0.5f);
-            }
-            annot.getVendor().setVendorName(company.getName());
-            annot.getVendor().setVendorAddr(company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity());
-            annot.getVendor().setVendorPOBox(company.getAddress().getZip());
-            vendorAddrCont.build(contentStream,writer);
+            VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,11,250,lineStrokeColor,model,document,company,annot,proba);
+            vendorInfoBox.translate(topAddrX, topAddrY);
+            vendorInfoBox.build(contentStream,writer);
         }
         else { // add the Payment Info and address
             float pAW = 300;
@@ -364,7 +345,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             verticalTableItems.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
         }
 
-        verticalTableItems.build(contentStream, writer);
+        verticalTableItems.build(contentStream,writer);
 
         float xPos = leftPageMargin;
         float yPos = tableTopY - 35;
@@ -383,17 +364,17 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         float tableBottomY = yPos-tableHeight-paymentInfoCont.getBBox().getHeight()-10;
         // Add vertical borders across columns in table
-        HelperImage.drawLine(contentStream, xPos, yPos, xPos, tableBottomY, lineStrokeColor);  // first line extends down more
+        new VerticalLineBox(xPos, yPos, xPos, tableBottomY, lineStrokeColor).build(contentStream,writer);  // first line extends down more
         xPos += configRow[0];
         for (int i=1; i < configRow.length; i++) {
             if (i < configRow.length - 1) {
-                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos-2, yPos-tableHeight, lineStrokeColor);
+                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos-tableHeight, lineStrokeColor).build(contentStream,writer);
             } else {
-                HelperImage.drawLine(contentStream, xPos-2, yPos, xPos-2, tableBottomY, lineStrokeColor); // penultimate line extends down more
+                new VerticalLineBox(xPos-2, yPos, xPos-2, tableBottomY, lineStrokeColor).build(contentStream,writer); // penultimate line extends down more
             }
             xPos += configRow[i];
         }
-        HelperImage.drawLine(contentStream, xPos, yPos, xPos, tableBottomY, lineStrokeColor);  // final line extends down more
+        new VerticalLineBox(xPos, yPos, xPos, tableBottomY, lineStrokeColor).build(contentStream,writer);  // final line extends down more
         // add table bottom horizontal lines
         new HorizontalLineBox(leftPageMargin, yPos - tableHeight, pageWidth-rightPageMargin, yPos - tableHeight, lineStrokeColor).build(contentStream,writer);
         new HorizontalLineBox(leftPageMargin, tableBottomY, pageWidth-rightPageMargin, tableBottomY, lineStrokeColor).build(contentStream,writer);
@@ -408,7 +389,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         backContainer.build(contentStream,writer);
 
         // barcode bottom left
-        new ImageBox(barcodeImg, leftPageMargin+20, backContainer.getBBox().getPosY()-backContainer.getBBox().getHeight()-3, 160, 50, barcodeNum).build(contentStream, writer);
+        new ImageBox(barcodeImg, leftPageMargin+20, backContainer.getBBox().getPosY()-backContainer.getBBox().getHeight()-3, 160, 50, barcodeNum).build(contentStream,writer);
 
         // footer table with total amt + total taxFCont info
         float[] footerConfigRow = {55,55,45,60};
@@ -442,7 +423,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         annot.getTotal().setTaxRate(pc.getFmtTotalTaxRate());
         annot.getTotal().setTaxPrice(pc.getFmtTotalTax());
 
-        taxFCont.build(contentStream, writer);
+        taxFCont.build(contentStream,writer);
 
         // Add Signature at bottom right
         if (proba.get("signature_bottom")) {
@@ -451,12 +432,12 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             float sigTX = tFX;
             float sigTY = taxFCont.getBBox().getPosY() - taxFCont.getBBox().getHeight() - 60;
             SimpleTextBox sigTextBox = new SimpleTextBox(fontN, 8,sigTX,sigTY, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
-            sigTextBox.build(contentStream, writer);
+            sigTextBox.build(contentStream,writer);
 
             new HorizontalLineBox(
                     sigTX - 10, sigTY + 5,
                     sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 5,
-                    lineStrokeColor).build(contentStream, writer);
+                    lineStrokeColor).build(contentStream,writer);
 
             String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
             PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
@@ -467,9 +448,9 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             float sigH = sigImg.getHeight() * sigScale;
             // align signature to center of sigTextBox bbox
             float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
-            float sigIY = sigTY + 10;
+            float sigIY = sigTY + sigH + 10;
 
-            contentStream.drawImage(sigImg, sigIX, sigIY, sigW, sigH);
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
         }
 
         // Add company stamp watermark, 40% prob
@@ -496,7 +477,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             String noStampText = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
             VerticalContainer noStampCont = new VerticalContainer(leftPageMargin,tFY,240);
             noStampCont.addElement(new SimpleTextBox(fontN,7,0,0, noStampText, "Footnote"));
-            noStampCont.build(contentStream, writer);
+            noStampCont.build(contentStream,writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once

@@ -137,6 +137,7 @@ public class AmazonLayout implements InvoiceLayout {
         float pageMiddleX = pageWidth/2;
         float leftPageMargin = 25;
         float rightPageMargin = 25;
+        float topPageMargin = rightPageMargin;
         float bottomPageMargin = 8;
 
         // colors
@@ -163,11 +164,11 @@ public class AmazonLayout implements InvoiceLayout {
         ///////////////////////////////////      Build Page components now      ////////////////////////////////////
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        new BorderBox(HelperCommon.getRandomColor(6), white, 4, 0, 0, pageWidth, pageHeight).build(contentStream, writer);
+        new BorderBox(HelperCommon.getRandomColor(6), white, 4, 0, 0, pageWidth, pageHeight).build(contentStream,writer);
 
         // Barcode top
         if (proba.get("barcode_top")) {
-            new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), barcodeNum).build(contentStream, writer);
+            new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), "barcode:"+barcodeNum).build(contentStream,writer);
         }
         // Or Logo top
         else if (proba.get("logo_top")) {
@@ -177,8 +178,8 @@ public class AmazonLayout implements InvoiceLayout {
             logoWidth = logoImg.getWidth() * logoScale;
             logoHeight = logoImg.getHeight() * logoScale;
             posLogoX = pageWidth-logoWidth-rightPageMargin;
-            posLogoY = pageHeight-logoHeight-rightPageMargin;
-            contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
+            posLogoY = pageHeight-topPageMargin;
+            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
         }
 
         // Text top
@@ -198,7 +199,7 @@ public class AmazonLayout implements InvoiceLayout {
         }
         annot.setTitle(docTitle);
         annot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
-        topTextCont.build(contentStream, writer);
+        topTextCont.build(contentStream,writer);
 
         // Vendor/Company Address
         proba.put("vendor_address_tax_number", false);
@@ -210,14 +211,14 @@ public class AmazonLayout implements InvoiceLayout {
         // if no "vendor_address_phone_fax" then Purchase Order Number, Left side
         if (proba.get("purchase_order_number_top") && !proba.get("vendor_address_phone") && !proba.get("vendor_address_fax")) {
             String purchaseOrderText = model.getReference().getLabelOrder()+": "+model.getReference().getValueOrder();
-            new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, purchaseOrderText, "LO").build(contentStream, writer);
+            new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, purchaseOrderText, "LO").build(contentStream,writer);
             leftTopInfoY += 10;
             annot.getInvoice().setInvoiceOrderId(model.getReference().getValueOrder());
         }
         // TAX number, Left side
         if (proba.get("vendor_tax_number_top")) {
             String vatText = company.getIdNumbers().getVatLabel() + ": " + company.getIdNumbers().getVatValue();
-            new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, vatText, "SVAT").build(contentStream, writer);
+            new SimpleTextBox(fontN, 9, leftPageMargin, leftTopInfoY, vatText, "SVAT").build(contentStream,writer);
             annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
         }
 
@@ -225,28 +226,28 @@ public class AmazonLayout implements InvoiceLayout {
         // Currency Used, Right side
         if (proba.get("currency_top")) {
             String currencyText = payment.getLabelAccountCurrency()+": "+cur;
-            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, currencyText, "CUR").build(contentStream, writer);
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, currencyText, "CUR").build(contentStream,writer);
             rightTopInfoY += 10;
             annot.getTotal().setCurrency(cur);
         }
         // Payment Terms, Right side
         if (proba.get("payment_terms_top")) {
             String paymentTermText = payment.getLabelPaymentTerm()+": "+payment.getValuePaymentTerm();
-            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentTermText, "PT").build(contentStream, writer);
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentTermText, "PT").build(contentStream,writer);
             rightTopInfoY += 10;
             annot.getInvoice().setPaymentTerm(payment.getValuePaymentTerm());
         }
         // Payment Due Date if Payment Terms is not mentioned
         else if (proba.get("payment_due_top")) {
             String paymentDueText = model.getDate().getLabelPaymentDue()+": "+model.getDate().getValuePaymentDue();
-            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentDueText, "PT").build(contentStream, writer);
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, paymentDueText, "PT").build(contentStream,writer);
             rightTopInfoY += 10;
             annot.getInvoice().setInvoiceDueDate(model.getDate().getValuePaymentDue());
         }
         // invoice number, Right side
         if (proba.get("invoice_number_top")) {
             String invoiceText = model.getReference().getLabelInvoice() + ": " +model.getReference().getValueInvoice();
-            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, invoiceText, "INV").build(contentStream, writer);
+            new SimpleTextBox(fontN, 9, pageWidth/2, rightTopInfoY, invoiceText, "INV").build(contentStream,writer);
             annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
         }
 
@@ -301,7 +302,7 @@ public class AmazonLayout implements InvoiceLayout {
         float tableTopPosY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 15;
 
         SimpleTextBox tableTopBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopPosX, tableTopPosY, tableTopText);
-        tableTopBox.build(contentStream, writer);
+        tableTopBox.build(contentStream,writer);
 
         // table top horizontal line, will be built after verticalTableItems
         float x1 = leftPageMargin; float y1 = tableTopBox.getBBox().getPosY() - tableTopBox.getBBox().getHeight() - 2;
@@ -328,7 +329,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         new BorderBox(hdrBgColor, hdrBgColor, 0,
                       leftPageMargin, tableTopPosY - tableTopBox.getBBox().getHeight() - 2 - row1.getBBox().getHeight(),
-                      row1.getBBox().getWidth(), row1.getBBox().getHeight()).build(contentStream, writer);
+                      row1.getBBox().getWidth(), row1.getBBox().getHeight()).build(contentStream,writer);
 
         // table item list body
         String quantity; String snNum;
@@ -500,10 +501,10 @@ public class AmazonLayout implements InvoiceLayout {
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
             annot.getTotal().setCurrency(cur);
         }
-        verticalTableItems.build(contentStream, writer);
-        tableTopInfoLine.build(contentStream, writer); // must be built after verticalTableItems
+        verticalTableItems.build(contentStream,writer);
+        tableTopInfoLine.build(contentStream,writer); // must be built after verticalTableItems
 
-        // Add horizontal borders to table cell items if table cell is CENTER aligned horizontally
+        // Add vertical borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = leftPageMargin;
             float yPos = tableTopPosY - tableTopBox.getBBox().getHeight() - 2;
@@ -541,12 +542,12 @@ public class AmazonLayout implements InvoiceLayout {
                 sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
             }
             sigTextBox.translate(sigTX, sigTY);
-            sigTextBox.build(contentStream, writer);
+            sigTextBox.build(contentStream,writer);
 
             new HorizontalLineBox(
                     sigTX - 10, sigTY + 5,
                     sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 5,
-                    lineStrokeColor).build(contentStream, writer);
+                    lineStrokeColor).build(contentStream,writer);
 
             String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
             PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
@@ -557,15 +558,15 @@ public class AmazonLayout implements InvoiceLayout {
             float sigH = sigImg.getHeight() * sigScale;
             // align signature to center of sigTextBox bbox
             float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
-            float sigIY = sigTY + 10;
+            float sigIY = sigTY + sigH + 10;
 
-            contentStream.drawImage(sigImg, sigIX, sigIY, sigW, sigH);
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
         }
 
         float footerHLineY = 110;
         // Add footer line and info if footer_info to be used and number of items less than 5
         if (proba.get("footer_info") && pc.getProducts().size() < 5) {
-            new HorizontalLineBox(leftPageMargin, footerHLineY, pageWidth-rightPageMargin, footerHLineY, lineStrokeColor).build(contentStream, writer);
+            new HorizontalLineBox(leftPageMargin, footerHLineY, pageWidth-rightPageMargin, footerHLineY, lineStrokeColor).build(contentStream,writer);
 
             VerticalContainer verticalFooterCont = new VerticalContainer(leftPageMargin, footerHLineY-10, 450);
             String compEmail = ((company.getWebsite() == null) ? "company.domain.com" :  company.getWebsite());
@@ -581,7 +582,7 @@ public class AmazonLayout implements InvoiceLayout {
                 verticalFooterCont.alignElements(HAlign.CENTER, verticalFooterCont.getBBox().getWidth());
                 verticalFooterCont.translate(pageMiddleX - verticalFooterCont.getBBox().getWidth()/2, 0);
             }
-            verticalFooterCont.build(contentStream, writer);
+            verticalFooterCont.build(contentStream,writer);
         }
 
         // Logo Bottom if logo is not at top or barcode at top
@@ -592,13 +593,14 @@ public class AmazonLayout implements InvoiceLayout {
             logoWidth = logoImg.getWidth() * logoScale;
             logoHeight = logoImg.getHeight() * logoScale;
             posLogoX = pageWidth-logoWidth-rightPageMargin;
-            posLogoY = bottomPageMargin+footerHLineY/2-logoHeight/2;
-            contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
+            posLogoY = bottomPageMargin+logoHeight+footerHLineY/2-logoHeight/2;
+            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
         }
 
         // Barcode bottom
         if (proba.get("barcode_bottom")) {
-            contentStream.drawImage(barcodeImg, leftPageMargin, bottomPageMargin, barcodeImg.getWidth() - 15, barcodeImg.getHeight() - 72);
+            float bW = barcodeImg.getWidth() - 15, bH = barcodeImg.getHeight() - 72;
+            new ImageBox(barcodeImg, leftPageMargin, bottomPageMargin+bH, bW, bH, "barcode:"+barcodeNum).build(contentStream,writer);
         }
 
         // Add company stamp watermark
@@ -622,7 +624,7 @@ public class AmazonLayout implements InvoiceLayout {
         // if no signature anåd no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
-            new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream, writer);
+            new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream,writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once

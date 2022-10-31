@@ -35,6 +35,8 @@ package com.fairandsmart.generator.documents.layout.bdmobilier;
 
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
+
+import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.IDNumbers;
@@ -45,21 +47,21 @@ import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 
-import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
-import com.fairandsmart.generator.documents.element.product.ProductTable;
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
-import com.fairandsmart.generator.documents.element.footer.StampBox;
-import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
+import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
+import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
+import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
+import com.fairandsmart.generator.documents.element.product.ProductTable;
+import com.fairandsmart.generator.documents.element.image.ImageBox;
+import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
-import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
-import com.fairandsmart.generator.documents.layout.InvoiceLayout;
-import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -157,15 +159,15 @@ public class BDmobilierLayout implements InvoiceLayout {
         float logoWidth = logoImg.getWidth() * logoScale;
         float logoHeight = logoImg.getHeight() * logoScale;
         float posLogoX = leftPageMargin;
-        float posLogoY = pageHeight - logoHeight - topPageMargin;
-        contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
+        float posLogoY = pageHeight - topPageMargin;
+        new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
 
         String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         // Top center document title
         if (proba.get("doc_title_top_center")) {
             SimpleTextBox docTitleBox = new SimpleTextBox(fontB,16,0,0,docTitle,"SN");
             docTitleBox.translate(pageMiddleX-(docTitleBox.getBBox().getWidth()/2), pageHeight-80);
-            docTitleBox.build(contentStream, writer);
+            docTitleBox.build(contentStream,writer);
             annot.setTitle(docTitle);
         }
         // Top right company header info
@@ -202,7 +204,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         headerCont.addElement(invNumCont);
 
         headerCont.translate(pageWidth - headerCont.getBBox().getWidth() - rightPageMargin, 0);  // align top right header to fit properly
-        headerCont.build(contentStream, writer);
+        headerCont.build(contentStream,writer);
 
         // check if billing and shipping addresses should be switched
         float leftAddrX = 120 + rnd.nextInt(15);
@@ -468,12 +470,12 @@ public class BDmobilierLayout implements InvoiceLayout {
                   sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
               }
               sigTextBox.translate(sigTX, sigTY);
-              sigTextBox.build(contentStream, writer);
+              sigTextBox.build(contentStream,writer);
 
               new HorizontalLineBox(
                       sigTX - 10, sigTY + 5,
                       sigTX + sigTextBox.getBBox().getWidth() + 10, sigTY + 5
-                      ).build(contentStream, writer);
+                      ).build(contentStream,writer);
 
               String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
               PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
@@ -484,9 +486,9 @@ public class BDmobilierLayout implements InvoiceLayout {
               float sigH = sigImg.getHeight() * sigScale;
               // align signature to center of sigTextBox bbox
               float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
-              float sigIY = sigTY + 10;
+              float sigIY = sigTY + sigH + 10;
 
-              contentStream.drawImage(sigImg, sigIX, sigIY, sigW, sigH);
+              new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
         }
 
         // Add company stamp watermark, 40% prob
@@ -513,7 +515,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontN, footerFontSize-1, 0, 80, noStampSignMsg, "Footnote");
             // align the text to the center
             noStampSignMsgBox.getBBox().setPosX(pageMiddleX - noStampSignMsgBox.getBBox().getWidth()/2);
-            noStampSignMsgBox.build(contentStream, writer);
+            noStampSignMsgBox.build(contentStream,writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once

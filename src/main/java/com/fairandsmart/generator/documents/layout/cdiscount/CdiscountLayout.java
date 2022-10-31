@@ -45,19 +45,21 @@ import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 
-import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
-import com.fairandsmart.generator.documents.element.product.ProductTable;
+import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
-import com.fairandsmart.generator.documents.element.border.BorderBox;
-import com.fairandsmart.generator.documents.element.footer.StampBox;
-import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
+import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
+import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
+import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
+import com.fairandsmart.generator.documents.element.product.ProductTable;
+import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
-import com.fairandsmart.generator.documents.element.HAlign;
+import com.fairandsmart.generator.documents.element.image.ImageBox;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -157,50 +159,14 @@ public class CdiscountLayout implements InvoiceLayout {
         float logoWidth = logoImg.getWidth() * logoScale;
         float logoHeight = logoImg.getHeight() * logoScale;
         float posLogoX = leftPageMargin;
-        float posLogoY = pageHeight-logoHeight-3;
-        contentStream.drawImage(logoImg, posLogoX, posLogoY, logoWidth, logoHeight);
+        float posLogoY = pageHeight-3;
+        new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
 
         // top left info
         // vendor address
-        Address cAddr = company.getAddress();
-        VerticalContainer vendorAddrCont = new VerticalContainer(leftPageMargin, posLogoY-4, 250);
-        vendorAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, company.getName()+"","SN"));
-        vendorAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, cAddr.getLine1(),"SA"));
-        vendorAddrCont.addElement(new SimpleTextBox(fontN,9,0,0, cAddr.getZip() +"  "+ cAddr.getCity(),"SA"));
-        vendorAddrCont.addElement(new BorderBox(white,white,0,0,0,0,3));
-        if (proba.get("vendor_address_phone_fax")) {
-            vendorAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, company.getContact().getPhoneLabel()+": "+company.getContact().getPhoneValue(), "SC"));
-            vendorAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, company.getContact().getFaxLabel()+": "+company.getContact().getFaxValue(), "SF"));
-        }
-        // specific to french invoices
-        else if (model.getLang().matches("fr")) {
-            HorizontalContainer rcs = new HorizontalContainer(0,0);
-            rcs.addElement(new SimpleTextBox(fontN,8,0,0,"N°RCS "));
-            rcs.addElement(new SimpleTextBox(fontN,8,0,0, company.getIdNumbers().getCidValue(), "SCID"));
-            rcs.addElement(new SimpleTextBox(fontN,8,0,0, " " +cAddr.getCity(), "SA"));
-            vendorAddrCont.addElement(rcs);
-            HorizontalContainer siret = new HorizontalContainer(0,0);
-            siret.addElement(new SimpleTextBox(fontN,8,0,0,"Siret "));
-            siret.addElement(new SimpleTextBox(fontN,8,0,0, company.getIdNumbers().getSiretValue(), "SSIRET"));
-            vendorAddrCont.addElement(siret);
-            HorizontalContainer naf = new HorizontalContainer(0,0);
-            naf.addElement(new SimpleTextBox(fontN,8,0,0, company.getIdNumbers().getToaLabel()+" : "));
-            naf.addElement(new SimpleTextBox(fontN,8,0,0, company.getIdNumbers().getToaValue(), "STOA"));
-            vendorAddrCont.addElement(naf);
-        }
-        if (proba.get("vendor_address_tax_number")) {
-            String vatText = company.getIdNumbers().getVatLabel()+": "+company.getIdNumbers().getVatValue();
-            vendorAddrCont.addElement(new SimpleTextBox(fontN,8,0,0, vatText, "SVAT"));
-            annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
-        }
-        if (proba.get("addresses_bordered")) {
-            vendorAddrCont.setBorderColor(themeColor);
-            vendorAddrCont.setBorderThickness(0.5f);
-        }
-        annot.getVendor().setVendorName(company.getName());
-        annot.getVendor().setVendorAddr(cAddr.getLine1()+" "+cAddr.getZip()+" "+cAddr.getCity());
-        annot.getVendor().setVendorPOBox(cAddr.getZip());
-        vendorAddrCont.build(contentStream,writer);
+        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,8,9,250,lineStrokeColor,model,document,company,annot,proba);
+        vendorInfoBox.translate(leftPageMargin+2, posLogoY-logoHeight-4);
+        vendorInfoBox.build(contentStream,writer);
 
         // top right hdr info
         float hdrWidth = 252;
@@ -233,7 +199,7 @@ public class CdiscountLayout implements InvoiceLayout {
         containerDate.build(contentStream,writer);
 
         // border box around invoice body
-        new BorderBox(black,white,1,leftPageMargin,bottomPageMargin,pageWidth-rightPageMargin-leftPageMargin,655).build(contentStream,writer);
+        new BorderBox(themeColor,white,1,leftPageMargin,bottomPageMargin,pageWidth-rightPageMargin-leftPageMargin,655).build(contentStream,writer);
 
         // Payment Info and Address top right or Bottom left or Bottom right
         if (proba.get("payment_address_top") || (proba.get("payment_address_bottom") && pc.getProducts().size() < 6)) {
@@ -249,24 +215,33 @@ public class CdiscountLayout implements InvoiceLayout {
             }
             proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
 
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,8,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,7,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(contentStream,writer);
         }
 
+        // check if billing and shipping addresses should be switched
+        float addrShift = rnd.nextInt(10);
+        float leftAddrX = leftPageMargin+30;
+        float rightAddrX = leftPageMargin+290;
+        if (proba.get("switch_bill_ship_addresses")) {
+            float tmp = leftAddrX; leftAddrX=rightAddrX; rightAddrX=tmp;
+        }
+        float billX = leftAddrX+addrShift; float billY = pageHeight-158;
+        float shipX = rightAddrX+addrShift; float shipY = billY;
+
         // Billing address
-        float bAddrPosX = 90, bAddrPosY, bAddrHeight;
-        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
-        billingInfoBox.translate(bAddrPosX, pageHeight-158);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,8,9,250,themeColor,model,document,client,annot,proba);
+        billingInfoBox.translate(billX, billY);
         billingInfoBox.build(contentStream,writer);
 
         // Shipping Address
-        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
-        shippingInfoBox.translate(320, pageHeight-158);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,8,9,250,themeColor,model,document,client,annot,proba);
+        shippingInfoBox.translate(shipX, shipY);
         shippingInfoBox.build(contentStream,writer);
 
         // client mail & payment info under billing addr
-        float box1PosX = 87;
+        float box1PosX = billX;
         float box1PosY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 4;
         float box1W = 85;
         float box1H = 11;
@@ -309,7 +284,7 @@ public class CdiscountLayout implements InvoiceLayout {
         valueInfo1.build(contentStream,writer);
 
         // client ID & shipping info under shipping addr
-        float box2PosX = 317;
+        float box2PosX = shipX;
         float box2PosY = box1PosY;
         float box2W = 85;
         float box2H = 11;
@@ -480,14 +455,13 @@ public class CdiscountLayout implements InvoiceLayout {
         tableFooterMsg.addElement(new SimpleTextBox(fontN,8,0,0,"* Order preparation costs include shipping costs"));
         tableFooterMsg.build(contentStream,writer);
 
-        // Add horizontal borders to table cell items if table cell is CENTER aligned horizontally
+        // Add vertical borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = leftPageMargin;
             float yPos = tableTopPosY - tableTopInfo.getBBox().getHeight() - 4;
-            // HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                HelperImage.drawLine(contentStream, xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor);
+                new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
                 xPos += configRow[i];
             }
         }
@@ -602,28 +576,40 @@ public class CdiscountLayout implements InvoiceLayout {
                 sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 75;
             }
             sigTextBox.translate(sigTX,sigTY);
-            sigTextBox.build(contentStream, writer);
+            sigTextBox.build(contentStream,writer);
 
             new HorizontalLineBox(
                     sigTX - 10, sigTY + 2,
                     sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 2,
-                    lineStrokeColor).build(contentStream, writer);
+                    lineStrokeColor).build(contentStream,writer);
 
-            String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
-            PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
-            int signatureWidth = 120;
-            int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
+            String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
+            PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
+
+            float maxSW = 120, maxSH = 60;
+            float sigScale = Math.min(maxSW/sigImg.getWidth(), maxSH/sigImg.getHeight());
+            float sigW = sigImg.getWidth() * sigScale;
+            float sigH = sigImg.getHeight() * sigScale;
             // align signature to center of sigTextBox bbox
-            float signatureXPos = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - signatureWidth/2;
-            float signatureYPos = bottomPageMargin + 45;
-            contentStream.drawImage(signatureImg, signatureXPos, signatureYPos, signatureWidth, signatureHeight);
+            float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
+            float sigIY = sigTY + sigH + 10;
+
+            // String signaturePath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
+            // PDImageXObject signatureImg = PDImageXObject.createFromFile(signaturePath, document);
+            // int signatureWidth = 120;
+            // int signatureHeight = (signatureWidth * signatureImg.getHeight()) / signatureImg.getWidth();
+            // // align signature to center of sigTextBox bbox
+            // float signatureXPos = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - signatureWidth/2;
+            // float signatureYPos = bottomPageMargin + signatureWidth + 10;
+
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
         }
         // no stamp or signature req info
         if (!proba.get("signature_bottom") && !proba.get("stamp_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
             SimpleTextBox noStampSignBox = new SimpleTextBox(fontN,7,0,0,noStampSignMsg,"Footnote");
             noStampSignBox.translate(pageMiddleX-noStampSignBox.getBBox().getWidth()/2, 60);
-            noStampSignBox.build(contentStream, writer);
+            noStampSignBox.build(contentStream,writer);
         }
         // Add company stamp watermark, 40% prob
         if (proba.get("stamp_bottom")) {
