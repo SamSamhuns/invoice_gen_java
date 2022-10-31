@@ -222,7 +222,7 @@ public class MACOMPLayout implements InvoiceLayout {
         }
 
         // table top invoice info
-        VerticalContainer invoiceInfo = new VerticalContainer(pageMiddleX, Math.min(billY, shipY), 400);
+        VerticalContainer invoiceInfoCont = new VerticalContainer(pageMiddleX, Math.min(billY, shipY), 400);
 
         float[] configRow = {150f, 200f};
         TableRowBox infoRow1 = new TableRowBox(configRow, 0, 0);
@@ -230,34 +230,34 @@ public class MACOMPLayout implements InvoiceLayout {
         infoRow1.addElement(Label, false);
         SimpleTextBox Value = new SimpleTextBox(fontN, fontSize, 0,0, model.getDate().getValueInvoice());
         infoRow1.addElement(Value, false);
-        invoiceInfo.addElement(infoRow1);
-        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
+        invoiceInfoCont.addElement(infoRow1);
+        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
         TableRowBox infoRow2 = new TableRowBox(configRow,0, 0);
         SimpleTextBox Label1 = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getReference().getLabelClient(),black, null, HAlign.LEFT);
         infoRow2.addElement(Label1, false);
         SimpleTextBox Value1 = new SimpleTextBox(fontN, fontSize, 0,0, model.getReference().getValueClient());
         infoRow2.addElement(Value1, false);
-        invoiceInfo.addElement(infoRow2);
-        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
+        invoiceInfoCont.addElement(infoRow2);
+        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
         TableRowBox infoRow3 = new TableRowBox(configRow,0, 0);
         SimpleTextBox Label2 = new SimpleTextBox(fontB, fontSize+1, 0,0, model.getReference().getLabelOrder(),black, null, HAlign.LEFT);
         infoRow3.addElement(Label2, false);
         SimpleTextBox Value2 = new SimpleTextBox(fontN, fontSize, 0,0, model.getReference().getValueOrder(),black, null, HAlign.LEFT);
         infoRow3.addElement(Value2, false);
-        invoiceInfo.addElement(infoRow3);
-        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
+        invoiceInfoCont.addElement(infoRow3);
+        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
         TableRowBox infoRow4 = new TableRowBox(configRow,0, 0);
         SimpleTextBox Label3 = new SimpleTextBox(fontB, fontSize+1, 0,0, payment.getLabelPaymentType(),black, null, HAlign.LEFT);
         infoRow4.addElement(Label3, false);
         SimpleTextBox Value3 = new SimpleTextBox(fontN, fontSize, 0,0, payment.getValuePaymentType(),black, null, HAlign.LEFT);
         infoRow4.addElement(Value3, false);
-        invoiceInfo.addElement(infoRow4);
-        invoiceInfo.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
+        invoiceInfoCont.addElement(infoRow4);
+        invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 5));
 
-        invoiceInfo.build(contentStream,writer);
+        invoiceInfoCont.build(contentStream,writer);
 
         // table
         ProductBox products = new ProductBox(30, 470, pc,fontI, fontB, fontSize);

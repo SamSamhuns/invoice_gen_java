@@ -102,62 +102,80 @@ public class PaymentInfoBox extends ElementBox {
         PDFont fontNB = rnd.nextBoolean() ? fontN: fontB;
         annot.setPaymentto(new InvoiceAnnotModel.Paymentto());
 
+        SimpleTextBox paymentHeader = new SimpleTextBox(fontB,fontSizeBig,0,0, payment.getAddressHeader(), "PH");;
+        SimpleTextBox bankNameLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelBankName()+": ", "PBN");
+        SimpleTextBox bankNameValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueBankName(), "PBN");
+        SimpleTextBox accountNameLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelAccountName()+": ", "PAName");
+        SimpleTextBox accountNameValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueAccountName(), "PAName");
+        SimpleTextBox accountNumberLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelAccountNumber()+": ", "PANum");
+        SimpleTextBox accountNumberValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueAccountNumber(), "PANum");
+        SimpleTextBox branchNameLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelBranchName()+": ", "PBName");
+        SimpleTextBox branchNameValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueBranchName(), "PBName");
+        SimpleTextBox ibanNumberLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelIBANNumber()+": ", "PBNum");
+        SimpleTextBox ibanNumberValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueIBANNumber(), "PBNum");
+        SimpleTextBox routingNumberLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelRoutingNumber()+": ", "PBNum");
+        SimpleTextBox routingNumberValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueRoutingNumber(), "PBNum");
+        SimpleTextBox swiftCodeLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelSwiftCode()+": ", "PSNum");
+        SimpleTextBox swiftCodeValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueSwiftCode(), "PSNum");
+        SimpleTextBox vatNumberLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, company.getIdNumbers().getVatLabel()+": ", "SVAT");
+        SimpleTextBox vatNumberValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, company.getIdNumbers().getVatValue(), "SVAT");
+
         vContainer = new VerticalContainer(0,0,width);
 
-        vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig,0,0, payment.getAddressHeader(), "PH"));
+        vContainer.addElement(paymentHeader);
 
-        HorizontalContainer bankName = new HorizontalContainer(0,0);
-        bankName.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelBankName()+": ", "PBN"));
-        bankName.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueBankName(), "PBN"));
-        vContainer.addElement(bankName);
+        HorizontalContainer bankNameCont = new HorizontalContainer(0,0);
+        bankNameCont.addElement(bankNameLabel);
+        bankNameCont.addElement(bankNameValue);
+        vContainer.addElement(bankNameCont);
         annot.getPaymentto().setBankName(payment.getValueBankName());
 
-        HorizontalContainer accountName = new HorizontalContainer(0,0);
-        accountName.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelAccountName()+": ", "PAName"));
-        accountName.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueAccountName(), "PAName"));
-        vContainer.addElement(accountName);
+        HorizontalContainer accountNameCont = new HorizontalContainer(0,0);
+        accountNameCont.addElement(accountNameLabel);
+        accountNameCont.addElement(accountNameValue);
+        vContainer.addElement(accountNameCont);
         annot.getPaymentto().setAccountName(payment.getValueAccountName());
 
         if (proba.get("payment_account_number")) {
-            HorizontalContainer accountNumber = new HorizontalContainer(0,0);
-            accountNumber.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelAccountNumber()+": ", "PANum"));
-            accountNumber.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueAccountNumber(), "PANum"));
-            vContainer.addElement(accountNumber);
+            HorizontalContainer accountNumberCont = new HorizontalContainer(0,0);
+            accountNumberCont.addElement(accountNumberLabel);
+            accountNumberCont.addElement(accountNumberValue);
+            vContainer.addElement(accountNumberCont);
             annot.getPaymentto().setAccountNumber(payment.getValueAccountNumber());
         }
         if (proba.get("payment_branch_name")) {
-            HorizontalContainer branchName = new HorizontalContainer(0,0);
-            branchName.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelBranchName()+": ", "PBName"));
-            branchName.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueBranchName(), "PBName"));
-            vContainer.addElement(branchName);
+            HorizontalContainer branchNameCont = new HorizontalContainer(0,0);
+            branchNameCont.addElement(branchNameLabel);
+            branchNameCont.addElement(branchNameValue);
+            vContainer.addElement(branchNameCont);
             annot.getPaymentto().setBranchAddress(payment.getValueBranchName());
         }
 
-        HorizontalContainer ibanNumber = new HorizontalContainer(0,0);
-        ibanNumber.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelIBANNumber()+": ", "PBNum"));
-        ibanNumber.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueIBANNumber(), "PBNum"));
-        vContainer.addElement(ibanNumber);
+        HorizontalContainer ibanNumberCont = new HorizontalContainer(0,0);
+        ibanNumberCont.addElement(ibanNumberLabel);
+        ibanNumberCont.addElement(ibanNumberValue);
+        vContainer.addElement(ibanNumberCont);
         annot.getPaymentto().setIbanNumber(payment.getValueIBANNumber());
 
         if (proba.get("payment_routing_number")) {
-            HorizontalContainer routingNumber = new HorizontalContainer(0,0);
-            routingNumber.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelRoutingNumber()+": ", "PBNum"));
-            routingNumber.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueRoutingNumber(), "PBNum"));
-            vContainer.addElement(routingNumber);
+            HorizontalContainer routingNumberCont = new HorizontalContainer(0,0);
+            routingNumberCont.addElement(routingNumberLabel);
+            routingNumberCont.addElement(routingNumberValue);
+            vContainer.addElement(routingNumberCont);
             annot.getPaymentto().setRoutingNumber(payment.getValueRoutingNumber());
         }
         if (proba.get("payment_swift_number")) {
-            HorizontalContainer swiftCode = new HorizontalContainer(0,0);
-            swiftCode.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelSwiftCode()+": ", "PSNum"));
-            swiftCode.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueSwiftCode(), "PSNum"));
-            vContainer.addElement(swiftCode);
+            HorizontalContainer swiftCodeCont = new HorizontalContainer(0,0);
+            swiftCodeCont.addElement(swiftCodeLabel);
+            swiftCodeCont.addElement(swiftCodeValue);
+            vContainer.addElement(swiftCodeCont);
             annot.getPaymentto().setSwiftCode(payment.getValueSwiftCode());
         }
         if (proba.get("payment_vendor_tax_number") && !proba.get("vendor_tax_number_top")) {
-            HorizontalContainer vatNumber = new HorizontalContainer(0,0);
-            vatNumber.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, company.getIdNumbers().getVatLabel()+": ", "SVAT"));
-            vatNumber.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, company.getIdNumbers().getVatValue(), "SVAT"));
-            vContainer.addElement(vatNumber);
+            HorizontalContainer vatNumberCont = new HorizontalContainer(0,0);
+            vatNumberCont.addElement(vatNumberLabel);
+            vatNumberCont.addElement(vatNumberValue);
+            vContainer.addElement(vatNumberCont);
             annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
         }
         if (proba.get("addresses_bordered")) {
