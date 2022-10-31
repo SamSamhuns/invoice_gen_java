@@ -62,6 +62,7 @@ import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.footer.StampBox;
+import com.fairandsmart.generator.documents.element.footer.FootCompanyBox;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -273,8 +274,8 @@ public class BDmobilierLayout implements InvoiceLayout {
         // check if cur should be included in table amt items
         String amtSuffix = "";
         if (proba.get("currency_in_table_items")) {
-              amtSuffix = " "+cur;
-              annot.getTotal().setCurrency(cur);
+            amtSuffix = " "+cur;
+            annot.getTotal().setCurrency(cur);
         }
         boolean upperCap = rnd.nextBoolean();  // table header items case
         HAlign tableHdrAlign = proba.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
@@ -417,78 +418,39 @@ public class BDmobilierLayout implements InvoiceLayout {
             paymentBox.build(contentStream,writer);
         }
 
-        // Footer company info
-        int footerFontSize = 7 + rnd.nextInt(3);
-        HorizontalContainer infoEntreprise = new HorizontalContainer(0,0);
-        infoEntreprise.addElement(new SimpleTextBox(fontNB,footerFontSize,0,0, company.getName(),"SN"));
-        infoEntreprise.addElement(new SimpleTextBox(fontNB,footerFontSize,0,0, " - "));
-        infoEntreprise.addElement(new SimpleTextBox(fontNB,footerFontSize,0,0, address.getCountry(),"SA"));
-
-        HorizontalContainer infoEntreprise2 = new HorizontalContainer(0,0);
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, address.getLine1()+" ","SA"));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, " - "));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, address.getZip() + " " +address.getCity(),"SA"));
-        if (model.getLang() == "fr") {
-            infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, " "+idNumbers.getSiretLabel()+" "));
-            infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, idNumbers.getSiretValue(),"SSIRET"));
-        }
-        // vendor tax number
-        if (proba.get("vendor_tax_number_bottom") && !proba.get("vendor_tax_number_top")) {
-            infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, " - "+ idNumbers.getVatLabel() +" : "));
-            infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, idNumbers.getVatValue(),"SVAT"));
-            annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
-        }
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, " - "+company.getContact().getFaxLabel()+" : "));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, company.getContact().getFaxValue(),"SFAX"));
-
-        HorizontalContainer infoEntreprise3 = new HorizontalContainer(0,0);
-        infoEntreprise3.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, company.getContact().getPhoneLabel()+" : "));
-        infoEntreprise3.addElement(new SimpleTextBox(fontN,footerFontSize,0,0, company.getContact().getPhoneValue(),"SCN"));
-        infoEntreprise.translate(pageMiddleX-infoEntreprise.getBBox().getWidth()/2,61);
-        infoEntreprise2.translate(pageMiddleX-infoEntreprise2.getBBox().getWidth()/2,53);
-        infoEntreprise3.translate(pageMiddleX-infoEntreprise3.getBBox().getWidth()/2,45);
-
-        String vendorAddr = company.getName()+" "+company.getAddress().getLine1()+" "+company.getAddress().getZip()+" "+company.getAddress().getCity();
-        annot.getVendor().setVendorName(company.getName());
-        annot.getVendor().setVendorAddr(vendorAddr);
-
-        infoEntreprise.build(contentStream,writer);
-        infoEntreprise2.build(contentStream,writer);
-        infoEntreprise3.build(contentStream,writer);
-
         // Add Signature at bottom
         if (proba.get("signature_bottom")) {
-              String compSignatureName = company.getName();
-              compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
-              SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
+            String compSignatureName = company.getName();
+            compSignatureName = compSignatureName.length() < 25? compSignatureName: "";
+            SimpleTextBox sigTextBox = new SimpleTextBox(fontN,8,0,0, company.getSignature().getLabel()+" "+compSignatureName, "Signature");
 
-              float sigTX;
-              float sigTY = 130;
-              if (proba.get("signature_bottom_left")) {  // bottom left
-                  sigTX = leftPageMargin + 25;
-              } else {                                     // bottom right
-                  sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
-              }
-              sigTextBox.translate(sigTX, sigTY);
-              sigTextBox.build(contentStream,writer);
+            float sigTX;
+            float sigTY = 130;
+            if (proba.get("signature_bottom_left")) {  // bottom left
+                sigTX = leftPageMargin + 25;
+            } else {                                     // bottom right
+                sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
+            }
+            sigTextBox.translate(sigTX, sigTY);
+            sigTextBox.build(contentStream,writer);
 
-              new HorizontalLineBox(
-                      sigTX - 10, sigTY + 5,
-                      sigTX + sigTextBox.getBBox().getWidth() + 10, sigTY + 5
-                      ).build(contentStream,writer);
+            new HorizontalLineBox(
+                    sigTX - 10, sigTY + 5,
+                    sigTX + sigTextBox.getBBox().getWidth() + 10, sigTY + 5
+                    ).build(contentStream,writer);
 
-              String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
-              PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
+            String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
+            PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
 
-              float maxSW = 110, maxSH = 65;
-              float sigScale = Math.min(maxSW/sigImg.getWidth(), maxSH/sigImg.getHeight());
-              float sigW = sigImg.getWidth() * sigScale;
-              float sigH = sigImg.getHeight() * sigScale;
-              // align signature to center of sigTextBox bbox
-              float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
-              float sigIY = sigTY + sigH + 10;
+            float maxSW = 110, maxSH = 65;
+            float sigScale = Math.min(maxSW/sigImg.getWidth(), maxSH/sigImg.getHeight());
+            float sigW = sigImg.getWidth() * sigScale;
+            float sigH = sigImg.getHeight() * sigScale;
+            // align signature to center of sigTextBox bbox
+            float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
+            float sigIY = sigTY + sigH + 10;
 
-              new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
         }
 
         // Add company stamp watermark, 40% prob
@@ -512,7 +474,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // if no signature and no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or the Company's stamp in order to be considered valid";
-            SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontN, footerFontSize-1, 0, 80, noStampSignMsg, "Footnote");
+            SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontN,8,0,80, noStampSignMsg, "footnote");
             // align the text to the center
             noStampSignMsgBox.getBBox().setPosX(pageMiddleX - noStampSignMsgBox.getBBox().getWidth()/2);
             noStampSignMsgBox.build(contentStream,writer);
@@ -521,11 +483,21 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Add bg logo watermark or confidential stamp, but not both at once
         if (proba.get("confidential_watermark")) {
             // Add confidential watermark
-            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
+            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "confidential");
         }
         else if (proba.get("logo_watermark")) {
             // Add watermarked background logo
             HelperImage.addWatermarkImagePDF(document, page, logoImg);
+        }
+
+        // Footer company info
+        if (proba.get("vendor_info_footer")) {
+            int fSize = 7 + rnd.nextInt(3);
+            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,fSize,fSize+1,themeColor, pageWidth-leftPageMargin-rightPageMargin,model,document,company,annot,proba);
+            float fW = footCompanyBox.getBBox().getWidth();
+            footCompanyBox.alignElements(HAlign.CENTER, fW);
+            footCompanyBox.translate(pageMiddleX-fW/2,60);
+            footCompanyBox.build(contentStream,writer);
         }
 
         contentStream.close();

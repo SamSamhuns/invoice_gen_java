@@ -46,7 +46,9 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3
+      "confidential_watermark": 3,
+      "vendor_info_footer": 70,
+      "vendor_tax_number_bottom": 50
     }
   },
   {
@@ -83,13 +85,14 @@
       "payment_routing_number": 40,
       "payment_swift_number": 40,
       "payment_vendor_tax_number": 20,
-      "vendor_tax_number_bottom": 65,
       "signature_bottom": 70,
       "signature_bottom_left": 25,
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3
+      "confidential_watermark": 3,
+      "vendor_info_footer": 70,
+      "vendor_tax_number_bottom": 50
     }
   },
   {
@@ -127,7 +130,9 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3
+      "confidential_watermark": 3,
+      "vendor_info_footer": 70,
+      "vendor_tax_number_bottom": 50
     }
   },
   {
@@ -168,7 +173,9 @@
       "signature_bottom": 70,
       "signature_bottom_left": 25,
       "stamp_bottom": 55,
-      "stamp_bottom_elongated": 25
+      "stamp_bottom_elongated": 25,
+      "vendor_info_footer": 70,
+      "vendor_tax_number_bottom": 50
     }
   },
   {
@@ -212,7 +219,9 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3
+      "confidential_watermark": 3,
+      "vendor_info_footer": 70,
+      "vendor_tax_number_bottom": 45
     }
   },
   {

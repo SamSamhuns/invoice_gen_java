@@ -35,7 +35,10 @@ package com.fairandsmart.generator.documents.layout.naturedecouvertes;
 
 import com.fairandsmart.generator.documents.data.helper.HelperCommon;
 import com.fairandsmart.generator.documents.data.helper.HelperImage;
+
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
+import com.fairandsmart.generator.documents.data.model.InvoiceModel;
+import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.Address;
@@ -43,8 +46,6 @@ import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.Client;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
-import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 
 import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
@@ -61,6 +62,7 @@ import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.footer.StampBox;
+import com.fairandsmart.generator.documents.element.footer.FootCompanyBox;
 
 import com.mifmif.common.regex.Generex;
 
@@ -490,43 +492,14 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             HelperImage.addWatermarkImagePDF(document, page, logoImg);
         }
 
-        // footer company name, info, address & contact information
-        Address cAddr = company.getAddress();
-
-        HorizontalContainer infoEntreprise1 = new HorizontalContainer(0,0);
-        infoEntreprise1.addElement(new SimpleTextBox(fontN,7,0,0, company.getName(),"SN"));
-        infoEntreprise1.addElement(new SimpleTextBox(fontN,7,0,0, " - "));
-        infoEntreprise1.addElement(new SimpleTextBox(fontN,7,0,0, cAddr.getCountry(),"SA"));
-
-        HorizontalContainer infoEntreprise2 = new HorizontalContainer(0,0);
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, cAddr.getLine1()+" ","SA"));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, " - "));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, cAddr.getZip() + " " +cAddr.getCity(),"SA"));
-        if (model.getLang().equals("fr")) {  // specific to FR invoices
-            infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, " "+company.getIdNumbers().getSiretLabel()+" "));
-            infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, company.getIdNumbers().getSiretValue(),"SSIRET"));
+        // footer company name, info, address & contact information at bottom center
+        if (proba.get("vendor_info_footer")) {
+            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,7,8, themeColor, pageWidth-leftPageMargin-rightPageMargin,model,document,company,annot,proba);
+            float fW = footCompanyBox.getBBox().getWidth();
+            footCompanyBox.alignElements(HAlign.CENTER, fW);
+            footCompanyBox.translate(pageMiddleX-fW/2,55);
+            footCompanyBox.build(contentStream,writer);
         }
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, " - "+company.getIdNumbers().getVatLabel() +" : "));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, company.getIdNumbers().getVatValue(),"SVAT"));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, " - "+company.getContact().getFaxLabel()+" : "));
-        infoEntreprise2.addElement(new SimpleTextBox(fontN,7,0,0, company.getContact().getFaxValue(),"SFAX"));
-
-        HorizontalContainer infoEntreprise3 = new HorizontalContainer(0,0);
-        infoEntreprise3.addElement(new SimpleTextBox(fontN,7,0,0, company.getContact().getPhoneLabel()+" : "));
-        infoEntreprise3.addElement(new SimpleTextBox(fontN,7,0,0, company.getContact().getPhoneValue(),"SCN"));
-
-        infoEntreprise1.translate(pageMiddleX-infoEntreprise1.getBBox().getWidth()/2,58);
-        infoEntreprise2.translate(pageMiddleX-infoEntreprise2.getBBox().getWidth()/2,51);
-        infoEntreprise3.translate(pageMiddleX-infoEntreprise3.getBBox().getWidth()/2,45);
-
-        infoEntreprise1.build(contentStream,writer);
-        infoEntreprise2.build(contentStream,writer);
-        infoEntreprise3.build(contentStream,writer);
-
-        annot.getVendor().setVendorName(company.getName());
-        annot.getVendor().setVendorAddr(cAddr.getLine1()+" "+cAddr.getZip()+" "+cAddr.getCity()+" "+cAddr.getCountry());
-        annot.getVendor().setVendorPOBox(cAddr.getZip());
-        annot.getVendor().setVendorTrn(company.getIdNumbers().getVatValue());
 
         contentStream.close();
         writer.writeEndElement();

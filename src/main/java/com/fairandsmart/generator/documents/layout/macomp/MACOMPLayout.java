@@ -43,19 +43,20 @@ import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
 import com.fairandsmart.generator.documents.element.HAlign;
-import com.fairandsmart.generator.documents.element.border.BorderBox;
-import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.footer.FootBox;
-import com.fairandsmart.generator.documents.element.footer.SignatureBox;
-import com.fairandsmart.generator.documents.element.footer.StampBox;
-import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
+import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.product.ProductBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
+import com.fairandsmart.generator.documents.element.border.BorderBox;
+import com.fairandsmart.generator.documents.element.container.VerticalContainer;
+import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
+import com.fairandsmart.generator.documents.element.image.ImageBox;
+import com.fairandsmart.generator.documents.element.footer.StampBox;
+import com.fairandsmart.generator.documents.element.footer.FootCompanyBox;
 
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -192,12 +193,7 @@ public class MACOMPLayout implements InvoiceLayout {
             paymentBox.build(contentStream,writer);
         }
 
-        String sigText = company.getSignature().getLabel()+" "+(company.getName().length() < 25 ? company.getName() : "");
-        SignatureBox sigB = new SignatureBox(
-                fontN, 8, sigText, 50,400, 90,30,
-                lineStrokeColor, model, document, company);
-        sigB.translate(100, 170);
-        sigB.build(contentStream,writer);
+        // Add signature here TODO
 
         // Add company stamp watermark
         if (proba.get("stamp_bottom")) {
@@ -263,13 +259,16 @@ public class MACOMPLayout implements InvoiceLayout {
         ProductBox products = new ProductBox(30, 400, pc,fontI, fontB, fontSize);
         products.build(contentStream,writer);
 
-        VerticalContainer footer = new VerticalContainer(50, 100, 1000);
-        footer.addElement(new HorizontalLineBox(0,0,530, 0));
-        footer.addElement(new BorderBox(white,white, 0,0, 0, 0, 3));
-        FootBox footBox = new FootBox(fontN, fontB, fontI, 11, model, document);
+        new HorizontalLineBox(50,100,530,100).build(contentStream,writer);
 
-        footer.addElement(footBox);
-        footer.build(contentStream,writer);
+        // footer company name, info, address & contact information at bottom center
+        if (proba.get("vendor_info_footer")) {
+            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,7,8, themeColor, pageWidth-leftPageMargin-rightPageMargin,model,document,company,annot,proba);
+            float fW = footCompanyBox.getBBox().getWidth();
+            footCompanyBox.alignElements(HAlign.CENTER, fW);
+            footCompanyBox.translate(pageMiddleX-fW/2,55);
+            footCompanyBox.build(contentStream,writer);
+        }
 
         contentStream.close();
         writer.writeEndElement();
