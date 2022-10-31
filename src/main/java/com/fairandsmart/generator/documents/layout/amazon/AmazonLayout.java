@@ -520,7 +520,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Payment Info and Address
         if (proba.get("payment_address")) {
-            float pAW = 300;
+            float pAW = 350;
             float pAX = proba.get("signature_bottom_left") ? rightAddrX: leftPageMargin;
             float pAY = verticalTableItems.getBBox().getPosY() - verticalTableItems.getBBox().getHeight() - 10;
 
