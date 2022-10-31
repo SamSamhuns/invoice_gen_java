@@ -81,7 +81,7 @@ public class DemoTextBox implements InvoiceLayout {
                 750,
                 model.getReference().getLabelInvoice(),
                 "HEAD");
-        stb.build(contentStream, writer);
+        stb.build(contentStream,writer);
         SimpleTextBox stb2 = new SimpleTextBox(
                 PDType1Font.HELVETICA,
                 12,
@@ -89,7 +89,7 @@ public class DemoTextBox implements InvoiceLayout {
                 750,
                 model.getReference().getValueInvoice(),
                 "IN");
-        stb2.build(contentStream, writer);
+        stb2.build(contentStream,writer);
 
         contentStream.close();
         writer.writeEndElement();

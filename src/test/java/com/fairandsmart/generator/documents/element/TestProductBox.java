@@ -82,7 +82,7 @@ public class TestProductBox implements InvoiceLayout {
         float fontSize = 10;
 
         ProductBox products = new ProductBox(30, 500, model.getProductContainer(), font, fontB, fontSize);
-        products.build(contentStream, writer);
+        products.build(contentStream,writer);
 
         contentStream.close();
 

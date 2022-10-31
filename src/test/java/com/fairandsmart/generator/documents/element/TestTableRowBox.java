@@ -39,6 +39,7 @@ import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
+import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.HAlign;
@@ -87,7 +88,7 @@ public class TestTableRowBox implements InvoiceLayout {
         int startPosY = 750;
         PDFont font = PDType1Font.HELVETICA_BOLD;
 
-        HelperImage.drawLine(contentStream, startPosX, startPosY, endPosX, startPosY, Color.RED);
+        new HorizontalLineBox(startPosX, startPosY, endPosX, startPosY, Color.RED).build(contentStream,writer);
 
         VerticalContainer container = new VerticalContainer(startPosX, startPosY, 0);
 
@@ -134,7 +135,7 @@ public class TestTableRowBox implements InvoiceLayout {
         row4.setBackgroundColor(Color.DARK_GRAY);
         container.addElement(row4);
 
-        container.build(contentStream, writer);
+        container.build(contentStream,writer);
         contentStream.close();
 
         writer.writeEndElement();

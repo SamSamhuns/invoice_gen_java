@@ -77,7 +77,7 @@ public class DemoImageBox implements InvoiceLayout {
 
         String barcode = this.getClass().getClassLoader().getResource("invoices/parts/amazon/barcode1.jpg").getFile();
         PDImageXObject pdBarcode = PDImageXObject.createFromFile(barcode, document);
-        new ImageBox(pdBarcode, 25, 750, pdBarcode.getWidth() / 2, pdBarcode.getHeight() / 2, "DMmZXznqN /-1 of 1 -// std-in-remote").build(contentStream, writer);
+        new ImageBox(pdBarcode, 25, 750, pdBarcode.getWidth() / 2, pdBarcode.getHeight() / 2, "DMmZXznqN /-1 of 1 -// std-in-remote").build(contentStream,writer);
 
         contentStream.close();
         writer.writeEndElement();
