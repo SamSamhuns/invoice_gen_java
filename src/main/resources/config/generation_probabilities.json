@@ -47,7 +47,7 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3,
+      "confidential_watermark": 2,
       "vendor_info_footer": 70,
       "vendor_tax_number_bottom": 50
     }
@@ -92,7 +92,7 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3,
+      "confidential_watermark": 2,
       "vendor_info_footer": 70,
       "vendor_tax_number_bottom": 50
     }
@@ -133,7 +133,7 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3,
+      "confidential_watermark": 2,
       "vendor_info_footer": 70,
       "vendor_tax_number_bottom": 50
     }
@@ -192,7 +192,7 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 25,
       "logo_watermark": 15,
-      "confidential_watermark": 3,
+      "confidential_watermark": 2,
       "vendor_info_footer": 70,
       "vendor_tax_number_bottom": 50
     }
@@ -239,7 +239,7 @@
       "stamp_bottom": 55,
       "stamp_bottom_elongated": 30,
       "logo_watermark": 15,
-      "confidential_watermark": 3,
+      "confidential_watermark": 2,
       "vendor_info_footer": 70,
       "vendor_tax_number_bottom": 45
     }
