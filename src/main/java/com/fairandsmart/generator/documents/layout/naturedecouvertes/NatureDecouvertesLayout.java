@@ -485,7 +485,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         // Add bg logo watermark or confidential stamp, but not both at once
         if (proba.get("confidential_watermark")) {
             // Add confidential watermark
-            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
+            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "confidential");
         }
         else if (proba.get("logo_watermark")) {
             // Add watermarked background logo

@@ -623,14 +623,14 @@ public class AmazonLayout implements InvoiceLayout {
         }
         // if no signature anåd no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {
-            String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
-            new SimpleTextBox(fontN, 7, 20, 130, noStampSignMsg, "Footnote").build(contentStream,writer);
+            String noStampMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
+            new SimpleTextBox(fontN, 7, 20, 130, noStampMsg, "footnote").build(contentStream,writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
         if (proba.get("confidential_watermark")) {
             // Add confidential watermark
-            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "Confidential");
+            HelperImage.addWatermarkTextPDF(document, page, PDType1Font.HELVETICA, "confidential");
         }
         else if (proba.get("logo_watermark")) {
             // Add watermarked background logo
