@@ -168,7 +168,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Barcode top
         if (proba.get("barcode_top")) {
-            new ImageBox(barcodeImg, pageWidth / 2, 810, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), "barcode:"+barcodeNum).build(contentStream,writer);
+            new ImageBox(barcodeImg, pageWidth / 2, pageHeight-topPageMargin, barcodeImg.getWidth(), (float)(barcodeImg.getHeight() / 1.5), "barcode:"+barcodeNum).build(contentStream,writer);
         }
         // Or Logo top
         else if (proba.get("logo_top")) {
