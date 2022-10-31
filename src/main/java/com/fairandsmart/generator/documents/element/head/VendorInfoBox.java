@@ -35,8 +35,8 @@ package com.fairandsmart.generator.documents.element.head;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.Company;
-import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.Address;
+import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.ContactNumber;
 
 import com.fairandsmart.generator.documents.element.BoundingBox;
