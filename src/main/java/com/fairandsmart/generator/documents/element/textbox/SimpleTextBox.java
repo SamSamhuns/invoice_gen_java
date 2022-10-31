@@ -68,6 +68,9 @@ public class SimpleTextBox extends ElementBox {
     private String entityName;
     private HAlign halign;
 
+    /*
+      (posX, posY) represent the top left corner of image
+    */
     public SimpleTextBox(PDFont font, float fontSize, float posX, float posY, String text) throws Exception {
         this(font, fontSize, posX, posY, text, Color.BLACK, null, HAlign.LEFT, "undefined", true);
     }

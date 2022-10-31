@@ -53,6 +53,9 @@ public class ImageBox extends ElementBox {
     private final float alpha;
     private final BoundingBox box;
 
+    /*
+      (posX, posY) represent the top left corner of image
+    */
     public ImageBox(PDImageXObject image, float posX, float posY, String text) {
         this(image, posX, posY, image.getWidth(), image.getHeight(), 1.0f, text);
     }
@@ -62,7 +65,7 @@ public class ImageBox extends ElementBox {
     }
 
     public ImageBox(PDImageXObject image, float posX, float posY, float width, float height, String text) {
-        this(image, posX, posY, image.getWidth(), image.getHeight(), 1.0f, text);
+        this(image, posX, posY, width, height, 1.0f, text);
     }
 
     public ImageBox(PDImageXObject image, float posX, float posY, float width, float height, float alpha, String text) {
@@ -89,9 +92,6 @@ public class ImageBox extends ElementBox {
         else{
             translate((width- box.getWidth())/2, 0);// Center align
         }
-        // float scale = width / box.getWidth();
-        // box.setHeight(box.getHeight() * scale);
-        // box.setWidth(box.getWidth() * scale);
     }
 
     @Override
@@ -115,14 +115,12 @@ public class ImageBox extends ElementBox {
         }
         final PDExtendedGraphicsState pdState = new PDExtendedGraphicsState();
 
-        // draw image with alpha opacity
         stream.saveGraphicsState();
         pdState.setBlendMode(BlendMode.MULTIPLY);
         pdState.setNonStrokingAlphaConstant(alpha);
         stream.setGraphicsStateParameters(pdState);
         stream.drawImage(image, box.getPosX(), box.getPosY(), box.getWidth(), box.getHeight());
         stream.restoreGraphicsState();
-
         this.writeXMLZone(writer, "ocr_carea", text, box, "img");
     }
 
