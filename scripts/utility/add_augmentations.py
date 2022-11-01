@@ -97,7 +97,7 @@ post_phase = [
         noise_value=(64, 224),
         ksize=random.choice([(3, 3), (5, 5), (7, 7)]),
         sigmaX=0,
-        p=0.1,
+        p=0.03,
     ),
     SubtleNoise(
         subtle_range=10,

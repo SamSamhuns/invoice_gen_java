@@ -37,9 +37,10 @@ if [ ! "$(docker ps -q -f name=$container_name)" ]; then
     fi
 fi
 
-echo "Check http://localhost:9080/api/ws/ to access facogen SSD gen api. Use username and password admin/admin to login"
+echo "Check http://localhost:$port/api/ws/ to access facogen SSD gen api. Use username and password admin/admin to login"
 
-docker run --rm -ti \
+docker run --rm -d \
       --name "$container_name" \
       -p $port:9080 \
-      "$image_name" bash
+      -v $PWD/generated_data:/facogen/target \
+      "$image_name"

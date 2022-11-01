@@ -32,11 +32,14 @@ RUN chmod 777 /usr/local/bin/mvn-entrypoint.sh
 # set work directory
 WORKDIR /facogen
 
+ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
+
+COPY src/etc /facogen/src/etc
 COPY pom.xml /facogen
-RUN mvn dependency:copy-dependencies
+RUN mvn package
 
 # freq changing files are added below
 COPY . /facogen
 
-ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
-CMD ["mvn quarkus:dev"]
+# use this to run the api server
+CMD ["mvn", "quarkus:dev"]

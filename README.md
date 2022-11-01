@@ -11,7 +11,7 @@ bash scripts/build_docker.sh
 bash scripts/run_docker.sh -p EXPOSED_HTTP_PORT
 ```
 
-The API will be hosted at <http://localhost:9080/api/ws/> that can be accessed with a default username: `admin` and password: `admin`.
+The API will be hosted at <http://localhost:EXPOSED_HTTP_PORT/api/ws/> that can be accessed with a default username: `admin` and password: `admin`.
 
 ## Local build
 
