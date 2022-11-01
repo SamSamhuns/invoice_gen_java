@@ -423,7 +423,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         // Payment Info and Address
         if (proba.get("payment_address")) {
-            float pAW = 320;
+            float pAW = 330;
             float pAX = (proba.get("signature_bottom_left")) ? rightAddrX: ttx1;
             float pAY = tableBottomY-60;
 

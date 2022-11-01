@@ -193,7 +193,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             vendorInfoBox.build(contentStream,writer);
         }
         else { // add the Payment Info and address
-            float pAW = 300;
+            float pAW = 330;
             float pAX = topAddrX;
             float pAY = topAddrY;
             proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
