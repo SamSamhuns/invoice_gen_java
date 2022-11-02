@@ -203,7 +203,7 @@ public class AmazonLayout implements InvoiceLayout {
 
         // Vendor/Company Address
         proba.put("vendor_address_tax_number", false);
-        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,9,300,lineStrokeColor,model,document,company,annot,proba);
+        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,10,300,lineStrokeColor,model,document,company,annot,proba);
         vendorInfoBox.translate(leftPageMargin, 760);
         vendorInfoBox.build(contentStream,writer);
 

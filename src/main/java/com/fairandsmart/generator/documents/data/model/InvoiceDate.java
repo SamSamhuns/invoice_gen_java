@@ -175,19 +175,22 @@ public class InvoiceDate {
 
         private static final long from = 942493200;  // from  Nov 13, 1999
         private static final long to = System.currentTimeMillis() / 1000;
-        private static final Map<SimpleDateFormat, String> formats = new LinkedHashMap<>();
+        private static final Map<SimpleDateFormat, String> dataFormats = new LinkedHashMap<>();
         private static final Map<String, String> labelsInvoice = new LinkedHashMap<>();
         private static final Map<String, String> labelsOrder = new LinkedHashMap<>();
         private static final Map<String, String> labelsShipping = new LinkedHashMap<>();
         private static final Map<String, String> labelsPayment = new LinkedHashMap<>();
         private static final Map<String, String> labelsPaymentDue = new LinkedHashMap<>();
         {
-          // formats.put(new SimpleDateFormat("YYYY-MM-dd HH:mm:ss"), "en");
-            formats.put(new SimpleDateFormat("MMM d, YYYY"), "en");
-            formats.put(new SimpleDateFormat("d MMM, YYYY"), "en");
+            dataFormats.put(new SimpleDateFormat("MMM d, YYYY"), "en");
+            dataFormats.put(new SimpleDateFormat("d MMM, YYYY"), "en");
+            dataFormats.put(new SimpleDateFormat("dd/MM/YY"), "en");
+            dataFormats.put(new SimpleDateFormat("yyyy-MM-dd"), "en");
+            dataFormats.put(new SimpleDateFormat("YYYY, MMM d"), "en");
+            dataFormats.put(new SimpleDateFormat("YYYY, d MMM"), "en");
 
-            formats.put(new SimpleDateFormat("dd/MM/YY"), "fr");
-            formats.put(new SimpleDateFormat("d MMM YYYY"), "fr");
+            // dataFormats.put(new SimpleDateFormat("dd/MM/YY"), "fr");
+            dataFormats.put(new SimpleDateFormat("d MMM YYYY"), "fr");
         }
         {
             labelsInvoice.put("Du", "fr");
@@ -240,7 +243,7 @@ public class InvoiceDate {
         public InvoiceDate generate(GenerationContext ctx) {
             long date = (ctx.getRandom().nextInt((int)(to-from)) + from) * 1000;
             ctx.setDate(date);
-            List<SimpleDateFormat> filteredFormats = formats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<SimpleDateFormat> filteredFormats = dataFormats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
 
             List<String> filteredLabels = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> filteredLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
