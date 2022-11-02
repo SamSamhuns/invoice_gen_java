@@ -10,8 +10,8 @@ from argparse import ArgumentParser
 
 
 def convert_to_donut(dataset_dir):
-    json_paths = glob.glob(f"{dataset_dir}/**/*.json", recursive=True)
-    img_paths = glob.glob(f"{dataset_dir}/**/*.jpg", recursive=True)
+    json_paths = sorted(glob.glob(f"{dataset_dir}/**/*.json", recursive=True))
+    img_paths = sorted(glob.glob(f"{dataset_dir}/**/*.jpg", recursive=True))
     assert len(json_paths) == len(
         img_paths), "Length of jsons and images do not match."
     jlines = []
