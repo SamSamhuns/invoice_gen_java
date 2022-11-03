@@ -333,13 +333,14 @@ public class AmazonLayout implements InvoiceLayout {
 
         // table item list body
         String quantity; String snNum;
+        String qtySuffix = rnd.nextBoolean() ? " "+pc.getQtySuffix() : "" ;
         Color cellTextColor; Color cellBgColor;
         for(int w=0; w<pc.getProducts().size(); w++) {
             Product randomProduct = pc.getProducts().get(w);
             cellTextColor = black;
-            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? lgray: white;
-            quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
-            snNum = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Integer.toString(w + 1);
+            cellBgColor = randomProduct.getName().equalsIgnoreCase("shipping") ? lgray: white;
+            quantity = randomProduct.getName().equalsIgnoreCase("shipping") ? "": randomProduct.getQuantity()+qtySuffix;
+            snNum = randomProduct.getName().equalsIgnoreCase("shipping") ? "": Integer.toString(w + 1);
 
             InvoiceAnnotModel.Item randomItem = new InvoiceAnnotModel.Item();
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);

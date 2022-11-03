@@ -72,6 +72,7 @@ public class ProductContainer {
     private final String nameHead;
     private final String codeHead;
     private final String qtyHead;
+    private final String qtySuffix;
     private final String unitPriceHead;
     private final String lineTotalHead;
     private final String snHead;
@@ -91,7 +92,7 @@ public class ProductContainer {
     private final String withTaxAndDiscountTotalHead;
 
 
-    public ProductContainer(String currency, String nameHead, String codeHead, String qtyHead, String unitPriceHead, String lineTotalHead, String snHead,
+    public ProductContainer(String currency, String nameHead, String codeHead, String qtyHead, String qtySuffix, String unitPriceHead, String lineTotalHead, String snHead,
                             String taxHead, String taxRateHead, String taxRateTotalHead, String taxTotalHead,
                             String discountHead, String discountRateHead, String discountRateTotalHead, String discountTotalHead,
                             String totalHead, String withTaxTotalHead, String withDiscountTotalHead, String withTaxAndDiscountTotalHead) {
@@ -99,6 +100,7 @@ public class ProductContainer {
         this.nameHead = nameHead;
         this.codeHead = codeHead;
         this.qtyHead = qtyHead;
+        this.qtySuffix = qtySuffix;
         this.unitPriceHead = unitPriceHead;
         this.lineTotalHead = lineTotalHead;
         this.snHead = snHead;
@@ -155,6 +157,10 @@ public class ProductContainer {
 
     public String getQtyHead() {
         return qtyHead;
+    }
+
+    public String getQtySuffix() {
+        return qtySuffix;
     }
 
     public String getUPHead() {
@@ -375,6 +381,7 @@ public class ProductContainer {
         private static final Map<String, String> nameHeads = new LinkedHashMap<>();
         private static final Map<String, String> codeHeads = new LinkedHashMap<>();
         private static final Map<String, String> qtyHeads = new LinkedHashMap<>();
+        private static final Map<String, String> qtySuffixes = new LinkedHashMap<>();
         private static final Map<String, String> unitPriceHeads = new LinkedHashMap<>();
         private static final Map<String, String> lineTotalHeads = new LinkedHashMap<>();
         private static final Map<String, String> snHeads = new LinkedHashMap<>();
@@ -431,6 +438,14 @@ public class ProductContainer {
 
             qtyHeads.put("Qty", "en");
             qtyHeads.put("Quantity", "en");
+        }
+        {
+            qtySuffixes.put("Pc", "fr");
+
+            qtySuffixes.put("PC", "en");
+            qtySuffixes.put("PCs", "en");
+            qtySuffixes.put("Unit", "en");
+            qtySuffixes.put("units", "en");
         }
         {
             unitPriceHeads.put("UP", "fr");
@@ -582,6 +597,7 @@ public class ProductContainer {
             List<String> localNameHeads = nameHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localCodeHeads = codeHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localQtyHeads = qtyHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localQtySuffixes = qtySuffixes.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localUPHeads = unitPriceHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localLineTotalHeads = lineTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
             List<String> localSNHeads = snHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
@@ -613,6 +629,7 @@ public class ProductContainer {
                     localNameHeads.get(ctx.getRandom().nextInt(localNameHeads.size())),
                     localCodeHeads.get(ctx.getRandom().nextInt(localCodeHeads.size())),
                     localQtyHeads.get(ctx.getRandom().nextInt(localQtyHeads.size())),
+                    localQtySuffixes.get(ctx.getRandom().nextInt(localQtySuffixes.size())),
                     localUPHeads.get(ctx.getRandom().nextInt(localUPHeads.size())),
                     localLineTotalHeads.get(ctx.getRandom().nextInt(localLineTotalHeads.size())),
                     localSNHeads.get(ctx.getRandom().nextInt(localSNHeads.size())),
