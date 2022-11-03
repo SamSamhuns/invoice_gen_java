@@ -207,15 +207,11 @@ public class DartyLayout implements InvoiceLayout {
 
             String yearWarranty = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-4);
             int newYear;
-            String dateWarranty;
+            String dateWarranty = "2020";
 
             if(yearWarranty.contains("/")){
                 newYear = Integer.parseInt(yearWarranty.substring(yearWarranty.length()-2))+2;
                 yearWarranty = model.getDate().getValueInvoice().substring(model.getDate().getValueInvoice().length()-2);
-                dateWarranty = model.getDate().getValueInvoice().replace(yearWarranty,newYear+"");
-            }
-            else {
-                newYear = Integer.parseInt(yearWarranty) + 2;
                 dateWarranty = model.getDate().getValueInvoice().replace(yearWarranty,newYear+"");
             }
 

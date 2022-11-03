@@ -120,7 +120,7 @@ public class VendorInfoBox extends ElementBox {
         String compAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
         String compZip = address.getZip();
 
-        vContainer.addElement(new SimpleTextBox(fontNB,fontSizeBig,0,0, compName+"","SN"));
+        vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig+1,0,0, compName+"","SN"));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(),"SA"));
         vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip() +"  "+ address.getCity(),"SA"));
         vContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,3));
