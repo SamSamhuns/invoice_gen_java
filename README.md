@@ -151,3 +151,115 @@ Generating your own invoices and other SSDs with custom data.
 -   Jérôme Blanchard <jerome.blanchard@fairandsmart.com> / FairAndSmart
 -   Aurore Hubert <aurore.hubert@fairandsmart.com> / FairAndSmart
 -   Kevin Meszczynski <kevin.meszczynski@fairandsmart.com> / FairAndSmart
+
+
+### Relevant Files for Invoice Generation
+
+      ├── Main.java
+      ├── api
+      │   └── WorkspaceResource.java
+      ├── documents
+      │   ├── InvoiceGenerator.java
+      │   ├── PayslipGenerator.java
+      │   ├── ReceiptGenerator.java
+      │   ├── common
+      │   │   └── VerifCharEncoding.java
+      │   ├── data
+      │   │   ├── generator
+      │   │   │   ├── GenerationContext.java
+      │   │   │   └── ModelGenerator.java
+      │   │   ├── helper
+      │   │   │   ├── Helper.java
+      │   │   │   ├── HelperCommon.java
+      │   │   │   └── HelperImage.java
+      │   │   └── model
+      │   │       ├── Address.java
+      │   │       ├── Client.java
+      │   │       ├── Company.java
+      │   │       ├── ContactNumber.java
+      │   │       ├── IDNumbers.java
+      │   │       ├── InvoiceAnnotModel.java
+      │   │       ├── InvoiceDate.java
+      │   │       ├── InvoiceModel.java
+      │   │       ├── InvoiceNumber.java
+      │   │       ├── Logo.java
+      │   │       ├── Model.java
+      │   │       ├── PaymentInfo.java
+      │   │       ├── Product.java
+      │   │       ├── ProductContainer.java
+      │   │       ├── Signature.java
+      │   │       ├── Stamp.java
+      │   ├── element
+      │   │   ├── BoundingBox.java
+      │   │   ├── ElementBox.java
+      │   │   ├── ElementBoxForEvaluation.java
+      │   │   ├── HAlign.java
+      │   │   ├── Padding.java
+      │   │   ├── VAlign.java
+      │   │   ├── border
+      │   │   │   └── BorderBox.java
+      │   │   ├── container
+      │   │   │   ├── HorizontalContainer.java
+      │   │   │   ├── LayeredContainer.java
+      │   │   │   └── VerticalContainer.java
+      │   │   ├── footer
+      │   │   │   ├── FootCompanyBox.java
+      │   │   │   ├── StampBox.java
+      │   │   ├── head
+      │   │   │   ├── BillingInfoBox.java
+      │   │   │   ├── ShippingInfoBox.java
+      │   │   │   └── VendorInfoBox.java
+      │   │   ├── image
+      │   │   │   └── ImageBox.java
+      │   │   ├── line
+      │   │   │   ├── HorizontalLineBox.java
+      │   │   │   └── VerticalLineBox.java
+      │   │   ├── payment
+      │   │   │   └── PaymentInfoBox.java
+      │   │   ├── product
+      │   │   │   ├── ProductTable.java
+      │   │   ├── table
+      │   │   │   └── TableRowBox.java
+      │   │   └── textbox
+      │   │       └── SimpleTextBox.java
+      │   └── layout
+      │       ├── InvoiceLayout.java
+      │       ├── InvoiceSSDGenerator.java
+      │       ├── PayslipLayout.java
+      │       ├── ReceiptLayout.java
+      │       ├── SSDLayout.java
+      │       ├── amazon (DONE)
+      │       ├── bdmobilier (DONE)
+      │       ├── cdiscount (DONE)
+      │       ├── darty
+      │       ├── fairandsmart
+      │       ├── invoiceSSD
+      │       ├── ldlc
+      │       ├── loria
+      │       ├── macomp (DONE)
+      │       ├── materielnet
+      │       ├── naturedecouvertes (DONE)
+      │       ├── ngeneric
+      │       ├── payslip
+      │       └── receipt
+      ├── job
+      │   ├── AlreadyActiveJobException.java
+      │   ├── JobManager.java
+      │   ├── JobNotFoundException.java
+      │   ├── MissingParameterException.java
+      │   ├── UnsupportedJobException.java
+      │   ├── entity
+      │   │   └── Job.java
+      │   └── handler
+      │       ├── InvoiceGenerationHandler.java
+      │       ├── JobHandler.java
+      │       ├── PayslipGenerationHandler.java
+      │       └── ReceiptGenerationHandler.java
+      └── workspace
+          ├── WorkspaceManager.java
+          ├── WorkspaceManagerException.java
+          ├── WorkspaceNotFoundException.java
+          └── entity
+              ├── FileItem.java
+              ├── Workspace.java
+              └── WorkspaceContent.java
