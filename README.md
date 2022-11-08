@@ -153,80 +153,74 @@ Generating your own invoices and other SSDs with custom data.
 -   Kevin Meszczynski <kevin.meszczynski@fairandsmart.com> / FairAndSmart
 
 
-### Relevant Files for Invoice Generation
+### Relevant Structure & Information for Invoice Generation
+
+`Note: Files related to receipt and payslips are ignored`
+
+Under `src/main/java/com/fairandsmart/generator`
 
       ├── Main.java
       ├── api
-      │   └── WorkspaceResource.java
+      │   └── WorkspaceResource.java     # Set Web API endpoints i.e. generate, delete or download SSDs
       ├── documents
-      │   ├── InvoiceGenerator.java
-      │   ├── PayslipGenerator.java
-      │   ├── ReceiptGenerator.java
+      │   ├── InvoiceGenerator.java      # Invoice SSD entrypoint, build invoice layout, save xml, save json, save image
       │   ├── common
-      │   │   └── VerifCharEncoding.java
-      │   ├── data
-      │   │   ├── generator
-      │   │   │   ├── GenerationContext.java
-      │   │   │   └── ModelGenerator.java
-      │   │   ├── helper
-      │   │   │   ├── Helper.java
-      │   │   │   ├── HelperCommon.java
-      │   │   │   └── HelperImage.java
-      │   │   └── model
-      │   │       ├── Address.java
-      │   │       ├── Client.java
-      │   │       ├── Company.java
-      │   │       ├── ContactNumber.java
-      │   │       ├── IDNumbers.java
-      │   │       ├── InvoiceAnnotModel.java
-      │   │       ├── InvoiceDate.java
-      │   │       ├── InvoiceModel.java
-      │   │       ├── InvoiceNumber.java
-      │   │       ├── Logo.java
-      │   │       ├── Model.java
-      │   │       ├── PaymentInfo.java
-      │   │       ├── Product.java
-      │   │       ├── ProductContainer.java
-      │   │       ├── Signature.java
-      │   │       ├── Stamp.java
-      │   ├── element
-      │   │   ├── BoundingBox.java
-      │   │   ├── ElementBox.java
-      │   │   ├── ElementBoxForEvaluation.java
-      │   │   ├── HAlign.java
-      │   │   ├── Padding.java
-      │   │   ├── VAlign.java
+      │   │   └── VerifCharEncoding.java (For verifying ANSI Encoding & remove non ANSI chars)
+      │   ├── data (Data classes to populate the layouts)
+      │   │   ├── generator              # Master generation controls i.e. Country, Language, Locale, and Currency
+      │   │   ├── helper                 # Utility classes
+      │   │   └── model                  # Contains data classes for populating layouts
+      │   │       ├── Address.java               # Stores address line1, line2, line3, zip, city & country
+      │   │       ├── Client.java                # Stores client Bill+Ship name, head, address & IDNumbers (TIN, TRN, VAT Number)
+      │   │       ├── Company.java               # Stores company name, Address, ContactNumber, idNumbers, Logo, Signature
+      │   │       ├── ContactNumber.java         # Stores phone & fax label and regex values
+      │   │       ├── IDNumbers.java             # Stores VAT/TRN/TIN labels and values along with french siret and TOA ids
+      │   │       ├── InvoiceAnnotModel.java     # Class to store annotations for invoices
+      │   │       ├── InvoiceDate.java           # Invoice date, Order date, Ship date, Payment date, and Payment Due date along with heads
+      │   │       ├── InvoiceModel.java          # High level container for invoices
+      │   │       ├── InvoiceNumber.java         # Invoice number, Order number & Client number along with heads
+      │   │       ├── Logo.java                  # Stores logo for each Company in the resources
+      │   │       ├── Model.java                 # Stores language, locale, payment info, company, configMaps, client, product container
+      │   │       ├── PaymentInfo.java           # Payment term, type, bank details, account name and number
+      │   │       ├── Product.java               # Stores one Product item Quantity, Code, Price, Discount, Tax
+      │   │       ├── ProductContainer.java      # Stores Table header labels: vat, disc & total labels
+      │   │       ├── Signature.java             # Stores signatures
+      │   │       ├── Stamp.java                 # Stores stamp that align with existing companies
+      │   ├── element                    # Drawing, structure & layout class elements
+      │   │   ├── BoundingBox.java               # base bounding box element with xmin,ymin,xmax,ymax
+      │   │   ├── ElementBox.java                # Abstract class that is extended by all other layout elements
+      │   │   ├── HAlign.java                    # HAlign LEFT, CENTER, RIGHT enums
+      │   │   ├── Padding.java                   # Padding element
+      │   │   ├── VAlign.java                    # VAlign TOP, CENTER, BOTTOM enums
       │   │   ├── border
-      │   │   │   └── BorderBox.java
+      │   │   │   └── BorderBox.java     # rectangle box with border stroke and fill colors
       │   │   ├── container
-      │   │   │   ├── HorizontalContainer.java
+      │   │   │   ├── HorizontalContainer.java   # horizontal container which can add other SimpleTextBox, ImageBox elements
       │   │   │   ├── LayeredContainer.java
-      │   │   │   └── VerticalContainer.java
+      │   │   │   └── VerticalContainer.java     # vertical container which can add other SimpleTextBox, ImageBox elements
       │   │   ├── footer
-      │   │   │   ├── FootCompanyBox.java
-      │   │   │   ├── StampBox.java
+      │   │   │   ├── FootCompanyBox.java        # contains company name, address and information to be displayed at page bottom
+      │   │   │   ├── StampBox.java              # Contains the company logo stamp ImageBox higher level API
       │   │   ├── head
-      │   │   │   ├── BillingInfoBox.java
-      │   │   │   ├── ShippingInfoBox.java
-      │   │   │   └── VendorInfoBox.java
+      │   │   │   ├── BillingInfoBox.java        # Contains client/buyer Billing name and address
+      │   │   │   ├── ShippingInfoBox.java       # Contains client/buyer shipping name and address
+      │   │   │   └── VendorInfoBox.java         # Contains vendor/seller name and address
       │   │   ├── image
-      │   │   │   └── ImageBox.java
+      │   │   │   └── ImageBox.java              # Wraps contentStream drawImage but allows for top left xmin,ymin anchoring
       │   │   ├── line
-      │   │   │   ├── HorizontalLineBox.java
-      │   │   │   └── VerticalLineBox.java
+      │   │   │   ├── HorizontalLineBox.java     # Horizontal line
+      │   │   │   └── VerticalLineBox.java       # Vertical line
       │   │   ├── payment
-      │   │   │   └── PaymentInfoBox.java
+      │   │   │   └── PaymentInfoBox.java        # Contains client payment name, address, & bank details
       │   │   ├── product
-      │   │   │   ├── ProductTable.java
+      │   │   │   ├── ProductTable.java          # Contains item table header permutations
       │   │   ├── table
-      │   │   │   └── TableRowBox.java
+      │   │   │   └── TableRowBox.java           # Primary element box for table rows, needs a float array for column widths
       │   │   └── textbox
-      │   │       └── SimpleTextBox.java
-      │   └── layout
+      │   │       └── SimpleTextBox.java         # Base text box for writing and displaying any text
+      │   └── layout                             # Specific Layouts
       │       ├── InvoiceLayout.java
       │       ├── InvoiceSSDGenerator.java
-      │       ├── PayslipLayout.java
-      │       ├── ReceiptLayout.java
       │       ├── SSDLayout.java
       │       ├── amazon (DONE)
       │       ├── bdmobilier (DONE)
@@ -239,27 +233,13 @@ Generating your own invoices and other SSDs with custom data.
       │       ├── macomp (DONE)
       │       ├── materielnet
       │       ├── naturedecouvertes (DONE)
-      │       ├── ngeneric
-      │       ├── payslip
-      │       └── receipt
-      ├── job
-      │   ├── AlreadyActiveJobException.java
+      ├── job                             # For handling API jobs
       │   ├── JobManager.java
-      │   ├── JobNotFoundException.java
-      │   ├── MissingParameterException.java
-      │   ├── UnsupportedJobException.java
       │   ├── entity
-      │   │   └── Job.java
+      │   │   └── Job.java                      # Job class
       │   └── handler
-      │       ├── InvoiceGenerationHandler.java
+      │       ├── InvoiceGenerationHandler.java # Actual invoice generation file for java quarkus web API
       │       ├── JobHandler.java
-      │       ├── PayslipGenerationHandler.java
-      │       └── ReceiptGenerationHandler.java
       └── workspace
-          ├── WorkspaceManager.java
-          ├── WorkspaceManagerException.java
-          ├── WorkspaceNotFoundException.java
-          └── entity
-              ├── FileItem.java
-              ├── Workspace.java
-              └── WorkspaceContent.java
+          ├── WorkspaceManager.java             # API functions for load, purge, bootstrap & deletePath
+          └── entity                            # Base classes for java quarkus web API
