@@ -225,7 +225,7 @@ Under `src/main/java/com/fairandsmart/generator`
       │       ├── amazon (DONE)
       │       ├── bdmobilier (DONE)
       │       ├── cdiscount (DONE)
-      │       ├── darty
+      │       ├── darty (DONE)
       │       ├── fairandsmart
       │       ├── invoiceSSD
       │       ├── ldlc
