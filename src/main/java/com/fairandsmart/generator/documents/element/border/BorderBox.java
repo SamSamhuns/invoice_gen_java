@@ -48,7 +48,7 @@ public class BorderBox extends ElementBox {
     private final BoundingBox box;
 
     /*
-      (posX, poxY) represent top left coord of box
+      (posX, poxY) represent bottom left coord of box
     */
     public BorderBox(Color borderColor, Color color, int thick, float posX, float posY, float width, float height) {
         this.borderColor = borderColor;
