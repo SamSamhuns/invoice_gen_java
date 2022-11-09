@@ -77,40 +77,40 @@ public class TestSimpleTextBox implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         int currentPosY = 750;
 
         PDFont font = PDType1Font.HELVETICA_BOLD;
 
-        contentStream.moveTo( 20, 750);
-        contentStream.lineTo( 400, 750);
-        contentStream.stroke();
+        stream.moveTo( 20, 750);
+        stream.lineTo( 400, 750);
+        stream.stroke();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb = new SimpleTextBox(font, 12, 20, currentPosY, "Simple title of text");
         stb.setBackgroundColor(Color.ORANGE);
-        stb.build(contentStream,writer);
+        stb.build(stream,writer);
         currentPosY -= stb.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb2 = new SimpleTextBox(font, 12, 20, currentPosY, "Simple title of text which is a little bit longer without max width");
         stb2.setBackgroundColor(Color.CYAN);
-        stb2.build(contentStream,writer);
+        stb2.build(stream,writer);
         currentPosY -= stb2.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb3 = new SimpleTextBox(font, 12, 60, currentPosY, "Simple title of text which is a little bit longer but WITH max width");
         stb3.setWidth(100);
         stb3.setBackgroundColor(Color.PINK);
-        stb3.build(contentStream,writer);
+        stb3.build(stream,writer);
         currentPosY -= stb3.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
         SimpleTextBox stb4 = new SimpleTextBox(font, 12, 20, currentPosY, "Simple text with padding");
         stb4.setBackgroundColor(Color.YELLOW);
         stb4.setPadding(20, 10, 75, 50);
-        stb4.build(contentStream,writer);
+        stb4.build(stream,writer);
         currentPosY -= stb4.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
@@ -118,7 +118,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb5.setBackgroundColor(Color.LIGHT_GRAY);
         stb5.setWidth(150);
         stb5.setHalign(HAlign.RIGHT);
-        stb5.build(contentStream,writer);
+        stb5.build(stream,writer);
         currentPosY -= stb5.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
@@ -127,7 +127,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb6.setPadding(10, 0, 10, 0);
         stb6.setWidth(200);
         stb6.setHalign(HAlign.RIGHT);
-        stb6.build(contentStream,writer);
+        stb6.build(stream,writer);
         currentPosY -= stb6.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
@@ -135,7 +135,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb7.setBackgroundColor(Color.LIGHT_GRAY);
         stb7.setWidth(150);
         stb7.setHalign(HAlign.CENTER);
-        stb7.build(contentStream,writer);
+        stb7.build(stream,writer);
         currentPosY -= stb7.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
@@ -144,7 +144,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb8.setPadding(10, 0, 50, 0);
         stb8.setWidth(250);
         stb8.setHalign(HAlign.CENTER);
-        stb8.build(contentStream,writer);
+        stb8.build(stream,writer);
         currentPosY -= stb8.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
@@ -152,7 +152,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb9.setBackgroundColor(Color.LIGHT_GRAY);
         stb9.setWidth(100);
         stb9.setHalign(HAlign.RIGHT);
-        stb9.build(contentStream,writer);
+        stb9.build(stream,writer);
         currentPosY -= stb9.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
@@ -160,7 +160,7 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb10.setBackgroundColor(Color.YELLOW);
         stb10.setWidth(100);
         stb10.setHalign(HAlign.CENTER);
-        stb10.build(contentStream,writer);
+        stb10.build(stream,writer);
         currentPosY -= stb10.getBBox().getHeight();
 
         // System.out.println("posY: " + currentPosY);
@@ -169,9 +169,9 @@ public class TestSimpleTextBox implements InvoiceLayout {
         stb11.setPadding(10, 20, 20, 20);
         stb11.setWidth(150);
         stb11.setHalign(HAlign.CENTER);
-        stb11.build(contentStream,writer);
+        stb11.build(stream,writer);
 
-        contentStream.close();
+        stream.close();
 
         writer.writeEndElement();
     }

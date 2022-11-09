@@ -76,10 +76,10 @@ public class TestHorizontalContainer implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
 
-        new BorderBox(Color.RED, Color.WHITE, 15, 0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight()).build(contentStream,writer);
+        new BorderBox(Color.RED, Color.WHITE, 15, 0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight()).build(stream,writer);
 
         HorizontalContainer container = new HorizontalContainer(50,700);
         container.setBackgroundColor(Color.GRAY);
@@ -95,10 +95,10 @@ public class TestHorizontalContainer implements InvoiceLayout {
         SimpleTextBox stb3 = new SimpleTextBox(font, 9, 0, 0, "line3");
         stb3.setBackgroundColor(Color.YELLOW);
         container.addElement(stb3);
-        container.build(contentStream,writer);
+        container.build(stream,writer);
 
 
-        contentStream.close();
+        stream.close();
 
         writer.writeEndElement();
     }

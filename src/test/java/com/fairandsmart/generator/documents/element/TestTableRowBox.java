@@ -81,14 +81,14 @@ public class TestTableRowBox implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         int startPosX = 25;
         int endPosX = 400;
         int startPosY = 750;
         PDFont font = PDType1Font.HELVETICA_BOLD;
 
-        new HorizontalLineBox(startPosX, startPosY, endPosX, startPosY, Color.RED).build(contentStream,writer);
+        new HorizontalLineBox(startPosX, startPosY, endPosX, startPosY, Color.RED).build(stream,writer);
 
         VerticalContainer container = new VerticalContainer(startPosX, startPosY, 0);
 
@@ -135,8 +135,8 @@ public class TestTableRowBox implements InvoiceLayout {
         row4.setBackgroundColor(Color.DARK_GRAY);
         container.addElement(row4);
 
-        container.build(contentStream,writer);
-        contentStream.close();
+        container.build(stream,writer);
+        stream.close();
 
         writer.writeEndElement();
     }

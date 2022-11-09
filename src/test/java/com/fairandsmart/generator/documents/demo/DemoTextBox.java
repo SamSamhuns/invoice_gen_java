@@ -72,7 +72,7 @@ public class DemoTextBox implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         SimpleTextBox stb = new SimpleTextBox(
                 PDType1Font.HELVETICA_BOLD,
@@ -81,7 +81,7 @@ public class DemoTextBox implements InvoiceLayout {
                 750,
                 model.getReference().getLabelInvoice(),
                 "HEAD");
-        stb.build(contentStream,writer);
+        stb.build(stream,writer);
         SimpleTextBox stb2 = new SimpleTextBox(
                 PDType1Font.HELVETICA,
                 12,
@@ -89,9 +89,9 @@ public class DemoTextBox implements InvoiceLayout {
                 750,
                 model.getReference().getValueInvoice(),
                 "IN");
-        stb2.build(contentStream,writer);
+        stb2.build(stream,writer);
 
-        contentStream.close();
+        stream.close();
         writer.writeEndElement();
     }
 
