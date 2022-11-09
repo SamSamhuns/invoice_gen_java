@@ -150,7 +150,7 @@ public class CdiscountLayout implements InvoiceLayout {
 
         ///////////////////////////////////      Build Page components now      ////////////////////////////////////
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         // draw top logo
         float maxLogoWidth = 200;
@@ -160,13 +160,13 @@ public class CdiscountLayout implements InvoiceLayout {
         float logoHeight = logoImg.getHeight() * logoScale;
         float posLogoX = leftPageMargin;
         float posLogoY = pageHeight-3;
-        new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
+        new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(stream,writer);
 
         // top left info
         // vendor address
         VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,8,9,250,lineStrokeColor,model,document,company,annot,proba);
         vendorInfoBox.translate(leftPageMargin+2, posLogoY-logoHeight-4);
-        vendorInfoBox.build(contentStream,writer);
+        vendorInfoBox.build(stream,writer);
 
         // top right hdr info
         float hdrWidth = 252;
@@ -177,7 +177,7 @@ public class CdiscountLayout implements InvoiceLayout {
         String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         SimpleTextBox docTitleBox = new SimpleTextBox(fontB,15,0,0, docTitle, docTitle);
         docTitleBox.translate(posHdrX+hdrWidth/2-docTitleBox.getBBox().getWidth()/2, posHdrY+32);
-        docTitleBox.build(contentStream,writer);
+        docTitleBox.build(stream,writer);
         // tax invoice number
         HorizontalContainer containerInvNum = new HorizontalContainer(0,0);
         containerInvNum.addElement(new SimpleTextBox(fontNB,9,0,0, model.getReference().getLabelInvoice()+" "));
@@ -189,17 +189,17 @@ public class CdiscountLayout implements InvoiceLayout {
         containerDate.addElement(new SimpleTextBox(fontB,9,0,0, model.getDate().getValueInvoice(), "IDATE"));
         containerDate.translate(posHdrX + hdrWidth/2 - containerDate.getBBox().getWidth()/2, posHdrY-4);
 
-        new BorderBox(gray,gray, 1, posHdrX, posHdrY-3, hdrWidth, hdrHeight).build(contentStream,writer);
-        new BorderBox(gray,gray, 1, posHdrX, posHdrY-hdrHeight-5, hdrWidth, hdrHeight).build(contentStream,writer);
+        new BorderBox(gray,gray, 1, posHdrX, posHdrY-3, hdrWidth, hdrHeight).build(stream,writer);
+        new BorderBox(gray,gray, 1, posHdrX, posHdrY-hdrHeight-5, hdrWidth, hdrHeight).build(stream,writer);
 
         annot.setTitle(docTitle);
         annot.getInvoice().setInvoiceId(model.getReference().getValueInvoice());
         annot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
-        containerInvNum.build(contentStream,writer);
-        containerDate.build(contentStream,writer);
+        containerInvNum.build(stream,writer);
+        containerDate.build(stream,writer);
 
         // border box around invoice body
-        new BorderBox(themeColor,white,1,leftPageMargin,bottomPageMargin,pageWidth-rightPageMargin-leftPageMargin,655).build(contentStream,writer);
+        new BorderBox(themeColor,white,1,leftPageMargin,bottomPageMargin,pageWidth-rightPageMargin-leftPageMargin,655).build(stream,writer);
 
         // Payment Info and Address top right or Bottom left or Bottom right
         if (proba.get("payment_address_top") || (proba.get("payment_address_bottom") && pc.getProducts().size() < 6)) {
@@ -217,7 +217,7 @@ public class CdiscountLayout implements InvoiceLayout {
 
             PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,7,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
             paymentBox.translate(pAX, pAY);
-            paymentBox.build(contentStream,writer);
+            paymentBox.build(stream,writer);
         }
 
         // check if billing and shipping addresses should be switched
@@ -244,10 +244,10 @@ public class CdiscountLayout implements InvoiceLayout {
         // draw borders around bill+ship addresses & thrn build addresses
         float bAY = billY;
         float bAH = billingInfoBox.getBBox().getHeight();
-        new BorderBox(themeColor,white,1, leftPageMargin+27,    bAY-bAH, 227,bAH+2).build(contentStream,writer);
-        new BorderBox(themeColor,white,1, leftPageMargin+27+245,bAY-bAH, 227,bAH+2).build(contentStream,writer);
-        billingInfoBox.build(contentStream,writer);
-        shippingInfoBox.build(contentStream,writer);
+        new BorderBox(themeColor,white,1, leftPageMargin+27,    bAY-bAH, 227,bAH+2).build(stream,writer);
+        new BorderBox(themeColor,white,1, leftPageMargin+27+245,bAY-bAH, 227,bAH+2).build(stream,writer);
+        billingInfoBox.build(stream,writer);
+        shippingInfoBox.build(stream,writer);
         proba.put("addresses_bordered", origBorderMode);  // reset to origBorderMode
 
         // client mail & payment info under billing addr
@@ -275,8 +275,8 @@ public class CdiscountLayout implements InvoiceLayout {
         labelInfo1.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getLabelAccountCurrency()+""));
         boxes1.add(new BorderBox(box1Color,box1Color,1,labelInfo1.getBBox().getPosX(),labelInfo1.getBBox().getPosY()-labelInfo1.getBBox().getHeight()-1,box1W,box1H));
 
-        for (BorderBox box : boxes1) box.build(contentStream,writer);
-        labelInfo1.build(contentStream,writer);
+        for (BorderBox box : boxes1) box.build(stream,writer);
+        labelInfo1.build(stream,writer);
 
         // values info 1
         VerticalContainer valueInfo1 = new VerticalContainer(box1PosX+box1W+3,box1PosY,250);
@@ -291,7 +291,7 @@ public class CdiscountLayout implements InvoiceLayout {
         valueInfo1.addElement(new SimpleTextBox(fontN,8,0,0,model.getPaymentInfo().getValueAccountCurrency(),"PCUR"));
 
         annot.getTotal().setCurrency(cur);
-        valueInfo1.build(contentStream,writer);
+        valueInfo1.build(stream,writer);
 
         // client ID & shipping info under shipping addr
         float box2PosX = shipX;
@@ -318,8 +318,8 @@ public class CdiscountLayout implements InvoiceLayout {
         labelInfo2.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getValueInvoice()));
 
         annot.getInvoice().setInvoiceDate(model.getDate().getValueInvoice());
-        for (BorderBox box : boxes2) box.build(contentStream,writer);
-        labelInfo2.build(contentStream,writer);
+        for (BorderBox box : boxes2) box.build(stream,writer);
+        labelInfo2.build(stream,writer);
 
         // values info 2
         VerticalContainer valueInfo2 = new VerticalContainer(box2PosX+box2W+3,box2PosY,250);
@@ -330,12 +330,12 @@ public class CdiscountLayout implements InvoiceLayout {
         valueInfo2.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getValueShipping(),"SDATE"));
         valueInfo2.addElement(new BorderBox(white,white,0,0,0,0,2.5f));
         valueInfo2.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getLabelPaymentDue()));
-        new BorderBox(box2Color,box2Color,1,valueInfo2.getBBox().getPosX(),valueInfo2.getBBox().getPosY()-valueInfo2.getBBox().getHeight()-1,box2W,box2H).build(contentStream,writer);
+        new BorderBox(box2Color,box2Color,1,valueInfo2.getBBox().getPosX(),valueInfo2.getBBox().getPosY()-valueInfo2.getBBox().getHeight()-1,box2W,box2H).build(stream,writer);
         valueInfo2.addElement(new BorderBox(white,white,0,0,0,0,2.5f));
         valueInfo2.addElement(new SimpleTextBox(fontN,8,0,0,model.getDate().getValuePaymentDue()));
 
         annot.getInvoice().setInvoiceDueDate(model.getDate().getValuePaymentDue());
-        valueInfo2.build(contentStream,writer);
+        valueInfo2.build(stream,writer);
 
         ////////////////////////////////////      Building Table      ////////////////////////////////////
         // check if cur should be included in table amt items
@@ -366,7 +366,7 @@ public class CdiscountLayout implements InvoiceLayout {
         float tableTopPosY = labelInfo1.getBBox().getPosY() - labelInfo1.getBBox().getHeight() - 30;
 
         SimpleTextBox tableTopInfo = new SimpleTextBox(fontB,9,tableTopPosX,tableTopPosY,tableTopText,themeColor,white);
-        tableTopInfo.build(contentStream,writer);
+        tableTopInfo.build(stream,writer);
 
         // table item list head
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
@@ -437,7 +437,7 @@ public class CdiscountLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithDiscount()+amtSuffix;
                         randomItem.setSubTotal(cellText); break;
                     case "Total":
-                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
+                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
                 cellBgColor = proba.get("alternate_table_items_bg_color") && w % 2 == 0 ? gray: cellBgColor;
@@ -453,7 +453,7 @@ public class CdiscountLayout implements InvoiceLayout {
 
         float tableItemsHeight = verticalTableItems.getBBox().getHeight();
 
-        verticalTableItems.build(contentStream,writer);
+        verticalTableItems.build(stream,writer);
 
         // tabel footer returns information
         float msgSize = 320;
@@ -463,7 +463,7 @@ public class CdiscountLayout implements InvoiceLayout {
         VerticalContainer tableFooterMsg = new VerticalContainer(posMsgX, posMsgY, 300);
         tableFooterMsg.addElement(new SimpleTextBox(fontN,10,0,0,"To return an item, go to the customer service section to obtain a return agreement."));
         tableFooterMsg.addElement(new SimpleTextBox(fontN,8,0,0,"* Order preparation costs include shipping costs"));
-        tableFooterMsg.build(contentStream,writer);
+        tableFooterMsg.build(stream,writer);
 
         // Add vertical borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
@@ -471,7 +471,7 @@ public class CdiscountLayout implements InvoiceLayout {
             float yPos = tableTopPosY - tableTopInfo.getBBox().getHeight() - 4;
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+                new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
                 xPos += configRow[i];
             }
         }
@@ -503,9 +503,9 @@ public class CdiscountLayout implements InvoiceLayout {
         labelTC.addElement(new SimpleTextBox(fontN,8,0,0,pc.getTotalHead().toUpperCase()));
         labelTCBorders.add(new BorderBox(lgray,lgray,1,labelTCPosX-1,labelTC.getBBox().getPosY()-labelTC.getBBox().getHeight(),labelTCWidth,1));
 
-        new BorderBox(lgray,gray,1,labelTCPosX-1,posMsgY-labelTC.getBBox().getHeight()-2,labelTCWidth,labelTC.getBBox().getHeight()+1).build(contentStream,writer);
-        for (BorderBox labelBox: labelTCBorders) labelBox.build(contentStream,writer);
-        labelTC.build(contentStream,writer);
+        new BorderBox(lgray,gray,1,labelTCPosX-1,posMsgY-labelTC.getBBox().getHeight()-2,labelTCWidth,labelTC.getBBox().getHeight()+1).build(stream,writer);
+        for (BorderBox labelBox: labelTCBorders) labelBox.build(stream,writer);
+        labelTC.build(stream,writer);
 
         // value totals container sub-table
         int valueTCPosX = 480;
@@ -534,9 +534,9 @@ public class CdiscountLayout implements InvoiceLayout {
         valueTC.addElement(new SimpleTextBox(fontN,8,0,0,pc.getFmtTotal()+amtSuffix,"TWTX"));
         valueTCBorders.add(new BorderBox(lgray,lgray,1,valueTCPosX-3,valueTC.getBBox().getPosY()-valueTC.getBBox().getHeight(),valueTCWidth,1));
 
-        new BorderBox(lgray,white,1,valueTCPosX-3,posMsgY-valueTC.getBBox().getHeight()-2,valueTCWidth,valueTC.getBBox().getHeight()+1).build(contentStream,writer);
-        for (BorderBox valueBox: valueTCBorders) valueBox.build(contentStream,writer);
-        valueTC.build(contentStream,writer);
+        new BorderBox(lgray,white,1,valueTCPosX-3,posMsgY-valueTC.getBBox().getHeight()-2,valueTCWidth,valueTC.getBBox().getHeight()+1).build(stream,writer);
+        for (BorderBox valueBox: valueTCBorders) valueBox.build(stream,writer);
+        valueTC.build(stream,writer);
 
         annot.getTotal().setSubtotalPrice(pc.getFmtTotal()+amtSuffix);
         annot.getTotal().setTaxPrice(pc.getFmtTotalTax()+amtSuffix);
@@ -546,31 +546,31 @@ public class CdiscountLayout implements InvoiceLayout {
         float posTableFooterY = valueTC.getBBox().getPosY() - valueTC.getBBox().getHeight() - 3;
         SimpleTextBox discInfoBox = new SimpleTextBox(fontI,9,0,0,"No discount will be applied in case of early payment");
         discInfoBox.translate(pageMiddleX - discInfoBox.getBBox().getWidth()/2, posTableFooterY);
-        discInfoBox.build(contentStream,writer);
+        discInfoBox.build(stream,writer);
 
-        new BorderBox(lgray,white,1,124,posTableFooterY-34,351,14).build(contentStream,writer);
-        new BorderBox(lgray,white,1,124,posTableFooterY-47,351,14).build(contentStream,writer);
+        new BorderBox(lgray,white,1,124,posTableFooterY-34,351,14).build(stream,writer);
+        new BorderBox(lgray,white,1,124,posTableFooterY-47,351,14).build(stream,writer);
 
         int sizeTab1;
         for(sizeTab1=0; sizeTab1<Math.max(pc.getProducts().size()-2, 1); sizeTab1++) {
-            new BorderBox(lgray,white,1,124,posTableFooterY-47-13*sizeTab1,351,14).build(contentStream,writer);
+            new BorderBox(lgray,white,1,124,posTableFooterY-47-13*sizeTab1,351,14).build(stream,writer);
         }
 
-        new BorderBox(lgray,white,1,124,posTableFooterY-47-13*(sizeTab1),351,14).build(contentStream,writer);
+        new BorderBox(lgray,white,1,124,posTableFooterY-47-13*(sizeTab1),351,14).build(stream,writer);
 
-        new SimpleTextBox(fontN,8,189,posTableFooterY-21,"Details of eco-participation and private copy remuneration").build(contentStream,writer);
-        new SimpleTextBox(fontN,8,170,posTableFooterY-35,"Serial").build(contentStream,writer);
-        new SimpleTextBox(fontN,8,250,posTableFooterY-35,"ECO-PARTICIPATION Tax").build(contentStream,writer);
-        new SimpleTextBox(fontN,8,380,posTableFooterY-35,"Private Copy Tax").build(contentStream,writer);
+        new SimpleTextBox(fontN,8,189,posTableFooterY-21,"Details of eco-participation and private copy remuneration").build(stream,writer);
+        new SimpleTextBox(fontN,8,170,posTableFooterY-35,"Serial").build(stream,writer);
+        new SimpleTextBox(fontN,8,250,posTableFooterY-35,"ECO-PARTICIPATION Tax").build(stream,writer);
+        new SimpleTextBox(fontN,8,380,posTableFooterY-35,"Private Copy Tax").build(stream,writer);
 
-        new BorderBox(lgray,lgray,1,240,posTableFooterY-60-14*(sizeTab1-1)+sizeTab1,1,13*(sizeTab1+1)).build(contentStream,writer);
-        new BorderBox(lgray,lgray,1,360,posTableFooterY-60-14*(sizeTab1-1)+sizeTab1,1,13*(sizeTab1+1)).build(contentStream,writer);
+        new BorderBox(lgray,lgray,1,240,posTableFooterY-60-14*(sizeTab1-1)+sizeTab1,1,13*(sizeTab1+1)).build(stream,writer);
+        new BorderBox(lgray,lgray,1,360,posTableFooterY-60-14*(sizeTab1-1)+sizeTab1,1,13*(sizeTab1+1)).build(stream,writer);
 
         int sizeTab2;
         for(sizeTab2=0; sizeTab2<Math.max(pc.getProducts().size()-2, 1); sizeTab2++) {
             Product randomProduct = pc.getProducts().get(sizeTab2);
-            new SimpleTextBox(fontN, 8, 155, posTableFooterY-47-13*sizeTab2, randomProduct.getEan(), "SNO").build(contentStream,writer);
-            new SimpleTextBox(fontN, 8, 283, posTableFooterY-47-13*sizeTab2, "N/A").build(contentStream,writer);
+            new SimpleTextBox(fontN, 8, 155, posTableFooterY-47-13*sizeTab2, randomProduct.getEan(), "SNO").build(stream,writer);
+            new SimpleTextBox(fontN, 8, 283, posTableFooterY-47-13*sizeTab2, "N/A").build(stream,writer);
         }
 
         // Add Signature at bottom
@@ -586,12 +586,12 @@ public class CdiscountLayout implements InvoiceLayout {
                 sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 75;
             }
             sigTextBox.translate(sigTX,sigTY);
-            sigTextBox.build(contentStream,writer);
+            sigTextBox.build(stream,writer);
 
             new HorizontalLineBox(
                     sigTX - 10, sigTY + 2,
                     sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 2,
-                    lineStrokeColor).build(contentStream,writer);
+                    lineStrokeColor).build(stream,writer);
 
             String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
             PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
@@ -604,14 +604,14 @@ public class CdiscountLayout implements InvoiceLayout {
             float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
             float sigIY = sigTY + sigH + 10;
 
-            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(stream,writer);
         }
         // no stamp or signature req info
         if (!proba.get("signature_bottom") && !proba.get("stamp_bottom")) {
             String noStampSignMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
             SimpleTextBox noStampSignBox = new SimpleTextBox(fontN,7,0,0,noStampSignMsg,"Footnote");
             noStampSignBox.translate(pageMiddleX-noStampSignBox.getBBox().getWidth()/2, 60);
-            noStampSignBox.build(contentStream,writer);
+            noStampSignBox.build(stream,writer);
         }
         // Add company stamp watermark, 40% prob
         if (proba.get("stamp_bottom")) {
@@ -629,7 +629,7 @@ public class CdiscountLayout implements InvoiceLayout {
             }
             StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
             stampBox.translate(xPosStamp,yPosStamp);
-            stampBox.build(contentStream,writer);
+            stampBox.build(stream,writer);
         }
         // Add bg logo watermark or confidential stamp, but not both at once
         if (proba.get("confidential_watermark")) {
@@ -644,7 +644,7 @@ public class CdiscountLayout implements InvoiceLayout {
         // footer website & addr info
         SimpleTextBox footerEmail = new SimpleTextBox(fontB,8,0,0,company.getWebsite());
         footerEmail.translate(pageMiddleX-footerEmail.getBBox().getWidth()/2, bottomPageMargin-5);
-        footerEmail.build(contentStream,writer);
+        footerEmail.build(stream,writer);
         HorizontalContainer footercontainer = new HorizontalContainer(0,0);
         if (model.getLang().matches("fr")) {
             footercontainer.addElement(new SimpleTextBox(fontN,8,0,0,"N°RCS : "));
@@ -652,9 +652,9 @@ public class CdiscountLayout implements InvoiceLayout {
         }
         footercontainer.addElement(new SimpleTextBox(fontN,8,0,0," "+company.getAddress().getCity()));
         footercontainer.translate(pageMiddleX - footercontainer.getBBox().getWidth()/2, bottomPageMargin-13);
-        footercontainer.build(contentStream,writer);
+        footercontainer.build(stream,writer);
 
-        contentStream.close();
+        stream.close();
         writer.writeEndElement();
     }
 }

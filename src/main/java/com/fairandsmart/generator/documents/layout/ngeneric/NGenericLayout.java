@@ -118,7 +118,7 @@ public class NGenericLayout implements InvoiceLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
         writer.writeCharacters(System.getProperty("line.separator"));
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
         // TODO : Add alignment of blocks like address,etc.
 
         VerticalContainer invoicePage = new VerticalContainer(0,0,0);
@@ -388,8 +388,8 @@ public class NGenericLayout implements InvoiceLayout {
 
 
         invoicePage.translate(30,785);
-        invoicePage.build(contentStream,writer);
-        contentStream.close();
+        invoicePage.build(stream,writer);
+        stream.close();
         writer.writeEndElement();
 
     }

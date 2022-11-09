@@ -143,7 +143,7 @@ public class GenericReceiptLayout implements SSDLayout {
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508"); // 3508
         writer.writeCharacters(System.getProperty("line.separator"));
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
         PDFont font = PDType1Font.HELVETICA_BOLD;
         this.fonts = FONTS.get(model.getRandom().nextInt(FONTS.size()));
         VerticalContainer receiptPage = new VerticalContainer(0,0,0);
@@ -574,8 +574,8 @@ public class GenericReceiptLayout implements SSDLayout {
         sixthPart.addElement(foot,true);
         receiptPage.addElement(sixthPart);
         receiptPage.translate(20,785); //830
-        receiptPage.build(contentStream,writer);
-        contentStream.close();
+        receiptPage.build(stream,writer);
+        stream.close();
         writer.writeEndElement();
         if(modeEval) {
             writerEval.writeEndElement();

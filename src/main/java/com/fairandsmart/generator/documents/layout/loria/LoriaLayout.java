@@ -66,13 +66,13 @@ public class LoriaLayout implements InvoiceLayout {
         writer.writeAttribute("pageID", "1");
         writer.writeAttribute("width", "2480");
         writer.writeAttribute("height", "3508");
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         PDFont font = PDType1Font.HELVETICA;
 
-        new SimpleTextBox(font,16,20,20, model.getCompany().getName()).build(contentStream,writer);
+        new SimpleTextBox(font,16,20,20, model.getCompany().getName()).build(stream,writer);
 
-        contentStream.close();
+        stream.close();
 
     }
 }

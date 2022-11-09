@@ -131,7 +131,7 @@ public class InvoiceSSDLayout implements SSDLayout {
         writerEval.writeAttribute("pageID", "1");
         writerEval.writeCharacters(System.getProperty("line.separator"));
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
         VerticalContainer invoicePage = new VerticalContainer(0,0,0);
         CompanyInfoBox companyInfoBox = new CompanyInfoBox(fonts[2], fonts[1], fontSize, model, document);
         ImageBox companyLogo =  companyInfoBox.getLogoBox(42, Color.WHITE);
@@ -518,8 +518,8 @@ public class InvoiceSSDLayout implements SSDLayout {
             invoicePage.addElement(fifthPart);
         }
         invoicePage.translate(30,785);
-        invoicePage.build(contentStream,writer);
-        contentStream.close();
+        invoicePage.build(stream,writer);
+        stream.close();
         writer.writeEndElement();
     }
     private int[] getRandomList(int n){

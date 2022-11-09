@@ -206,7 +206,7 @@ Under `src/main/java/com/fairandsmart/generator`
       │   │   │   ├── ShippingInfoBox.java       # Contains client/buyer shipping name and address
       │   │   │   └── VendorInfoBox.java         # Contains vendor/seller name and address
       │   │   ├── image
-      │   │   │   └── ImageBox.java              # Wraps contentStream drawImage but allows for top left xmin,ymin anchoring
+      │   │   │   └── ImageBox.java              # Wraps stream drawImage but allows for top left xmin,ymin anchoring
       │   │   ├── line
       │   │   │   ├── HorizontalLineBox.java     # Horizontal line
       │   │   │   └── VerticalLineBox.java       # Vertical line

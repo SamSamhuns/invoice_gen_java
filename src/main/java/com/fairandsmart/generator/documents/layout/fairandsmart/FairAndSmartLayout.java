@@ -70,7 +70,7 @@ public class FairAndSmartLayout implements InvoiceLayout {
         float bottomMargin = 0;
 
         PDFont font = PDType1Font.HELVETICA_BOLD;
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         // Page composition :
         // Header
@@ -81,25 +81,25 @@ public class FairAndSmartLayout implements InvoiceLayout {
         //Logo
         String logo = this.getClass().getClassLoader().getResource("invoices/parts/fairandsmart/logo.png").getFile();
         PDImageXObject pdImage = PDImageXObject.createFromFile(logo, document);
-        contentStream.drawImage(pdImage, margin, 715, pdImage.getWidth() / 4, pdImage.getHeight() / 4);
+        stream.drawImage(pdImage, margin, 715, pdImage.getWidth() / 4, pdImage.getHeight() / 4);
 
         //Company address
-        contentStream.beginText();
-        contentStream.setFont(font, 12);
-        contentStream.newLineAtOffset(margin, 700);
-        contentStream.showText("Fair and Smart SAS");
-        contentStream.newLineAtOffset(0, -16);
-        contentStream.showText("11 Rempart St Thiébault");
-        contentStream.newLineAtOffset(0, -16);
-        contentStream.showText("57000 Metz - France");
-        contentStream.endText();
+        stream.beginText();
+        stream.setFont(font, 12);
+        stream.newLineAtOffset(margin, 700);
+        stream.showText("Fair and Smart SAS");
+        stream.newLineAtOffset(0, -16);
+        stream.showText("11 Rempart St Thiébault");
+        stream.newLineAtOffset(0, -16);
+        stream.showText("57000 Metz - France");
+        stream.endText();
 
         //Invoice Number
-        contentStream.beginText();
-        contentStream.setFont(font, 20);
-        contentStream.newLineAtOffset(400, 750);
-        contentStream.showText("INVOICE N°1276551");
-        contentStream.endText();
+        stream.beginText();
+        stream.setFont(font, 20);
+        stream.newLineAtOffset(400, 750);
+        stream.showText("INVOICE N°1276551");
+        stream.endText();
 
         //Invoice content
         //Initialize table
@@ -116,6 +116,6 @@ public class FairAndSmartLayout implements InvoiceLayout {
         t.addListToTable(data, DataTable.HASHEADER);
         dataTable.draw();
 
-        contentStream.close();
+        stream.close();
     }
 }

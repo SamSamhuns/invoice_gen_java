@@ -120,7 +120,7 @@ public class GenericPayslipLayout implements SSDLayout {
             writerEval.writeAttribute("pageID", "1");
             writerEval.writeCharacters(System.getProperty("line.separator"));
         }
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
         this.fonts = FONTS.get(model.getRandom().nextInt(FONTS.size()));
         VerticalContainer payslipPage = new VerticalContainer(0,0,0);
         //payslip parts
@@ -407,8 +407,8 @@ public class GenericPayslipLayout implements SSDLayout {
             }
         }
         payslipPage.translate(30,830);
-        payslipPage.build(contentStream,writer);
-        contentStream.close();
+        payslipPage.build(stream,writer);
+        stream.close();
         writer.writeEndElement();
         if(modeEval) {
             writerEval.writeEndElement();

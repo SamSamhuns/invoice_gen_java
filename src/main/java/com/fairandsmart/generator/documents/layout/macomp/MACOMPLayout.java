@@ -163,13 +163,13 @@ public class MACOMPLayout implements InvoiceLayout {
 
         ///////////////////////////////////      Build Page components now      ////////////////////////////////////
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         if (proba.get("doc_title_top")) {
             SimpleTextBox docTitleBox = new SimpleTextBox(fontB, 15,0,0, docTitle,"title");
             docTitleBox.translate(pageMiddleX-docTitleBox.getBBox().getWidth()/2, pageHeight-topPageMargin);
-            docTitleBox.build(contentStream,writer);
+            docTitleBox.build(stream,writer);
             annot.setTitle(docTitle);
         }
 
@@ -182,22 +182,22 @@ public class MACOMPLayout implements InvoiceLayout {
             logoHeight = logoImg.getHeight() * logoScale;
             posLogoX = pageWidth-logoWidth-rightPageMargin;
             posLogoY = pageHeight-topPageMargin;
-            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
+            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(stream,writer);
         }
         else if (proba.get("barcode_top")) {
             float bW = (float)(barcodeImg.getWidth() / 1.5);
             float bH = (float)(barcodeImg.getHeight() / 2);
-            new ImageBox(barcodeImg, pageWidth-bW-rightPageMargin, pageHeight-topPageMargin, bW, bH, "barcode:"+barcodeNum).build(contentStream,writer);
+            new ImageBox(barcodeImg, pageWidth-bW-rightPageMargin, pageHeight-topPageMargin, bW, bH, "barcode:"+barcodeNum).build(stream,writer);
         }
 
         // Invoice number
-        new SimpleTextBox(fontB, fontSize+2, pageMiddleX, 740, ref.getLabelInvoice()+" : "+ ref.getValueInvoice()).build(contentStream,writer);
+        new SimpleTextBox(fontB, fontSize+2, pageMiddleX, 740, ref.getLabelInvoice()+" : "+ ref.getValueInvoice()).build(stream,writer);
         annot.getInvoice().setInvoiceId(ref.getValueInvoice());
 
         // Vendor/company address
         VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,10,260,lineStrokeColor,model,document,company,annot,proba);
         vendorInfoBox.translate(leftPageMargin, pageHeight-topPageMargin);
-        vendorInfoBox.build(contentStream,writer);
+        vendorInfoBox.build(stream,writer);
 
         // check if billing and shipping addresses should be switched
         float topY = 700, botY = 600;
@@ -210,12 +210,12 @@ public class MACOMPLayout implements InvoiceLayout {
         // Billing Address
         BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,8,9,260,lineStrokeColor,model,document,client,annot,proba);
         billingInfoBox.translate(billX, billY);
-        billingInfoBox.build(contentStream,writer);
+        billingInfoBox.build(stream,writer);
 
         // Shipping Address
         ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,8,9,260,lineStrokeColor,model,document,client,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
-        shippingInfoBox.build(contentStream,writer);
+        shippingInfoBox.build(stream,writer);
 
         // Payment Info and Address
         if (proba.get("payment_address")) {
@@ -224,7 +224,7 @@ public class MACOMPLayout implements InvoiceLayout {
 
             PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,8,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
             paymentBox.translate(pAX, pAY);
-            paymentBox.build(contentStream,writer);
+            paymentBox.build(stream,writer);
         }
 
         // table top invoice info
@@ -276,7 +276,7 @@ public class MACOMPLayout implements InvoiceLayout {
             invoiceInfoCont.addElement(infoRow4);
             invoiceInfoCont.addElement(new BorderBox(white,white, 0,0, 0, 0, 2));
         }
-        invoiceInfoCont.build(contentStream,writer);
+        invoiceInfoCont.build(stream,writer);
 
         ////////////////////////////////////      Building Table      ////////////////////////////////////
 
@@ -308,7 +308,7 @@ public class MACOMPLayout implements InvoiceLayout {
         float tableTopPosY = invoiceInfoCont.getBBox().getPosY() - invoiceInfoCont.getBBox().getHeight() - 10;
 
         SimpleTextBox tableTopBox = new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB), 9, tableTopPosX, tableTopPosY, tableTopText);
-        tableTopBox.build(contentStream,writer);
+        tableTopBox.build(stream,writer);
 
         // table top horizontal line, will be built after verticalTableItems
         float x1 = leftPageMargin; float y1 = tableTopBox.getBBox().getPosY() - tableTopBox.getBBox().getHeight() - 2;
@@ -335,7 +335,7 @@ public class MACOMPLayout implements InvoiceLayout {
 
         new BorderBox(hdrBgColor, hdrBgColor, 0,
                       leftPageMargin, tableTopPosY - tableTopBox.getBBox().getHeight() - 2 - row1.getBBox().getHeight(),
-                      row1.getBBox().getWidth(), row1.getBBox().getHeight()).build(contentStream,writer);
+                      row1.getBBox().getWidth(), row1.getBBox().getHeight()).build(stream,writer);
 
         // table item list body
         String quantity; String snNum;
@@ -386,7 +386,7 @@ public class MACOMPLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithDiscount()+amtSuffix;
                         randomItem.setSubTotal(cellText); break;
                     case "Total":
-                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
+                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
                 cellBgColor = proba.get("alternate_table_items_bg_color") && w % 2 == 0 ? lgray: cellBgColor;
@@ -485,25 +485,25 @@ public class MACOMPLayout implements InvoiceLayout {
             verticalTableItems.addElement(new HorizontalLineBox(0, 0, pageWidth-rightPageMargin, 0, lineStrokeColor));
             annot.getTotal().setCurrency(cur);
         }
-        verticalTableItems.build(contentStream,writer);
-        tableTopInfoLine.build(contentStream,writer); // must be built after verticalTableItems
+        verticalTableItems.build(stream,writer);
+        tableTopInfoLine.build(stream,writer); // must be built after verticalTableItems
 
         // Add vertical borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = leftPageMargin;
             float yPos = tableTopPosY - tableTopBox.getBBox().getHeight() - 2;
-            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
                 xPos += configRow[i];
             }
-            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
         }
 
         ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
-        new HorizontalLineBox(leftPageMargin,100,pageWidth-rightPageMargin,100).build(contentStream,writer);
+        new HorizontalLineBox(leftPageMargin,100,pageWidth-rightPageMargin,100).build(stream,writer);
 
         // Add Signature at bottom
         if (proba.get("signature_bottom")) {
@@ -518,12 +518,12 @@ public class MACOMPLayout implements InvoiceLayout {
                 sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
             }
             sigTextBox.translate(sigTX, sigTY);
-            sigTextBox.build(contentStream,writer);
+            sigTextBox.build(stream,writer);
 
             new HorizontalLineBox(
                     sigTX - 10, sigTY + 5,
                     sigTX + sigTextBox.getBBox().getWidth() + 5, sigTY + 5,
-                    lineStrokeColor).build(contentStream,writer);
+                    lineStrokeColor).build(stream,writer);
 
             String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
             PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
@@ -536,7 +536,7 @@ public class MACOMPLayout implements InvoiceLayout {
             float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
             float sigIY = sigTY + sigH + 10;
 
-            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(stream,writer);
         }
 
         // Logo Bottom if logo is not at top
@@ -548,7 +548,7 @@ public class MACOMPLayout implements InvoiceLayout {
             logoHeight = logoImg.getHeight() * logoScale;
             posLogoX = pageWidth-logoWidth-rightPageMargin;
             posLogoY = bottomPageMargin+logoHeight;
-            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
+            new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(stream,writer);
         }
 
         // Add company stamp watermark
@@ -567,14 +567,14 @@ public class MACOMPLayout implements InvoiceLayout {
             }
             StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
             stampBox.translate(xPosStamp,yPosStamp);
-            stampBox.build(contentStream,writer);
+            stampBox.build(stream,writer);
         }
         // if no signature anåd no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {
             String noStampMsg = "*This document is computer generated and does not require a signature or \nthe Company's stamp in order to be considered valid";
             SimpleTextBox noStampMsgBox = new SimpleTextBox(fontN,7,0,0, noStampMsg, "footnote");
             noStampMsgBox.translate(pageMiddleX-noStampMsgBox.getBBox().getWidth()/2, 120);
-            noStampMsgBox.build(contentStream,writer);
+            noStampMsgBox.build(stream,writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
@@ -595,10 +595,10 @@ public class MACOMPLayout implements InvoiceLayout {
             float fW = footCompanyBox.getBBox().getWidth();
             footCompanyBox.alignElements(HAlign.CENTER, fW);
             footCompanyBox.translate(pageMiddleX-fW/2,55);
-            footCompanyBox.build(contentStream,writer);
+            footCompanyBox.build(stream,writer);
         }
 
-        contentStream.close();
+        stream.close();
         writer.writeEndElement();
     }
 }

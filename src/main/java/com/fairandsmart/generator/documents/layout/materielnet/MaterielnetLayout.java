@@ -83,7 +83,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         PDFont font = PDType1Font.HELVETICA;
         PDFont fontB = PDType1Font.HELVETICA_BOLD;
         PDFont fontI = PDType1Font.HELVETICA_OBLIQUE;
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
         Address address = model.getCompany().getAddress();
 
 
@@ -109,7 +109,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         verticalHeaderContainer.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2));
         verticalHeaderContainer.addElement(new SimpleTextBox(font, 9,0,0,model.getCompany().getWebsite()));
 
-        verticalHeaderContainer.build(contentStream,writer);
+        verticalHeaderContainer.build(stream,writer);
 
         VerticalContainer numContainer = new VerticalContainer(274, page.getMediaBox().getHeight()-45, 250 );
 
@@ -127,7 +127,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         numContainer.addElement(new BorderBox(Color.white,Color.WHITE,0,0,0,0,2));
         numContainer.addElement(dateFact);
 
-        numContainer.build(contentStream,writer);
+        numContainer.build(stream,writer);
 
         VerticalContainer numComContainer = new VerticalContainer(22, page.getMediaBox().getHeight()-133, 250 );
 
@@ -138,7 +138,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         numComContainer.addElement(numCom);
         numComContainer.addElement(new SimpleTextBox(fontI,8,0,0,"Delivery by Chronopost"));
 
-        numComContainer.build(contentStream,writer);
+        numComContainer.build(stream,writer);
 
         VerticalContainer billingContainer = new VerticalContainer(311,page.getMediaBox().getHeight()-104,250);
         billingContainer.addElement(new SimpleTextBox(fontB,9,0,0,model.getClient().getBillingHead()));
@@ -147,7 +147,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         billingContainer.addElement(new SimpleTextBox(font,9,0,0,model.getClient().getBillingAddress().getZip()+" "+model.getClient().getBillingAddress().getCity(),"BA"));
         billingContainer.addElement(new SimpleTextBox(font,9,0,0,model.getClient().getBillingAddress().getCountry(),"BA"));
 
-        billingContainer.build(contentStream,writer);
+        billingContainer.build(stream,writer);
 
         VerticalContainer shippingContainer = new VerticalContainer(453,page.getMediaBox().getHeight()-104,250);
         shippingContainer.addElement(new SimpleTextBox(fontB,9,0,0,model.getClient().getShippingHead()));
@@ -156,7 +156,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         shippingContainer.addElement(new SimpleTextBox(font,9,0,0,model.getClient().getShippingAddress().getZip()+" "+model.getClient().getShippingAddress().getCity(),"SHA"));
         shippingContainer.addElement(new SimpleTextBox(font,9,0,0, "06"+(int)(1000000+(Math.random()*(99999999 - 1000000)))));
 
-        shippingContainer.build(contentStream,writer);
+        shippingContainer.build(stream,writer);
 
         float[] configRow = {48f, 283f, 121f, 121f};
         TableRowBox firstLine = new TableRowBox(configRow, 0, 0);
@@ -183,14 +183,14 @@ public class MaterielnetLayout implements InvoiceLayout {
             verticalInvoiceItems.addElement(productLine);
         }
 
-        verticalInvoiceItems.build(contentStream,writer);
+        verticalInvoiceItems.build(stream,writer);
 
         HorizontalContainer fdp = new HorizontalContainer(388,297);
         fdp.addElement(new SimpleTextBox(fontB,8,0,0,"Shipping Fees : "));
         fdp.addElement(new BorderBox(Color.WHITE,Color.WHITE,1,0,0,80,0));
         fdp.addElement(new SimpleTextBox(font,8,0,0,"0,00 "));
 
-        fdp.build(contentStream,writer);
+        fdp.build(stream,writer);
 
         VerticalContainer totalContainer = new VerticalContainer(416,269,250);
 
@@ -216,9 +216,9 @@ public class MaterielnetLayout implements InvoiceLayout {
         totalContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,4));
         totalContainer.addElement(totalTTC);
 
-        totalContainer.build(contentStream,writer);
+        totalContainer.build(stream,writer);
 
-        new SimpleTextBox(fontB,9,209,204,"Terms and conditions of payment").build(contentStream,writer);
+        new SimpleTextBox(fontB,9,209,204,"Terms and conditions of payment").build(stream,writer);
 
         VerticalContainer paiementLabel = new VerticalContainer(22,190,250);
         paiementLabel.addElement(new SimpleTextBox(font, 9,0,0,model.getPaymentInfo().getLabelPaymentType()+" : "));
@@ -228,8 +228,8 @@ public class MaterielnetLayout implements InvoiceLayout {
         paiementValeur.addElement(new SimpleTextBox(fontI, 9,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
         paiementValeur.addElement(new SimpleTextBox(fontI, 9,0,0,"Comptant"));
 
-        paiementLabel.build(contentStream,writer);
-        paiementValeur.build(contentStream,writer);
+        paiementLabel.build(stream,writer);
+        paiementValeur.build(stream,writer);
 
         String footer = this.getClass().getClassLoader().getResource("invoices/parts/materielnet/footer.png").getFile();
         PDImageXObject logoFooter = PDImageXObject.createFromFile(footer, document);
@@ -237,7 +237,7 @@ public class MaterielnetLayout implements InvoiceLayout {
         float tailleFooter = 530;
         float posFooterX = 22;
         float posFooterY = 85;
-        contentStream.drawImage(logoFooter, posFooterX, posFooterY, tailleFooter, tailleFooter/ratioFooter);
+        stream.drawImage(logoFooter, posFooterX, posFooterY, tailleFooter, tailleFooter/ratioFooter);
 
         HorizontalContainer infoEntreprise = new HorizontalContainer(0,0);
         infoEntreprise.addElement(new SimpleTextBox(font,7,0,0, model.getCompany().getName()+" - "));
@@ -266,10 +266,10 @@ public class MaterielnetLayout implements InvoiceLayout {
         infoEntreprise2.translate(millieuPageX-infoEntreprise2.getBBox().getWidth()/2,72);
         infoEntreprise3.translate(millieuPageX-infoEntreprise3.getBBox().getWidth()/2,62);
 
-        infoEntreprise.build(contentStream,writer);
-        infoEntreprise2.build(contentStream,writer);
-        infoEntreprise3.build(contentStream,writer);
+        infoEntreprise.build(stream,writer);
+        infoEntreprise2.build(stream,writer);
+        infoEntreprise3.build(stream,writer);
 
-        contentStream.close();
+        stream.close();
     }
 }

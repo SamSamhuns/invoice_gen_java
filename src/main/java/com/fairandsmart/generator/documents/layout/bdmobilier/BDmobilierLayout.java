@@ -151,7 +151,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
         /*//////////////////   Build Page components now   //////////////////*/
 
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        PDPageContentStream stream = new PDPageContentStream(document, page);
 
         /// Draw top left logo
         float maxLogoWidth = 200;
@@ -161,14 +161,14 @@ public class BDmobilierLayout implements InvoiceLayout {
         float logoHeight = logoImg.getHeight() * logoScale;
         float posLogoX = leftPageMargin;
         float posLogoY = pageHeight - topPageMargin;
-        new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(contentStream,writer);
+        new ImageBox(logoImg, posLogoX, posLogoY, logoWidth, logoHeight, "logo").build(stream,writer);
 
         String docTitle = (rnd.nextBoolean() ? "Tax Invoice": "Invoice");
         // Top center document title
         if (proba.get("doc_title_top_center")) {
             SimpleTextBox docTitleBox = new SimpleTextBox(fontB,16,0,0,docTitle,"SN");
             docTitleBox.translate(pageMiddleX-(docTitleBox.getBBox().getWidth()/2), pageHeight-80);
-            docTitleBox.build(contentStream,writer);
+            docTitleBox.build(stream,writer);
             annot.setTitle(docTitle);
         }
         // Top right company header info
@@ -205,7 +205,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         headerCont.addElement(invNumCont);
 
         headerCont.translate(pageWidth - headerCont.getBBox().getWidth() - rightPageMargin, 0);  // align top right header to fit properly
-        headerCont.build(contentStream,writer);
+        headerCont.build(stream,writer);
 
         // check if billing and shipping addresses should be switched
         float leftAddrX = 120 + rnd.nextInt(15);
@@ -219,12 +219,12 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Billing Address
         BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
         billingInfoBox.translate(billX, billY);
-        billingInfoBox.build(contentStream,writer);
+        billingInfoBox.build(stream,writer);
 
         // Shipping Address
         ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
-        shippingInfoBox.build(contentStream,writer);
+        shippingInfoBox.build(stream,writer);
 
         // Left side info
         int leftFSize = 7;
@@ -263,7 +263,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             infoOrder.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,9));
             annot.getInvoice().setPaymentTerm(payment.getValuePaymentTerm());
         }
-        infoOrder.build(contentStream,writer);
+        infoOrder.build(stream,writer);
 
         // table top horizontal line, will be built after verticalTableItems
         float ttx1 = 85; float tty1 = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 15;
@@ -362,7 +362,7 @@ public class BDmobilierLayout implements InvoiceLayout {
                         cellText = randomProduct.getFmtTotalPriceWithDiscount()+amtSuffix;
                         randomItem.setSubTotal(cellText); break;
                     case "Total":
-                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDDiscount()+amtSuffix;
+                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDiscount()+amtSuffix;
                         randomItem.setTotal(cellText); break;
                 }
                 SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
@@ -373,25 +373,25 @@ public class BDmobilierLayout implements InvoiceLayout {
             verticalTableItems.addElement(productLine);
         }
         verticalTableItems.addElement(new BorderBox(Color.WHITE, cellBgColor, 0, 0, 0, 0, 5));
-        verticalTableItems.build(contentStream,writer);
-        tableTopInfoLine.build(contentStream,writer);
+        verticalTableItems.build(stream,writer);
+        tableTopInfoLine.build(stream,writer);
 
         float tableItemsHeight = verticalTableItems.getBBox().getHeight();
         // Add borders to table cell items if table cell is CENTER aligned horizontally
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = ttx1;
             float yPos = tty1;
-            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
                 xPos += configRow[i];
             }
-            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(contentStream,writer);
+            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
         }
 
         float tableBottomY = verticalTableItems.getBBox().getPosY() - tableItemsHeight;
-        new HorizontalLineBox(ttx1, tableBottomY, ttx2, tableBottomY, lineStrokeColor).build(contentStream,writer);
+        new HorizontalLineBox(ttx1, tableBottomY, ttx2, tableBottomY, lineStrokeColor).build(stream,writer);
 
         // Table footer total labels and values
         VerticalContainer footerInfoCont = new VerticalContainer(pageWidth-rightPageMargin-175, tableBottomY-5, 600);
@@ -418,7 +418,7 @@ public class BDmobilierLayout implements InvoiceLayout {
                 case "Total": annot.getTotal().setTotalPrice(hdrValue); break;
             }
         }
-        footerInfoCont.build(contentStream,writer);
+        footerInfoCont.build(stream,writer);
         ////////////////////////////////////      Finished Table      ////////////////////////////////////
 
         // Payment Info and Address
@@ -429,7 +429,7 @@ public class BDmobilierLayout implements InvoiceLayout {
 
             PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
             paymentBox.translate(pAX, pAY);
-            paymentBox.build(contentStream,writer);
+            paymentBox.build(stream,writer);
         }
 
         // Add Signature at bottom
@@ -446,12 +446,12 @@ public class BDmobilierLayout implements InvoiceLayout {
                 sigTX = pageWidth - sigTextBox.getBBox().getWidth() - 50;
             }
             sigTextBox.translate(sigTX, sigTY);
-            sigTextBox.build(contentStream,writer);
+            sigTextBox.build(stream,writer);
 
             new HorizontalLineBox(
                     sigTX - 10, sigTY + 5,
                     sigTX + sigTextBox.getBBox().getWidth() + 10, sigTY + 5
-                    ).build(contentStream,writer);
+                    ).build(stream,writer);
 
             String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
             PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
@@ -464,7 +464,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
             float sigIY = sigTY + sigH + 10;
 
-            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(contentStream,writer);
+            new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(stream,writer);
         }
 
         // Add company stamp watermark, 40% prob
@@ -483,7 +483,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             }
             StampBox stampBox = new StampBox(resDim,resDim,alpha,model,document,company,proba);
             stampBox.translate(xPosStamp,yPosStamp);
-            stampBox.build(contentStream,writer);
+            stampBox.build(stream,writer);
         }
         // if no signature and no stamp, then add a footer note
         else if (!proba.get("signature_bottom")) {
@@ -491,7 +491,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             SimpleTextBox noStampSignMsgBox = new SimpleTextBox(fontN,8,0,80, noStampSignMsg, "footnote");
             // align the text to the center
             noStampSignMsgBox.getBBox().setPosX(pageMiddleX - noStampSignMsgBox.getBBox().getWidth()/2);
-            noStampSignMsgBox.build(contentStream,writer);
+            noStampSignMsgBox.build(stream,writer);
         }
 
         // Add bg logo watermark or confidential stamp, but not both at once
@@ -511,10 +511,10 @@ public class BDmobilierLayout implements InvoiceLayout {
             float fW = footCompanyBox.getBBox().getWidth();
             footCompanyBox.alignElements(HAlign.CENTER, fW);
             footCompanyBox.translate(pageMiddleX-fW/2,60);
-            footCompanyBox.build(contentStream,writer);
+            footCompanyBox.build(stream,writer);
         }
 
-        contentStream.close();
+        stream.close();
         writer.writeEndElement();
     }
 }
