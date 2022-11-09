@@ -272,7 +272,7 @@ public class Product {
         return priceWithTaxAndDiscount * quantity;
     }
 
-    public String getFmtTotalPriceWithTaxAndDDiscount() {
+    public String getFmtTotalPriceWithTaxAndDiscount() {
         return String.format("%.2f", this.getTotalPriceWithTaxAndDiscount());
     }
 

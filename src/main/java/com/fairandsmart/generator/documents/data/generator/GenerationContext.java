@@ -73,7 +73,7 @@ public class GenerationContext {
     }
     {
         // locales.add("fr");
-        // locales.add("en");
+        locales.add("en");
         locales.add("en-MS");
     }
     {
