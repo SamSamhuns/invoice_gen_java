@@ -110,7 +110,7 @@ public class SignatureBox extends ElementBox {
         float sigW = sigImg.getWidth() * sigScale;
         float sigH = sigImg.getHeight() * sigScale;
         // align signature to center of sigTextBox bbox
-        float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
+        float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;
         float sigIY = sigTextY + 10;
 
         ImageBox sigImgBox = new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "Signature Image");

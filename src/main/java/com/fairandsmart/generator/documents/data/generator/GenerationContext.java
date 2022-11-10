@@ -170,7 +170,7 @@ public class GenerationContext {
     }
 
     public void setConfigMaps(List<Map<String, Object>> configMaps) {
-        this.configMaps = configMaps;
+        GenerationContext.configMaps = configMaps;
     }
 
     public int getMaxProductNum() {
@@ -178,7 +178,7 @@ public class GenerationContext {
     }
 
     public void setMaxProductNum(int maxProductNum) {
-        this.maxProductNum = maxProductNum;
+        GenerationContext.maxProductNum = maxProductNum;
     }
 
     @Override

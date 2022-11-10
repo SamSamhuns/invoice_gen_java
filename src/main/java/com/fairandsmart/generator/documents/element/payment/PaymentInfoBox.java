@@ -97,7 +97,7 @@ public class PaymentInfoBox extends ElementBox {
         PaymentInfo payment = model.getPaymentInfo();
         annot.setPaymentto(new InvoiceAnnotModel.Paymentto());
 
-        SimpleTextBox paymentHeader = new SimpleTextBox(fontB,fontSizeBig,0,0, payment.getAddressHeader(), "PH");;
+        SimpleTextBox paymentHeader = new SimpleTextBox(fontB,fontSizeBig,0,0, payment.getAddressHeader(), "PH");
         SimpleTextBox bankNameLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelBankName()+": ", "PBN");
         SimpleTextBox bankNameValue = new SimpleTextBox(fontN,fontSizeSmall,0,0, payment.getValueBankName(), "PBN");
         SimpleTextBox accountNameLabel = new SimpleTextBox(fontNB,fontSizeSmall,0,0, payment.getLabelAccountName()+": ", "PAName");

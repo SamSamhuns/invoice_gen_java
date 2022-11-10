@@ -131,7 +131,7 @@ public class ProductTableBox extends ElementBox {
         */
     }
 
-    private int candSize;
+    private final int candSize;
     private final PDFont fontN;
     private final PDFont fontB;
     private final PDFont fontI;
@@ -143,13 +143,13 @@ public class ProductTableBox extends ElementBox {
     private final float tableTopPosY;
     private final float tableWidth;
 
-    private InvoiceModel model;
+    private final InvoiceModel model;
     private final InvoiceAnnotModel annot;
     private final Map<String, Boolean> proba;
 
     private VerticalContainer vContainer;
-    private List<HorizontalLineBox> hLines = new ArrayList<HorizontalLineBox>();
-    private List<VerticalLineBox> vLines = new ArrayList<VerticalLineBox>();
+    private final List<HorizontalLineBox> hLines = new ArrayList<HorizontalLineBox>();
+    private final List<VerticalLineBox> vLines = new ArrayList<VerticalLineBox>();
 
     private String tableTopInfo;
     private List<String> tableHeaders;
@@ -246,7 +246,7 @@ public class ProductTableBox extends ElementBox {
                            float tableTopPosX, float tableTopPosY, float tableWidth,
                            InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         // candTableSize refers to the number of tableHeaders to consider, larger size would mean more proba of longer headers
-        this.candSize = (int) Math.min(candTableSize, candidateTableHeaders.size());
+        this.candSize = Math.min(candTableSize, candidateTableHeaders.size());
 
         this.fontN = fontN;
         this.fontB = fontB;
@@ -307,7 +307,7 @@ public class ProductTableBox extends ElementBox {
         float weightSum = 0;
         for (String tableHeader: tableHeaders) {
             weightSum += itemMap.get(tableHeader).getWidthWeight();
-        };
+        }
         // get base column width based on contents of tableHeaders & total weightSum
         float baseColWidth = (float) Math.floor(tableWidth / weightSum);
 

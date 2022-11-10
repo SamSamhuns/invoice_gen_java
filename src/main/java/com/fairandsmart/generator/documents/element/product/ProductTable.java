@@ -108,10 +108,10 @@ public class ProductTable {
         */
     }
 
-    private String tableTopInfo;
-    private List<String> tableHeaders;
-    private float[] configRow;
-    private Map<String, ColItem> itemMap;
+    private final String tableTopInfo;
+    private final List<String> tableHeaders;
+    private final float[] configRow;
+    private final Map<String, ColItem> itemMap;
 
     private final Random rnd = new Random();
     private static final Collection<String> numericalHdrs = Arrays.asList("ItemRate", "Disc", "Tax", "SubTotal", "Total");
@@ -193,7 +193,7 @@ public class ProductTable {
 
     public ProductTable(ProductContainer pc, String amtSuffix, String lang, float tableWidth, int candTableSize) throws Exception {
         // candTableSize refers to the number of tableHeaders to consider, larger size would mean more proba of longer headers
-        int candSize = (int) Math.min(candTableSize, candidateTableHeaders.size());
+        int candSize = Math.min(candTableSize, candidateTableHeaders.size());
         List<String> tableHeaders = candidateTableHeaders.get(rnd.nextInt(candSize));
 
         // randomly select tableTopInfo based on lang
@@ -219,7 +219,7 @@ public class ProductTable {
         float weightSum = 0;
         for (String tableHeader: tableHeaders) {
             weightSum += itemColMap.get(tableHeader).getWidthWeight();
-        };
+        }
         // get base column width based on contents of tableHeaders & total weightSum
         float baseColWidth = (float) Math.floor(tableWidth / weightSum);
 

@@ -53,6 +53,7 @@ import java.awt.Color;
 import java.net.URI;
 import java.io.File;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -196,7 +197,7 @@ public class HelperCommon extends Helper {
 
     /* When rendering non ANSI text, the useANSIEncoding must be set to false when using SimpleTextBox */
     public static PDCustomFonts getNonANSIRandomPDFontFamily(PDDocument doc, Object classObj) throws Exception {
-        final List<List<String>> ttfFontNBIList = Arrays.asList(
+        final List<List<String>> ttfFontNBIList = Collections.singletonList(
                 Arrays.asList("A_Nefel_Sereke.ttf", "A_Nefel_Sereke_Bold.ttf", "A_Nefel_Sereke.ttf")
         );
 

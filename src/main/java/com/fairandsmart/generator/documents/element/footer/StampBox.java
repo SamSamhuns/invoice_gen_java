@@ -56,7 +56,7 @@ public class StampBox extends ElementBox {
 
     private float stampWidth;
     private float stampHeight;
-    private float alpha;
+    private final float alpha;
     private double rotAngle;
 
     private final InvoiceModel model;

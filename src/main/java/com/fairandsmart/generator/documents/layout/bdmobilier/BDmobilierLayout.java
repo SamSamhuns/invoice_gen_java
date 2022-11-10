@@ -460,7 +460,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             float sigW = sigImg.getWidth() * sigScale;
             float sigH = sigImg.getHeight() * sigScale;
             // align signature to center of sigTextBox bbox
-            float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;;
+            float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;
             float sigIY = sigTY + sigH + 10;
 
             new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "signature").build(stream,writer);
