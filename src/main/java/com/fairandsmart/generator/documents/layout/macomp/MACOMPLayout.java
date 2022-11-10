@@ -41,7 +41,6 @@ import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.InvoiceNumber;
 import com.fairandsmart.generator.documents.data.model.Client;
-import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
@@ -49,10 +48,8 @@ import com.fairandsmart.generator.documents.element.HAlign;
 import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
-import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.product.ProductTableBox;
-import com.fairandsmart.generator.documents.element.product.ProductBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
@@ -78,8 +75,6 @@ import java.awt.Color;
 import java.util.Random;
 import java.util.Map;
 import java.util.List;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 

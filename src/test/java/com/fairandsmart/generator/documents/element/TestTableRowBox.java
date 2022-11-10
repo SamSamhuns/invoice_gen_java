@@ -33,7 +33,6 @@ package com.fairandsmart.generator.documents.element;
  * #L%
  */
 
-import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.InvoiceGenerator;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.generator.GenerationContext;

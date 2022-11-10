@@ -48,7 +48,6 @@ import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 
 import com.fairandsmart.generator.documents.element.HAlign;
-import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;

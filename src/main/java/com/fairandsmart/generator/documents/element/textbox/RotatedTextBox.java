@@ -36,19 +36,12 @@ package com.fairandsmart.generator.documents.element.textbox;
 import com.fairandsmart.generator.documents.element.BoundingBox;
 import com.fairandsmart.generator.documents.common.VerifCharEncoding;
 import com.fairandsmart.generator.documents.element.ElementBox;
-import com.fairandsmart.generator.documents.element.HAlign;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.util.Matrix;
 
-import org.davidmoten.text.utils.WordWrap;
-
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class RotatedTextBox extends ElementBox {
