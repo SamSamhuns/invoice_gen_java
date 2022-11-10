@@ -45,14 +45,24 @@ public class HorizontalLineBox extends ElementBox {
 
     private final float targetX;
     private final float targetY;
+    private final float lineWidth;
     private final BoundingBox box;
     private Color strokeColor;
 
     public HorizontalLineBox(float posX, float posY, float targetX, float targetY) {
-        this(posX, posY, targetX, targetY, Color.BLACK);
+        this(posX, posY, targetX, targetY,        1f, Color.BLACK);
     }
 
     public HorizontalLineBox(float posX, float posY, float targetX, float targetY, Color strokeColor) {
+        this(posX, posY, targetX, targetY,        1f, strokeColor);
+    }
+
+    public HorizontalLineBox(float posX, float posY, float targetX, float targetY, float lineWidth) {
+        this(posX, posY, targetX, targetY, lineWidth, Color.BLACK);
+    }
+
+    public HorizontalLineBox(float posX, float posY, float targetX, float targetY, float lineWidth, Color strokeColor) {
+        this.lineWidth = lineWidth;
         this.targetX = targetX;
         this.targetY = targetY;
         this.strokeColor = strokeColor;
@@ -85,6 +95,7 @@ public class HorizontalLineBox extends ElementBox {
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
+        stream.setLineWidth(lineWidth);
         stream.moveTo(this.getBBox().getPosX(), this.getBBox().getPosY());
         stream.lineTo(targetX, this.getBBox().getPosY());
         stream.closePath();
