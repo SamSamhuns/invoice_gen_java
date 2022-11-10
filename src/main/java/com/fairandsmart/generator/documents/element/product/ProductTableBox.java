@@ -348,6 +348,8 @@ public class ProductTableBox extends ElementBox {
         tableTopText = (hdrBgColor == white) ? "" : tableTopText;
 
         vContainer.addElement(new SimpleTextBox(((rnd.nextInt(100) < 40) ? fontN : fontB),9,0,0, tableTopText));
+        vContainer.addElement(new BorderBox(white, white, 0,0,0,0,1));
+
         float tableTopTextHeight = vContainer.getBBox().getHeight();
 
         // table top horizontal line
@@ -362,7 +364,7 @@ public class ProductTableBox extends ElementBox {
             if (proba.get("currency_in_table_headers") && !proba.get("currency_in_table_items") && numericalHdrs.contains(tableHeader)) {
                 tableHdrLabel += " ("+cur+")";
             }
-            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), false);
+            row1.addElement(new SimpleTextBox(fontNB,fontSizeBig,0,0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), false);
         }
         row1.setBackgroundColor(hdrBgColor);
 
@@ -424,7 +426,7 @@ public class ProductTableBox extends ElementBox {
                         randomItem.setTotal(cellText); break;
                 }
                 cellBgColor = proba.get("alternate_table_items_bg_color") && w % 2 == 0 ? lgray: cellBgColor;
-                SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
+                SimpleTextBox rowBox = new SimpleTextBox(cellFont, fontSizeSmall, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
                 productLine.addElement(rowBox, false);
             }
             annot.getItems().add(randomItem);
@@ -450,8 +452,8 @@ public class ProductTableBox extends ElementBox {
                 String tableHeader = tableHeaders.get(i);
                 String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
                 String hdrValue = itemMap.get(tableHeader).getValueFooter();
-                footerInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), HAlign.RIGHT, tableHeader+"FooterLabel"), false);
-                footerInvoice.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.RIGHT, tableHeader+"FooterValue"), false);
+                footerInvoice.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), HAlign.RIGHT, tableHeader+"FooterLabel"), false);
+                footerInvoice.addElement(new SimpleTextBox(fontN ,fontSizeSmall,0,0, (upperCap ? hdrValue.toUpperCase() : hdrValue), HAlign.RIGHT, tableHeader+"FooterValue"), false);
                 vContainer.addElement(footerInvoice);
 
                 switch (tableHeader) {
@@ -465,13 +467,12 @@ public class ProductTableBox extends ElementBox {
                 }
             }
         }
-        else {
-            // Table Footer Single Row
+        else if (proba.get("table_footer_single_row"))  {
             // Footer Labels for final total amount, tax and discount
             TableRowBox titleTotalInvoice = new TableRowBox(configRow, 0, 0);
             for (String tableHeader: tableHeaders) {
                 String hdrLabel = itemMap.get(tableHeader).getLabelFooter();
-                titleTotalInvoice.addElement(new SimpleTextBox(fontNB, 8, 0, 0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign, tableHeader+"FooterLabel"), false);
+                titleTotalInvoice.addElement(new SimpleTextBox(fontNB,fontSizeSmall,0,0, (upperCap ? hdrLabel.toUpperCase() : hdrLabel), tableHdrAlign, tableHeader+"FooterLabel"), false);
             }
             vContainer.addElement(titleTotalInvoice);
 
@@ -484,7 +485,7 @@ public class ProductTableBox extends ElementBox {
             TableRowBox totalInvoice1 = new TableRowBox(configRow, 0, 0);
             for (String tableHeader: tableHeaders) {
                 String hdrValue = itemMap.get(tableHeader).getValueFooter();
-                totalInvoice1.addElement(new SimpleTextBox(fontN, 8, 0, 0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), false);
+                totalInvoice1.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, (upperCap ? hdrValue.toUpperCase() : hdrValue), tableHdrAlign, tableHeader+"FooterValue"), false);
                 switch (tableHeader) {
                     case "Tax": annot.getTotal().setTaxPrice(hdrValue); break;
                     case "TaxRate": annot.getTotal().setTaxRate(hdrValue); break;
@@ -514,7 +515,7 @@ public class ProductTableBox extends ElementBox {
                                                      company.getAddress().getZip(),
                                                      company.getAddress().getCity(),
                                                      company.getAddress().getCountry());
-            SimpleTextBox addressFooter = new SimpleTextBox(fontN, 10, 0, 0, addressFooterText);
+            SimpleTextBox addressFooter = new SimpleTextBox(fontN, fontSizeBig, 0, 0, addressFooterText);
             addressFooter.setWidth(500);
             vContainer.addElement(addressFooter);
             vContainer.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
@@ -534,7 +535,7 @@ public class ProductTableBox extends ElementBox {
             totalInWordsText = "Total in Words: " + totalInWordsText+" "+cur;
             totalInWordsText = (rnd.nextInt(100) < 50) ? totalInWordsText.toUpperCase() : totalInWordsText;
 
-            SimpleTextBox totalInWordsFooter = new SimpleTextBox(fontN, 10, 0, 0, totalInWordsText);
+            SimpleTextBox totalInWordsFooter = new SimpleTextBox(fontN, fontSizeBig+1, 0, 0, totalInWordsText);
             totalInWordsFooter.setWidth(500);
             vContainer.addElement(totalInWordsFooter);
             vContainer.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));

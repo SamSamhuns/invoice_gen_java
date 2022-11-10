@@ -278,7 +278,7 @@ public class AmazonLayout implements InvoiceLayout {
         float tableTopPosY = billingInfoBox.getBBox().getPosY() - billingInfoBox.getBBox().getHeight() - 15;
         float tableWidth = pageWidth-rightPageMargin-leftPageMargin;
         ProductTableBox productTableBox = new ProductTableBox(
-                fontN, fontB, fontI, 8, 9, 600, lineStrokeColor, tableTopPosX, tableTopPosY, tableWidth, model, annot, proba);
+                fontN, fontB, fontI, 8, 8, 600, lineStrokeColor, tableTopPosX, tableTopPosY, tableWidth, model, annot, proba);
         productTableBox.build(stream,writer);
 
         // Payment Info and Address
