@@ -54,13 +54,13 @@ import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 
 import com.mifmif.common.regex.Generex;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.List;
 import java.util.Map;
@@ -144,16 +144,12 @@ public class ProductTableBox extends ElementBox {
     private final float tableWidth;
 
     private InvoiceModel model;
-    private PDDocument document;
-
-    private final Company company;
-    private final ProductContainer pc;
     private final InvoiceAnnotModel annot;
-    private final XMLStreamWriter writer;
-    private final PDPageContentStream stream;
     private final Map<String, Boolean> proba;
 
     private VerticalContainer vContainer;
+    private List<HorizontalLineBox> hLines = new ArrayList<HorizontalLineBox>();
+    private List<VerticalLineBox> vLines = new ArrayList<VerticalLineBox>();
 
     private String tableTopInfo;
     private List<String> tableHeaders;
@@ -237,14 +233,10 @@ public class ProductTableBox extends ElementBox {
                            float fontSizeSmall, float fontSizeBig,
                            float width, Color lineStrokeColor,
                            float tableTopPosX, float tableTopPosY, float tableWidth,
-                           InvoiceModel model, PDDocument document,
-                           XMLStreamWriter writer, PDPageContentStream stream,
-                           Company company, ProductContainer pc,
-                           InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+                           InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         // All tableHeaders are considered
         this(candidateTableHeaders.size(), fontN, fontB, fontI, fontSizeSmall, fontSizeBig,
-             width, lineStrokeColor, tableTopPosX, tableTopPosY, tableWidth,
-             model, document, writer, stream, company, pc, annot, proba);
+             width, lineStrokeColor, tableTopPosX, tableTopPosY, tableWidth, model, annot, proba);
     }
 
     public ProductTableBox(int candTableSize,
@@ -252,10 +244,7 @@ public class ProductTableBox extends ElementBox {
                            float fontSizeSmall, float fontSizeBig,
                            float width, Color lineStrokeColor,
                            float tableTopPosX, float tableTopPosY, float tableWidth,
-                           InvoiceModel model, PDDocument document,
-                           XMLStreamWriter writer, PDPageContentStream stream,
-                           Company company, ProductContainer pc,
-                           InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+                           InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         // candTableSize refers to the number of tableHeaders to consider, larger size would mean more proba of longer headers
         this.candSize = (int) Math.min(candTableSize, candidateTableHeaders.size());
 
@@ -271,12 +260,6 @@ public class ProductTableBox extends ElementBox {
         this.tableWidth = tableWidth;
 
         this.model = model;
-        this.document = document;
-        this.writer = writer;
-        this.stream = stream;
-        this.company = company;
-        this.pc = pc;
-
         this.annot = annot;
         this.proba = proba;
 
@@ -284,18 +267,21 @@ public class ProductTableBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        // check if cur should be included in table amt items
-        String amtSuffix = "";
-        String cur = pc.getCurrency();
-        if (proba.get("currency_in_table_items")) {
-            amtSuffix = " "+cur;
-            annot.getTotal().setCurrency(cur);
-        }
         boolean upperCap = rnd.nextBoolean();  // table header items case
         Color black = Color.BLACK;
         Color white = Color.WHITE;
         Color lgray = new Color(239,239,239);
         PDFont fontNB = rnd.nextBoolean() ? fontN : fontB;
+        Company company = model.getCompany();
+        ProductContainer pc = model.getProductContainer();
+
+        // check if cur should be included in table amt items
+        String amtSuffix = "";
+        String cur = pc.getCurrency();
+        if (proba.get("currency_in_table_items")) {
+          amtSuffix = " "+cur;
+          annot.getTotal().setCurrency(cur);
+        }
 
         float tableRightPosX = tableTopPosX+tableWidth;
         // table main vContainer
@@ -351,8 +337,6 @@ public class ProductTableBox extends ElementBox {
         assert curWidth <= tableWidth;
 
         HAlign tableHdrAlign = proba.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
-
-
         // table header text colors
         Color hdrTextColor = proba.get("table_hdr_black_text") ? black: white; // hdrTextColor black (predominantly) or white
         Color hdrBgColor = (hdrTextColor == white) ? black: Arrays.asList(Color.GRAY, lgray, white).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
@@ -367,7 +351,7 @@ public class ProductTableBox extends ElementBox {
         float tableTopTextHeight = vContainer.getBBox().getHeight();
 
         // table top horizontal line
-        vContainer.addElement(new HorizontalLineBox(0, 0, tableRightPosX, 0, 2f, lineStrokeColor));
+        hLines.add(new HorizontalLineBox(tableTopPosX, tableTopPosY-tableTopTextHeight, tableRightPosX, tableTopPosY-tableTopTextHeight, lineStrokeColor));
 
         // table item list head
         TableRowBox row1 = new TableRowBox(configRow, 0, 0);
@@ -562,13 +546,13 @@ public class ProductTableBox extends ElementBox {
         if ( tableHdrAlign == HAlign.CENTER ) {
             float xPos = tableTopPosX;
             float yPos = tableTopPosY - tableTopTextHeight;
-            new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
+            vLines.add(new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor));
             xPos += configRow[0];
             for (int i=1; i < configRow.length; i++) {
-                new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
+                vLines.add(new VerticalLineBox(xPos-2, yPos, xPos-2, yPos - tableItemsHeight, lineStrokeColor));
                 xPos += configRow[i];
             }
-            new VerticalLineBox(tableRightPosX, yPos, tableRightPosX, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
+            vLines.add(new VerticalLineBox(tableRightPosX, yPos, tableRightPosX, yPos - tableItemsHeight, lineStrokeColor));
         }
     }
 
@@ -594,6 +578,8 @@ public class ProductTableBox extends ElementBox {
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        vContainer.build(stream, writer);
+        vContainer.build(stream,writer);
+        for (VerticalLineBox line: vLines) line.build(stream,writer);
+        for (HorizontalLineBox line: hLines) line.build(stream,writer);
     }
 }
