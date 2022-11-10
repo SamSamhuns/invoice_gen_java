@@ -195,7 +195,7 @@ public class MACOMPLayout implements InvoiceLayout {
         annot.getInvoice().setInvoiceId(ref.getValueInvoice());
 
         // Vendor/company address
-        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,10,260,lineStrokeColor,model,document,company,annot,proba);
+        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,10,260,lineStrokeColor,model,annot,proba);
         vendorInfoBox.translate(leftPageMargin, pageHeight-topPageMargin);
         vendorInfoBox.build(stream,writer);
 
@@ -208,12 +208,12 @@ public class MACOMPLayout implements InvoiceLayout {
         float shipX = leftPageMargin; float shipY = botY;
 
         // Billing Address
-        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,8,9,260,lineStrokeColor,model,document,client,annot,proba);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,8,9,260,lineStrokeColor,model,annot,proba);
         billingInfoBox.translate(billX, billY);
         billingInfoBox.build(stream,writer);
 
         // Shipping Address
-        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,8,9,260,lineStrokeColor,model,document,client,annot,proba);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,8,9,260,lineStrokeColor,model,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
         shippingInfoBox.build(stream,writer);
 
@@ -222,7 +222,7 @@ public class MACOMPLayout implements InvoiceLayout {
             float pAW = 300, pAX = pageMiddleX, pAY = Math.max(billY, shipY);
             proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
 
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,8,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,8,9,pAW,lineStrokeColor,model,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(stream,writer);
         }
@@ -591,7 +591,7 @@ public class MACOMPLayout implements InvoiceLayout {
         if (proba.get("vendor_info_footer")) {
             FootCompanyBox footCompanyBox = new FootCompanyBox(
                         fontN,fontB,fontI,7,8, themeColor, pageWidth-leftPageMargin-rightPageMargin,
-                        model,document,company,annot,proba);
+                        model,annot,proba);
             float fW = footCompanyBox.getBBox().getWidth();
             footCompanyBox.alignElements(HAlign.CENTER, fW);
             footCompanyBox.translate(pageMiddleX-fW/2,55);

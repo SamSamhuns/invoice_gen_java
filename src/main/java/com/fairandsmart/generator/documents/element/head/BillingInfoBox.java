@@ -44,7 +44,6 @@ import com.fairandsmart.generator.documents.element.ElementBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
@@ -64,8 +63,6 @@ public class BillingInfoBox extends ElementBox {
     private final Color lineStrokeColor;
 
     private final InvoiceModel model;
-    private final PDDocument document;
-    private final Client client;
     private final InvoiceAnnotModel annot;
     private final Map<String, Boolean> proba;
 
@@ -86,8 +83,7 @@ public class BillingInfoBox extends ElementBox {
     public BillingInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
                           float fontSizeSmall, float fontSizeBig,
                           float width, Color lineStrokeColor,
-                          InvoiceModel model, PDDocument document, Client client,
-                          InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+                          InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         this.fontN = fontN;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -97,9 +93,6 @@ public class BillingInfoBox extends ElementBox {
         this.lineStrokeColor = lineStrokeColor;
 
         this.model = model;
-        this.document = document;
-        this.client = client;
-
         this.annot = annot;
         this.proba = proba;
         this.init();
@@ -108,6 +101,7 @@ public class BillingInfoBox extends ElementBox {
     private void init() throws Exception {
         vContainer = new VerticalContainer(0,0,width);
 
+        Client client = model.getClient();
         Address address = client.getBillingAddress();
         IDNumbers idNumber = client.getIdNumbers();
         ContactNumber contact = client.getBillingContactNumber();

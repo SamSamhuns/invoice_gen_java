@@ -45,7 +45,6 @@ import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
@@ -66,8 +65,6 @@ public class VendorInfoBox extends ElementBox {
     private final Color lineStrokeColor;
 
     private final InvoiceModel model;
-    private final PDDocument document;
-    private final Company company;
     private final InvoiceAnnotModel annot;
     private final Map<String, Boolean> proba;
 
@@ -89,8 +86,7 @@ public class VendorInfoBox extends ElementBox {
     public VendorInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
                          float fontSizeSmall, float fontSizeBig,
                          float width, Color lineStrokeColor,
-                         InvoiceModel model, PDDocument document, Company company,
-                         InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+                         InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         this.fontN = fontN;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -100,9 +96,6 @@ public class VendorInfoBox extends ElementBox {
         this.lineStrokeColor = lineStrokeColor;
 
         this.model = model;
-        this.document = document;
-        this.company = company;
-
         this.annot = annot;
         this.proba = proba;
         this.init();
@@ -113,6 +106,7 @@ public class VendorInfoBox extends ElementBox {
 
         vContainer = new VerticalContainer(0,0,width);
 
+        Company company = model.getCompany();
         Address address = company.getAddress();
         IDNumbers idNumber = company.getIdNumbers();
         ContactNumber contact = company.getContact();

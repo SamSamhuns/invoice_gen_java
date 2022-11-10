@@ -48,7 +48,6 @@ import com.fairandsmart.generator.documents.element.container.HorizontalContaine
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.head.CompanyInfoBox;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
@@ -69,9 +68,6 @@ public class FootCompanyBox extends ElementBox {
     private final float width;
 
     private final InvoiceModel model;
-    private final PDDocument document;
-    private final Company company;
-
     private final InvoiceAnnotModel annot;
     private final Map<String, Boolean> proba;
 
@@ -80,8 +76,7 @@ public class FootCompanyBox extends ElementBox {
 
     public FootCompanyBox(PDFont fontN, PDFont fontB, PDFont fontI,
                           float fontSizeSmall, float fontSizeBig, Color fontColor, float width,
-                          InvoiceModel model, PDDocument document, Company company,
-                          InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+                          InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         this.fontN = fontN;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -91,9 +86,6 @@ public class FootCompanyBox extends ElementBox {
         this.width = width;
 
         this.model = model;
-        this.document = document;
-        this.company = company;
-
         this.annot = annot;
         this.proba = proba;
         this.init();
@@ -104,6 +96,7 @@ public class FootCompanyBox extends ElementBox {
         vContainer = new VerticalContainer(0,0,width);
 
         // footer company name, info, address & contact information
+        Company company = model.getCompany();
         Address address = company.getAddress();
         IDNumbers idNumber = company.getIdNumbers();
         ContactNumber contact = company.getContact();

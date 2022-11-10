@@ -217,12 +217,12 @@ public class BDmobilierLayout implements InvoiceLayout {
         float shipX = rightAddrX; float shipY = pageHeight-110;
 
         // Billing Address
-        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,annot,proba);
         billingInfoBox.translate(billX, billY);
         billingInfoBox.build(stream,writer);
 
         // Shipping Address
-        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
         shippingInfoBox.build(stream,writer);
 
@@ -427,7 +427,7 @@ public class BDmobilierLayout implements InvoiceLayout {
             float pAX = (proba.get("signature_bottom_left")) ? rightAddrX: ttx1;
             float pAY = tableBottomY-60;
 
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(stream,writer);
         }
@@ -507,7 +507,7 @@ public class BDmobilierLayout implements InvoiceLayout {
         // Footer company info
         if (proba.get("vendor_info_footer")) {
             int fSize = 7 + rnd.nextInt(3);
-            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,fSize,fSize+1,themeColor, pageWidth-leftPageMargin-rightPageMargin,model,document,company,annot,proba);
+            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,fSize,fSize+1,themeColor, pageWidth-leftPageMargin-rightPageMargin,model,annot,proba);
             float fW = footCompanyBox.getBBox().getWidth();
             footCompanyBox.alignElements(HAlign.CENTER, fW);
             footCompanyBox.translate(pageMiddleX-fW/2,60);

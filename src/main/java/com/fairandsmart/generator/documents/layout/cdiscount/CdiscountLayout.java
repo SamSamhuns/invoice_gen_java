@@ -164,7 +164,7 @@ public class CdiscountLayout implements InvoiceLayout {
 
         // top left info
         // vendor address
-        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,8,9,250,lineStrokeColor,model,document,company,annot,proba);
+        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,8,9,250,lineStrokeColor,model,annot,proba);
         vendorInfoBox.translate(leftPageMargin+2, posLogoY-logoHeight-4);
         vendorInfoBox.build(stream,writer);
 
@@ -215,7 +215,7 @@ public class CdiscountLayout implements InvoiceLayout {
             }
             proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
 
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,7,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,7,9,pAW,lineStrokeColor,model,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(stream,writer);
         }
@@ -234,11 +234,11 @@ public class CdiscountLayout implements InvoiceLayout {
         Boolean origBorderMode = proba.get("addresses_bordered");
         proba.put("addresses_bordered", false);
         // Billing address
-        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,7,8,250,themeColor,model,document,client,annot,proba);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,7,8,250,themeColor,model,annot,proba);
         billingInfoBox.translate(billX, billY);
 
         // Shipping Address
-        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,7,8,250,themeColor,model,document,client,annot,proba);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,7,8,250,themeColor,model,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
 
         // draw borders around bill+ship addresses & thrn build addresses

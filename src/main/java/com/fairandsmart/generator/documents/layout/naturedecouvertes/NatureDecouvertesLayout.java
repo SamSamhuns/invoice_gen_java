@@ -188,7 +188,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         float topAddrY = pageHeight - topPageMargin;
         // company/vendor info top (switch with billing address sometimes)
         if (proba.get("vendor_address_top")) {
-            VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,11,250,lineStrokeColor,model,document,company,annot,proba);
+            VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,11,250,lineStrokeColor,model,annot,proba);
             vendorInfoBox.translate(topAddrX, topAddrY);
             vendorInfoBox.build(stream,writer);
         }
@@ -198,7 +198,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
             float pAY = topAddrY;
             proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
 
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,8,9,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,8,9,pAW,lineStrokeColor,model,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(stream,writer);
         }
@@ -213,12 +213,12 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
         float shipX = rightAddrX; float shipY = billY;
 
         // billing address
-        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,11,250,lineStrokeColor,model,document,client,annot,proba);
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,11,250,lineStrokeColor,model,annot,proba);
         billingInfoBox.translate(billX, billY);
         billingInfoBox.build(stream,writer);
 
         // shipping address
-        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,11,250,lineStrokeColor,model,document,client,annot,proba);
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,11,250,lineStrokeColor,model,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
         shippingInfoBox.build(stream,writer);
 
@@ -494,7 +494,7 @@ public class NatureDecouvertesLayout implements InvoiceLayout {
 
         // footer company name, info, address & contact information at bottom center
         if (proba.get("vendor_info_footer")) {
-            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,7,8, themeColor, pageWidth-leftPageMargin-rightPageMargin,model,document,company,annot,proba);
+            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,7,8, themeColor, pageWidth-leftPageMargin-rightPageMargin,model,annot,proba);
             float fW = footCompanyBox.getBBox().getWidth();
             footCompanyBox.alignElements(HAlign.CENTER, fW);
             footCompanyBox.translate(pageMiddleX-fW/2,55);

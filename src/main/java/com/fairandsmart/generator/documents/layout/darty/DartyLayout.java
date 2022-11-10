@@ -177,7 +177,7 @@ public class DartyLayout implements InvoiceLayout {
         logoImgBox.build(stream,writer);
 
         // Vendor/Company Address
-        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,10,300,lineStrokeColor,model,document,company,annot,proba);
+        VendorInfoBox vendorInfoBox = new VendorInfoBox(fontN,fontB,fontI,9,10,300,lineStrokeColor,model,annot,proba);
         vendorInfoBox.translate(posLogoX, posLogoY-logoImgBox.getBBox().getHeight()-5);
         vendorInfoBox.build(stream,writer);
 
@@ -199,16 +199,16 @@ public class DartyLayout implements InvoiceLayout {
         // Shipping Address
         // ship head outside
         new RotatedTextBox(fontNB, 9, posBHX-20, pageHeight-80,  90f, pageWidth, client.getShippingHead()).build(stream,writer);
-        client.setShippingHead("");
-        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        model.getClient().setShippingHead("");
+        ShippingInfoBox shippingInfoBox = new ShippingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,annot,proba);
         shippingInfoBox.translate(shipX, shipY);
         shippingInfoBox.build(stream,writer);
 
         // Billing Address
         // bill head outside
         new RotatedTextBox(fontNB, 9, posBHX-20, pageHeight-170, 90f, pageWidth, client.getBillingHead()).build(stream,writer);
-        client.setBillingHead("");
-        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,document,client,annot,proba);
+        model.getClient().setBillingHead("");
+        BillingInfoBox billingInfoBox = new BillingInfoBox(fontN,fontNB,fontI,9,9,250,lineStrokeColor,model,annot,proba);
         billingInfoBox.translate(billX, billY);
         billingInfoBox.build(stream,writer);
         // restore actual addresses_bordered
@@ -494,7 +494,7 @@ public class DartyLayout implements InvoiceLayout {
             float pAY = tableFooterInfo.getBBox().getPosY() - tableFooterInfo.getBBox().getHeight() - 15;
 
             proba.put("vendor_tax_number_top", proba.get("vendor_address_tax_number"));
-            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,document,payment,company,annot,proba);
+            PaymentInfoBox paymentBox = new PaymentInfoBox(fontN,fontB,fontI,9,10,pAW,lineStrokeColor,model,annot,proba);
             paymentBox.translate(pAX, pAY);
             paymentBox.build(stream,writer);
         }
@@ -570,7 +570,7 @@ public class DartyLayout implements InvoiceLayout {
         // Footer company info
         if (proba.get("vendor_info_footer")) {
             int fSize = 7 + rnd.nextInt(3);
-            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,fSize,fSize+1,themeColor, pageWidth-leftPageMargin-rightPageMargin,model,document,company,annot,proba);
+            FootCompanyBox footCompanyBox = new FootCompanyBox(fontN,fontB,fontI,fSize,fSize+1,themeColor, pageWidth-leftPageMargin-rightPageMargin,model,annot,proba);
             float fW = footCompanyBox.getBBox().getWidth();
             footCompanyBox.alignElements(HAlign.CENTER, fW);
             footCompanyBox.translate(pageMiddleX-fW/2,60);

@@ -44,7 +44,6 @@ import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
@@ -68,9 +67,6 @@ public class PaymentInfoBox extends ElementBox {
     private final Color lineStrokeColor;
 
     private final InvoiceModel model;
-    private final PDDocument document;
-    private final PaymentInfo payment;
-    private final Company company;
     private final InvoiceAnnotModel annot;
     private final Map<String, Boolean> proba;
 
@@ -80,9 +76,7 @@ public class PaymentInfoBox extends ElementBox {
     public PaymentInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
                           float fontSizeSmall, float fontSizeBig,
                           float width, Color lineStrokeColor,
-                          InvoiceModel model, PDDocument document,
-                          PaymentInfo payment, Company company,
-                          InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+                          InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         this.fontN = fontN;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -92,11 +86,6 @@ public class PaymentInfoBox extends ElementBox {
         this.lineStrokeColor = lineStrokeColor;
 
         this.model = model;
-        this.document = document;
-
-        this.payment = payment;
-        this.company = company;
-
         this.annot = annot;
         this.proba = proba;
         this.init();
@@ -104,6 +93,8 @@ public class PaymentInfoBox extends ElementBox {
 
     private void init() throws Exception {
         PDFont fontNB = rnd.nextBoolean() ? fontN: fontB;
+        Company company = model.getCompany();
+        PaymentInfo payment = model.getPaymentInfo();
         annot.setPaymentto(new InvoiceAnnotModel.Paymentto());
 
         SimpleTextBox paymentHeader = new SimpleTextBox(fontB,fontSizeBig,0,0, payment.getAddressHeader(), "PH");;
