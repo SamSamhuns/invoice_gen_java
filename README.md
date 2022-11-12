@@ -219,15 +219,11 @@ Under `src/main/java/com/fairandsmart/generator`
       │   │   └── textbox
       │   │       └── SimpleTextBox.java         # Base text box for writing and displaying any text
       │   └── layout                             # Specific Layouts
-      │       ├── InvoiceLayout.java
-      │       ├── InvoiceSSDGenerator.java
-      │       ├── SSDLayout.java
       │       ├── amazon (DONE)
       │       ├── bdmobilier (DONE)
       │       ├── cdiscount (DONE)
       │       ├── darty (DONE)
       │       ├── fairandsmart
-      │       ├── invoiceSSD
       │       ├── ldlc
       │       ├── loria
       │       ├── macomp (DONE)
