@@ -231,7 +231,7 @@ Under `src/main/java/com/fairandsmart/generator`
       │       ├── ldlc
       │       ├── loria
       │       ├── macomp (DONE)
-      │       ├── materielnet
+      │       ├── materielnet (DONE)
       │       ├── naturedecouvertes (DONE)
       ├── job                             # For handling API jobs
       │   ├── JobManager.java

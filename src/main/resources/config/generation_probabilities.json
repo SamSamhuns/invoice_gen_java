@@ -184,10 +184,6 @@
     }
   },
   {
-    "layout": "InvoiceSSD",
-    "probability": {}
-  },
-  {
     "layout": "LDLC",
     "probability": {}
   },
@@ -241,7 +237,46 @@
   },
   {
     "layout": "Materielnet",
-    "probability": {}
+    "probability": {
+      "doc_title_top": 40,
+      "line_stroke_black": 96,
+      "vendor_address_country": 10,
+      "vendor_address_phone": 35,
+      "vendor_address_fax": 20,
+      "vendor_address_tax_number": 85,
+      "addresses_bordered": 40,
+      "bill_address_tax_number": 50,
+      "bill_address_country": 25,
+      "bill_address_phone": 30,
+      "bill_address_fax": 20,
+      "ship_address_country": 25,
+      "ship_address_phone": 30,
+      "ship_address_fax": 20,
+      "table_hdr_black_text": 90,
+      "currency_in_table_headers": 60,
+      "currency_in_table_items": 60,
+      "alternate_table_items_bg_color": 10,
+      "table_center_align_items": 40,
+      "table_footer_multi_row": 0,
+      "table_footer_single_row": 0,
+      "registered_address_info": 0,
+      "total_in_words": 50,
+      "payment_address_tabular": 50,
+      "payment_address": 40,
+      "payment_account_number": 40,
+      "payment_branch_name": 40,
+      "payment_routing_number": 40,
+      "payment_swift_number": 40,
+      "payment_vendor_tax_number": 20,
+      "signature_bottom": 70,
+      "signature_bottom_left": 25,
+      "stamp_bottom": 55,
+      "stamp_bottom_elongated": 30,
+      "logo_watermark": 15,
+      "confidential_watermark": 2,
+      "vendor_info_footer": 70,
+      "vendor_tax_number_bottom": 50
+    }
   },
   {
     "layout": "Nature&Decouvertes",
@@ -285,9 +320,5 @@
       "vendor_info_footer": 70,
       "vendor_tax_number_bottom": 45
     }
-  },
-  {
-    "layout": "NGeneric",
-    "probability": {}
   }
 ]

@@ -75,6 +75,11 @@ public class GenerationContext {
         // locales.add("fr");
         locales.add("en");
         locales.add("en-MS");
+        locales.add("en-CA");
+        locales.add("en-AU");
+        locales.add("en-NZ");
+        locales.add("en-SG");
+        locales.add("uk");
     }
     {
         currencies.add("EUR");
