@@ -45,7 +45,7 @@ import com.fairandsmart.generator.documents.layout.cdiscount.CdiscountLayout;
 import com.fairandsmart.generator.documents.layout.darty.DartyLayout;
 import com.fairandsmart.generator.documents.layout.macomp.MACOMPLayout;
 import com.fairandsmart.generator.documents.layout.materielnet.MaterielnetLayout;
-import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;
+import com.fairandsmart.generator.documents.layout.naturedecouvertes.NatureDecouvertesLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -141,11 +141,10 @@ public class InvoiceGenerator {
         availablesLayout.add(new BDmobilierLayout());
         availablesLayout.add(new CdiscountLayout());
         availablesLayout.add(new DartyLayout());
-        availablesLayout.add(new NGenericLayout());
         availablesLayout.add(new LDLCLayout());
         availablesLayout.add(new MACOMPLayout());
         availablesLayout.add(new MaterielnetLayout());
-        availablesLayout.add(new NGenericLayout());
+        availablesLayout.add(new NatureDecouvertesLayout());
 
         Path generated = Paths.get("target/generated/" + args[0]);
         if ( !Files.exists(generated) ) {

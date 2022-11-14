@@ -43,7 +43,7 @@ import com.fairandsmart.generator.documents.layout.darty.DartyLayout;
 import com.fairandsmart.generator.documents.layout.ldlc.LDLCLayout;
 import com.fairandsmart.generator.documents.layout.macomp.MACOMPLayout;
 import com.fairandsmart.generator.documents.layout.materielnet.MaterielnetLayout;
-import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;
+import com.fairandsmart.generator.documents.layout.naturedecouvertes.NatureDecouvertesLayout;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -65,11 +65,10 @@ public void generateUsingRoundRobinOnAllLayout() throws Exception {
         availablesLayout.add(new BDmobilierLayout());
         availablesLayout.add(new CdiscountLayout());
         availablesLayout.add(new DartyLayout());
-        //availablesLayout.add(new GenericLayout());
         availablesLayout.add(new LDLCLayout());
         availablesLayout.add(new MACOMPLayout());
         availablesLayout.add(new MaterielnetLayout());
-        availablesLayout.add(new NGenericLayout());
+        availablesLayout.add(new NatureDecouvertesLayout());
 
         Path generated = Paths.get("target/generated");
         if ( !Files.exists(generated) ) {

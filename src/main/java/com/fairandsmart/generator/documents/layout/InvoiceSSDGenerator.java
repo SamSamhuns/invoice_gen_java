@@ -44,7 +44,7 @@ import com.fairandsmart.generator.documents.layout.invoiceSSD.InvoiceSSDLayout;
 import com.fairandsmart.generator.documents.layout.ldlc.LDLCLayout;
 import com.fairandsmart.generator.documents.layout.macomp.MACOMPLayout;
 import com.fairandsmart.generator.documents.layout.materielnet.MaterielnetLayout;
-import com.fairandsmart.generator.documents.layout.ngeneric.NGenericLayout;
+import com.fairandsmart.generator.documents.layout.naturedecouvertes.NatureDecouvertesLayout;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -146,7 +146,7 @@ public class InvoiceSSDGenerator {
         availablesLayout.add(new LDLCLayout());
         availablesLayout.add(new MACOMPLayout());
         availablesLayout.add(new MaterielnetLayout());
-        availablesLayout.add(new NGenericLayout());
+        availablesLayout.add(new NatureDecouvertesLayout());
 
         Path generated = Paths.get("target/generated/" + args[0]);
         if ( !Files.exists(generated) ) {
