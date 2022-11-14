@@ -114,7 +114,6 @@ public class MaterielnetLayout implements InvoiceLayout {
         Company company = model.getCompany();
         PaymentInfo payment = model.getPaymentInfo();
         ProductContainer pc = model.getProductContainer();
-
         IDNumbers idNumbers = company.getIdNumbers();
         Address address = company.getAddress();
         String cur = pc.getCurrency();
@@ -268,12 +267,12 @@ public class MaterielnetLayout implements InvoiceLayout {
         new SimpleTextBox(fontB,9,leftPageMargin,footerPosY+20,"Payment Terms and Date").build(stream,writer);
 
         VerticalContainer paymentLabels = new VerticalContainer(leftPageMargin,footerPosY,250);
-        paymentLabels.addElement(new SimpleTextBox(fontN, 9,0,0,model.getPaymentInfo().getLabelPaymentType()+" : "));
+        paymentLabels.addElement(new SimpleTextBox(fontN, 9,0,0,payment.getLabelPaymentType()+" : "));
         paymentLabels.addElement(new SimpleTextBox(fontN, 9,0,0,model.getDate().getLabelPaymentDue()+" : "));
         paymentLabels.build(stream,writer);
 
         VerticalContainer paymentValues = new VerticalContainer(leftPageMargin+paymentLabels.getBBox().getWidth()+20,footerPosY,250);
-        paymentValues.addElement(new SimpleTextBox(fontI, 9,0,0,model.getPaymentInfo().getValuePaymentType(),"PMODE"));
+        paymentValues.addElement(new SimpleTextBox(fontI, 9,0,0,payment.getValuePaymentType(),"PMODE"));
         paymentValues.addElement(new SimpleTextBox(fontI, 9,0,0,model.getDate().getValuePaymentDue()));
         annot.getInvoice().setInvoiceDueDate(model.getDate().getValuePaymentDue());
         paymentValues.build(stream,writer);
