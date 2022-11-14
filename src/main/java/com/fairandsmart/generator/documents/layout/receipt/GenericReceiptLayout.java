@@ -387,13 +387,13 @@ public class GenericReceiptLayout implements SSDLayout {
                 new SimpleTextBoxForEvaluation("title", pos_element).build(writerEval);
             }
         }
-        ReceiptProductBox productTable = new ReceiptProductBox(0, 0, this.model.getProductReceiptContainer(),fonts[2], fonts[1], fontSize);
+        ReceiptProductBox receiptProductTableBox = new ReceiptProductBox(0, 0, this.model.getProductReceiptContainer(),fonts[2], fonts[1], fontSize);
         receiptPage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 10));
-        receiptPage.addElement(productTable);
+        receiptPage.addElement(receiptProductTableBox);
         if(modeEval) {
-            for (int i = 0; i < productTable.getChosenFormatHeaders().length; i++) {
+            for (int i = 0; i < receiptProductTableBox.getChosenFormatHeaders().length; i++) {
                 pos_element++;
-                new SimpleTextBoxForEvaluation(productTable.getChosenFormatHeaders()[i], pos_element).build(writerEval);
+                new SimpleTextBoxForEvaluation(receiptProductTableBox.getChosenFormatHeaders()[i], pos_element).build(writerEval);
             }
         }
         sumup = new TableRowBox(configRow1v1, 0, 0);

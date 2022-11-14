@@ -213,7 +213,7 @@ Under `src/main/java/com/fairandsmart/generator`
       │   │   ├── payment
       │   │   │   └── PaymentInfoBox.java        # Contains client payment name, address, & bank details
       │   │   ├── product
-      │   │   │   ├── ProductTable.java          # Contains item table header permutations
+      │   │   │   ├── ProductTableBox.java       # Contains item table header permutations
       │   │   ├── table
       │   │   │   └── TableRowBox.java           # Primary element box for table rows, needs a float array for column widths
       │   │   └── textbox

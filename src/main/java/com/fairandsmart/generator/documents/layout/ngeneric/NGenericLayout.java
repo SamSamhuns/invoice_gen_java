@@ -315,9 +315,9 @@ public class NGenericLayout implements InvoiceLayout {
         }
 
 
-        ProductBox productTable = new ProductBox(0, 0, model.getProductContainer(),fonts[2], fonts[1], fontSize);
+        ProductBox productBox = new ProductBox(0, 0, model.getProductContainer(),fonts[2], fonts[1], fontSize);
         invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 130));
-        invoicePage.addElement(productTable);
+        invoicePage.addElement(productBox);
 
         ClientInfoBox randomClientInfo = new ClientInfoBox(getLeftInfo(false, false, false, false, true));
         if(randomClientInfo.getBBox().getWidth()!=0.0){

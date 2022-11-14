@@ -222,7 +222,7 @@ public class ProductTableBox extends ElementBox {
 
     @Override
     public String toString() {
-        return "ProductTable{" +
+        return "ProductTableBox{" +
                 "tableTopInfo=" + tableTopInfo +
                 "tableHeaders=" + tableHeaders +
                 "configRow=" + configRow +
@@ -437,16 +437,16 @@ public class ProductTableBox extends ElementBox {
             vContainer.addElement(new BorderBox(white,white, 0, 0, 0, 0, 5));
         }
 
-        vContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
         vContainer.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
-        float tableItemsHeight = vContainer.getBBox().getHeight() - tableTopTextHeight;
-
         vContainer.addElement(new HorizontalLineBox(0,0, tableRightPosX, 0, lineStrokeColor));
-        vContainer.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+        float tableItemsHeight = vContainer.getBBox().getHeight() - tableTopTextHeight;
         vContainer.addElement(new SimpleTextBox(fontN, 9, 0, 0, ""));
+        vContainer.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
 
         if (proba.get("table_footer_multi_row")) {
-            float[] configFooterRow = {450f, 80f}; // Adds up to 530 which is pageW - leftM - rightM
+            vContainer.addElement(new BorderBox(white, white, 0, 0, 0, 0, 5));
+            float unitWidth = (width-60) / 6f;  // row to be divided into 6 units
+            float[] configFooterRow = {5f*unitWidth, unitWidth};  // must add to vContainer width-60
             for (int i=0; i<tableHeaders.size(); i++ ) {
                 TableRowBox footerInvoice = new TableRowBox(configFooterRow, 0, 25);
                 String tableHeader = tableHeaders.get(i);
@@ -466,6 +466,7 @@ public class ProductTableBox extends ElementBox {
                     case "Total": annot.getTotal().setTotalPrice(hdrValue); break;
                 }
             }
+            vContainer.addElement(new HorizontalLineBox(0, 0, tableRightPosX, 0, lineStrokeColor));
         }
         else if (proba.get("table_footer_single_row"))  {
             // Footer Labels for final total amount, tax and discount

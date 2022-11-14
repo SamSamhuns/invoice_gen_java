@@ -371,12 +371,12 @@ public class InvoiceSSDLayout implements SSDLayout {
             invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 50));
             invoicePage.addElement(thirdPart);
         }
-        ProductBoxSSD productTable = new ProductBoxSSD(0, 0, model.getProductContainer(),fonts[2], fonts[1], fontSize);
+        ProductBoxSSD productTableSSD = new ProductBoxSSD(0, 0, model.getProductContainer(),fonts[2], fonts[1], fontSize);
         invoicePage.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 130));
-        invoicePage.addElement(productTable);
-        for(int i=0;i<productTable.getChosenFormatForEval().length;i++){
+        invoicePage.addElement(productTableSSD);
+        for(int i=0;i<productTableSSD.getChosenFormatForEval().length;i++){
             pos_element++;
-            new SimpleTextBoxForEvaluation(productTable.getChosenFormatForEval()[i], pos_element).build(writerEval);
+            new SimpleTextBoxForEvaluation(productTableSSD.getChosenFormatForEval()[i], pos_element).build(writerEval);
         }
         ////
         //// Products totals
