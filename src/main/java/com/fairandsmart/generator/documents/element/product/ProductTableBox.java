@@ -545,7 +545,7 @@ public class ProductTableBox extends ElementBox {
         }
 
         // Add vertical borders to table cell items if table cell is CENTER aligned horizontally
-        if ( tableHdrAlign == HAlign.CENTER ) {
+        if ( tableHdrAlign == HAlign.CENTER && proba.get("draw_table_vertical_lines")) {
             float xPos = tableTopPosX;
             float yPos = tableTopPosY - tableTopTextHeight;
             vLines.add(new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor));
@@ -556,6 +556,12 @@ public class ProductTableBox extends ElementBox {
             }
             vLines.add(new VerticalLineBox(tableRightPosX, yPos, tableRightPosX, yPos - tableItemsHeight, lineStrokeColor));
         }
+
+        this.configRow = configRow;
+        this.tableTopInfo = tableTopInfo;
+        this.tableHeaders = tableHeaders;
+        this.configRow = configRow;
+        this.itemMap = itemMap;
     }
 
     @Override

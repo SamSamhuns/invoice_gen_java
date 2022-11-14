@@ -53,7 +53,7 @@ import com.fairandsmart.generator.documents.element.container.HorizontalContaine
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
 import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
-import com.fairandsmart.generator.documents.element.product.ProductTable;
+import com.fairandsmart.generator.documents.element.product.ProductTableBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.table.TableRowBox;
@@ -343,137 +343,25 @@ public class CdiscountLayout implements InvoiceLayout {
             amtSuffix = " "+cur;
             annot.getTotal().setCurrency(cur);
         }
-        boolean upperCap = rnd.nextBoolean();  // table header items case
         HAlign tableHdrAlign = proba.get("table_center_align_items") ? HAlign.CENTER : HAlign.LEFT;
 
-        // Building Header Item labels, table values and footer labels list
-        float tableWidth = pageWidth - leftPageMargin - rightPageMargin - 5;
-        int maxHdrNum = 14;
-        ProductTable pt = new ProductTable(pc, amtSuffix, model.getLang(), tableWidth, maxHdrNum);
-        List<String> tableHeaders = pt.getTableHeaders();
-        float[] configRow = pt.getConfigRow();
-        Map<String, ProductTable.ColItem> itemMap = pt.getItemMap();
-
-        // table text colors
-        Color hdrTextColor = proba.get("table_hdr_black_text") ? Color.BLACK: Color.WHITE; // hdrTextColor black (predominantly) or white
-        Color hdrBgColor = (hdrTextColor == Color.WHITE) ? Color.BLACK: Arrays.asList(Color.GRAY, Color.LIGHT_GRAY, Color.WHITE).get(rnd.nextInt(3)); // hdrBgColor should be contrasting to hdrTextColor
-
-        // table top info
-        String tableTopText = pt.getTableTopInfo();
-        tableTopText = tableTopText.equals("All prices are in")? tableTopText+" "+cur: tableTopText;
         float tableTopPosX = leftPageMargin+2;
         float tableTopPosY = labelInfo1.getBBox().getPosY() - labelInfo1.getBBox().getHeight() - 30;
-
-        SimpleTextBox tableTopInfo = new SimpleTextBox(fontB,9,tableTopPosX,tableTopPosY,tableTopText,themeColor,white);
-        tableTopInfo.build(stream,writer);
-
-        // table item list head
-        TableRowBox row1 = new TableRowBox(configRow, 0, 0);
-        for (String tableHeader: tableHeaders) {
-            String hdrLabel = itemMap.get(tableHeader).getLabelHeader();
-            String tableHdrLabel = upperCap ? hdrLabel.toUpperCase() : hdrLabel;
-            // if numerical header used, check if cur needs to appended at the end
-            if (proba.get("currency_in_table_headers") && !proba.get("currency_in_table_items") && pt.getNumericalHdrs().contains(tableHeader)) {
-                tableHdrLabel += " ("+cur+")";
-            }
-            row1.addElement(new SimpleTextBox(fontNB, 8, 0, 0, tableHdrLabel, hdrTextColor, hdrBgColor, tableHdrAlign, hdrLabel+"HeaderLabel"), false);
-        }
-        row1.setBackgroundColor(hdrBgColor);
-
-        VerticalContainer verticalTableItems = new VerticalContainer(leftPageMargin+2, tableTopInfo.getBBox().getPosY()-tableTopInfo.getBBox().getHeight()-5, 600);
-        verticalTableItems.addElement(new BorderBox(lgray,lgray,0,0,0,pageWidth-(72),0.3f));
-        verticalTableItems.addElement(new BorderBox(white,white, 0,0, 0, 0, 1));
-        verticalTableItems.addElement(row1);
-        verticalTableItems.addElement(new BorderBox(white,white, 0,0,0, 0, 1));
-        verticalTableItems.addElement(new BorderBox(lgray,lgray,0,0,0,pageWidth-(72),0.3f));
-
-        // table item list body
-        String quantity; String snNum;
-        Color cellTextColor; Color cellBgColor;
-        for(int w=0; w<pc.getProducts().size(); w++) {
-            Product randomProduct = pc.getProducts().get(w);
-            cellTextColor = black;
-            cellBgColor = (randomProduct.getName().equalsIgnoreCase("shipping")) ? Color.LIGHT_GRAY: white;
-            quantity = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Float.toString(randomProduct.getQuantity());
-            snNum = (randomProduct.getName().equalsIgnoreCase("shipping")) ? "": Integer.toString(w + 1);
-
-            InvoiceAnnotModel.Item randomItem = new InvoiceAnnotModel.Item();
-            TableRowBox productLine = new TableRowBox(configRow, 0, 0);
-            for (String tableHeader: tableHeaders) {
-                String cellText = "";
-                PDFont cellFont = fontN;
-                HAlign cellAlign = tableHdrAlign;
-                switch (tableHeader) {
-                    case "SN":
-                        cellText = snNum;
-                        randomItem.setSerialNumber(cellText); break;
-                    case "Qty":
-                        cellText = quantity;
-                        randomItem.setQuantity(cellText); break;
-                    case "ItemCode":
-                        cellText = randomProduct.getCode();
-                        randomItem.setItemCode(cellText); break;
-                    case "Item":
-                        cellFont = fontNB;
-                        cellText = randomProduct.getName();
-                        randomItem.setDescription(cellText); break;
-                    case "ItemRate":
-                        cellText = randomProduct.getFmtPrice()+amtSuffix;
-                        randomItem.setUnitPrice(cellText); break;
-                    case "Disc":
-                        cellText = randomProduct.getFmtTotalDiscount()+amtSuffix;
-                        randomItem.setDiscount(cellText); break;
-                    case "DiscRate":
-                        cellText = randomProduct.getFmtDiscountRate();
-                        randomItem.setDiscountRate(cellText); break;
-                    case "Tax":
-                        cellText = randomProduct.getFmtTotalTax()+amtSuffix;
-                        randomItem.setTax(cellText); break;
-                    case "TaxRate":
-                        cellText = randomProduct.getFmtTaxRate();
-                        randomItem.setTaxRate(cellText); break;
-                    case "SubTotal":
-                        cellText = randomProduct.getFmtTotalPriceWithDiscount()+amtSuffix;
-                        randomItem.setSubTotal(cellText); break;
-                    case "Total":
-                        cellText = randomProduct.getFmtTotalPriceWithTaxAndDiscount()+amtSuffix;
-                        randomItem.setTotal(cellText); break;
-                }
-                cellBgColor = proba.get("alternate_table_items_bg_color") && w % 2 == 0 ? gray: cellBgColor;
-                SimpleTextBox rowBox = new SimpleTextBox(cellFont, 8, 0, 0, cellText, cellTextColor, cellBgColor, cellAlign, tableHeader+"Item");
-                productLine.addElement(rowBox, false);
-            }
-            annot.getItems().add(randomItem);
-
-            productLine.setBackgroundColor(cellBgColor);
-            verticalTableItems.addElement(productLine);
-            verticalTableItems.addElement(new BorderBox(lgray,lgray,0,0,0,pageWidth-(72),0.3f));
-        }
-
-        float tableItemsHeight = verticalTableItems.getBBox().getHeight();
-
-        verticalTableItems.build(stream,writer);
+        float tableWidth = pageWidth - leftPageMargin - rightPageMargin - 5;
+        int maxHdrNum = 14;
+        ProductTableBox productTableBox = new ProductTableBox(
+                maxHdrNum, fontN, fontB, fontI, 8, 8, 600, lineStrokeColor, tableTopPosX, tableTopPosY, tableWidth, model, annot, proba);
+        productTableBox.build(stream,writer);
 
         // tabel footer returns information
         float msgSize = 320;
         float posMsgX = leftPageMargin+2;
-        float posMsgY = verticalTableItems.getBBox().getPosY()-verticalTableItems.getBBox().getHeight()-10;
+        float posMsgY = productTableBox.getBBox().getPosY()-productTableBox.getBBox().getHeight()-10;
 
         VerticalContainer tableFooterMsg = new VerticalContainer(posMsgX, posMsgY, 300);
         tableFooterMsg.addElement(new SimpleTextBox(fontN,10,0,0,"To return an item, go to the customer service section to obtain a return agreement."));
         tableFooterMsg.addElement(new SimpleTextBox(fontN,8,0,0,"* Order preparation costs include shipping costs"));
         tableFooterMsg.build(stream,writer);
-
-        // Add vertical borders to table cell items if table cell is CENTER aligned horizontally
-        if ( tableHdrAlign == HAlign.CENTER ) {
-            float xPos = leftPageMargin;
-            float yPos = tableTopPosY - tableTopInfo.getBBox().getHeight() - 4;
-            xPos += configRow[0];
-            for (int i=1; i < configRow.length; i++) {
-                new VerticalLineBox(xPos, yPos, xPos, yPos - tableItemsHeight, lineStrokeColor).build(stream,writer);
-                xPos += configRow[i];
-            }
-        }
 
         // label totals container sub-table
         int labelTCPosX = 370;
