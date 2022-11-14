@@ -143,7 +143,6 @@ public class InvoiceSSDGenerator {
         availablesLayout.add(new BDmobilierLayout());
         availablesLayout.add(new CdiscountLayout());
         availablesLayout.add(new DartyLayout());
-        //availablesLayout.add(new GenericLayout());
         availablesLayout.add(new LDLCLayout());
         availablesLayout.add(new MACOMPLayout());
         availablesLayout.add(new MaterielnetLayout());

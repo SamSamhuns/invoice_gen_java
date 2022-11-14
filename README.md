@@ -223,9 +223,7 @@ Under `src/main/java/com/fairandsmart/generator`
       │       ├── bdmobilier (DONE)
       │       ├── cdiscount (DONE)
       │       ├── darty (DONE)
-      │       ├── fairandsmart
-      │       ├── ldlc
-      │       ├── loria
+      │       ├── ldlc (DONE)
       │       ├── macomp (DONE)
       │       ├── materielnet (DONE)
       │       ├── naturedecouvertes (DONE)
