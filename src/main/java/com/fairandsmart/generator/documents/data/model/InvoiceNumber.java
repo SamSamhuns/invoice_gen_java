@@ -138,7 +138,7 @@ public class InvoiceNumber {
         private static final List<String> valuesInvoice = new ArrayList<>();
         private static final List<String> valuesOrder = new ArrayList<>();
         private static final List<String> valuesClient = new ArrayList<>();
-        private static final List<String>  valuesBarcode = new ArrayList<>();
+        private static final List<String> valuesBarcode = new ArrayList<>();
         private static final Map<String, String> labelsInvoice = new LinkedHashMap<>();
         private static final Map<String, String> labelsOrder = new LinkedHashMap<>();
         private static final Map<String, String> labelsClient = new LinkedHashMap<>();
@@ -226,7 +226,7 @@ public class InvoiceNumber {
             labelsClient.put("Client No.", "en");
             labelsClient.put("Client ID", "en");
             labelsClient.put("Client Reference", "en");
-            labelsClient.put("Reference", "en");
+            labelsClient.put("Client Ref", "en");
             labelsClient.put("Ref", "en");
 
             labelsClient.put("Numéro de client", "fr");

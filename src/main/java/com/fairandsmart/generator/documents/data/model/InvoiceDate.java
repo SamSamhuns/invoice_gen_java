@@ -232,6 +232,7 @@ public class InvoiceDate {
             labelsPaymentDue.put("Date de paiement", "fr");
 
             labelsPaymentDue.put("Payment Due Date", "en");
+            labelsPaymentDue.put("Payment Deadline", "en");
             labelsPaymentDue.put("Payment Due On", "en");
             labelsPaymentDue.put("Payment Due", "en");
             labelsPaymentDue.put("Pay By", "en");

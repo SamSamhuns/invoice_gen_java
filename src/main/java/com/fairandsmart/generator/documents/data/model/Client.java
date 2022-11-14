@@ -179,6 +179,7 @@ public class Client {
             billingHeads.put("Sold To", "en");
             billingHeads.put("Buyer", "en");
             billingHeads.put("Purchaser", "en");
+            billingHeads.put("Customer", "en");
         }
         {
             shippingHeads.put("Livraison à", "fr");
@@ -194,6 +195,7 @@ public class Client {
             shippingHeads.put("Send To", "en");
             shippingHeads.put("Shipping Receiver", "en");
             shippingHeads.put("Delivery Receiver", "en");
+            shippingHeads.put("Shipping Location", "en");
         }
         {
           // billingHeads and shippingHeads must have the same number of corresponding values
