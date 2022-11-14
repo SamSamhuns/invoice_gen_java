@@ -39,7 +39,6 @@ import com.fairandsmart.generator.documents.data.helper.HelperImage;
 import com.fairandsmart.generator.documents.layout.InvoiceLayout;
 import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
-import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.Company;
@@ -78,7 +77,6 @@ import java.util.Random;
 import java.awt.Color;
 import java.util.Map;
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 

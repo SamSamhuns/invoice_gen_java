@@ -51,12 +51,10 @@ import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.container.VerticalContainer;
 import com.fairandsmart.generator.documents.element.container.HorizontalContainer;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
-import com.fairandsmart.generator.documents.element.line.VerticalLineBox;
 import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.product.ProductTableBox;
 import com.fairandsmart.generator.documents.element.border.BorderBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
-import com.fairandsmart.generator.documents.element.table.TableRowBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.footer.StampBox;
 
@@ -74,7 +72,6 @@ import java.awt.Color;
 import java.util.Random;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 

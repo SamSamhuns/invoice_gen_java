@@ -41,14 +41,11 @@ import com.fairandsmart.generator.documents.data.model.InvoiceModel;
 import com.fairandsmart.generator.documents.data.model.PaymentInfo;
 import com.fairandsmart.generator.documents.data.model.InvoiceNumber;
 import com.fairandsmart.generator.documents.data.model.Client;
-import com.fairandsmart.generator.documents.data.model.Product;
 import com.fairandsmart.generator.documents.data.model.Address;
 import com.fairandsmart.generator.documents.data.model.IDNumbers;
 import com.fairandsmart.generator.documents.data.model.Company;
 import com.fairandsmart.generator.documents.data.model.ProductContainer;
 
-import com.fairandsmart.generator.documents.element.HAlign;
-import com.fairandsmart.generator.documents.element.head.VendorInfoBox;
 import com.fairandsmart.generator.documents.element.head.BillingInfoBox;
 import com.fairandsmart.generator.documents.element.head.ShippingInfoBox;
 import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
@@ -61,7 +58,6 @@ import com.fairandsmart.generator.documents.element.payment.PaymentInfoBox;
 import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
 import com.fairandsmart.generator.documents.element.image.ImageBox;
 import com.fairandsmart.generator.documents.element.footer.StampBox;
-import com.fairandsmart.generator.documents.element.footer.FootCompanyBox;
 
 import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDDocument;
