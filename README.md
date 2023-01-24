@@ -2,7 +2,22 @@
 
 Generate semi-structured documents (invoices, payslips, and receipts). This repo is a Java implementation of the two papers mentioned in the acknowledgements.
 
-## Docker (Recommended)
+## Setup
+
+### Download resources
+
+Download [common.zip](https://drive.google.com/file/d/1h6h5fSmRbCjMfanVFDWY03GOq-R4NZJS/view?usp=sharing), unzip and place under `src/main/resources`
+
+Or download using `gdown` then unzip into required path.
+
+```shell
+pip install gdown  # inside a python virtual or conda environment
+gdown 1h6h5fSmRbCjMfanVFDWY03GOq-R4NZJS
+unzip common.zip -d src/main/resources/
+rm common.zip
+```
+
+### Docker (Recommended)
 
 Setup docker in the local system.
 
@@ -13,9 +28,9 @@ bash scripts/run_docker.sh -p EXPOSED_HTTP_PORT
 
 The API will be hosted at <http://localhost:EXPOSED_HTTP_PORT/api/ws/> that can be accessed with a default username: `admin` and password: `admin`.
 
-## Local build
+### Local build
 
-### Requirements
+#### Requirements
 
 -   `Java Development Kit 11/12/13/14/15`
 -   `Maven 3.8.6`
@@ -33,7 +48,9 @@ export M2_HOME="/Users/apache-maven-3.8.6"
 export PATH="$PATH:${M2_HOME}/bin"
 ```
 
-### Running SSD generation
+## Running SSD generation
+
+### Web API Generation
 
 Generate these documents via the API web interface by launching:
 
@@ -43,21 +60,22 @@ mvn quarkus:dev
 
 The API will be hosted at <http://localhost:9080/api/ws/> that can be accessed with a default username: `admin` and password: `admin`.
 
-### Testing
+### Testing and Generating SSDs
 
 #### Maven Test
 
-To run all the tests with maven.
+To run all the tests with maven and generate example SSDs.
 
 ```shell
 mvn test
 ```
 
-To run tests for a particular test file inside `src/test/java/com/fairandsmart/generator/documents`:
+To run tests for a particular test file inside `src/test/java/com/fairandsmart/generator/documents` and generate desired number of SSDs:
 
 ```shell
 mvn test -Dtest=TestAmazonLayout
-mvn test -Dntests=2  # only run 2 tests for each layout
+mvn test -Dntests=2  # only run two tests and generate two examples for each layout
+mvn test -Dtest=TestAmazonLayout -Dntests=2  # generate two examples for Amazon Layout
 ```
 
 #### Diversity evaluation (Currently Disabled)
