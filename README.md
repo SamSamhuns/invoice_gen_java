@@ -1,6 +1,11 @@
 # Automatic generator of semi-structured documents (SSDs)
 
-Generate semi-structured documents (invoices, payslips, and receipts). This repo is a Java implementation of the two papers mentioned in the acknowledgements.
+Generate semi-structured documents (invoices, payslips, and receipts). This repo is a Java implementation of the two papers mentioned in the acknowledgments.
+
+<img src="https://github.com/SamSamhuns/invoice_gen_java/assets/13418507/6682c39e-8f89-4ec4-89c6-b6cf1f4a1ef7" width="42%" />
+  <img src="https://github.com/SamSamhuns/invoice_gen_java/assets/13418507/e1ad91a1-998d-44fc-a5ea-a4ddcdb79bbd" width="42%" />
+
+<sub>Actual generated examples do not have blurring</sub>
 
 ## Setup
 
@@ -8,7 +13,7 @@ Generate semi-structured documents (invoices, payslips, and receipts). This repo
 
 Download [common.zip](https://drive.google.com/file/d/1h6h5fSmRbCjMfanVFDWY03GOq-R4NZJS/view?usp=sharing), unzip and place under `src/main/resources`
 
-Or download using `gdown` then unzip into required path.
+Or download using `gdown` then unzip into the required path.
 
 ```shell
 pip install gdown  # inside a python virtual or conda environment
@@ -35,7 +40,7 @@ The API will be hosted at <http://localhost:EXPOSED_HTTP_PORT/api/ws/> that can 
 -   `Java Development Kit 11/12/13/14/15`
 -   `Maven 3.8.6`
 
-Tested on MacOS Big Sur 11.6. The repository should function in linux systems as well. Recommended to install from archived `tar.gz` files available from <https://www.oracle.com/java/technologies/java-se-glance.html> for JDK files and <https://maven.apache.org/download.cgi> for Maven.
+Tested on MacOS Big Sur 11.6. The repository should function in Linux systems as well. Recommended to install from archived `tar.gz` files available from <https://www.oracle.com/java/technologies/java-se-glance.html> for JDK files and <https://maven.apache.org/download.cgi> for Maven.
 
 Add the following the bash or the current editor profile/rc files.
 
@@ -58,31 +63,31 @@ Generate these documents via the API web interface by launching:
 mvn quarkus:dev
 ```
 
-The API will be hosted at <http://localhost:9080/api/ws/> that can be accessed with a default username: `admin` and password: `admin`.
+The API will be hosted at <http://localhost:9080/api/ws/> which can be accessed with a default username: `admin` and password: `admin`.
 
 ### Testing and Generating SSDs
 
 #### Maven Test
 
-To run all the tests with maven and generate example SSDs.
+To run all the tests with Maven and generate example SSDs.
 
 ```shell
 mvn test
 ```
 
-To run tests for a particular test file inside `src/test/java/com/fairandsmart/generator/documents` and generate desired number of SSDs:
+To run tests for a particular test file inside `src/test/java/com/fairandsmart/generator/documents` and generate the desired number of SSDs:
 
 ```shell
 mvn test -Dtest=TestAmazonLayout
-mvn test -Dntests=2  # only run two tests and generate two examples for each layout
+mvn test -Dntests=2  # Only run two tests and generate two examples for each layout
 mvn test -Dtest=TestAmazonLayout -Dntests=2  # generate two examples for Amazon Layout
 ```
 
 #### Diversity evaluation (Currently Disabled)
 
-We can evaluate the diversity of the local generated SSD datasets using 4 metrics:
+We can evaluate the diversity of the locally generated SSD datasets using 4 metrics:
 
-    Alignement, overlapping, SCR_score, and SELF-BLEU :
+    Alignment, overlapping, SCR_score, and SELF-BLEU :
         TestDiversityLaunch
 
 #### Annotations in Invoices GEDI File
@@ -99,7 +104,7 @@ We can evaluate the diversity of the local generated SSD datasets using 4 metric
 -   Seller Email - SEMAIL
 -   Seller Contact Number - SCN
 -   Seller Fax Number - SFAX
--   E-commerce Platform Name(Like Amazon, Ebay,..) - EN
+-   E-commerce Platform Name(Like Amazon, Ebay, ...) - EN
 -   E-commerce Platform Website - EWEB
 -   E-commerce Order Reference - EOID
     -   Invoice Date - IDATE
@@ -127,7 +132,7 @@ Generating your own invoices and other SSDs with custom data.
         -   Address CSV files acquired from <https://results.openaddresses.io/>
     -   [Client Info: Bill To, Ship To](src/main/java/com/fairandsmart/generator/documents/data/model/Client.java)
     -   [Company Info](src/main/java/com/fairandsmart/generator/documents/data/model/Company.java)
-        -   Required Fields for company info csv file
+        -   Required Fields for company info CSV file
             -   `name`: Sign or name of the operation
             -   `address_l1`: Address line 1
             -   `address_l2`: Address line 2
@@ -160,7 +165,7 @@ Generating your own invoices and other SSDs with custom data.
 
 -   Original facogen repo <https://github.com/fairandsmart/facogen>. Re-initialized to remove tracking of large resources.
 -   Belhadj, D., Belaïd, Y., & Belaïd, A. (2021, September). Automatic Generation of Semi-structured Documents. In International Conference on Document Analysis and Recognition (pp. 191-205). Springer, Cham.
--   Blanchard, J., Belaïd, Y., & Belaïd, A. (2019, September). Automatic generation of a custom corpora for invoice analysis and recognition. In 2019 International Conference on Document Analysis and Recognition Workshops (ICDARW). IEEE.
+-   Blanchard, J., Belaïd, Y., & Belaïd, A. (2019, September). Automatic generation of custom corpora for invoice analysis and recognition. In 2019 International Conference on Document Analysis and Recognition Workshops (ICDARW). IEEE.
 -   Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
 -   Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
 -   Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
@@ -181,7 +186,7 @@ Under `src/main/java/com/fairandsmart/generator`
       ├── api
       │   └── WorkspaceResource.java     # Set Web API endpoints i.e. generate, delete or download SSDs
       ├── documents
-      │   ├── InvoiceGenerator.java      # Invoice SSD entrypoint, build invoice layout, save xml, save json, save image
+      │   ├── InvoiceGenerator.java      # Invoice SSD entry point, build invoice layout, save XML, save JSON, save image
       │   ├── common
       │   │   └── VerifCharEncoding.java (For verifying ANSI Encoding & remove non ANSI chars)
       │   ├── data (Data classes to populate the layouts)
@@ -192,20 +197,20 @@ Under `src/main/java/com/fairandsmart/generator`
       │   │       ├── Client.java                # Stores client Bill+Ship name, head, address & IDNumbers (TIN, TRN, VAT Number)
       │   │       ├── Company.java               # Stores company name, Address, ContactNumber, idNumbers, Logo, Signature
       │   │       ├── ContactNumber.java         # Stores phone & fax label and regex values
-      │   │       ├── IDNumbers.java             # Stores VAT/TRN/TIN labels and values along with french siret and TOA ids
+      │   │       ├── IDNumbers.java             # Stores VAT/TRN/TIN labels and values along with French siret and TOA ids
       │   │       ├── InvoiceAnnotModel.java     # Class to store annotations for invoices
       │   │       ├── InvoiceDate.java           # Invoice date, Order date, Ship date, Payment date, and Payment Due date along with heads
-      │   │       ├── InvoiceModel.java          # High level container for invoices
+      │   │       ├── InvoiceModel.java          # High-level container for invoices
       │   │       ├── InvoiceNumber.java         # Invoice number, Order number & Client number along with heads
       │   │       ├── Logo.java                  # Stores logo for each Company in the resources
       │   │       ├── Model.java                 # Stores language, locale, payment info, company, configMaps, client, product container
-      │   │       ├── PaymentInfo.java           # Payment term, type, bank details, account name and number
+      │   │       ├── PaymentInfo.java           # Payment term, type, bank details, account name, and number
       │   │       ├── Product.java               # Stores one Product item Quantity, Code, Price, Discount, Tax
       │   │       ├── ProductContainer.java      # Stores Table header labels: vat, disc & total labels
       │   │       ├── Signature.java             # Stores signatures
-      │   │       ├── Stamp.java                 # Stores stamp that align with existing companies
+      │   │       ├── Stamp.java                 # Stores stamp that aligns with existing companies
       │   ├── element                    # Drawing, structure & layout class elements
-      │   │   ├── BoundingBox.java               # base bounding box element with xmin,ymin,xmax,ymax
+      │   │   ├── BoundingBox.java               # base bounding box element with xmin, ymin, xmax, ymax
       │   │   ├── ElementBox.java                # Abstract class that is extended by all other layout elements
       │   │   ├── HAlign.java                    # HAlign LEFT, CENTER, RIGHT enums
       │   │   ├── Padding.java                   # Padding element
