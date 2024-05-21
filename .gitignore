@@ -47,6 +47,9 @@ env
 # resources/common must be downloaded from online storage
 src/main/resources/common
 
+# generated data
+generated_data
+
 # MacOS system files
 .DS_Store
 ._DS_Store
