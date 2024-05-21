@@ -2,7 +2,7 @@ import csv
 import tqdm
 
 
-csv_path = "/Users/samridha.shrestha/Downloads/dw/facogen/src/main/resources/common/company/companies_us.csv"
+csv_path = "invoice_gen_java/src/main/resources/common/company/companies_us.csv"
 data_rows = []
 
 with open(csv_path, newline='') as csvfile:

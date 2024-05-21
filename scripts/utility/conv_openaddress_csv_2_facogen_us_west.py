@@ -21,7 +21,7 @@ faker_gen = Faker()
 10 HASH b0aa70f7d0301027
 """
 
-csv_path = "/Users/samridha.shrestha/Downloads/dw/facogen/src/main/resources/common/address/us_west.csv"
+csv_path = "invoice_gen_java/src/main/resources/common/address/us_west.csv"
 data_rows = []
 street_map = set()
 

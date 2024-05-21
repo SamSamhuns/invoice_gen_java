@@ -220,13 +220,6 @@
     <tag>HEAD</tag>
   </scm>
 
-  <distributionManagement>
-    <site>
-      <id>facogen.fairandsmart.io</id>
-      <url>file:///tmp/facogen/site</url>
-    </site>
-  </distributionManagement>
-
   <developers>
     <developer>
       <id>samsamhuns</id>
@@ -239,99 +232,10 @@
         <role>maintainer</role>
       </roles>
     </developer>
-    <developer>
-      <id>xlefevbre</id>
-      <name>Xavier Lefevre</name>
-      <email>xavier.lefevre@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>manager</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>abalbo</id>
-      <name>ALan Balbo</name>
-      <email>alan.balbo@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>nrueff</id>
-      <name>Nicolas Rueff</name>
-      <email>nicolas.rueff@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>fpierre</id>
-      <name>Frederic Pierre</name>
-      <email>frederic.pierre@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>vguillaume</id>
-      <name>Victor Guillaume</name>
-      <email>victor.guillaume@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>jblanchard</id>
-      <name>Jerome Blanchard</name>
-      <email>jerome.blanchard@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>ahubert</id>
-      <name>Aurore Hubert</name>
-      <email>aurore.hubert@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>kmeszczynski</id>
-      <name>Kevin Meszczynski</name>
-      <email>kevin.meszczynski@fairandsmart.com</email>
-      <timezone>+1</timezone>
-      <organization>Fair And Smart</organization>
-      <organizationUrl>https://www.fairandsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
   </developers>
-
   <organization>
-    <name>Fair And Smart</name>
-    <url>https://fairandsmart.io/facogen/team-list.html</url>
+    <name>SamSamhuns</name>
+    <url>https://samsamhuns.github.io/</url>
   </organization>
 
   <licenses>
@@ -341,20 +245,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <issueManagement>
-    <system>Jira</system>
-    <url>http://forge.ortolang.fr/</url>
-  </issueManagement>
-
-  <mailingLists>
-    <mailingList>
-      <name>Infos List</name>
-      <subscribe>http://lists.fairandsmart.io/facogen/</subscribe>
-      <unsubscribe>http://lists.fairandsmart.io/facogen/</unsubscribe>
-      <post>facogen@lists.fairandsmart.io</post>
-    </mailingList>
-  </mailingLists>
 
   <build>
     <plugins>

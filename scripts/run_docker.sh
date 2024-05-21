@@ -2,7 +2,7 @@
 helpFunction()
 {
    echo ""
-   echo "Usage: $0 -p port -n container_name(default: facogen_sdd_gen_cont)"
+   echo "Usage: $0 -p port -n container_name(default: sdd_gen_cont)"
    echo -e "\t-p port"
    echo -e "\t-n container_name"
    exit 1 # Exit script after printing help
