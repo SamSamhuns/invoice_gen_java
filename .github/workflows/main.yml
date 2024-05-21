@@ -16,13 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+    - name: Install Python and pip
+      run: |
+        apt-get update
+        apt-get install -y python3 python3-pip
 
     - name: Install gdown
-      run: pip install gdown
+      run: pip3 install gdown
 
     - name: Download resources with gdown
       run: |
