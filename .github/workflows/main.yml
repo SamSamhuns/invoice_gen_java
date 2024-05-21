@@ -16,6 +16,20 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install gdown
+      run: pip install gdown
+
+    - name: Download resources with gdown
+      run: |
+        gdown 1h6h5fSmRbCjMfanVFDWY03GOq-R4NZJS -O common.zip
+        unzip common.zip -d src/main/resources/
+        rm common.zip
+
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
