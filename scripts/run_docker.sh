@@ -8,8 +8,8 @@ helpFunction()
    exit 1 # Exit script after printing help
 }
 
-image_name="facogen_ssd_gen:latest"  # image name, check build_docker.sh for details
-container_name="facogen_sdd_gen_cont"  # default container name
+image_name="ssd_gen:latest"  # image name, check build_docker.sh for details
+container_name="sdd_gen_cont"  # default container name
 
 while getopts "p:" opt
 do
@@ -37,10 +37,10 @@ if [ ! "$(docker ps -q -f name=$container_name)" ]; then
     fi
 fi
 
-echo "Check http://localhost:$port/api/ws/ to access facogen SSD gen api. Use username and password admin/admin to login"
+echo "Check http://localhost:$port/api/ws/ to access SSD gen api. Use username and password admin/admin to login"
 
 docker run --rm -d \
       --name "$container_name" \
       -p $port:9080 \
-      -v $PWD/generated_data:/facogen/target \
+      -v $PWD/generated_data:/ssd_gen/target \
       "$image_name"
