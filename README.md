@@ -1,11 +1,28 @@
-# Automatic generator of semi-structured documents (SSDs)
+# Automatically generate synthetic semi-structured documents (SSDs)
 
-Generate semi-structured documents (invoices, payslips, and receipts). This repo is a Java implementation of the two papers mentioned in the acknowledgments.
+Generate semi-structured documents **(invoices, payslips, and receipts)**. This repo is a Java implementation of the two papers mentioned in the acknowledgments.
 
 <img src="https://github.com/SamSamhuns/invoice_gen_java/assets/13418507/6682c39e-8f89-4ec4-89c6-b6cf1f4a1ef7" width="42%" />
   <img src="https://github.com/SamSamhuns/invoice_gen_java/assets/13418507/e1ad91a1-998d-44fc-a5ea-a4ddcdb79bbd" width="42%" />
 
 <sub>Actual generated examples do not have blurring</sub>
+
+- [Automatically generate synthetic semi-structured documents (SSDs)](#automatically-generate-synthetic-semi-structured-documents-ssds)
+  - [Setup](#setup)
+    - [Download resources](#download-resources)
+    - [Docker (Recommended)](#docker-recommended)
+    - [Generating SSDs](#generating-ssds)
+    - [Local build](#local-build)
+      - [Requirements](#requirements)
+  - [Running SSD generation](#running-ssd-generation)
+    - [Web API Generation](#web-api-generation)
+    - [Testing and Generating SSDs](#testing-and-generating-ssds)
+      - [Maven Test](#maven-test)
+      - [Diversity evaluation (Currently Disabled)](#diversity-evaluation-currently-disabled)
+      - [Annotations in Invoices GEDI File](#annotations-in-invoices-gedi-file)
+      - [Development Support](#development-support)
+    - [Relevant Structure \& Information for Invoice Generation](#relevant-structure--information-for-invoice-generation)
+    - [Acknowledgements](#acknowledgements)
 
 ## Setup
 
@@ -31,7 +48,13 @@ bash scripts/build_docker.sh
 bash scripts/run_docker.sh -p EXPOSED_HTTP_PORT
 ```
 
+### Generating SSDs
+
 The API will be hosted at <http://localhost:EXPOSED_HTTP_PORT/api/ws/> that can be accessed with a default username: `admin` and password: `admin`.
+
+Generate the desired SSD with the `Generate Content` button and refresh the page after a while. The generated documents will appear on the page.
+
+The documents are also bulk saved in the `generated_data/classes/invoices/sample` directory which is created after running the docker container.
 
 ### Local build
 
@@ -161,21 +184,6 @@ Generating your own invoices and other SSDs with custom data.
     -   [Product Receipt Fields](src/main/java/com/fairandsmart/generator/documents/data/model/ProductReceiptContainer.java)
     -   [Receipt Date](src/main/java/com/fairandsmart/generator/documents/data/model/ReceiptDate.java)
 
-### Acknowledgements
-
--   Original facogen repo <https://github.com/fairandsmart/facogen>. Re-initialized to remove tracking of large resources.
--   Belhadj, D., Belaïd, Y., & Belaïd, A. (2021, September). Automatic Generation of Semi-structured Documents. In International Conference on Document Analysis and Recognition (pp. 191-205). Springer, Cham.
--   Blanchard, J., Belaïd, Y., & Belaïd, A. (2019, September). Automatic generation of custom corpora for invoice analysis and recognition. In 2019 International Conference on Document Analysis and Recognition Workshops (ICDARW). IEEE.
--   Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
--   Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
--   Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
--   Frederic Pierre <frederic.pierre@fairansmart.com> / FairAndSmart
--   Victor Guillaume <victor.guillaume@fairandsmart.com> / FairAndSmart
--   Jérôme Blanchard <jerome.blanchard@fairandsmart.com> / FairAndSmart
--   Aurore Hubert <aurore.hubert@fairandsmart.com> / FairAndSmart
--   Kevin Meszczynski <kevin.meszczynski@fairandsmart.com> / FairAndSmart
-
-
 ### Relevant Structure & Information for Invoice Generation
 
 `Note: Files related to receipt and payslips are ignored`
@@ -260,3 +268,18 @@ Under `src/main/java/com/fairandsmart/generator`
       └── workspace
           ├── WorkspaceManager.java             # API functions for load, purge, bootstrap & deletePath
           └── entity                            # Base classes for java quarkus web API
+
+
+### Acknowledgements
+
+-   Original facogen repo <https://github.com/fairandsmart/facogen>. Re-initialized to remove tracking of large resources.
+-   Belhadj, D., Belaïd, Y., & Belaïd, A. (2021, September). Automatic Generation of Semi-structured Documents. In International Conference on Document Analysis and Recognition (pp. 191-205). Springer, Cham.
+-   Blanchard, J., Belaïd, Y., & Belaïd, A. (2019, September). Automatic generation of custom corpora for invoice analysis and recognition. In 2019 International Conference on Document Analysis and Recognition Workshops (ICDARW). IEEE.
+-   Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
+-   Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
+-   Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
+-   Frederic Pierre <frederic.pierre@fairansmart.com> / FairAndSmart
+-   Victor Guillaume <victor.guillaume@fairandsmart.com> / FairAndSmart
+-   Jérôme Blanchard <jerome.blanchard@fairandsmart.com> / FairAndSmart
+-   Aurore Hubert <aurore.hubert@fairandsmart.com> / FairAndSmart
+-   Kevin Meszczynski <kevin.meszczynski@fairandsmart.com> / FairAndSmart
