@@ -1,8 +1,8 @@
-package com.fairandsmart.generator.documents;
+package com.ssdgen.generator.documents;
 
-import com.fairandsmart.generator.evaluation.CompleteInformation;
-import com.fairandsmart.generator.evaluation.ElementaryInfo;
-import com.fairandsmart.generator.evaluation.InfoMap;
+import com.ssdgen.generator.evaluation.CompleteInformation;
+import com.ssdgen.generator.evaluation.ElementaryInfo;
+import com.ssdgen.generator.evaluation.InfoMap;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

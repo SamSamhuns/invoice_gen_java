@@ -1,12 +1,12 @@
-package com.fairandsmart.generator.documents.element;
+package com.ssdgen.generator.documents.element;
 
-import com.fairandsmart.generator.documents.InvoiceGenerator;
-import com.fairandsmart.generator.documents.data.helper.HelperCommon;
-import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
-import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-import com.fairandsmart.generator.documents.layout.InvoiceLayout;
-import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
+import com.ssdgen.generator.documents.InvoiceGenerator;
+import com.ssdgen.generator.documents.data.helper.HelperCommon;
+import com.ssdgen.generator.documents.element.textbox.SimpleTextBox;
+import com.ssdgen.generator.documents.data.generator.GenerationContext;
+import com.ssdgen.generator.documents.data.model.InvoiceModel;
+import com.ssdgen.generator.documents.layout.InvoiceLayout;
+import com.ssdgen.generator.documents.data.model.InvoiceAnnotModel;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;

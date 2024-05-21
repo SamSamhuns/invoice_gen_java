@@ -1,8 +1,8 @@
-package com.fairandsmart.generator.documents;
+package com.ssdgen.generator.documents;
 
-import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.fairandsmart.generator.documents.data.model.ReceiptModel;
-import com.fairandsmart.generator.documents.layout.receipt.GenericReceiptLayout;
+import com.ssdgen.generator.documents.data.generator.GenerationContext;
+import com.ssdgen.generator.documents.data.model.ReceiptModel;
+import com.ssdgen.generator.documents.layout.receipt.GenericReceiptLayout;
 import org.junit.Test;
 
 import java.nio.file.Files;

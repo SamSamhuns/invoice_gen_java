@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ssd_gen">
+<project name="ssdgen">
 
     <skin>
         <groupId>org.apache.maven.skins</groupId>

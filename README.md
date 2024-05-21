@@ -100,7 +100,7 @@ To run all the tests with Maven and generate example SSDs.
 mvn test
 ```
 
-To run tests for a particular test file inside `src/test/java/com/fairandsmart/generator/documents` and generate the desired number of SSDs:
+To run tests for a particular test file inside `src/test/java/com/ssdgen/generator/documents` and generate the desired number of SSDs:
 
 ```shell
 mvn test -Dtest=TestAmazonLayout
@@ -152,11 +152,11 @@ Generating your own invoices and other SSDs with custom data.
 
 -   Invoice
 
-    -   [Currency, Country, Language](src/main/java/com/fairandsmart/generator/documents/data/generator/GenerationContext.java)
-    -   [Country Addresses](src/main/java/com/fairandsmart/generator/documents/data/model/Address.java)
+    -   [Currency, Country, Language](src/main/java/com/ssdgen/generator/documents/data/generator/GenerationContext.java)
+    -   [Country Addresses](src/main/java/com/ssdgen/generator/documents/data/model/Address.java)
         -   Address CSV files acquired from <https://results.openaddresses.io/>
-    -   [Client Info: Bill To, Ship To](src/main/java/com/fairandsmart/generator/documents/data/model/Client.java)
-    -   [Company Info](src/main/java/com/fairandsmart/generator/documents/data/model/Company.java)
+    -   [Client Info: Bill To, Ship To](src/main/java/com/ssdgen/generator/documents/data/model/Client.java)
+    -   [Company Info](src/main/java/com/ssdgen/generator/documents/data/model/Company.java)
         -   Required Fields for company info CSV file
             -   `name`: Sign or name of the operation
             -   `address_l1`: Address line 1
@@ -166,31 +166,31 @@ Generating your own invoices and other SSDs with custom data.
             -   `country`: Country of the establishment
         -   `companies_ar.csv` and `companies_us.csv` generated from [7-million Company Dataset](https://www.kaggle.com/datasets/peopledatalabssf/free-7-million-company-dataset). Postcodes were randomly generated from the `Faker` library
         -   [The French Companies Sirene Dataset](https://www.sirene.fr/static-resources/doc/dessin_L2_description_complete.pdf?version=1.33.25) csv format requires the same fields as above but named `ENSEIGNE`, `L4_NORMALISEE`, `L5_NORMALISEE`, `CODPOS`, `LIBCOM`, `L7_NORMALISEE`,
-    -   [Contact Info: Telephone, Fax](src/main/java/com/fairandsmart/generator/documents/data/model/ContactNumber.java)
+    -   [Contact Info: Telephone, Fax](src/main/java/com/ssdgen/generator/documents/data/model/ContactNumber.java)
         -   The Fields must be present in the Company Info CSV file
-    -   [ID Num Info: Tax Num](src/main/java/com/fairandsmart/generator/documents/data/model/IDNumbers.java)
-    -   [Invoice Dates](src/main/java/com/fairandsmart/generator/documents/data/model/InvoiceDate.java)
-    -   [Invoice Numbers: Client, Invoice Num](src/main/java/com/fairandsmart/generator/documents/data/model/InvoiceNumber.java)
-    -   [Logo Generation](src/main/java/com/fairandsmart/generator/documents/data/model/Logo.java)
+    -   [ID Num Info: Tax Num](src/main/java/com/ssdgen/generator/documents/data/model/IDNumbers.java)
+    -   [Invoice Dates](src/main/java/com/ssdgen/generator/documents/data/model/InvoiceDate.java)
+    -   [Invoice Numbers: Client, Invoice Num](src/main/java/com/ssdgen/generator/documents/data/model/InvoiceNumber.java)
+    -   [Logo Generation](src/main/java/com/ssdgen/generator/documents/data/model/Logo.java)
         -   JSON file
-    -   [Product Item Fields](src/main/java/com/fairandsmart/generator/documents/data/model/ProductContainer.java)
+    -   [Product Item Fields](src/main/java/com/ssdgen/generator/documents/data/model/ProductContainer.java)
     -   1st Signatures dataset from [Kaggle](https://www.kaggle.com/datasets/divyanshrai/handwritten-signatures)
     -   2nd Signatures dataset from [IEEE dataport](https://ieee-dataport.org/open-access/multi-script-handwritten-signature-roman-devanagari)
 
 -   Payslip Specific
 
-    -   [Payment Info](src/main/java/com/fairandsmart/generator/documents/data/model/PaymentInfo.java)
-    -   [Payslip Date](src/main/java/com/fairandsmart/generator/documents/data/model/PayslipDate.java)
+    -   [Payment Info](src/main/java/com/ssdgen/generator/documents/data/model/PaymentInfo.java)
+    -   [Payslip Date](src/main/java/com/ssdgen/generator/documents/data/model/PayslipDate.java)
 
 -   Receipt Specific
-    -   [Product Receipt Fields](src/main/java/com/fairandsmart/generator/documents/data/model/ProductReceiptContainer.java)
-    -   [Receipt Date](src/main/java/com/fairandsmart/generator/documents/data/model/ReceiptDate.java)
+    -   [Product Receipt Fields](src/main/java/com/ssdgen/generator/documents/data/model/ProductReceiptContainer.java)
+    -   [Receipt Date](src/main/java/com/ssdgen/generator/documents/data/model/ReceiptDate.java)
 
 ### Relevant Structure & Information for Invoice Generation
 
 `Note: Files related to receipt and payslips are ignored`
 
-Under `src/main/java/com/fairandsmart/generator`
+Under `src/main/java/com/ssdgen/generator`
 
       ├── Main.java
       ├── api
@@ -280,7 +280,7 @@ Under `src/main/java/com/fairandsmart/generator`
 -   Xavier Lefevre <xavier.lefevre@fairandsmart.com> / FairAndSmart
 -   Nicolas Rueff <nicolas.rueff@fairandsmart.com> / FairAndSmart
 -   Alan Balbo <alan.balbo@fairandsmart.com> / FairAndSmart
--   Frederic Pierre <frederic.pierre@fairansmart.com> / FairAndSmart
+-   Frederic Pierre <frederic.pierre@fairandsmart.com> / FairAndSmart
 -   Victor Guillaume <victor.guillaume@fairandsmart.com> / FairAndSmart
 -   Jérôme Blanchard <jerome.blanchard@fairandsmart.com> / FairAndSmart
 -   Aurore Hubert <aurore.hubert@fairandsmart.com> / FairAndSmart

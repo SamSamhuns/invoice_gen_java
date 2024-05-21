@@ -1,8 +1,8 @@
-package com.fairandsmart.generator.documents;
+package com.ssdgen.generator.documents;
 
-import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.fairandsmart.generator.documents.data.model.PayslipModel;
-import com.fairandsmart.generator.documents.layout.payslip.GenericPayslipLayout;
+import com.ssdgen.generator.documents.data.generator.GenerationContext;
+import com.ssdgen.generator.documents.data.model.PayslipModel;
+import com.ssdgen.generator.documents.layout.payslip.GenericPayslipLayout;
 import org.junit.Test;
 
 import java.nio.file.Files;

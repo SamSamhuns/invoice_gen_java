@@ -1,4 +1,4 @@
-package com.fairandsmart.generator.documents;
+package com.ssdgen.generator.documents;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;

@@ -1,9 +1,9 @@
-package com.fairandsmart.generator.documents;
+package com.ssdgen.generator.documents;
 
-import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-import com.fairandsmart.generator.documents.layout.InvoiceSSDGenerator;
-import com.fairandsmart.generator.documents.layout.invoiceSSD.InvoiceSSDLayout;
+import com.ssdgen.generator.documents.data.generator.GenerationContext;
+import com.ssdgen.generator.documents.data.model.InvoiceModel;
+import com.ssdgen.generator.documents.layout.InvoiceSSDGenerator;
+import com.ssdgen.generator.documents.layout.invoiceSSD.InvoiceSSDLayout;
 import org.junit.Test;
 
 import java.nio.file.Files;

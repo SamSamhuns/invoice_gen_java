@@ -1,16 +1,16 @@
-package com.fairandsmart.generator.documents.element;
+package com.ssdgen.generator.documents.element;
 
-import com.fairandsmart.generator.documents.InvoiceGenerator;
-import com.fairandsmart.generator.documents.layout.InvoiceLayout;
-import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-import com.fairandsmart.generator.documents.element.container.VerticalContainer;
-import com.fairandsmart.generator.documents.element.line.HorizontalLineBox;
-import com.fairandsmart.generator.documents.element.textbox.SimpleTextBox;
-import com.fairandsmart.generator.documents.element.table.TableRowBox;
-import com.fairandsmart.generator.documents.element.HAlign;
+import com.ssdgen.generator.documents.InvoiceGenerator;
+import com.ssdgen.generator.documents.layout.InvoiceLayout;
+import com.ssdgen.generator.documents.data.generator.GenerationContext;
+import com.ssdgen.generator.documents.data.model.InvoiceModel;
+import com.ssdgen.generator.documents.element.container.VerticalContainer;
+import com.ssdgen.generator.documents.element.line.HorizontalLineBox;
+import com.ssdgen.generator.documents.element.textbox.SimpleTextBox;
+import com.ssdgen.generator.documents.element.table.TableRowBox;
+import com.ssdgen.generator.documents.element.HAlign;
 
-import com.fairandsmart.generator.documents.data.model.InvoiceAnnotModel;
+import com.ssdgen.generator.documents.data.model.InvoiceAnnotModel;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;

@@ -1,9 +1,9 @@
-package com.fairandsmart.generator.documents;
+package com.ssdgen.generator.documents;
 
-import com.fairandsmart.generator.documents.data.generator.GenerationContext;
-import com.fairandsmart.generator.documents.data.model.InvoiceModel;
-import com.fairandsmart.generator.documents.layout.InvoiceLayout;
-import com.fairandsmart.generator.documents.layout.cdiscount.CdiscountLayout;
+import com.ssdgen.generator.documents.data.generator.GenerationContext;
+import com.ssdgen.generator.documents.data.model.InvoiceModel;
+import com.ssdgen.generator.documents.layout.InvoiceLayout;
+import com.ssdgen.generator.documents.layout.cdiscount.CdiscountLayout;
 import org.junit.Test;
 
 import java.nio.file.Files;
@@ -45,7 +45,7 @@ public void test() throws Exception {
                 ctx.setMaxProductNum(8);  // increase max number of products to 8
                 InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
                 InvoiceLayout layout = new CdiscountLayout();
-                com.fairandsmart.generator.documents.InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);
+                com.ssdgen.generator.documents.InvoiceGenerator.getInstance().generateInvoice(layout, model, pdf, xml, img, json);
         }
 }
 

@@ -1,4 +1,4 @@
-package com.fairandsmart.generator.documents;
+package com.ssdgen.generator.documents;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
@@ -36,7 +36,7 @@ public class TestLaunch {
                 TestDartyLayout.test(number);
                 break;
             case 5:
-                TestfairandsmartLayout.test(number);
+                TestssdgenLayout.test(number);
                 break;
             case 6:
                 TestLDLCLayout.test(number);
@@ -90,7 +90,7 @@ public class TestLaunch {
                 "Bdmobilier",
                 "Cdiscount",
                 "Darty",
-                "fairandsmart",
+                "ssdgen",
                 "Ldlc",
                 "Loria",
                 "Macomp",
