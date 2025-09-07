@@ -14,32 +14,33 @@ jobs:
       image: maven:3.8.6-openjdk-11
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Python and pip
-      run: |
-        apt-get update
-        apt-get install -y python3 python3-pip
+      - name: Install Python and pip
+        run: |
+            apt-get update -y
+            apt-get install -y python3 python3-pip unzip
 
-    - name: Install gdown
-      run: pip3 install gdown
+      - name: Install gdown
+        run: pip3 install gdown
 
-    - name: Download resources with gdown
-      run: |
-        gdown 1h6h5fSmRbCjMfanVFDWY03GOq-R4NZJS -O common.zip
-        unzip common.zip -d src/main/resources/
-        rm common.zip
+      - name: Download resources with gdown
+        run: |
+          gdown 1S9FNmSMYmNOJElW0lrBsX-TrBQpJfM6C -O common.zip
+          unzip common.zip -d src/main/resources/
+          rm common.zip
 
-    - name: Cache Maven packages
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-m2
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2
 
-    - name: Run Maven Package
-      run: mvn -B package
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
-    - name: Run Maven Tests
-      run: mvn test
+      - name: Run Maven Tests
+        run: mvn -B test
