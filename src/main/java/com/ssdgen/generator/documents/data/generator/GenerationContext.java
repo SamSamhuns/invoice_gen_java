@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class GenerationContext {
 
     private static final Logger LOGGER = Logger.getLogger(GenerationContext.class.getName());
@@ -168,18 +167,20 @@ public class GenerationContext {
 
     // load configuration files //
     {
-      final String genProbConfigFile = "config/generation_probabilities.json";
-      {
-          configMaps = new ArrayList<Map<String, Object>>();
-          try {
-              Reader jsonReader = new InputStreamReader(GenerationContext.class.getClassLoader().getResourceAsStream(genProbConfigFile));
-              Gson gson = new Gson();
-              Type collectionType = new TypeToken<List<Map<String, Object>>>(){}.getType();
-              configMaps.addAll(gson.fromJson(jsonReader, collectionType));
-          } catch ( Exception e ) {
-              LOGGER.log(Level.SEVERE, "unable to parse json source: " + genProbConfigFile, e);
-          }
-      }
+        final String genProbConfigFile = "config/generation_probabilities.json";
+        {
+            configMaps = new ArrayList<Map<String, Object>>();
+            try {
+                Reader jsonReader = new InputStreamReader(
+                        GenerationContext.class.getClassLoader().getResourceAsStream(genProbConfigFile));
+                Gson gson = new Gson();
+                Type collectionType = new TypeToken<List<Map<String, Object>>>() {
+                }.getType();
+                configMaps.addAll(gson.fromJson(jsonReader, collectionType));
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "unable to parse json source: " + genProbConfigFile, e);
+            }
+        }
     }
 
     public static GenerationContext generate() {

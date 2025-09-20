@@ -59,10 +59,14 @@ public class BillingType {
 
         @Override
         public BillingType generate(GenerationContext ctx) {
-            List<String> localizedValues = values.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedValues = values.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxF = ctx.getRandom().nextInt(localizedValues.size());
 
-            List<String> localizedLabels = labels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabels = labels.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxL = ctx.getRandom().nextInt(localizedLabels.size());
             return new BillingType(localizedLabels.get(idxL), localizedValues.get(idxF));
         }

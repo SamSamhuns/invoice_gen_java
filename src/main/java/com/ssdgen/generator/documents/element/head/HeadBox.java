@@ -21,7 +21,8 @@ public class HeadBox extends ElementBox {
     private VerticalContainer container;
     private final PDDocument document;
 
-    public HeadBox(PDFont font, PDFont fontB, PDFont fontI, float fontSize, InvoiceModel model, PDDocument document) throws Exception {
+    public HeadBox(PDFont font, PDFont fontB, PDFont fontI, float fontSize, InvoiceModel model, PDDocument document)
+            throws Exception {
         this.font = font;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -32,8 +33,8 @@ public class HeadBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        container = new VerticalContainer(0,0, 0);
-        HorizontalContainer top = new HorizontalContainer(0,0);
+        container = new VerticalContainer(0, 0, 0);
+        HorizontalContainer top = new HorizontalContainer(0, 0);
         CompanyInfoBox companyInfoBox = new CompanyInfoBox(font, fontB, 11, model, document);
         companyInfoBox.setWidth(250);
         CompanyInfoBox companyInfoBox2 = new CompanyInfoBox(font, fontB, 11, model, document);

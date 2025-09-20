@@ -40,30 +40,31 @@ public class TableRowBox extends ElementBox {
     }
 
     public void addElement(ElementBox element) throws Exception {
-            addElement(element, false);
-        }
+        addElement(element, false);
+    }
 
     public void addElement(ElementBox element, Boolean center_align) throws Exception {
-        if ( elements.size() == config.length ) {
+        if (elements.size() == config.length) {
             throw new Exception("Row is full, no more element allowed");
         }
         elements.add(element);
         element.setWidth(config[elements.size() - 1]);
 
-        //TODO : Add Center Right & Left Horizontal alignment
+        // TODO : Add Center Right & Left Horizontal alignment
 
-        if( !( element.getBBox().getPosY()==0 && element.getBBox().getPosX()!=0 ))
-        {   // Translate only if x is not 0 and y is 0 which is in case of image center alignment
+        if (!(element.getBBox().getPosY() == 0 && element.getBBox().getPosX() != 0)) { // Translate only if x is not 0
+                                                                                       // and y is 0 which is in case of
+                                                                                       // image center alignment
             element.getBBox().setPosX(0);
             element.getBBox().setPosY(0);
         }
 
-        element.translate(box.getPosX() + this.getColumnOffsetX(elements.size()-1), box.getPosY() );
+        element.translate(box.getPosX() + this.getColumnOffsetX(elements.size() - 1), box.getPosY());
 
-        if ( center_align && elements.size()>1 ) {
-            element.translate(element.getBBox().getWidth()/3 , box.getPosY() );
+        if (center_align && elements.size() > 1) {
+            element.translate(element.getBBox().getWidth() / 3, box.getPosY());
         }
-        if ( element.getBBox().getHeight() > box.getHeight() ) {
+        if (element.getBBox().getHeight() > box.getHeight()) {
             this.getBBox().setHeight(element.getBBox().getHeight());
         }
 
@@ -72,13 +73,15 @@ public class TableRowBox extends ElementBox {
 
     private void realignElements() {
         int cpt = 0;
-        for ( ElementBox element : elements ) {
+        for (ElementBox element : elements) {
             float posY = box.getPosY();
-            switch ( valign ) {
+            switch (valign) {
                 case BOTTOM:
-                    posY = box.getPosY() - box.getHeight() + element.getBBox().getHeight(); break;
+                    posY = box.getPosY() - box.getHeight() + element.getBBox().getHeight();
+                    break;
                 case CENTER:
-                    posY = box.getPosY() - box.getHeight() + (element.getBBox().getHeight()/2); break;
+                    posY = box.getPosY() - box.getHeight() + (element.getBBox().getHeight() / 2);
+                    break;
             }
             float transY = posY - element.getBBox().getPosY();
             element.translate(0, transY);
@@ -123,31 +126,33 @@ public class TableRowBox extends ElementBox {
     }
 
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        if ( borderColor != null ) {
+        if (borderColor != null) {
             stream.setLineWidth(borderThickness);
             stream.setStrokingColor(borderColor);
-            borderThickness += 1f;  // add an expansion factor
-            stream.addRect(box.getPosX()-borderThickness, box.getPosY() - box.getHeight() - borderThickness, box.getWidth() + borderThickness*2, box.getHeight() + borderThickness*2);
+            borderThickness += 1f; // add an expansion factor
+            stream.addRect(box.getPosX() - borderThickness, box.getPosY() - box.getHeight() - borderThickness,
+                    box.getWidth() + borderThickness * 2, box.getHeight() + borderThickness * 2);
             stream.stroke();
         }
-        if ( backgroundColor != null ) {
+        if (backgroundColor != null) {
             stream.setNonStrokingColor(backgroundColor);
             stream.addRect(box.getPosX(), box.getPosY() - box.getHeight(), box.getWidth(), box.getHeight());
             stream.fill();
         }
 
-        for(ElementBox element : this.elements) {
-            //if(element.getBBox().getHeight() < this.getBBox().getHeight()) {
-            //    element.translate(0,  this.getBBox().getHeight() - element.getBBox().getHeight());
-            //}
+        for (ElementBox element : this.elements) {
+            // if(element.getBBox().getHeight() < this.getBBox().getHeight()) {
+            // element.translate(0, this.getBBox().getHeight() -
+            // element.getBBox().getHeight());
+            // }
             element.build(stream, writer);
         }
     }
 
-    private float getColumnOffsetX (int numCol) {
-        //TODO maybe the offset X could be store in a float[] like config...
+    private float getColumnOffsetX(int numCol) {
+        // TODO maybe the offset X could be store in a float[] like config...
         float posX = 0;
-        for (int i=0; i<numCol; i++) {
+        for (int i = 0; i < numCol; i++) {
             posX += config[i];
         }
         return posX;

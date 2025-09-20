@@ -3,13 +3,12 @@ package com.ssdgen.generator.documents.data.model;
 import java.util.List;
 import java.util.ArrayList;
 
-
 /*
   This class should be exporte dto JSON with gson to get an json annotation file
     A fully populated sample annot along with field descriptions
     is provided at src/main/resources/invoices/sample_invoice_annotation.json
 */
-public class InvoiceAnnotModel{
+public class InvoiceAnnotModel {
 
     public static class Invoice {
         private String invoice_date;
@@ -62,7 +61,8 @@ public class InvoiceAnnotModel{
 
         }
 
-        public Invoice(String invoice_date, String invoice_id, String invoice_order_id, String invoice_due_date, String payment_term) {
+        public Invoice(String invoice_date, String invoice_id, String invoice_order_id, String invoice_due_date,
+                String payment_term) {
             this.invoice_date = invoice_date;
             this.invoice_id = invoice_id;
             this.invoice_order_id = invoice_order_id;
@@ -285,7 +285,8 @@ public class InvoiceAnnotModel{
         public Paymentto() {
         }
 
-        public Paymentto(String bank_name, String account_name, String account_number, String branch_address, String iban_number, String swift_code, String routing_number, String customer_trn) {
+        public Paymentto(String bank_name, String account_name, String account_number, String branch_address,
+                String iban_number, String swift_code, String routing_number, String customer_trn) {
             this.bank_name = bank_name;
             this.account_name = account_name;
             this.account_number = account_number;
@@ -410,7 +411,9 @@ public class InvoiceAnnotModel{
         public Item() {
         }
 
-        public Item(String serial_number, String description, String item_code, String quantity, String unit, String unit_price, String discount, String discount_rate, String tax, String tax_rate, String sub_total, String total) {
+        public Item(String serial_number, String description, String item_code, String quantity, String unit,
+                String unit_price, String discount, String discount_rate, String tax, String tax_rate, String sub_total,
+                String total) {
             this.serial_number = serial_number;
             this.description = description;
             this.item_code = item_code;
@@ -494,7 +497,8 @@ public class InvoiceAnnotModel{
         public Total() {
         }
 
-        public Total(String tax_price, String tax_rate, String discount_price, String discount_rate, String subtotal_price, String total_price, String currency) {
+        public Total(String tax_price, String tax_rate, String discount_price, String discount_rate,
+                String subtotal_price, String total_price, String currency) {
             this.tax_price = tax_price;
             this.tax_rate = tax_rate;
             this.discount_price = discount_price;

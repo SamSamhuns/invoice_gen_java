@@ -15,8 +15,8 @@ public class BorderBox extends ElementBox {
     private final BoundingBox box;
 
     /*
-      (posX, poxY) represent bottom left coord of box
-    */
+     * (posX, poxY) represent bottom left coord of box
+     */
     public BorderBox(Color borderColor, Color color, int thick, float posX, float posY, float width, float height) {
         this.borderColor = borderColor;
         this.color = color;
@@ -50,7 +50,8 @@ public class BorderBox extends ElementBox {
         stream.addRect(box.getPosX(), box.getPosY(), box.getWidth(), box.getHeight());
         stream.fill();
         stream.setNonStrokingColor(color);
-        stream.addRect(box.getPosX()+thick, box.getPosY()+thick, box.getWidth()-(thick*2), box.getHeight()-(thick*2));
+        stream.addRect(box.getPosX() + thick, box.getPosY() + thick, box.getWidth() - (thick * 2),
+                box.getHeight() - (thick * 2));
         stream.fill();
     }
 

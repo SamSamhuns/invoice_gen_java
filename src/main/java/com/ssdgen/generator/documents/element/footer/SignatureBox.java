@@ -18,7 +18,6 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import java.awt.Color;
 import javax.xml.stream.XMLStreamWriter;
 
-
 public class SignatureBox extends ElementBox {
 
     private final PDFont font;
@@ -38,11 +37,11 @@ public class SignatureBox extends ElementBox {
     private VerticalContainer vContainer;
 
     public SignatureBox(PDFont font, float fontSize, String sigText,
-                        float sigTextX, float sigTextY,
-                        float sigImgWidth, float sigImgHeight,
-                        Color lineStrokeColor,
-                        InvoiceModel model, PDDocument document,
-                        Company company) throws Exception {
+            float sigTextX, float sigTextY,
+            float sigImgWidth, float sigImgHeight,
+            Color lineStrokeColor,
+            InvoiceModel model, PDDocument document,
+            Company company) throws Exception {
         this.font = font;
         this.fontSize = fontSize;
         this.sigText = sigText;
@@ -61,24 +60,25 @@ public class SignatureBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        vContainer = new VerticalContainer(0,0,sigImgWidth);
+        vContainer = new VerticalContainer(0, 0, sigImgWidth);
 
-        SimpleTextBox sigTextBox = new SimpleTextBox(font,fontSize,sigTextX,sigTextY,sigText,"Signature");
+        SimpleTextBox sigTextBox = new SimpleTextBox(font, fontSize, sigTextX, sigTextY, sigText, "Signature");
 
         HorizontalLineBox sigLine = new HorizontalLineBox(
                 sigTextX - 10, sigTextY + 5,
                 sigTextX + sigTextBox.getBBox().getWidth() + 10, sigTextY + 5,
                 lineStrokeColor);
 
-        String sigPath = HelperCommon.getResourceFullPath(this, "common/signature/" + company.getSignature().getFullPath());
+        String sigPath = HelperCommon.getResourceFullPath(this,
+                "common/signature/" + company.getSignature().getFullPath());
         PDImageXObject sigImg = PDImageXObject.createFromFile(sigPath, document);
 
         // resize maintaining aspect to (sigImgWidth, sigImgHeight)
-        float sigScale = Math.min(sigImgWidth/sigImg.getWidth(), sigImgHeight/sigImg.getHeight());
+        float sigScale = Math.min(sigImgWidth / sigImg.getWidth(), sigImgHeight / sigImg.getHeight());
         float sigW = sigImg.getWidth() * sigScale;
         float sigH = sigImg.getHeight() * sigScale;
         // align signature to center of sigTextBox bbox
-        float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth()/2 - sigW/2;
+        float sigIX = sigTextBox.getBBox().getPosX() + sigTextBox.getBBox().getWidth() / 2 - sigW / 2;
         float sigIY = sigTextY + 10;
 
         ImageBox sigImgBox = new ImageBox(sigImg, sigIX, sigIY, sigW, sigH, "Signature Image");

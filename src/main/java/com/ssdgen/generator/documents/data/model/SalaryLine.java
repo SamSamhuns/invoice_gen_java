@@ -2,7 +2,7 @@ package com.ssdgen.generator.documents.data.model;
 
 public class SalaryLine {
 
-    //News
+    // News
     private int codeElement;
     private String heading;
     private float base;
@@ -67,7 +67,8 @@ public class SalaryLine {
         this.employerContributions = employerContributions;
     }
 
-    public SalaryLine(int codeElement, String heading, float base, float salaryRate, float employeeContributions, float employerRate, float employerContributions) {
+    public SalaryLine(int codeElement, String heading, float base, float salaryRate, float employeeContributions,
+            float employerRate, float employerContributions) {
         this.codeElement = codeElement;
         this.heading = heading;
         this.base = base;
@@ -93,26 +94,24 @@ public class SalaryLine {
                 '}';
     }
 
-
-/*
-    public String getFmtPrice() {
-        return String.format("%.2f", this.getPrice()) + " " + currency;
-    }*/
-
-
+    /*
+     * public String getFmtPrice() {
+     * return String.format("%.2f", this.getPrice()) + " " + currency;
+     * }
+     */
 
     /*
-      "price": "479.0",
-              "ean": "8806088499048",
-              "name": "Lave linge hublot Samsung ADD WASH WW90K4437YW",
-              "brand": "Samsung",
-              "sku": "000000000001079579",
-              "categories": [
-              "Gros électroménager",
-              "Lave-linge",
-              "Lave-linge hublot"
-              ]
-
-              */
+     * "price": "479.0",
+     * "ean": "8806088499048",
+     * "name": "Lave linge hublot Samsung ADD WASH WW90K4437YW",
+     * "brand": "Samsung",
+     * "sku": "000000000001079579",
+     * "categories": [
+     * "Gros électroménager",
+     * "Lave-linge",
+     * "Lave-linge hublot"
+     * ]
+     * 
+     */
 
 }

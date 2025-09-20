@@ -162,12 +162,13 @@ public class Company {
         private static final Map<Company, String> companies = new HashMap<>();
         {
             assert companiesFileList.size() == companiesCountryList.size();
-            for (int i=0; i<companiesFileList.size(); i++) {
+            for (int i = 0; i < companiesFileList.size(); i++) {
                 String companiesFile = companiesFileList.get(i);
                 String companiesCountry = companiesCountryList.get(i);
                 try {
                     Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(companiesFile));
-                    Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
+                    Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader()
+                            .parse(in);
                     for (CSVRecord record : records) {
                         String name = record.get("name");
                         String website = record.get("domain");
@@ -177,7 +178,7 @@ public class Company {
                         String postcode = record.get("postcode");
                         String city = record.get("city");
                         String country = record.get("country");
-                        if ( name.length() > 3 ) {
+                        if (name.length() > 3) {
                             Company comp = new Company();
                             comp.setName(name);
                             comp.setWebsite(website);
@@ -187,7 +188,7 @@ public class Company {
                             companies.put(comp, companiesCountry);
                         }
                     }
-                } catch ( Exception e ) {
+                } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "unable to parse csv source: " + companiesFile, e);
                 }
             }
@@ -195,11 +196,16 @@ public class Company {
 
         @Override
         public Company generate(GenerationContext ctx) {
-            List<String> filteredAddressHeaders = addressHeaders.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<Company> goodCompanies = companies.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
+            List<String> filteredAddressHeaders = addressHeaders.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<Company> goodCompanies = companies.entrySet().stream()
+                    .filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey())
+                    .collect(Collectors.toList());
             Company company = goodCompanies.get(ctx.getRandom().nextInt(goodCompanies.size()));
             company.setLogo(new Logo(ctx, company.getName()));
-            company.setAddressHeader(filteredAddressHeaders.get(ctx.getRandom().nextInt(filteredAddressHeaders.size())));
+            company.setAddressHeader(
+                    filteredAddressHeaders.get(ctx.getRandom().nextInt(filteredAddressHeaders.size())));
             company.setStamp(new Stamp(ctx, company.getName()));
             company.setIdNumbers(new IDNumbers.Generator().generate(ctx));
             company.setContact(new ContactNumber.Generator().generate(ctx));

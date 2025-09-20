@@ -24,7 +24,6 @@ import java.util.Random;
 import java.util.logging.Logger;
 import java.text.DecimalFormat;
 
-
 public class SalaryBox extends ElementBox {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
@@ -36,29 +35,31 @@ public class SalaryBox extends ElementBox {
     private Color bodyBackgroundColor;
     private final VerticalContainer container;
     private final SalaryCotisationTable salaryContainer;
-    private String [] chosenFormatForEval;
+    private String[] chosenFormatForEval;
     private static final Random rnd = new Random();
 
     private static final List<String[]> tableFormat = new ArrayList<>();
     {
         tableFormat.clear();
-        tableFormat.add(new String[] {"Rubrique", "Base", "TxSalarial", "CtSalarial", "TxPatrnl", "CotPatrnl"} );
-        tableFormat.add(new String[] {"Rubrique", "Base", "TxSalarial", "CtSalarial", "CotPatrnl"} );
-        tableFormat.add(new String[] {"Element", "Rubrique", "Base", "TxSalarial", "CtSalarial", "TxPatrnl", "CotPatrnl"} );
+        tableFormat.add(new String[] { "Rubrique", "Base", "TxSalarial", "CtSalarial", "TxPatrnl", "CotPatrnl" });
+        tableFormat.add(new String[] { "Rubrique", "Base", "TxSalarial", "CtSalarial", "CotPatrnl" });
+        tableFormat.add(
+                new String[] { "Element", "Rubrique", "Base", "TxSalarial", "CtSalarial", "TxPatrnl", "CotPatrnl" });
     }
 
     private static final List<float[]> tableConfig = new ArrayList<>();
     {
-        tableConfig.add(new float[] {190f, 40f, 70f, 70f, 70f, 70f} );
-        tableConfig.add(new float[] {190f,  90f, 90f, 70f, 70f} );
-        tableConfig.add(new float[] {40f, 190f, 40f, 70f,  70f, 70f, 70f} );
+        tableConfig.add(new float[] { 190f, 40f, 70f, 70f, 70f, 70f });
+        tableConfig.add(new float[] { 190f, 90f, 90f, 70f, 70f });
+        tableConfig.add(new float[] { 40f, 190f, 40f, 70f, 70f, 70f, 70f });
     }
 
     public Random getRandom() {
         return rnd;
     }
 
-    public SalaryBox(float posX, float posY, SalaryCotisationTable salaryContainer, PDFont font, PDFont fontB, float fontSize) throws Exception {
+    public SalaryBox(float posX, float posY, SalaryCotisationTable salaryContainer, PDFont font, PDFont fontB,
+            float fontSize) throws Exception {
         container = new VerticalContainer(posX, posY, 0);
         this.salaryContainer = salaryContainer;
         this.font = font;
@@ -67,51 +68,59 @@ public class SalaryBox extends ElementBox {
         this.init();
     }
 
-    private String getProductElement(SalaryLine salaryLine, String colName){
+    private String getProductElement(SalaryLine salaryLine, String colName) {
         String salaryElement;
-        switch (colName){
+        switch (colName) {
             case "Element":
-                if (salaryLine.getCodeElement()==0) salaryElement ="";
+                if (salaryLine.getCodeElement() == 0)
+                    salaryElement = "";
                 else {
-                    salaryElement = ""+salaryLine.getCodeElement();
+                    salaryElement = "" + salaryLine.getCodeElement();
                 }
                 break;
-            case "Rubrique":  salaryElement = salaryLine.getHeading();
+            case "Rubrique":
+                salaryElement = salaryLine.getHeading();
                 break;
             case "Base":
-                if (salaryLine.getBase()==0) salaryElement ="";
+                if (salaryLine.getBase() == 0)
+                    salaryElement = "";
                 else {
                     salaryElement = df.format(salaryLine.getBase());
                 }
                 break;
             case "TxSalarial":
-                if (salaryLine.getSalaryRate()==0) salaryElement ="";
+                if (salaryLine.getSalaryRate() == 0)
+                    salaryElement = "";
                 else {
                     salaryElement = df.format(salaryLine.getSalaryRate());
                 }
                 break;
             case "CtSalarial":
-                if (salaryLine.getEmployeeContributions()==0) salaryElement ="";
+                if (salaryLine.getEmployeeContributions() == 0)
+                    salaryElement = "";
                 else {
                     salaryElement = df.format(salaryLine.getEmployeeContributions());
                 }
                 break;
             case "TxPatrnl":
-                if (salaryLine.getEmployerRate()==0 ) salaryElement ="";
+                if (salaryLine.getEmployerRate() == 0)
+                    salaryElement = "";
                 else {
                     salaryElement = df.format(salaryLine.getEmployerRate());
                 }
                 break;
             case "CotPatrnl":
-                if (salaryLine.getEmployerContributions()==0 ) salaryElement ="";
+                if (salaryLine.getEmployerContributions() == 0)
+                    salaryElement = "";
                 else {
                     salaryElement = df.format(salaryLine.getEmployerContributions());
                 }
                 break;
 
-            default: return "Invalid Product Name";
+            default:
+                return "Invalid Product Name";
         }
-        return  salaryElement;
+        return salaryElement;
     }
 
     private void init() throws Exception {
@@ -128,40 +137,42 @@ public class SalaryBox extends ElementBox {
 
         int chosenFormatIndex = getRandom().nextInt(tableFormat.size());
         float[] configRow = tableConfig.get(chosenFormatIndex);
-        String [] chosenFormat = tableFormat.get(chosenFormatIndex);
-        chosenFormatForEval =chosenFormat;
+        String[] chosenFormat = tableFormat.get(chosenFormatIndex);
+        chosenFormatForEval = chosenFormat;
         TableRowBox head = new TableRowBox(configRow, 0, 0, VAlign.BOTTOM);
         head.setBackgroundColor(Color.LIGHT_GRAY);
 
-        for(String colname: chosenFormat)
-        {
-            head.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, headLabels.get(colname), Color.black, null, HAlign.CENTER), false);
+        for (String colname : chosenFormat) {
+            head.addElement(new SimpleTextBox(fontB, fontSize + 1, 0, 0, headLabels.get(colname), Color.black, null,
+                    HAlign.CENTER), false);
 
         }
         container.addElement(head);
 
-        int salarylineNum= 0;
-        for(SalaryLine salaryLine : salaryContainer.getSalaryTableLines() ) {
+        int salarylineNum = 0;
+        for (SalaryLine salaryLine : salaryContainer.getSalaryTableLines()) {
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             HAlign halign;
             salarylineNum++;
             String salaryElement;
-            for(String colname: chosenFormat)
-            {
+            for (String colname : chosenFormat) {
                 salaryElement = getProductElement(salaryLine, colname);
                 halign = HAlign.LEFT;
-               // productLine.addElement(new SimpleTextBox(fontB, fontSize, 0, 0, salaryElement, Color.BLACK, null, halign, colname), false);
-                productLine.addElement(new SimpleTextBox(fontB, fontSize, 0, 0, salaryElement, Color.BLACK, null, halign), false);
+                // productLine.addElement(new SimpleTextBox(fontB, fontSize, 0, 0,
+                // salaryElement, Color.BLACK, null, halign, colname), false);
+                productLine.addElement(
+                        new SimpleTextBox(fontB, fontSize, 0, 0, salaryElement, Color.BLACK, null, halign), false);
 
             }
-           // container.addElement(new HorizontalLineBox(0,0, head.getBBox().getWidth()+30, 0));
-            container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+            // container.addElement(new HorizontalLineBox(0,0, head.getBBox().getWidth()+30,
+            // 0));
+            container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
             container.addElement(productLine);
-           // container.addElement(new BorderBox(Color.BLACK,Color.BLACK, 0,0, 0, 0, 5));
+            // container.addElement(new BorderBox(Color.BLACK,Color.BLACK, 0,0, 0, 0, 5));
         }
 
-        container.addElement(new HorizontalLineBox(0,0, head.getBBox().getWidth()+30, 0));
-        container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        container.addElement(new HorizontalLineBox(0, 0, head.getBBox().getWidth() + 30, 0));
+        container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
 
     }
 

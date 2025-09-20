@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 
 import java.io.IOException;
 
-
 public class HelperImage extends Helper {
 
     public HelperImage() {
@@ -39,7 +38,8 @@ public class HelperImage extends Helper {
         drawLine(stream, x1, y1, x2, y2, Color.BLACK);
     }
 
-    public static void drawLine(PDPageContentStream stream, float x1, float y1, float x2, float y2, Color strokeColor) throws Exception {
+    public static void drawLine(PDPageContentStream stream, float x1, float y1, float x2, float y2, Color strokeColor)
+            throws Exception {
         stream.moveTo(x1, y1);
         stream.lineTo(x2, y2);
         stream.closePath();
@@ -54,8 +54,7 @@ public class HelperImage extends Helper {
         for (int i = 0; i < x.length; i++) {
             if (i == 0) {
                 stream.moveTo(x[i], y[i]);
-            }
-            else {
+            } else {
                 stream.lineTo(x[i], y[i]);
             }
         }
@@ -93,14 +92,15 @@ public class HelperImage extends Helper {
         return rotatedImage;
     }
 
-    public static void addWatermarkImagePDF(final PDDocument doc, final PDPage page, final PDImageXObject imgPDF) throws IOException {
+    public static void addWatermarkImagePDF(final PDDocument doc, final PDPage page, final PDImageXObject imgPDF)
+            throws IOException {
 
         float oImgW = imgPDF.getWidth();
         float oImgH = imgPDF.getHeight();
         float pageW = page.getMediaBox().getWidth();
         float pageH = page.getMediaBox().getHeight();
         // rescale img dims to be 1/2.5 of page dim
-        float nImgW = (1f/2.5f) * pageW;
+        float nImgW = (1f / 2.5f) * pageW;
         float nimgH = (nImgW * oImgH) / oImgW;
         float xoff = (pageW - nImgW) / 2;
         float yoff = (pageH - nimgH) / 2;
@@ -115,7 +115,8 @@ public class HelperImage extends Helper {
             final PDDocument doc, final PDPage page, final PDImageXObject imgPDF,
             final float xPos, final float yPos, final float imgW, final float imgH,
             final float minAlpha, final float maxAlpha, final double rotAngle) throws IOException {
-        try (PDPageContentStream stream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
+        try (PDPageContentStream stream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND,
+                true,
                 true)) {
             stream.saveGraphicsState();
             final PDExtendedGraphicsState pdState = new PDExtendedGraphicsState();
@@ -129,8 +130,7 @@ public class HelperImage extends Helper {
                 BufferedImage imgBuf = HelperImage.getRotatedImage(imgPDF.getImage(), rotAngle);
                 PDImageXObject imgPDFRot = LosslessFactory.createFromImage(doc, imgBuf);
                 stream.drawImage(imgPDFRot, xPos, yPos, imgW, imgH);
-            }
-            else {
+            } else {
                 stream.drawImage(imgPDF, xPos, yPos, imgW, imgH);
             }
             stream.restoreGraphicsState();
@@ -138,38 +138,41 @@ public class HelperImage extends Helper {
         }
     }
 
-    public static void addWatermarkTextPDF(final PDDocument doc, final PDPage page, final PDFont font, final String text) throws IOException {
-          try (PDPageContentStream stream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true,
-                  true)) {
-              final float fontHeight = 90 + rnd.nextInt(20); // arbitrary for short text
-              final float width = page.getMediaBox().getWidth();
-              final float height = page.getMediaBox().getHeight();
-              final float stringWidth = font.getStringWidth(text) / 1000 * fontHeight;  /// mult by fontSize to get width as well
-              final float diagonalLength = (float) Math.sqrt(width * width + height * height);
-              final float angle = (float) Math.atan2(height, width) + (float) rnd.nextInt(5)/100;
-              final float x = (diagonalLength - stringWidth) / 2; // "horizontal" position in rotated world
-              final float y = -fontHeight / 4; // 4 is a trial-and-error thing, this lowers the text a bit
-              stream.transform(Matrix.getRotateInstance(angle, 0, 0));
-              stream.setFont(font, fontHeight);
-              if (rnd.nextInt(10) < 3) {
-                  stream.setRenderingMode(RenderingMode.STROKE); // for "hollow" effect
-              }
-              final PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
+    public static void addWatermarkTextPDF(final PDDocument doc, final PDPage page, final PDFont font,
+            final String text) throws IOException {
+        try (PDPageContentStream stream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND,
+                true,
+                true)) {
+            final float fontHeight = 90 + rnd.nextInt(20); // arbitrary for short text
+            final float width = page.getMediaBox().getWidth();
+            final float height = page.getMediaBox().getHeight();
+            final float stringWidth = font.getStringWidth(text) / 1000 * fontHeight; /// mult by fontSize to get width
+                                                                                     /// as well
+            final float diagonalLength = (float) Math.sqrt(width * width + height * height);
+            final float angle = (float) Math.atan2(height, width) + (float) rnd.nextInt(5) / 100;
+            final float x = (diagonalLength - stringWidth) / 2; // "horizontal" position in rotated world
+            final float y = -fontHeight / 4; // 4 is a trial-and-error thing, this lowers the text a bit
+            stream.transform(Matrix.getRotateInstance(angle, 0, 0));
+            stream.setFont(font, fontHeight);
+            if (rnd.nextInt(10) < 3) {
+                stream.setRenderingMode(RenderingMode.STROKE); // for "hollow" effect
+            }
+            final PDExtendedGraphicsState gs = new PDExtendedGraphicsState();
 
-              float alpha = HelperCommon.rand_uniform(0.10f, 0.25f);
-              gs.setNonStrokingAlphaConstant(alpha);
-              gs.setStrokingAlphaConstant(alpha);
-              gs.setBlendMode(BlendMode.MULTIPLY);
-              gs.setLineWidth(3f);
-              stream.setGraphicsStateParameters(gs);
+            float alpha = HelperCommon.rand_uniform(0.10f, 0.25f);
+            gs.setNonStrokingAlphaConstant(alpha);
+            gs.setStrokingAlphaConstant(alpha);
+            gs.setBlendMode(BlendMode.MULTIPLY);
+            gs.setLineWidth(3f);
+            stream.setGraphicsStateParameters(gs);
 
-              stream.setNonStrokingColor(Color.red);
-              stream.setStrokingColor(Color.red);
+            stream.setNonStrokingColor(Color.red);
+            stream.setStrokingColor(Color.red);
 
-              stream.beginText();
-              stream.newLineAtOffset(x, y);
-              stream.showText(text);
-              stream.endText();
-          }
+            stream.beginText();
+            stream.newLineAtOffset(x, y);
+            stream.showText(text);
+            stream.endText();
+        }
     }
 }

@@ -42,24 +42,25 @@ public class ReceiptProductBox extends ElementBox {
 
     private static final List<String[]> tableFormat = new ArrayList<>();
     {
-        tableFormat.add(new String[] {"PD", "QTY", "UP",  "PTWTX"} );
-        tableFormat.add(new String[] {"QTY", "PD", "UP",  "PTWTX"} );
-        tableFormat.add(new String[] { "QTY", "PD", "PTWTX"} );
+        tableFormat.add(new String[] { "PD", "QTY", "UP", "PTWTX" });
+        tableFormat.add(new String[] { "QTY", "PD", "UP", "PTWTX" });
+        tableFormat.add(new String[] { "QTY", "PD", "PTWTX" });
 
     }
 
     private static final List<float[]> tableConfig = new ArrayList<>();
     {
-        tableConfig.add(new float[] {100f, 60f, 70f,  70f} );
-        tableConfig.add(new float[] {60f, 100f, 70f,  70f} );
-        tableConfig.add(new float[] {40f, 180f, 80f} );
+        tableConfig.add(new float[] { 100f, 60f, 70f, 70f });
+        tableConfig.add(new float[] { 60f, 100f, 70f, 70f });
+        tableConfig.add(new float[] { 40f, 180f, 80f });
     }
 
     public Random getRandom() {
         return rnd;
     }
 
-    public ReceiptProductBox(float posX, float posY, ProductReceiptContainer productContainer, PDFont font, PDFont fontB, float fontSize) throws Exception {
+    public ReceiptProductBox(float posX, float posY, ProductReceiptContainer productContainer, PDFont font,
+            PDFont fontB, float fontSize) throws Exception {
         container = new VerticalContainer(posX, posY, 0);
         this.productContainer = productContainer;
         this.font = font;
@@ -68,23 +69,27 @@ public class ReceiptProductBox extends ElementBox {
         this.init();
     }
 
-    private String getProductElement(Product product, String colName){
+    private String getProductElement(Product product, String colName) {
         String productElement;
-        switch (colName){
-            case "PD":  productElement = product.getName();
+        switch (colName) {
+            case "PD":
+                productElement = product.getName();
                 break;
-            case "QTY":  productElement = Integer.toString(product.getQuantity());
+            case "QTY":
+                productElement = Integer.toString(product.getQuantity());
                 break;
-            case "UP":  productElement = product.getFmtPrice();
+            case "UP":
+                productElement = product.getFmtPrice();
                 break;
-            case "PTWTX":  productElement = product.getFmtTotalPrice();
+            case "PTWTX":
+                productElement = product.getFmtTotalPrice();
                 break;
 
-            default: return "Invalid Product Name";
+            default:
+                return "Invalid Product Name";
         }
-        return  productElement;
+        return productElement;
     }
-
 
     private void init() throws Exception {
         final Map<String, String> headLabels = new HashMap<>();
@@ -92,106 +97,140 @@ public class ReceiptProductBox extends ElementBox {
             headLabels.put("PD", productContainer.getNameHead());
             headLabels.put("QTY", productContainer.getQtyHead());
             headLabels.put("UP", productContainer.getUPHead());
-            //headLabels.put("TXR", productContainer.getTaxRateHead());
+            // headLabels.put("TXR", productContainer.getTaxRateHead());
             headLabels.put("PTWTX", productContainer.getLineTotalHead());
-            //headLabels.put("SNO", productContainer.getsnHead());
+            // headLabels.put("SNO", productContainer.getsnHead());
         }
-
 
         int chosenFormatIndex = getRandom().nextInt(tableFormat.size());
         float[] configRow = tableConfig.get(chosenFormatIndex);
-        String [] chosenFormat = tableFormat.get(chosenFormatIndex);
-        this.chosenFormatHeaders =chosenFormat;
+        String[] chosenFormat = tableFormat.get(chosenFormatIndex);
+        this.chosenFormatHeaders = chosenFormat;
         TableRowBox head = new TableRowBox(configRow, 0, 0, VAlign.BOTTOM);
         head.setBackgroundColor(Color.WHITE);
 
-        headersAvailable= getRandom().nextBoolean();
+        headersAvailable = getRandom().nextBoolean();
 
         if (headersAvailable) {
             for (String colname : chosenFormat) {
-                head.addElement(new SimpleTextBox(fontB, fontSize + 1, 0, 0, headLabels.get(colname), Color.BLACK, null, HAlign.CENTER), false);
+                head.addElement(new SimpleTextBox(fontB, fontSize + 1, 0, 0, headLabels.get(colname), Color.BLACK, null,
+                        HAlign.CENTER), false);
             }
             container.addElement(head);
         }
 
-        int productNum= 0;
-        for(Product product : productContainer.getProducts() ) {
+        int productNum = 0;
+        for (Product product : productContainer.getProducts()) {
             TableRowBox productLine = new TableRowBox(configRow, 0, 0);
             HAlign halign;
             productNum++;
             String productElement;
-            for(String colname: chosenFormat)
-            {
+            for (String colname : chosenFormat) {
                 productElement = getProductElement(product, colname);
-                /*if(colname.equals("SNO"))
-                    productElement = Integer.toString(productNum);*/
+                /*
+                 * if(colname.equals("SNO"))
+                 * productElement = Integer.toString(productNum);
+                 */
                 halign = HAlign.CENTER;
-                if(colname.equals("PD"))
+                if (colname.equals("PD"))
                     halign = HAlign.LEFT;
-                //System.out.println(colname + productElement);
-                productLine.addElement(new SimpleTextBox(font, fontSize, 0, 0, productElement, Color.BLACK, null, halign),false);// colname), false);
+                // System.out.println(colname + productElement);
+                productLine.addElement(
+                        new SimpleTextBox(font, fontSize, 0, 0, productElement, Color.BLACK, null, halign), false);// colname),
+                                                                                                                   // false);
             }
-            container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+            container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
             container.addElement(productLine);
-            container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+            container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
         }
 
-        container.addElement(new HorizontalLineBox(0,0, head.getBBox().getWidth()+30, 0));
-        container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 15));
+        container.addElement(new HorizontalLineBox(0, 0, head.getBBox().getWidth() + 30, 0));
+        container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 15));
 
         qtyTotalAvailabel = rnd.nextBoolean();
         itemsTotalAvailable = rnd.nextBoolean();
 
-        if(qtyTotalAvailabel || itemsTotalAvailable) {
+        if (qtyTotalAvailabel || itemsTotalAvailable) {
             TableRowBox totalQtyItems = new TableRowBox(configRow, 0, 0);
-            if (qtyTotalAvailabel && itemsTotalAvailable){
+            if (qtyTotalAvailabel && itemsTotalAvailable) {
                 QtyBefItems = rnd.nextBoolean();
                 if (QtyBefItems)
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getQtyTotalHead()+" : "+productContainer.getTotalQty(), Color.BLACK, null, HAlign.CENTER), false);
+                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+                            productContainer.getQtyTotalHead() + " : " + productContainer.getTotalQty(), Color.BLACK,
+                            null, HAlign.CENTER), false);
                 else
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getItemsTotalHead() +" : "+productContainer.getTotalItems(), Color.BLACK, null, HAlign.CENTER), false);
-                totalQtyItems.addElement(new SimpleTextBox(fontB, fontSize + 1, 0, 0, " ", Color.BLACK, null, HAlign.LEFT), false);
-                 if (configRow.length == 4) {
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
+                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+                            productContainer.getItemsTotalHead() + " : " + productContainer.getTotalItems(),
+                            Color.BLACK, null, HAlign.CENTER), false);
+                totalQtyItems.addElement(
+                        new SimpleTextBox(fontB, fontSize + 1, 0, 0, " ", Color.BLACK, null, HAlign.LEFT), false);
+                if (configRow.length == 4) {
+                    totalQtyItems.addElement(
+                            new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
                 }
                 if (QtyBefItems)
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getItemsTotalHead() +" : "+productContainer.getTotalItems(), Color.BLACK, null, HAlign.CENTER), false);
+                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+                            productContainer.getItemsTotalHead() + " : " + productContainer.getTotalItems(),
+                            Color.BLACK, null, HAlign.CENTER), false);
                 else
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getQtyTotalHead()+" : "+productContainer.getTotalQty(), Color.BLACK, null, HAlign.CENTER), false);
-            }else {
+                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+                            productContainer.getQtyTotalHead() + " : " + productContainer.getTotalQty(), Color.BLACK,
+                            null, HAlign.CENTER), false);
+            } else {
                 if (qtyTotalAvailabel)
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getQtyTotalHead()+" : "+productContainer.getTotalQty(), Color.BLACK, null, HAlign.CENTER), false);
+                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+                            productContainer.getQtyTotalHead() + " : " + productContainer.getTotalQty(), Color.BLACK,
+                            null, HAlign.CENTER), false);
                 else
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getItemsTotalHead() +" : "+productContainer.getTotalItems(), Color.BLACK, null, HAlign.CENTER), false);
+                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+                            productContainer.getItemsTotalHead() + " : " + productContainer.getTotalItems(),
+                            Color.BLACK, null, HAlign.CENTER), false);
 
-                totalQtyItems.addElement(new SimpleTextBox(fontB, fontSize + 1, 0, 0, " ", Color.BLACK, null, HAlign.LEFT), false);
-                totalQtyItems.addElement(new SimpleTextBox(fontB, fontSize + 1, 0, 0, " ", Color.BLACK, null, HAlign.LEFT), false);
+                totalQtyItems.addElement(
+                        new SimpleTextBox(fontB, fontSize + 1, 0, 0, " ", Color.BLACK, null, HAlign.LEFT), false);
+                totalQtyItems.addElement(
+                        new SimpleTextBox(fontB, fontSize + 1, 0, 0, " ", Color.BLACK, null, HAlign.LEFT), false);
                 if (configRow.length == 4) {
-                    totalQtyItems.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
+                    totalQtyItems.addElement(
+                            new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
                 }
             }
-
 
             container.addElement(totalQtyItems);
         }
 
-       /* TableRowBox totalTax = new TableRowBox(configRow, 0, 0);
-        totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
-        totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
-        totalTax.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, productContainer.getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
-        totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFmtTotalTax(), Color.BLACK, null, HAlign.CENTER , "TTX"), false);
+        /*
+         * TableRowBox totalTax = new TableRowBox(configRow, 0, 0);
+         * totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK,
+         * null, HAlign.CENTER), false);
+         * totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK,
+         * null, HAlign.CENTER), false);
+         * totalTax.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0,
+         * productContainer.getTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
+         * totalTax.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+         * productContainer.getFmtTotalTax(), Color.BLACK, null, HAlign.CENTER , "TTX"),
+         * false);
+         * 
+         * container.addElement(totalTax);
+         */
 
-        container.addElement(totalTax);*/
-
-        /*TableRowBox totalTTC = new TableRowBox(configRow, 0, 0);
-        if (configRow.length == 4){
-            totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
-        }
-        totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK, null, HAlign.CENTER), false);
-        totalTTC.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, productContainer.getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT), false);
-        totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, productContainer.getFmtTotalWithTax(), Color.BLACK, null, HAlign.CENTER,"TA" ), false);
-
-        container.addElement(totalTTC);*/
+        /*
+         * TableRowBox totalTTC = new TableRowBox(configRow, 0, 0);
+         * if (configRow.length == 4){
+         * totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK,
+         * null, HAlign.CENTER), false);
+         * }
+         * totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0, "", Color.BLACK,
+         * null, HAlign.CENTER), false);
+         * totalTTC.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0,
+         * productContainer.getWithTaxTotalHead(), Color.BLACK, null, HAlign.LEFT),
+         * false);
+         * totalTTC.addElement(new SimpleTextBox(font, fontSize, 0, 0,
+         * productContainer.getFmtTotalWithTax(), Color.BLACK, null, HAlign.CENTER,"TA"
+         * ), false);
+         * 
+         * container.addElement(totalTTC);
+         */
     }
 
     @Override

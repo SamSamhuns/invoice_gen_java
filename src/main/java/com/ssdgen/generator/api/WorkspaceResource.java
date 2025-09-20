@@ -36,13 +36,13 @@ import java.util.Collections;
 
 /**
  * Actions availables :
- *   - Lunch a new generation job for this workspace
- *      - Choose layouts
- *      - Choose
- *   - List current running job status
- *   - Purge Workspace content
- *   - Download workspace content
- *   - Browse workspace content
+ * - Lunch a new generation job for this workspace
+ * - Choose layouts
+ * - Choose
+ * - List current running job status
+ * - Purge Workspace content
+ * - Download workspace content
+ * - Browse workspace content
  *
  */
 
@@ -59,7 +59,7 @@ public class WorkspaceResource {
     Template workspace;
 
     @GET
-    @RolesAllowed({"silver","gold","platinum"})
+    @RolesAllowed({ "silver", "gold", "platinum" })
     @Produces(MediaType.TEXT_HTML)
     public Response me(@Context UriInfo uriInfo) throws WorkspaceManagerException {
         Long wsid = workspaceManager.findIdForConnectedUser();
@@ -69,25 +69,27 @@ public class WorkspaceResource {
 
     @GET
     @Path("/{wsid}")
-    @RolesAllowed({"silver","gold","platinum"})
+    @RolesAllowed({ "silver", "gold", "platinum" })
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance getWorkspace(@PathParam("wsid") Long wsid) throws WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException {
+    public TemplateInstance getWorkspace(@PathParam("wsid") Long wsid)
+            throws WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException {
         return workspace.data("workspace", workspaceManager.load(wsid));
     }
 
     @POST
     @Path("/{wsid}/purge")
-    @RolesAllowed({"silver","gold","platinum"})
+    @RolesAllowed({ "silver", "gold", "platinum" })
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance purgeWorkspace(@PathParam("wsid") Long wsid, @FormParam("wsname") String wsname) throws WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException {
+    public TemplateInstance purgeWorkspace(@PathParam("wsid") Long wsid, @FormParam("wsname") String wsname)
+            throws WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException {
         Workspace ws = workspaceManager.load(wsid);
         if (ws.owner.equalsIgnoreCase(wsname)) {
 
             java.io.File rootDir = new File(ws.root);
             String rootParent = rootDir.getParent();
             java.io.File zipPath = new File(rootParent, "files.zip");
-            zipPath.delete();  // returns True if zipPath paths esle returns False
+            zipPath.delete(); // returns True if zipPath paths esle returns False
 
             workspaceManager.purge(wsid);
             return workspace.data("workspace", workspaceManager.load(wsid));
@@ -98,8 +100,10 @@ public class WorkspaceResource {
 
     @GET
     @Path("/{wsid}/content/{filename}")
-    @RolesAllowed({"silver","gold","platinum"})
-    public Response getWorkspaceContent(@PathParam("wsid") Long wsid, @PathParam("filename") String filename, @QueryParam("download") boolean download) throws WorkspaceNotFoundException, WorkspaceManagerException, IOException {
+    @RolesAllowed({ "silver", "gold", "platinum" })
+    public Response getWorkspaceContent(@PathParam("wsid") Long wsid, @PathParam("filename") String filename,
+            @QueryParam("download") boolean download)
+            throws WorkspaceNotFoundException, WorkspaceManagerException, IOException {
         Workspace workspace = workspaceManager.load(wsid);
         java.nio.file.Path itemPath = Paths.get(workspace.root, filename);
         return Response.ok(itemPath.toFile())
@@ -111,8 +115,9 @@ public class WorkspaceResource {
 
     @GET
     @Path("/{wsid}/all_zip")
-    @RolesAllowed({"silver","gold","platinum"})
-    public Response downloadZipWorkspaceContent(@PathParam("wsid") Long wsid) throws WorkspaceNotFoundException, WorkspaceManagerException, IOException {
+    @RolesAllowed({ "silver", "gold", "platinum" })
+    public Response downloadZipWorkspaceContent(@PathParam("wsid") Long wsid)
+            throws WorkspaceNotFoundException, WorkspaceManagerException, IOException {
         Workspace workspace = workspaceManager.load(wsid);
 
         java.io.File rootDir = new File(workspace.root);
@@ -128,9 +133,11 @@ public class WorkspaceResource {
 
     @POST
     @Path("/{wsid}/jobs")
-    @RolesAllowed({"silver","gold","platinum"})
+    @RolesAllowed({ "silver", "gold", "platinum" })
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response submitJob(@Context UriInfo uriInfo, @PathParam("wsid") Long wsid, @FormParam("qty") String qty) throws UnsupportedJobException, WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException, AlreadyActiveJobException {
+    public Response submitJob(@Context UriInfo uriInfo, @PathParam("wsid") Long wsid, @FormParam("qty") String qty)
+            throws UnsupportedJobException, WorkspaceNotFoundException, WorkspaceManagerException,
+            AccessDeniedException, AlreadyActiveJobException {
         Workspace ws = workspaceManager.load(wsid);
         jobManager.submit(ws, "invoice.generate", Collections.singletonMap("qty", qty));
         URI created = uriInfo.getBaseUriBuilder().path(WorkspaceResource.class).path(wsid.toString()).build();
@@ -139,9 +146,11 @@ public class WorkspaceResource {
 
     @POST
     @Path("/{wsid}/payslip/jobs")
-    @RolesAllowed({"silver","gold","platinum"})
+    @RolesAllowed({ "silver", "gold", "platinum" })
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response submitJobP(@Context UriInfo uriInfo, @PathParam("wsid") Long wsid, @FormParam("qty") String qty) throws UnsupportedJobException, WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException, AlreadyActiveJobException {
+    public Response submitJobP(@Context UriInfo uriInfo, @PathParam("wsid") Long wsid, @FormParam("qty") String qty)
+            throws UnsupportedJobException, WorkspaceNotFoundException, WorkspaceManagerException,
+            AccessDeniedException, AlreadyActiveJobException {
         Workspace ws = workspaceManager.load(wsid);
         jobManager.submit(ws, "payslip.generate", Collections.singletonMap("qty", qty));
         URI created = uriInfo.getBaseUriBuilder().path(WorkspaceResource.class).path(wsid.toString()).build();
@@ -150,9 +159,11 @@ public class WorkspaceResource {
 
     @POST
     @Path("/{wsid}/receipt/jobs")
-    @RolesAllowed({"silver","gold","platinum"})
+    @RolesAllowed({ "silver", "gold", "platinum" })
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response submitJobR(@Context UriInfo uriInfo, @PathParam("wsid") Long wsid, @FormParam("qty") String qty) throws UnsupportedJobException, WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException, AlreadyActiveJobException {
+    public Response submitJobR(@Context UriInfo uriInfo, @PathParam("wsid") Long wsid, @FormParam("qty") String qty)
+            throws UnsupportedJobException, WorkspaceNotFoundException, WorkspaceManagerException,
+            AccessDeniedException, AlreadyActiveJobException {
         Workspace ws = workspaceManager.load(wsid);
         jobManager.submit(ws, "receipt.generate", Collections.singletonMap("qty", qty));
         URI created = uriInfo.getBaseUriBuilder().path(WorkspaceResource.class).path(wsid.toString()).build();

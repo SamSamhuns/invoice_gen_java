@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ReceiptGenerationHandler implements JobHandler {
 
     private static final Logger LOGGER = Logger.getLogger(ReceiptGenerationHandler.class.getName());
-    public static final String[] SUPPORTED_TYPES = {"receipt.generate"};
+    public static final String[] SUPPORTED_TYPES = { "receipt.generate" };
     public static final String PARAM_QTY = "qty";
     public static final String PARAM_START_IDX = "start-idx";
     public static final String PARAM_OUTPUT = "output";
@@ -37,7 +37,6 @@ public class ReceiptGenerationHandler implements JobHandler {
     @Inject
     @Any
     Instance<GenericReceiptLayout> layouts;
-
 
     @Inject
     JobManager manager;
@@ -74,7 +73,7 @@ public class ReceiptGenerationHandler implements JobHandler {
         try {
             try {
                 LOGGER.log(Level.INFO, "ReceiptGeneration started");
-                if ( !params.containsKey(PARAM_QTY) ) {
+                if (!params.containsKey(PARAM_QTY)) {
                     report.append("Missing parameters: " + PARAM_QTY);
                     manager.fail(jobId, report.toString());
                     return;
@@ -85,36 +84,38 @@ public class ReceiptGenerationHandler implements JobHandler {
                 int qty = Integer.parseInt(params.get(PARAM_QTY));
                 int start = Integer.parseInt(params.getOrDefault(PARAM_START_IDX, "1"));
                 int stop = start + qty;
-                //TODO Filter layouts according to param
+                // TODO Filter layouts according to param
                 LOGGER.log(Level.INFO, "layouts");
                 List<GenericReceiptLayout> availableLayouts = layouts.stream().collect(Collectors.toList());
 
-                LOGGER.log(Level.INFO, "availableLayouts.size() = "+availableLayouts.size());
+                LOGGER.log(Level.INFO, "availableLayouts.size() = " + availableLayouts.size());
 
-                if ( availableLayouts.size() == 0 ) {
+                if (availableLayouts.size() == 0) {
                     report.append("Unable to find available layouts for this job.");
                     LOGGER.log(Level.INFO, "Unable to find available layouts for this job");
                     manager.fail(jobId, report.toString());
                     return;
                 }
                 LOGGER.log(Level.INFO, "After generating layout");
-                for ( int i=start; i<stop; i++) {
+                for (int i = start; i < stop; i++) {
                     Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receipt") + "-" + i + ".pdf");
                     Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receipt") + "-" + i + ".xml");
-                    //Path xmlEval = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receiptEval") + "-" + i + ".xml");
+                    // Path xmlEval = Paths.get(root, params.getOrDefault(PARAM_OUTPUT,
+                    // "receiptEval") + "-" + i + ".xml");
                     Path xmlEval = null;
                     Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "receipt") + "-" + i + ".jpg");
-                    //TODO configure context according to config
+                    // TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();
                     ReceiptModel model = new ReceiptModel.Generator().generate(ctx);
-                    ReceiptGenerator.getInstance().generateReceipt(new GenericReceiptLayout(), model, pdf, xml, img,xmlEval);
-                    manager.progress(jobId, ((i-start)* 100L) /qty);
+                    ReceiptGenerator.getInstance().generateReceipt(new GenericReceiptLayout(), model, pdf, xml, img,
+                            xmlEval);
+                    manager.progress(jobId, ((i - start) * 100L) / qty);
                 }
                 report.append("All receipts generated");
                 LOGGER.log(Level.INFO, "All receipts generated");
                 manager.complete(jobId, report.toString());
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Error while executing job",  e);
+                LOGGER.log(Level.SEVERE, "Error while executing job", e);
                 report.append("Error occurred during job: " + e.getMessage());
                 manager.fail(jobId, report.toString());
             }

@@ -101,10 +101,11 @@ public class Address {
     public static class Generator implements ModelGenerator<Address> {
 
         private static final String[] addressFiles = new String[] {
-          "common/address/france.csv", "common/address/luxembourg.csv", "common/address/belgium.csv", "common/address/germany.csv", "common/address/ae_dubai_en.csv", "common/address/us_west.csv"};
+                "common/address/france.csv", "common/address/luxembourg.csv", "common/address/belgium.csv",
+                "common/address/germany.csv", "common/address/ae_dubai_en.csv", "common/address/us_west.csv" };
         private static final Map<Address, String> addresses = new HashMap<>();
         {
-            for ( String addressFile : addressFiles ) {
+            for (String addressFile : addressFiles) {
                 try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(addressFile)) {
                     Reader in = new InputStreamReader(inputStream);
                     Iterable<CSVRecord> records = CSVFormat.newFormat(',').withFirstRecordAsHeader().parse(in);
@@ -114,7 +115,7 @@ public class Address {
                         String city = record.get("CITY");
                         String postcode = record.get("POSTCODE");
                         String country = record.get("COUNTRY");
-                        if(street != null && !street.isEmpty()) {
+                        if (street != null && !street.isEmpty()) {
                             Address address = new Address(number + ", " + street, "", "", postcode, city, country);
                             switch (addressFile) {
                                 case "common/address/france.csv":
@@ -144,12 +145,13 @@ public class Address {
             }
         }
 
-
         @Override
         public Address generate(GenerationContext ctx) {
-            List<Address> goodAddresses = addresses.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
+            List<Address> goodAddresses = addresses.entrySet().stream()
+                    .filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey())
+                    .collect(Collectors.toList());
             Address address = goodAddresses.get(ctx.getRandom().nextInt(goodAddresses.size()));
-            //TODO include a random line 3 with app No 2, Stage 3...
+            // TODO include a random line 3 with app No 2, Stage 3...
             return address;
         }
     }

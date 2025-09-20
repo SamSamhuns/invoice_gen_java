@@ -24,12 +24,11 @@ public class InvoiceDate {
     private String labelPaymentDue;
     private String valuePaymentDue;
 
-
     public InvoiceDate(String labelInvoice, String valueInvoice,
-                       String labelOrder, String valueOrder,
-                       String labelShipping, String valueShipping,
-                       String labelPayment, String valuePayment,
-                       String labelPaymentDue, String valuePaymentDue) {
+            String labelOrder, String valueOrder,
+            String labelShipping, String valueShipping,
+            String labelPayment, String valuePayment,
+            String labelPaymentDue, String valuePaymentDue) {
         this.labelInvoice = labelInvoice;
         this.valueInvoice = valueInvoice;
         this.labelOrder = labelOrder;
@@ -140,7 +139,7 @@ public class InvoiceDate {
 
     public static class Generator implements ModelGenerator<InvoiceDate> {
 
-        private static final long from = 942493200;  // from  Nov 13, 1999
+        private static final long from = 942493200; // from Nov 13, 1999
         private static final long to = System.currentTimeMillis() / 1000;
         private static final Map<SimpleDateFormat, String> dataFormats = new LinkedHashMap<>();
         private static final Map<String, String> labelsInvoice = new LinkedHashMap<>();
@@ -206,18 +205,29 @@ public class InvoiceDate {
             labelsPaymentDue.put("Due Date", "en");
         }
 
-
         @Override
         public InvoiceDate generate(GenerationContext ctx) {
-            long date = (ctx.getRandom().nextInt((int)(to-from)) + from) * 1000;
+            long date = (ctx.getRandom().nextInt((int) (to - from)) + from) * 1000;
             ctx.setDate(date);
-            List<SimpleDateFormat> filteredFormats = dataFormats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<SimpleDateFormat> filteredFormats = dataFormats.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
-            List<String> filteredLabels = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> filteredLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> filteredLabelsShipping = labelsShipping.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> filteredLabelsPayment = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> filteredLabelsPaymentDue = labelsPaymentDue.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabels = labelsInvoice.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> filteredLabelsOrder = labelsOrder.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> filteredLabelsShipping = labelsShipping.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> filteredLabelsPayment = labelsPayment.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> filteredLabelsPaymentDue = labelsPaymentDue.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(date);
@@ -242,8 +252,7 @@ public class InvoiceDate {
                     filteredLabelsPayment.get(ctx.getRandom().nextInt(filteredLabelsPayment.size())),
                     filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(paymentDate),
                     filteredLabelsPaymentDue.get(ctx.getRandom().nextInt(filteredLabelsPaymentDue.size())),
-                    filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(paymentDueDate)
-            );
+                    filteredFormats.get(ctx.getRandom().nextInt(filteredFormats.size())).format(paymentDueDate));
         }
 
     }

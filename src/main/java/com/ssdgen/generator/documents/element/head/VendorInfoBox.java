@@ -21,7 +21,6 @@ import javax.xml.stream.XMLStreamWriter;
 import java.util.Map;
 import java.util.Random;
 
-
 public class VendorInfoBox extends ElementBox {
 
     private final PDFont fontN;
@@ -52,9 +51,9 @@ public class VendorInfoBox extends ElementBox {
     }
 
     public VendorInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
-                         float fontSizeSmall, float fontSizeBig,
-                         float width, Color lineStrokeColor,
-                         InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+            float fontSizeSmall, float fontSizeBig,
+            float width, Color lineStrokeColor,
+            InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         this.fontN = fontN;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -70,37 +69,39 @@ public class VendorInfoBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        PDFont fontNB = rnd.nextBoolean() ? fontN: fontB;
+        PDFont fontNB = rnd.nextBoolean() ? fontN : fontB;
 
-        vContainer = new VerticalContainer(0,0,width);
+        vContainer = new VerticalContainer(0, 0, width);
 
         Company company = model.getCompany();
         Address address = company.getAddress();
         IDNumbers idNumber = company.getIdNumbers();
         ContactNumber contact = company.getContact();
         String compName = company.getName();
-        String compAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
+        String compAddr = address.getLine1() + " " + address.getZip() + " " + address.getCity();
         String compZip = address.getZip();
 
-        vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig+1,0,0, compName+"","SN"));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(),"SA"));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip() +"  "+ address.getCity(),"SA"));
-        vContainer.addElement(new BorderBox(Color.WHITE,Color.WHITE,0,0,0,0,3));
+        vContainer.addElement(new SimpleTextBox(fontB, fontSizeBig + 1, 0, 0, compName + "", "SN"));
+        vContainer.addElement(new SimpleTextBox(fontN, fontSizeBig, 0, 0, address.getLine1(), "SA"));
+        vContainer.addElement(
+                new SimpleTextBox(fontN, fontSizeBig, 0, 0, address.getZip() + "  " + address.getCity(), "SA"));
+        vContainer.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 3));
         if (proba.get("vendor_address_country")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,address.getCountry(),"BA"));
+            vContainer.addElement(new SimpleTextBox(fontN, fontSizeSmall, 0, 0, address.getCountry(), "BA"));
             compAddr += " " + address.getCountry();
-        }
-        else {
+        } else {
             if (proba.get("vendor_address_phone")) {
-                vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+": "+contact.getPhoneValue(), "SC"));
+                vContainer.addElement(new SimpleTextBox(fontN, fontSizeSmall, 0, 0,
+                        contact.getPhoneLabel() + ": " + contact.getPhoneValue(), "SC"));
             }
             if (proba.get("vendor_address_fax")) {
-                vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+": "+contact.getFaxValue(), "SF"));
+                vContainer.addElement(new SimpleTextBox(fontN, fontSizeSmall, 0, 0,
+                        contact.getFaxLabel() + ": " + contact.getFaxValue(), "SF"));
             }
         }
         if (proba.get("vendor_address_tax_number")) {
-            String vatText = idNumber.getVatLabel()+": "+idNumber.getVatValue();
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, vatText, "SVAT"));
+            String vatText = idNumber.getVatLabel() + ": " + idNumber.getVatValue();
+            vContainer.addElement(new SimpleTextBox(fontN, fontSizeSmall, 0, 0, vatText, "SVAT"));
             annot.getVendor().setVendorTrn(idNumber.getVatValue());
         }
 

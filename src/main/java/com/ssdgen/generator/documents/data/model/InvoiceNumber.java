@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 public class InvoiceNumber {
 
     private String labelInvoice;
@@ -21,7 +20,8 @@ public class InvoiceNumber {
     private String valueClient;
     private String valueBarcode;
 
-    public InvoiceNumber(String labelInvoice, String valueInvoice, String labelOrder, String valueOrder, String labelClient, String valueClient, String valueBarcode) {
+    public InvoiceNumber(String labelInvoice, String valueInvoice, String labelOrder, String valueOrder,
+            String labelClient, String valueClient, String valueBarcode) {
         this.labelInvoice = labelInvoice;
         this.valueInvoice = valueInvoice;
         this.labelOrder = labelOrder;
@@ -209,22 +209,32 @@ public class InvoiceNumber {
         @Override
         public InvoiceNumber generate(GenerationContext ctx) {
 
-            String generatedInvoiceFmt = new Generex(valuesInvoice.get(ctx.getRandom().nextInt(valuesInvoice.size()))).random();
-            String generatedOrderFmt = new Generex(valuesOrder.get(ctx.getRandom().nextInt(valuesOrder.size()))).random();
-            String generatedClientFmt = new Generex(valuesClient.get(ctx.getRandom().nextInt(valuesClient.size()))).random();
-            String generatedBarcodeFmt = new Generex(valuesBarcode.get(ctx.getRandom().nextInt(valuesBarcode.size()))).random();
+            String generatedInvoiceFmt = new Generex(valuesInvoice.get(ctx.getRandom().nextInt(valuesInvoice.size())))
+                    .random();
+            String generatedOrderFmt = new Generex(valuesOrder.get(ctx.getRandom().nextInt(valuesOrder.size())))
+                    .random();
+            String generatedClientFmt = new Generex(valuesClient.get(ctx.getRandom().nextInt(valuesClient.size())))
+                    .random();
+            String generatedBarcodeFmt = new Generex(valuesBarcode.get(ctx.getRandom().nextInt(valuesBarcode.size())))
+                    .random();
 
-            List<String> filteredLabelsInvoice = labelsInvoice.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> filteredLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> filteredLabelsClient = labelsClient.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> filteredLabelsInvoice = labelsInvoice.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> filteredLabelsOrder = labelsOrder.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> filteredLabelsClient = labelsClient.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
             return new InvoiceNumber(filteredLabelsInvoice.get(ctx.getRandom().nextInt(filteredLabelsInvoice.size())),
-                                     generatedInvoiceFmt,
-                                     filteredLabelsOrder.get(ctx.getRandom().nextInt(filteredLabelsOrder.size())),
-                                     generatedOrderFmt,
-                                     filteredLabelsClient.get(ctx.getRandom().nextInt(filteredLabelsClient.size())),
-                                     generatedClientFmt,
-                                     generatedBarcodeFmt);
+                    generatedInvoiceFmt,
+                    filteredLabelsOrder.get(ctx.getRandom().nextInt(filteredLabelsOrder.size())),
+                    generatedOrderFmt,
+                    filteredLabelsClient.get(ctx.getRandom().nextInt(filteredLabelsClient.size())),
+                    generatedClientFmt,
+                    generatedBarcodeFmt);
         }
     }
 }

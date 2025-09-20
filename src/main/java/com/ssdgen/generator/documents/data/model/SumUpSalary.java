@@ -13,11 +13,10 @@ import java.util.logging.Logger;
 public class SumUpSalary {
 
     private static final Logger LOGGER = Logger.getLogger(SumUpSalary.class.getName());
-    private final Random random= new Random();
+    private final Random random = new Random();
     private double netApayer;
     private double netImposable;
     private double brut;
-
 
     public SumUpSalary(double netApayer, double netImposable) {
         this.netApayer = netApayer;
@@ -54,12 +53,13 @@ public class SumUpSalary {
     }
 
     public String getNetAvantImpotLabel() {
-        List<String> labels = new ArrayList<String>(Collections.singletonList("Net à payer avant impôt sur le revenue :"));
+        List<String> labels = new ArrayList<String>(
+                Collections.singletonList("Net à payer avant impôt sur le revenue :"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getNetApayerLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Net à payer :","Salaire Net à payer"));
+        List<String> labels = new ArrayList<String>(Arrays.asList("Net à payer :", "Salaire Net à payer"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
@@ -75,7 +75,7 @@ public class SumUpSalary {
 
         @Override
         public SumUpSalary generate(GenerationContext ctx) {
-            Random rand =new Random();
+            Random rand = new Random();
 
             double netApayer = rand.nextDouble();
             double netImpo = rand.nextDouble();

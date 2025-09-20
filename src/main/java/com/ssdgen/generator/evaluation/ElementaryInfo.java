@@ -1,6 +1,6 @@
 package com.ssdgen.generator.evaluation;
 
-public class ElementaryInfo implements Comparable<ElementaryInfo>{
+public class ElementaryInfo implements Comparable<ElementaryInfo> {
     private int x;
     private int y;
     private String content;
@@ -49,9 +49,9 @@ public class ElementaryInfo implements Comparable<ElementaryInfo>{
 
     @Override
     public int compareTo(ElementaryInfo elementaryInfo) {
-        if(this.getY()==elementaryInfo.getY()) {
+        if (this.getY() == elementaryInfo.getY()) {
             return this.getX().compareTo(elementaryInfo.getX());
-        }else {
+        } else {
             return this.getY().compareTo(elementaryInfo.getY());
         }
     }

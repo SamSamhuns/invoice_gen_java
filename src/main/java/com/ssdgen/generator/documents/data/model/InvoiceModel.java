@@ -3,7 +3,7 @@ package com.ssdgen.generator.documents.data.model;
 import com.ssdgen.generator.documents.data.generator.GenerationContext;
 import com.ssdgen.generator.documents.data.generator.ModelGenerator;
 
-public class InvoiceModel extends Model{
+public class InvoiceModel extends Model {
 
     private InvoiceNumber reference;
     private InvoiceDate date;

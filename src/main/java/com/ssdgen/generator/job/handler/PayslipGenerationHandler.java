@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class PayslipGenerationHandler implements JobHandler {
 
     private static final Logger LOGGER = Logger.getLogger(PayslipGenerationHandler.class.getName());
-    public static final String[] SUPPORTED_TYPES = {"payslip.generate"};
+    public static final String[] SUPPORTED_TYPES = { "payslip.generate" };
     public static final String PARAM_QTY = "qty";
     public static final String PARAM_START_IDX = "start-idx";
     public static final String PARAM_OUTPUT = "output";
@@ -38,7 +38,6 @@ public class PayslipGenerationHandler implements JobHandler {
     @Inject
     @Any
     Instance<GenericPayslipLayout> layouts;
-
 
     @Inject
     JobManager manager;
@@ -75,7 +74,7 @@ public class PayslipGenerationHandler implements JobHandler {
         try {
             try {
                 LOGGER.log(Level.INFO, "PayslipGeneration started");
-                if ( !params.containsKey(PARAM_QTY) ) {
+                if (!params.containsKey(PARAM_QTY)) {
                     report.append("Missing parameters: " + PARAM_QTY);
                     manager.fail(jobId, report.toString());
                     return;
@@ -86,37 +85,40 @@ public class PayslipGenerationHandler implements JobHandler {
                 int qty = Integer.parseInt(params.get(PARAM_QTY));
                 int start = Integer.parseInt(params.getOrDefault(PARAM_START_IDX, "1"));
                 int stop = start + qty;
-                //TODO Filter layouts according to param
+                // TODO Filter layouts according to param
                 LOGGER.log(Level.INFO, "layouts");
                 List<GenericPayslipLayout> availableLayouts = layouts.stream().collect(Collectors.toList());
 
-                LOGGER.log(Level.INFO, "availableLayouts.size() = "+availableLayouts.size());
+                LOGGER.log(Level.INFO, "availableLayouts.size() = " + availableLayouts.size());
 
-                if ( availableLayouts.size() == 0 ) {
+                if (availableLayouts.size() == 0) {
                     report.append("Unable to find available layouts for this job.");
                     LOGGER.log(Level.INFO, "Unable to find available layouts for this job");
                     manager.fail(jobId, report.toString());
                     return;
                 }
                 LOGGER.log(Level.INFO, "After generating layout");
-                for ( int i=start; i<stop; i++) {                    //TODO configure context according to config
+                for (int i = start; i < stop; i++) { // TODO configure context according to config
 
                     Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslip") + "-" + i + ".pdf");
                     Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslip") + "-" + i + ".xml");
                     Path xmlEval = null;
-                    //Path xmlEval = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslipEval") + "-" + i + ".xml");
+                    // Path xmlEval = Paths.get(root, params.getOrDefault(PARAM_OUTPUT,
+                    // "payslipEval") + "-" + i + ".xml");
                     Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "payslip") + "-" + i + ".jpg");
-                    //TODO configure context according to config
+                    // TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();
                     PayslipModel model = new PayslipModel.Generator().generate(ctx);
-                    PayslipGenerator.getInstance().generatePayslip(new com.ssdgen.generator.documents.layout.payslip.GenericPayslipLayout(), model, pdf, xml, img,xmlEval);
-                    manager.progress(jobId, ((i-start)* 100L) /qty);
+                    PayslipGenerator.getInstance().generatePayslip(
+                            new com.ssdgen.generator.documents.layout.payslip.GenericPayslipLayout(), model, pdf, xml,
+                            img, xmlEval);
+                    manager.progress(jobId, ((i - start) * 100L) / qty);
                 }
                 report.append("All payslips generated");
                 LOGGER.log(Level.INFO, "All payslips generated");
                 manager.complete(jobId, report.toString());
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Error while executing job",  e);
+                LOGGER.log(Level.SEVERE, "Error while executing job", e);
                 report.append("Error occurred during job: " + e.getMessage());
                 manager.fail(jobId, report.toString());
             }

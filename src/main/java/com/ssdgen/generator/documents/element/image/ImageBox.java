@@ -11,7 +11,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import javax.xml.stream.XMLStreamWriter;
 import java.awt.Color;
 
-
 public class ImageBox extends ElementBox {
 
     private final PDImageXObject image;
@@ -21,8 +20,8 @@ public class ImageBox extends ElementBox {
     private final BoundingBox box;
 
     /*
-      (posX, posY) represent the top left corner of image
-    */
+     * (posX, posY) represent the top left corner of image
+     */
     public ImageBox(PDImageXObject image, float posX, float posY, String text) {
         this(image, posX, posY, image.getWidth(), image.getHeight(), 1.0f, text);
     }
@@ -53,11 +52,10 @@ public class ImageBox extends ElementBox {
 
     @Override
     public void setWidth(float width) {
-        if(box.getWidth()>width){
+        if (box.getWidth() > width) {
             box.setWidth(width);
-        }
-        else{
-            translate((width- box.getWidth())/2, 0);// Center align
+        } else {
+            translate((width - box.getWidth()) / 2, 0);// Center align
         }
     }
 
@@ -75,7 +73,7 @@ public class ImageBox extends ElementBox {
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        if ( backgroundColor != null ) {
+        if (backgroundColor != null) {
             stream.setNonStrokingColor(backgroundColor);
             stream.addRect(box.getPosX(), box.getPosY(), box.getWidth(), box.getHeight());
             stream.fill();

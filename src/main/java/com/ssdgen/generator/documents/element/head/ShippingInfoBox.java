@@ -18,7 +18,6 @@ import java.awt.Color;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.Map;
 
-
 public class ShippingInfoBox extends ElementBox {
 
     private final PDFont fontN;
@@ -48,9 +47,9 @@ public class ShippingInfoBox extends ElementBox {
     }
 
     public ShippingInfoBox(PDFont fontN, PDFont fontB, PDFont fontI,
-                           float fontSizeSmall, float fontSizeBig,
-                           float width, Color lineStrokeColor,
-                           InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
+            float fontSizeSmall, float fontSizeBig,
+            float width, Color lineStrokeColor,
+            InvoiceModel model, InvoiceAnnotModel annot, Map<String, Boolean> proba) throws Exception {
         this.fontN = fontN;
         this.fontB = fontB;
         this.fontI = fontI;
@@ -66,30 +65,32 @@ public class ShippingInfoBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        vContainer = new VerticalContainer(0,0,width);
+        vContainer = new VerticalContainer(0, 0, width);
 
         Client client = model.getClient();
         Address address = client.getShippingAddress();
         ContactNumber contact = client.getShippingContactNumber();
-        String connec = (contact.getPhoneLabel().length() > 0) ? ": ": "";
+        String connec = (contact.getPhoneLabel().length() > 0) ? ": " : "";
         String clientName = client.getShippingName();
-        String clientAddr = address.getLine1()+" "+address.getZip()+" "+address.getCity();
+        String clientAddr = address.getLine1() + " " + address.getZip() + " " + address.getCity();
         String clientZip = address.getZip();
 
-        vContainer.addElement(new SimpleTextBox(fontB,fontSizeBig,0,0, client.getShippingHead(), "SHH" ));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, clientName, "SHN" ));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getLine1(), "SHA" ));
-        vContainer.addElement(new SimpleTextBox(fontN,fontSizeBig,0,0, address.getZip()+" "+address.getCity(), "SHA" ));
+        vContainer.addElement(new SimpleTextBox(fontB, fontSizeBig, 0, 0, client.getShippingHead(), "SHH"));
+        vContainer.addElement(new SimpleTextBox(fontN, fontSizeBig, 0, 0, clientName, "SHN"));
+        vContainer.addElement(new SimpleTextBox(fontN, fontSizeBig, 0, 0, address.getLine1(), "SHA"));
+        vContainer.addElement(
+                new SimpleTextBox(fontN, fontSizeBig, 0, 0, address.getZip() + " " + address.getCity(), "SHA"));
         if (proba.get("ship_address_phone") && proba.get("bill_address_phone")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getPhoneLabel()+connec+contact.getPhoneValue(), "SHC"));
-        }
-        else if (proba.get("ship_address_country")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0,address.getCountry(),"SA"));
+            vContainer.addElement(new SimpleTextBox(fontN, fontSizeSmall, 0, 0,
+                    contact.getPhoneLabel() + connec + contact.getPhoneValue(), "SHC"));
+        } else if (proba.get("ship_address_country")) {
+            vContainer.addElement(new SimpleTextBox(fontN, fontSizeSmall, 0, 0, address.getCountry(), "SA"));
             clientAddr += " " + address.getCountry();
         }
 
         if (proba.get("ship_address_fax") && proba.get("bill_address_fax")) {
-            vContainer.addElement(new SimpleTextBox(fontN,fontSizeSmall,0,0, contact.getFaxLabel()+connec+contact.getFaxValue(), "SHF"));
+            vContainer.addElement(new SimpleTextBox(fontN, fontSizeSmall, 0, 0,
+                    contact.getFaxLabel() + connec + contact.getFaxValue(), "SHF"));
         }
 
         if (proba.get("addresses_bordered") && client.getShippingHead().length() > 0) {

@@ -16,7 +16,7 @@ public class LayeredContainer extends ElementBox {
     private final Map<Integer, ElementBox> elements;
     private final BoundingBox box;
 
-    //TODO manage aligment and padding
+    // TODO manage aligment and padding
     public LayeredContainer(float posX, float posY, float width, float height) {
         this.elements = new TreeMap<>();
         this.box = new BoundingBox(posX, posY, width, height);
@@ -26,13 +26,13 @@ public class LayeredContainer extends ElementBox {
         this.elements.put(layer, element);
         element.getBBox().setPosX(box.getPosX());
         element.getBBox().setPosY(box.getPosY());
-        if ( element.getBBox().getWidth() > box.getWidth() ) {
+        if (element.getBBox().getWidth() > box.getWidth()) {
             box.setWidth(element.getBBox().getWidth());
-            //TODO maybe resize all existing elements
+            // TODO maybe resize all existing elements
         }
-        if ( element.getBBox().getHeight() > box.getHeight() ) {
+        if (element.getBBox().getHeight() > box.getHeight()) {
             box.setHeight(element.getBBox().getHeight());
-            //TODO maybe resize all existing elements
+            // TODO maybe resize all existing elements
         }
     }
 
@@ -43,7 +43,7 @@ public class LayeredContainer extends ElementBox {
 
     @Override
     public void setWidth(float width) throws Exception {
-        for ( ElementBox element : elements.values() ) {
+        for (ElementBox element : elements.values()) {
             element.setWidth(width);
         }
         this.box.setWidth(width);
@@ -51,7 +51,7 @@ public class LayeredContainer extends ElementBox {
 
     @Override
     public void setHeight(float height) throws Exception {
-        for ( ElementBox element : elements.values() ) {
+        for (ElementBox element : elements.values()) {
             element.setHeight(height);
         }
         this.box.setHeight(height);
@@ -60,14 +60,14 @@ public class LayeredContainer extends ElementBox {
     @Override
     public void translate(float offsetX, float offsetY) {
         box.translate(offsetX, offsetY);
-        for ( ElementBox element : elements.values() ) {
+        for (ElementBox element : elements.values()) {
             element.translate(offsetX, offsetY);
         }
     }
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        for ( ElementBox element : elements.values() ) {
+        for (ElementBox element : elements.values()) {
             element.build(stream, writer);
         }
     }

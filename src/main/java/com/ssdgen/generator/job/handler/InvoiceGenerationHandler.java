@@ -27,11 +27,12 @@ public class InvoiceGenerationHandler implements JobHandler {
 
     private static final Logger LOGGER = Logger.getLogger(InvoiceGenerationHandler.class.getName());
 
-    public static final String[] SUPPORTED_TYPES = {"invoice.generate"};
+    public static final String[] SUPPORTED_TYPES = { "invoice.generate" };
     public static final String PARAM_QTY = "qty";
     public static final String PARAM_START_IDX = "start-idx";
     public static final String PARAM_OUTPUT = "output";
-    private static final Collection<String> SUPPORTED_LAYOUTS = Arrays.asList("Amazon", "BDMobilier", "Cdiscount", "Nature&Decouvertes");
+    private static final Collection<String> SUPPORTED_LAYOUTS = Arrays.asList("Amazon", "BDMobilier", "Cdiscount",
+            "Nature&Decouvertes");
 
     private Long jobId;
     private String root;
@@ -75,7 +76,7 @@ public class InvoiceGenerationHandler implements JobHandler {
         try {
             try {
                 LOGGER.log(Level.INFO, "Invoice Generation started");
-                if ( !params.containsKey(PARAM_QTY) ) {
+                if (!params.containsKey(PARAM_QTY)) {
                     report.append("Missing parameters: " + PARAM_QTY);
                     manager.fail(jobId, report.toString());
                     return;
@@ -85,34 +86,40 @@ public class InvoiceGenerationHandler implements JobHandler {
                 int qty = Integer.parseInt(params.get(PARAM_QTY));
                 int start = Integer.parseInt(params.getOrDefault(PARAM_START_IDX, "1"));
                 int stop = start + qty;
-                //TODO Filter layouts according to param
+                // TODO Filter layouts according to param
                 List<InvoiceLayout> availableLayouts = layouts.stream().collect(Collectors.toList());
                 // currently filtering acc to SUPPORTED_LAYOUTS variable
-                availableLayouts = layouts.stream().filter(l -> SUPPORTED_LAYOUTS.contains(l.name())).collect(Collectors.toList());
-                LOGGER.log(Level.INFO, "availableLayouts.size() = "+availableLayouts.size());
+                availableLayouts = layouts.stream().filter(l -> SUPPORTED_LAYOUTS.contains(l.name()))
+                        .collect(Collectors.toList());
+                LOGGER.log(Level.INFO, "availableLayouts.size() = " + availableLayouts.size());
 
-                if ( availableLayouts.size() == 0 ) {
+                if (availableLayouts.size() == 0) {
                     report.append("Unable to find available layouts for this job.");
                     manager.fail(jobId, report.toString());
                     return;
                 }
-                for ( int i=start; i<stop; i++) {
+                for (int i = start; i < stop; i++) {
                     String layoutName = availableLayouts.get(i % availableLayouts.size()).name();
-                    Path pdf = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".pdf");
-                    Path xml = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".xml");
-                    Path img = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".jpg");
-                    Path json = Paths.get(root, params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".json");
-                    //TODO configure context according to config
+                    Path pdf = Paths.get(root,
+                            params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".pdf");
+                    Path xml = Paths.get(root,
+                            params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".xml");
+                    Path img = Paths.get(root,
+                            params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".jpg");
+                    Path json = Paths.get(root,
+                            params.getOrDefault(PARAM_OUTPUT, "invoice") + "_" + layoutName + "_" + i + ".json");
+                    // TODO configure context according to config
                     GenerationContext ctx = GenerationContext.generate();
                     InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
-                    InvoiceGenerator.getInstance().generateInvoice(availableLayouts.get(i % availableLayouts.size()), model, pdf, xml, img, json);
-                    manager.progress(jobId, ((i-start)* 100L) /qty);
+                    InvoiceGenerator.getInstance().generateInvoice(availableLayouts.get(i % availableLayouts.size()),
+                            model, pdf, xml, img, json);
+                    manager.progress(jobId, ((i - start) * 100L) / qty);
                 }
                 LOGGER.log(Level.INFO, "All invoices generated");
                 report.append("All invoices generated");
                 manager.complete(jobId, report.toString());
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Error while executing job",  e);
+                LOGGER.log(Level.SEVERE, "Error while executing job", e);
                 report.append("Error occurred during job: " + e.getMessage());
                 manager.fail(jobId, report.toString());
             }

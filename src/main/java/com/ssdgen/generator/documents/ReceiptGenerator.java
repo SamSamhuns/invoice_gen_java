@@ -35,12 +35,15 @@ public class ReceiptGenerator {
     private ReceiptGenerator() {
     }
 
-    public void generateReceipt(com.ssdgen.generator.documents.layout.receipt.GenericReceiptLayout layout, ReceiptModel model, Path pdf, Path xml, Path img, Path xmlForEvaluation) throws Exception {
+    public void generateReceipt(com.ssdgen.generator.documents.layout.receipt.GenericReceiptLayout layout,
+            ReceiptModel model, Path pdf, Path xml, Path img, Path xmlForEvaluation) throws Exception {
 
-        Boolean modeEval= true;
-        if (xmlForEvaluation == null) modeEval = false;
+        Boolean modeEval = true;
+        if (xmlForEvaluation == null)
+            modeEval = false;
         OutputStream xmlos = Files.newOutputStream(xml);
-        XMLStreamWriter xmlout = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
+        XMLStreamWriter xmlout = XMLOutputFactory.newInstance()
+                .createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
         xmlout.writeStartDocument();
         xmlout.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
         xmlout.writeAttribute("GEDI_version", "2.4");
@@ -56,11 +59,12 @@ public class ReceiptGenerator {
         xmlout.writeAttribute("docTag", "xml");
 
         ///
-        OutputStream xmlosEval ;
+        OutputStream xmlosEval;
         XMLStreamWriter xmloutEval = null;
         if (modeEval) {
             xmlosEval = Files.newOutputStream(xmlForEvaluation);
-            xmloutEval = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlosEval, StandardCharsets.UTF_8));
+            xmloutEval = XMLOutputFactory.newInstance()
+                    .createXMLStreamWriter(new OutputStreamWriter(xmlosEval, StandardCharsets.UTF_8));
             xmloutEval.writeStartDocument();
             xmloutEval.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
             xmloutEval.writeAttribute("GEDI_version", "2.4");
@@ -77,24 +81,25 @@ public class ReceiptGenerator {
         }
 
         PDDocument document = new PDDocument();
-        layout.builtSSD(model, document, xmlout,xmloutEval);
+        layout.builtSSD(model, document, xmlout, xmloutEval);
         document.save(pdf.toFile());
 
-        //Export as img
-        //PDFRenderer pdfRenderer = new PDFRenderer(document);
-        //BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
+        // Export as img
+        // PDFRenderer pdfRenderer = new PDFRenderer(document);
+        // BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
         /////
 
         PDPage page = document.getPage(0);
-        page.setCropBox(new PDRectangle(0f, 100f, 400f, 1000f)); // Here you draw a rectangle around the area you want to specify
+        page.setCropBox(new PDRectangle(0f, 100f, 400f, 1000f)); // Here you draw a rectangle around the area you want
+                                                                 // to specify
         PDFRenderer renderer = new PDFRenderer(document);
         BufferedImage image = renderer.renderImageWithDPI(0, 150);
         ImageIO.write(image, "img", new File(img.toString()));
         document.close();
 
         /////
-        //ImageIOUtil.writeImage(bim, img.toString(), 300);
-        //document.close();
+        // ImageIOUtil.writeImage(bim, img.toString(), 300);
+        // document.close();
 
         xmlout.writeEndElement();
         xmlout.writeEndElement();
@@ -112,24 +117,25 @@ public class ReceiptGenerator {
 
     public static void main(String[] args) throws Exception {
 
-
         Path generated = Paths.get("target/generated/" + args[0]);
-        if ( !Files.exists(generated) ) {
+        if (!Files.exists(generated)) {
             Files.createDirectories(generated);
         }
 
         int start = Integer.parseInt(args[1]);
         int stop = Integer.parseInt(args[2]);
-        for ( int i=start; i<stop; i++) {
-            //String ts = "" + System.currentTimeMillis();
+        for (int i = start; i < stop; i++) {
+            // String ts = "" + System.currentTimeMillis();
 
-            Path pdf = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".pdf");
-            Path xml = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
-            Path xmlForEval = Paths.get("target/generated/" + args[0] + "/basic-2"+ i + ".xml");
-            Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".jpg");
+            Path pdf = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".pdf");
+            Path xml = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".xml");
+            Path xmlForEval = Paths.get("target/generated/" + args[0] + "/basic-2" + i + ".xml");
+            Path img = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".jpg");
             GenerationContext ctx = GenerationContext.generate();
             ReceiptModel model = new ReceiptModel.Generator().generate(ctx);
-            ReceiptGenerator.getInstance().generateReceipt(new com.ssdgen.generator.documents.layout.receipt.GenericReceiptLayout(), model, pdf, xml, img,xmlForEval);
+            ReceiptGenerator.getInstance().generateReceipt(
+                    new com.ssdgen.generator.documents.layout.receipt.GenericReceiptLayout(), model, pdf, xml, img,
+                    xmlForEval);
             System.out.println("current: " + i);
         }
     }

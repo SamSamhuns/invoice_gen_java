@@ -20,8 +20,8 @@ public class PayslipModel extends Model {
     private SumUpSalary sumUpSalary;
     private String headTitle;
 
-
-    public PayslipModel() {}
+    public PayslipModel() {
+    }
 
     public String getHeadTitle() {
         return headTitle;
@@ -100,7 +100,6 @@ public class PayslipModel extends Model {
                 '}';
     }
 
-
     public static class Generator implements ModelGenerator<PayslipModel> {
         private static final Map<String, String> headerLabels = new HashMap<>();
 
@@ -121,10 +120,13 @@ public class PayslipModel extends Model {
             model.setCompany(new Company.Generator().generate(ctx));
             model.setEmployee(new Employee.Generator().generate(ctx));
             model.setEmployeeInformation(new EmployeeInformation.Generator().generate(ctx));
-            model.setSalaryTable(new SalaryCotisationTable.Generator().generate(ctx,model.getEmployeeInformation().getMonthlyPay()));
+            model.setSalaryTable(new SalaryCotisationTable.Generator().generate(ctx,
+                    model.getEmployeeInformation().getMonthlyPay()));
             model.setLeaveInformation(new LeaveInformation.Generator().generate(ctx));
             model.setSumUpSalary(new SumUpSalary.Generator().generate(ctx));
-            List<String> localizedHeaderLabel = headerLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguagePayslip())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedHeaderLabel = headerLabels.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguagePayslip())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxvL = new Random().nextInt(localizedHeaderLabel.size());
             Generex generex = new Generex(localizedHeaderLabel.get(idxvL));
             model.setHeadTitle(generex.random());

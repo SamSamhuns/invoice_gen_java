@@ -12,16 +12,15 @@ public class SimpleTextBoxForEvaluation {
     private final String optionalClass;
     private final int orderPos;
 
-
-    public  SimpleTextBoxForEvaluation( String optionalClass, int orderPos)  {
+    public SimpleTextBoxForEvaluation(String optionalClass, int orderPos) {
 
         this.optionalClass = optionalClass;
         this.orderPos = orderPos;
 
     }
 
-    public void build( XMLStreamWriter writer) throws Exception {
-        ElementBoxForEvaluation.writeXMLZone(writer, "ocrx_word", optionalClass,orderPos);
+    public void build(XMLStreamWriter writer) throws Exception {
+        ElementBoxForEvaluation.writeXMLZone(writer, "ocrx_word", optionalClass, orderPos);
     }
 
 }

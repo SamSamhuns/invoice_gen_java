@@ -21,8 +21,7 @@ public class Model {
         return rnd;
     }
 
-    public Object callviaName(Object c, String methodName) throws Exception
-    {
+    public Object callviaName(Object c, String methodName) throws Exception {
         // Calls a method with its name as a string
         return c.getClass().getMethod(methodName).invoke(c);
     }
@@ -85,7 +84,7 @@ public class Model {
 
     @Override
     public String toString() {
-        return "Model{"+
+        return "Model{" +
                 ", lang=" + lang +
                 ", locale=" + locale +
                 ", paymentInfo=" + paymentInfo +

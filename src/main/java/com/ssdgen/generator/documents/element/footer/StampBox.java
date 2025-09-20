@@ -19,7 +19,6 @@ import javax.xml.stream.XMLStreamWriter;
 import java.util.Map;
 import java.util.Random;
 
-
 public class StampBox extends ElementBox {
 
     private float stampWidth;
@@ -37,8 +36,8 @@ public class StampBox extends ElementBox {
     private VerticalContainer vContainer;
 
     public StampBox(float stampWidth, float stampHeight, float alpha,
-                    InvoiceModel model, PDDocument document,
-                    Company company, Map<String, Boolean> proba) throws Exception {
+            InvoiceModel model, PDDocument document,
+            Company company, Map<String, Boolean> proba) throws Exception {
 
         this.stampWidth = stampWidth;
         this.stampHeight = stampHeight;
@@ -54,7 +53,7 @@ public class StampBox extends ElementBox {
     }
 
     private void init() throws Exception {
-        vContainer = new VerticalContainer(0,0,0);
+        vContainer = new VerticalContainer(0, 0, 0);
 
         String stampPath = HelperCommon.getResourceFullPath(this, "common/stamp/" + company.getStamp().getFullPath());
         PDImageXObject stampImg = PDImageXObject.createFromFile(stampPath, document);
@@ -65,8 +64,7 @@ public class StampBox extends ElementBox {
             rotAngle = 0;
             stampWidth += rnd.nextInt(20);
             stampHeight = (stampWidth * stampImg.getHeight()) / stampImg.getWidth();
-        }
-        else if (proba.get("stamp_bottom_elongated")) {
+        } else if (proba.get("stamp_bottom_elongated")) {
             // elongate stamps if the stamp is a not a Rectangular one
             // and set rotation to 0
             rotAngle = 0;
@@ -78,7 +76,7 @@ public class StampBox extends ElementBox {
             BufferedImage imgBuf = HelperImage.getRotatedImage(stampImg.getImage(), rotAngle);
             stampImg = LosslessFactory.createFromImage(document, imgBuf);
         }
-        ImageBox stampImgBox = new ImageBox(stampImg,0,0,stampWidth,stampHeight,alpha,"stamp");
+        ImageBox stampImgBox = new ImageBox(stampImg, 0, 0, stampWidth, stampHeight, alpha, "stamp");
         vContainer.addElement(stampImgBox);
     }
 

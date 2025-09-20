@@ -17,11 +17,11 @@ public class HorizontalLineBox extends ElementBox {
     private Color strokeColor;
 
     public HorizontalLineBox(float posX, float posY, float targetX, float targetY) {
-        this(posX, posY, targetX, targetY,        1f, Color.BLACK);
+        this(posX, posY, targetX, targetY, 1f, Color.BLACK);
     }
 
     public HorizontalLineBox(float posX, float posY, float targetX, float targetY, Color strokeColor) {
-        this(posX, posY, targetX, targetY,        1f, strokeColor);
+        this(posX, posY, targetX, targetY, 1f, strokeColor);
     }
 
     public HorizontalLineBox(float posX, float posY, float targetX, float targetY, float lineWidth) {

@@ -28,16 +28,21 @@ public class CompleteInformation {
 
     public void UpdateInformation(ElementaryInfo content, int newp1x, int newp1y, int newp2x, int newp2y) {
         this.contentList.add(content);
-        //Collections.sort(this.contentList);
-        this.contents ="";
-        for (int i=0;i<contentList.size();i++){
-            if (i!=0) setContents(getContents()+" ");
-            setContents(getContents()+contentList.get(i).getContent());
+        // Collections.sort(this.contentList);
+        this.contents = "";
+        for (int i = 0; i < contentList.size(); i++) {
+            if (i != 0)
+                setContents(getContents() + " ");
+            setContents(getContents() + contentList.get(i).getContent());
         }
-        if (newp1x < getP1x()) setP1x(newp1x);
-        if (newp1y < getP1y()) setP1y(newp1y);
-        if (newp2x > getP2x()) setP2x(newp2x);
-        if (newp2y > getP2y()) setP2y(newp2y);
+        if (newp1x < getP1x())
+            setP1x(newp1x);
+        if (newp1y < getP1y())
+            setP1y(newp1y);
+        if (newp2x > getP2x())
+            setP2x(newp2x);
+        if (newp2y > getP2y())
+            setP2y(newp2y);
     }
 
     public String getClassName() {

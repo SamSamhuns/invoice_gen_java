@@ -21,7 +21,8 @@ public class PayslipDate {
     private String labelPayment;
     private String valuePayment;
 
-    public PayslipDate(String label, String value, String labelStart, String valueStart, String labelEnd, String valueEnd, String labelPayment, String valuePayment){
+    public PayslipDate(String label, String value, String labelStart, String valueStart, String labelEnd,
+            String valueEnd, String labelPayment, String valuePayment) {
         this.label = label;
         this.value = value;
         this.labelStart = labelStart;
@@ -95,6 +96,7 @@ public class PayslipDate {
     public void setValuePayment(String valuePayment) {
         this.valuePayment = valuePayment;
     }
+
     @Override
     public String toString() {
         return "PayslipDate{" +
@@ -111,11 +113,11 @@ public class PayslipDate {
 
     public static class Generator implements ModelGenerator<PayslipDate> {
 
-        private static final long from = 1483228800; //   252493200
+        private static final long from = 1483228800; // 252493200
         private static final long to = System.currentTimeMillis() / 1000;
 
         private static final SimpleDateFormat formatsPeriod = new SimpleDateFormat("MMM YYYY");
-        private static final Map<SimpleDateFormat,String> formatsDate = new LinkedHashMap<>();
+        private static final Map<SimpleDateFormat, String> formatsDate = new LinkedHashMap<>();
         private static final Map<String, String> labels = new LinkedHashMap<>();
         private static final Map<String, String> labelsStart = new LinkedHashMap<>();
         private static final Map<String, String> labelsEnd = new LinkedHashMap<>();
@@ -151,18 +153,27 @@ public class PayslipDate {
             labelsPayment.put("Payment date", "en");
         }
 
-
         @Override
         public PayslipDate generate(GenerationContext ctx) {
-            long date = (ctx.getRandom().nextInt((int)(to-from)) + from) * 1000;
+            long date = (ctx.getRandom().nextInt((int) (to - from)) + from) * 1000;
             ctx.setDate(date);
-            List<SimpleDateFormat> localizedFormats = formatsDate.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<SimpleDateFormat> localizedFormats = formatsDate.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxF = ctx.getRandom().nextInt(localizedFormats.size());
 
-            List<String> localizedLabels = labels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsStart = labelsStart.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsEnd = labelsEnd.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsPayment = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabels = labels.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelsStart = labelsStart.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelsEnd = labelsEnd.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelsPayment = labelsPayment.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxL = ctx.getRandom().nextInt(localizedLabels.size());
             int idxLS = ctx.getRandom().nextInt(localizedLabelsStart.size());
             int idxLP = ctx.getRandom().nextInt(localizedLabelsPayment.size());
@@ -172,14 +183,13 @@ public class PayslipDate {
             Date payslipDate = calendar.getTime();
             calendar.set(Calendar.DAY_OF_MONTH, 1);
             Date startDate = calendar.getTime();
-            calendar.set(Calendar.DATE,calendar.getActualMaximum(Calendar.DATE));
-            Date endDate =calendar.getTime();
+            calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+            Date endDate = calendar.getTime();
 
             return new PayslipDate(localizedLabels.get(idxL), formatsPeriod.format(payslipDate),
                     localizedLabelsStart.get(idxLS), localizedFormats.get(idxF).format(startDate),
                     localizedLabelsEnd.get(idxLS), localizedFormats.get(idxF).format(endDate),
-                    localizedLabelsPayment.get(idxLP), localizedFormats.get(idxF).format(endDate)
-            );
+                    localizedLabelsPayment.get(idxLP), localizedFormats.get(idxF).format(endDate));
         }
 
     }

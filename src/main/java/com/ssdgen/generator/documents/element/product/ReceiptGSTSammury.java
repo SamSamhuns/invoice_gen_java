@@ -37,19 +37,19 @@ public class ReceiptGSTSammury extends ElementBox {
 
     private static final List<String[]> tableFormat = new ArrayList<>();
     {
-        tableFormat.add(new String[] {"CODE", "TAUX", "TTC", "VAT", "HT"} );
-        tableFormat.add(new String[] {"CODE", "TAUX", "HT", "VAT", "TTC"} );
-        tableFormat.add(new String[] {"CODE", "TAUX", "HT", "VAT"} );
-        tableFormat.add(new String[] {"CODE", "HT", "VAT"} );
+        tableFormat.add(new String[] { "CODE", "TAUX", "TTC", "VAT", "HT" });
+        tableFormat.add(new String[] { "CODE", "TAUX", "HT", "VAT", "TTC" });
+        tableFormat.add(new String[] { "CODE", "TAUX", "HT", "VAT" });
+        tableFormat.add(new String[] { "CODE", "HT", "VAT" });
 
     }
 
     private static final List<float[]> tableConfig = new ArrayList<>();
     {
-        tableConfig.add(new float[] {70f,70f, 70f, 70f,  70f} );
-        tableConfig.add(new float[] {50f,60f, 80f, 80f,  80f} );
-        tableConfig.add(new float[] {120f, 60f, 80f,  80f} );
-        tableConfig.add(new float[] {140f, 90f, 90f} );
+        tableConfig.add(new float[] { 70f, 70f, 70f, 70f, 70f });
+        tableConfig.add(new float[] { 50f, 60f, 80f, 80f, 80f });
+        tableConfig.add(new float[] { 120f, 60f, 80f, 80f });
+        tableConfig.add(new float[] { 140f, 90f, 90f });
 
     }
 
@@ -57,7 +57,8 @@ public class ReceiptGSTSammury extends ElementBox {
         return rnd;
     }
 
-    public ReceiptGSTSammury(float posX, float posY, ProductReceiptContainer productContainer, PDFont font, PDFont fontB, float fontSize) throws Exception {
+    public ReceiptGSTSammury(float posX, float posY, ProductReceiptContainer productContainer, PDFont font,
+            PDFont fontB, float fontSize) throws Exception {
         container = new VerticalContainer(posX, posY, 0);
         this.productContainer = productContainer;
         this.font = font;
@@ -66,24 +67,29 @@ public class ReceiptGSTSammury extends ElementBox {
         this.init();
     }
 
-
-    private String getTableElement(String colName){
+    private String getTableElement(String colName) {
         String tableElement;
 
-        switch (colName){
-            case "CODE":  tableElement = "(1)";
+        switch (colName) {
+            case "CODE":
+                tableElement = "(1)";
                 break;
-            case "TAUX":  tableElement = String.format("%.2f",productContainer.getTotalTaxRate() * 100)+"%";
+            case "TAUX":
+                tableElement = String.format("%.2f", productContainer.getTotalTaxRate() * 100) + "%";
                 break;
-            case "TTC":  tableElement = productContainer.getFmtTotalWithTax();
+            case "TTC":
+                tableElement = productContainer.getFmtTotalWithTax();
                 break;
-            case "VAT":  tableElement = productContainer.getFmtTotalTax();
+            case "VAT":
+                tableElement = productContainer.getFmtTotalTax();
                 break;
-            case "HT":  tableElement = productContainer.getFmtTotal();
+            case "HT":
+                tableElement = productContainer.getFmtTotal();
                 break;
-            default: return "Invalid element name Name";
+            default:
+                return "Invalid element name Name";
         }
-        return  tableElement;
+        return tableElement;
     }
 
     private void init() throws Exception {
@@ -96,17 +102,16 @@ public class ReceiptGSTSammury extends ElementBox {
             headLabels.put("HT", productContainer.getTotalHead());
         }
 
-
         int chosenFormatIndex = getRandom().nextInt(tableFormat.size());
         float[] configRow = tableConfig.get(chosenFormatIndex);
-        String [] chosenFormat = tableFormat.get(chosenFormatIndex);
-        this.chosenFormatHeaders =chosenFormat;
+        String[] chosenFormat = tableFormat.get(chosenFormatIndex);
+        this.chosenFormatHeaders = chosenFormat;
         TableRowBox head = new TableRowBox(configRow, 0, 0, VAlign.BOTTOM);
         head.setBackgroundColor(Color.WHITE);
 
-        for(String colname: chosenFormat)
-        {
-            head.addElement(new SimpleTextBox(fontB, fontSize+1, 0, 0, headLabels.get(colname), Color.BLACK, null, HAlign.CENTER), false);
+        for (String colname : chosenFormat) {
+            head.addElement(new SimpleTextBox(fontB, fontSize + 1, 0, 0, headLabels.get(colname), Color.BLACK, null,
+                    HAlign.CENTER), false);
         }
         container.addElement(head);
 
@@ -114,20 +119,20 @@ public class ReceiptGSTSammury extends ElementBox {
         HAlign halign;
         String tabelElement;
 
-        for(String colname: chosenFormat)
-        {
+        for (String colname : chosenFormat) {
             tabelElement = getTableElement(colname);
             halign = HAlign.CENTER;
-            if(colname.equals("CODE"))
+            if (colname.equals("CODE"))
                 halign = HAlign.LEFT;
-            productLine.addElement(new SimpleTextBox(font, fontSize, 0, 0, tabelElement, Color.BLACK, null, halign),false);// colname), false);
+            productLine.addElement(new SimpleTextBox(font, fontSize, 0, 0, tabelElement, Color.BLACK, null, halign),
+                    false);// colname), false);
         }
-        container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
         container.addElement(productLine);
-        container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 5));
+        container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 5));
 
-        container.addElement(new HorizontalLineBox(0,0, head.getBBox().getWidth()+30, 0));
-        container.addElement(new BorderBox(Color.WHITE,Color.WHITE, 0,0, 0, 0, 15));
+        container.addElement(new HorizontalLineBox(0, 0, head.getBBox().getWidth() + 30, 0));
+        container.addElement(new BorderBox(Color.WHITE, Color.WHITE, 0, 0, 0, 0, 15));
 
     }
 

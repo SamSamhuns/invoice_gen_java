@@ -51,10 +51,12 @@ public class InvoiceGenerator {
     private InvoiceGenerator() {
     }
 
-    public void generateInvoice(InvoiceLayout layout, InvoiceModel model, Path pdf, Path xml, Path img, Path json) throws Exception {
+    public void generateInvoice(InvoiceLayout layout, InvoiceModel model, Path pdf, Path xml, Path img, Path json)
+            throws Exception {
 
         OutputStream xmlos = Files.newOutputStream(xml);
-        XMLStreamWriter xmlOut = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
+        XMLStreamWriter xmlOut = XMLOutputFactory.newInstance()
+                .createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
         xmlOut.writeStartDocument();
         xmlOut.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
         xmlOut.writeAttribute("GEDI_version", "2.4");
@@ -113,21 +115,22 @@ public class InvoiceGenerator {
         availablesLayout.add(new NatureDecouvertesLayout());
 
         Path generated = Paths.get("target/generated/" + args[0]);
-        if ( !Files.exists(generated) ) {
+        if (!Files.exists(generated)) {
             Files.createDirectories(generated);
         }
 
         int start = Integer.parseInt(args[1]);
         int stop = Integer.parseInt(args[2]);
-        for ( int i=start; i<stop; i++) {
-            Path pdf = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".pdf");
-            Path xml = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
-            Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".jpg");
-            Path json = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".json");
+        for (int i = start; i < stop; i++) {
+            Path pdf = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".pdf");
+            Path xml = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".xml");
+            Path img = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".jpg");
+            Path json = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".json");
 
             GenerationContext ctx = GenerationContext.generate();
             InvoiceModel model = new InvoiceModel.Generator().generate(ctx);
-            InvoiceGenerator.getInstance().generateInvoice(availablesLayout.get(i % availablesLayout.size()), model, pdf, xml, img, json);
+            InvoiceGenerator.getInstance().generateInvoice(availablesLayout.get(i % availablesLayout.size()), model,
+                    pdf, xml, img, json);
             System.out.println("current: " + i);
         }
     }

@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-
 public class ProductContainer {
 
     private List<Product> products = new ArrayList<Product>();
@@ -56,11 +55,12 @@ public class ProductContainer {
     private final String withDiscountTotalHead;
     private final String withTaxAndDiscountTotalHead;
 
-
-    public ProductContainer(String currency, String nameHead, String codeHead, String qtyHead, String qtySuffix, String unitPriceHead, String lineTotalHead, String snHead,
-                            String taxHead, String taxRateHead, String taxRateTotalHead, String taxTotalHead,
-                            String discountHead, String discountRateHead, String discountRateTotalHead, String discountTotalHead,
-                            String totalHead, String withTaxTotalHead, String withDiscountTotalHead, String withTaxAndDiscountTotalHead) {
+    public ProductContainer(String currency, String nameHead, String codeHead, String qtyHead, String qtySuffix,
+            String unitPriceHead, String lineTotalHead, String snHead,
+            String taxHead, String taxRateHead, String taxRateTotalHead, String taxTotalHead,
+            String discountHead, String discountRateHead, String discountRateTotalHead, String discountTotalHead,
+            String totalHead, String withTaxTotalHead, String withDiscountTotalHead,
+            String withTaxAndDiscountTotalHead) {
         this.setCurrency(currency);
         this.nameHead = nameHead;
         this.codeHead = codeHead;
@@ -91,7 +91,8 @@ public class ProductContainer {
         total = total + (product.getQuantity() * product.getPrice());
         totalWithTax = totalWithTax + (product.getQuantity() * product.getPriceWithTax());
         totalWithDiscount = totalWithDiscount + (product.getQuantity() * product.getPriceWithDiscount());
-        totalWithTaxAndDiscount = totalWithTaxAndDiscount + (product.getQuantity() * product.getPriceWithTaxAndDiscount());
+        totalWithTaxAndDiscount = totalWithTaxAndDiscount
+                + (product.getQuantity() * product.getPriceWithTaxAndDiscount());
     }
 
     public List<Product> getProducts() {
@@ -129,7 +130,7 @@ public class ProductContainer {
     }
 
     public String getUPHead() {
-      return unitPriceHead;
+        return unitPriceHead;
     }
 
     public String getLineTotalHead() {
@@ -249,7 +250,7 @@ public class ProductContainer {
     // tax getter heads //
 
     public String getTaxHead() {
-      return taxHead;
+        return taxHead;
     }
 
     public String getTaxRateHead() {
@@ -536,20 +537,21 @@ public class ProductContainer {
             withTaxAndDiscountTotalHeads.put("Total", "en");
         }
 
-
         private final List<Product> products = new ArrayList<Product>();
         private static final List<List<String>> productsFileLangList = Arrays.asList(
                 Arrays.asList("common/product/fr/householdandmedia_fr.json", "fr"),
                 Arrays.asList("common/product/en/householdandmedia_en.json", "en"));
         {
             int currentListSize = 0;
-            for (int i=0; i < productsFileLangList.size(); i++) {
-                Reader jsonReader = new InputStreamReader(ProductContainer.class.getClassLoader().getResourceAsStream(productsFileLangList.get(i).get(0)));
+            for (int i = 0; i < productsFileLangList.size(); i++) {
+                Reader jsonReader = new InputStreamReader(ProductContainer.class.getClassLoader()
+                        .getResourceAsStream(productsFileLangList.get(i).get(0)));
                 Gson gson = new Gson();
-                Type collectionType = new TypeToken<Collection<Product>>(){}.getType();
+                Type collectionType = new TypeToken<Collection<Product>>() {
+                }.getType();
                 products.addAll(gson.fromJson(jsonReader, collectionType));
 
-                for (int j=currentListSize; j<products.size(); j++) {
+                for (int j = currentListSize; j < products.size(); j++) {
                     products.get(j).setLanguage(productsFileLangList.get(i).get(1));
                 }
                 currentListSize += products.size();
@@ -559,28 +561,66 @@ public class ProductContainer {
         @Override
         public ProductContainer generate(GenerationContext ctx) {
 
-            List<String> localNameHeads = nameHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localCodeHeads = codeHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localQtyHeads = qtyHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localQtySuffixes = qtySuffixes.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localUPHeads = unitPriceHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localLineTotalHeads = lineTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localSNHeads = snHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localNameHeads = nameHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localCodeHeads = codeHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localQtyHeads = qtyHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localQtySuffixes = qtySuffixes.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localUPHeads = unitPriceHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localLineTotalHeads = lineTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localSNHeads = snHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
-            List<String> localTaxHeads = taxHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localTaxRateHeads = taxRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localTaxRateTotalHeads = taxRateTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localTaxTotalHeads = taxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localTaxHeads = taxHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localTaxRateHeads = taxRateHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localTaxRateTotalHeads = taxRateTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localTaxTotalHeads = taxTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
-            List<String> localDiscountHeads = discountHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localDiscountRateHeads = discountRateHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localDiscountRateTotalHeads = discountRateTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localDiscountTotalHeads = discountTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localDiscountHeads = discountHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localDiscountRateHeads = discountRateHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localDiscountRateTotalHeads = discountRateTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localDiscountTotalHeads = discountTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
-            List<String> localTotalHeads = totalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localWithTaxTotalHeads = withTaxTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localWithDiscountTotalHeads = withDiscountTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localWithTaxAndDiscountTotalHeads = withTaxAndDiscountTotalHeads.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localTotalHeads = totalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localWithTaxTotalHeads = withTaxTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localWithDiscountTotalHeads = withDiscountTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localWithTaxAndDiscountTotalHeads = withTaxAndDiscountTotalHeads.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
             List<Product> productsLangFiltered = new ArrayList<Product>();
             for (int i = 0; i < products.size(); i++) {
@@ -600,22 +640,28 @@ public class ProductContainer {
                     localSNHeads.get(ctx.getRandom().nextInt(localSNHeads.size())),
                     new Generex(localTaxHeads.get(ctx.getRandom().nextInt(localTaxHeads.size()))).random(),
                     new Generex(localTaxRateHeads.get(ctx.getRandom().nextInt(localTaxRateHeads.size()))).random(),
-                    new Generex(localTaxRateTotalHeads.get(ctx.getRandom().nextInt(localTaxRateTotalHeads.size()))).random(),
+                    new Generex(localTaxRateTotalHeads.get(ctx.getRandom().nextInt(localTaxRateTotalHeads.size())))
+                            .random(),
                     new Generex(localTaxTotalHeads.get(ctx.getRandom().nextInt(localTaxTotalHeads.size()))).random(),
                     new Generex(localDiscountHeads.get(ctx.getRandom().nextInt(localDiscountHeads.size()))).random(),
-                    new Generex(localDiscountRateHeads.get(ctx.getRandom().nextInt(localDiscountRateHeads.size()))).random(),
-                    new Generex(localDiscountRateTotalHeads.get(ctx.getRandom().nextInt(localDiscountRateTotalHeads.size()))).random(),
-                    new Generex(localDiscountTotalHeads.get(ctx.getRandom().nextInt(localDiscountTotalHeads.size()))).random(),
+                    new Generex(localDiscountRateHeads.get(ctx.getRandom().nextInt(localDiscountRateHeads.size())))
+                            .random(),
+                    new Generex(localDiscountRateTotalHeads
+                            .get(ctx.getRandom().nextInt(localDiscountRateTotalHeads.size()))).random(),
+                    new Generex(localDiscountTotalHeads.get(ctx.getRandom().nextInt(localDiscountTotalHeads.size())))
+                            .random(),
                     new Generex(localTotalHeads.get(ctx.getRandom().nextInt(localTotalHeads.size()))).random(),
-                    new Generex(localWithTaxTotalHeads.get(ctx.getRandom().nextInt(localWithTaxTotalHeads.size()))).random(),
-                    new Generex(localWithDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithDiscountTotalHeads.size()))).random(),
-                    new Generex(localWithTaxAndDiscountTotalHeads.get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))).random()
-                    );
+                    new Generex(localWithTaxTotalHeads.get(ctx.getRandom().nextInt(localWithTaxTotalHeads.size())))
+                            .random(),
+                    new Generex(localWithDiscountTotalHeads
+                            .get(ctx.getRandom().nextInt(localWithDiscountTotalHeads.size()))).random(),
+                    new Generex(localWithTaxAndDiscountTotalHeads
+                            .get(ctx.getRandom().nextInt(localWithTaxAndDiscountTotalHeads.size()))).random());
 
             Boolean discountAvailable = false; // ctx.getRandom().nextInt(100) < 10; TODO uncomment
             productContainer.setDiscountAvailable(discountAvailable);
 
-            Boolean taxAvailable = true;  // ctx.getRandom().nextInt(100) < 90; TODO uncomment
+            Boolean taxAvailable = true; // ctx.getRandom().nextInt(100) < 90; TODO uncomment
             productContainer.setTaxAvailable(taxAvailable);
 
             final int maxProductNum = ctx.getMaxProductNum();
@@ -626,12 +672,12 @@ public class ProductContainer {
             float priceWithTax = 0;
             float priceWithDiscount = 0;
             float priceWithTaxAndDiscount = 0;
-            Generex codeGenerex = new Generex("[A-Z0-9]"+"{"+new Generex("[4-9]").random()+"}");  // [A-Z0-9]
+            Generex codeGenerex = new Generex("[A-Z0-9]" + "{" + new Generex("[4-9]").random() + "}"); // [A-Z0-9]
 
-            for (int i = 0; i < ctx.getRandom().nextInt(maxProductNum - 1)+1; i++) {
+            for (int i = 0; i < ctx.getRandom().nextInt(maxProductNum - 1) + 1; i++) {
                 Product product = productsLangFiltered.get(ctx.getRandom().nextInt(productsLangFiltered.size()));
                 int quantity = ctx.getRandom().nextInt(MAXQTYPERPRODUCT - 1) + 1;
-                quantity = (product.getPrice() < 250) ? quantity * 8: quantity; // 8x qty if price < 250
+                quantity = (product.getPrice() < 250) ? quantity * 8 : quantity; // 8x qty if price < 250
                 product.setQuantity(quantity);
                 product.setCurrency(ctx.getCurrency());
 
@@ -640,14 +686,14 @@ public class ProductContainer {
                 priceWithTax = price;
                 // add tax for each item if taxAvailable
                 if (taxAvailable) {
-                    taxRate = HelperCommon.rand_uniform(0.0f, 0.2f);  // taxRate from 0% to 20%
+                    taxRate = HelperCommon.rand_uniform(0.0f, 0.2f); // taxRate from 0% to 20%
                     priceWithTax = HelperCommon.round(price * (1 + taxRate), 2);
                 }
 
                 priceWithDiscount = price;
                 // add discounts for each item if discountAvailable
                 if (discountAvailable) {
-                    discountRate = HelperCommon.rand_uniform(0.05f, 0.15f);  // discountRate from 5% to 15%
+                    discountRate = HelperCommon.rand_uniform(0.05f, 0.15f); // discountRate from 5% to 15%
                     priceWithDiscount = HelperCommon.round(price * (1 - discountRate), 2);
                 }
                 priceWithTaxAndDiscount = price * (1 + taxRate - discountRate);
@@ -669,12 +715,12 @@ public class ProductContainer {
                 Product shippingProduct = new Product();
                 price = 10 + ctx.getRandom().nextInt(200);
 
-                shippingProduct.setName((ctx.getRandom().nextBoolean()) ? "Shipping": "SHIPPING");
+                shippingProduct.setName((ctx.getRandom().nextBoolean()) ? "Shipping" : "SHIPPING");
                 shippingProduct.setCurrency(ctx.getCurrency());
                 shippingProduct.setQuantity(1);
                 shippingProduct.setPrice(price);
-                shippingProduct.setTaxRate(0);  // vat for shipping is always 0
-                shippingProduct.setDiscountRate(0);  // discount for shipping is always 0
+                shippingProduct.setTaxRate(0); // vat for shipping is always 0
+                shippingProduct.setDiscountRate(0); // discount for shipping is always 0
                 shippingProduct.setPriceWithTax(price);
                 shippingProduct.setPriceWithDiscount(price);
                 shippingProduct.setPriceWithTaxAndDiscount(price);

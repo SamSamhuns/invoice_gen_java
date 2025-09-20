@@ -116,15 +116,23 @@ public class ContactNumber {
 
         @Override
         public ContactNumber generate(GenerationContext ctx) {
-            List<String> phoneFormat = phoneFormats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> faxFormat = faxFormats.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> phoneFormat = phoneFormats.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> faxFormat = faxFormats.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getCountry())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idx1 = ctx.getRandom().nextInt(phoneFormat.size());
             int idx2 = ctx.getRandom().nextInt(faxFormat.size());
             String phoneNumber = new Generex(phoneFormat.get(idx1)).random();
             String faxNumber = new Generex(faxFormat.get(idx2)).random();
 
-            List<String> locPLabels = phoneLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> locFLabels = faxLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> locPLabels = phoneLabels.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> locFLabels = faxLabels.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxL = ctx.getRandom().nextInt(locPLabels.size());
             int idxF = ctx.getRandom().nextInt(locFLabels.size());
             return new ContactNumber(locPLabels.get(idxL), phoneNumber, locFLabels.get(idxF), faxNumber);

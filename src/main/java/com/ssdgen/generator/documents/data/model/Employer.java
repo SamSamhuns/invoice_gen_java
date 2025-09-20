@@ -39,7 +39,9 @@ public class Employer {
         this.logo = logo;
     }
 
-    public IDNumbers getIdNumbers() { return idNumbers; }
+    public IDNumbers getIdNumbers() {
+        return idNumbers;
+    }
 
     public void setIdNumbers(IDNumbers idNumbers) {
         this.idNumbers = idNumbers;
@@ -117,12 +119,13 @@ public class Employer {
         private static final Map<Employer, String> employers = new HashMap<>();
         {
             assert companiesFileList.size() == companiesCountryList.size();
-            for (int i=0; i<companiesFileList.size(); i++) {
+            for (int i = 0; i < companiesFileList.size(); i++) {
                 String companiesFile = companiesFileList.get(i);
                 String companiesCountry = companiesCountryList.get(i);
                 try {
                     Reader in = new InputStreamReader(Logo.class.getClassLoader().getResourceAsStream(companiesFile));
-                    Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader().parse(in);
+                    Iterable<CSVRecord> records = CSVFormat.newFormat(';').withQuote('"').withFirstRecordAsHeader()
+                            .parse(in);
                     for (CSVRecord record : records) {
                         String name = record.get("name");
                         String website = record.get("domain");
@@ -132,7 +135,7 @@ public class Employer {
                         String postcode = record.get("postcode");
                         String city = record.get("city");
                         String country = record.get("country");
-                        if ( name.length() > 3 ) {
+                        if (name.length() > 3) {
                             Employer emp = new Employer();
                             emp.setName(name);
                             emp.setWebsite(website);
@@ -142,7 +145,7 @@ public class Employer {
                             employers.put(emp, companiesCountry);
                         }
                     }
-                } catch ( Exception e ) {
+                } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "unable to parse csv source: " + companiesFile, e);
                 }
             }
@@ -150,7 +153,9 @@ public class Employer {
 
         @Override
         public Employer generate(GenerationContext ctx) {
-            List<Employer> goodEmployers = employers.entrySet().stream().filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey()).collect(Collectors.toList());
+            List<Employer> goodEmployers = employers.entrySet().stream()
+                    .filter(comp -> comp.getValue().matches(ctx.getCountry())).map(comp -> comp.getKey())
+                    .collect(Collectors.toList());
             Employer employer = goodEmployers.get(ctx.getRandom().nextInt(goodEmployers.size()));
             employer.setLogo(new Logo(ctx, employer.getName()));
             employer.setIdNumbers(new IDNumbers.Generator().generate(ctx));

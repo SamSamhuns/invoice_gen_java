@@ -24,7 +24,8 @@ public class HorizontalContainer extends ElementBox {
         this(posX, posY, 1, null, null);
     }
 
-    public HorizontalContainer(float posX, float posY, float borderThickness, Color borderColor, Color backgroundColor) {
+    public HorizontalContainer(float posX, float posY, float borderThickness, Color borderColor,
+            Color backgroundColor) {
         this.elements = new ArrayList<>();
         this.box = new BoundingBox(posX, posY, 0, 0);
         this.borderThickness = borderThickness;
@@ -37,7 +38,7 @@ public class HorizontalContainer extends ElementBox {
         element.getBBox().setPosX(0);
         element.getBBox().setPosY(0);
         element.translate(box.getPosX() + this.box.getWidth(), box.getPosY());
-        if ( element.getBBox().getHeight() > box.getHeight() ) {
+        if (element.getBBox().getHeight() > box.getHeight()) {
             this.box.setHeight(element.getBBox().getHeight());
         }
         this.box.setWidth(this.box.getWidth() + element.getBBox().getWidth());
@@ -63,38 +64,39 @@ public class HorizontalContainer extends ElementBox {
     @Override
     public void setWidth(float width) throws Exception {
         this.box.setWidth(width);
-        //throw new Exception("Not allowed");
+        // throw new Exception("Not allowed");
     }
 
     @Override
     public void setHeight(float height) throws Exception {
         this.box.setHeight(height);
-        //throw new Exception("Not allowed");
+        // throw new Exception("Not allowed");
     }
 
     @Override
     public void translate(float offsetX, float offsetY) {
         box.translate(offsetX, offsetY);
-        for ( ElementBox element : elements ) {
+        for (ElementBox element : elements) {
             element.translate(offsetX, offsetY);
         }
     }
 
     @Override
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        if ( borderColor != null ) {
+        if (borderColor != null) {
             stream.setLineWidth(borderThickness);
             stream.setStrokingColor(borderColor);
-            stream.addRect(box.getPosX()-borderThickness, box.getPosY()-box.getHeight()-borderThickness, box.getWidth()+borderThickness*2, box.getHeight() + borderThickness*2);
+            stream.addRect(box.getPosX() - borderThickness, box.getPosY() - box.getHeight() - borderThickness,
+                    box.getWidth() + borderThickness * 2, box.getHeight() + borderThickness * 2);
             stream.stroke();
         }
-        if ( backgroundColor != null ) {
+        if (backgroundColor != null) {
             stream.setNonStrokingColor(backgroundColor);
-            stream.addRect(box.getPosX(), box.getPosY()-box.getHeight(), box.getWidth(), box.getHeight());
+            stream.addRect(box.getPosX(), box.getPosY() - box.getHeight(), box.getWidth(), box.getHeight());
             stream.fill();
         }
 
-        for ( ElementBox element : elements ) {
+        for (ElementBox element : elements) {
             element.build(stream, writer);
         }
     }

@@ -19,7 +19,7 @@ public class ReceiptDate {
     private final String timeLabel;
     private final String printedDateLabel;
 
-    public ReceiptDate(String label,String timeLabel, String printedDateLabel, String value, String time ) {
+    public ReceiptDate(String label, String timeLabel, String printedDateLabel, String value, String time) {
         this.label = label;
         this.value = value;
         this.time = time;
@@ -135,21 +135,36 @@ public class ReceiptDate {
 
         @Override
         public ReceiptDate generate(GenerationContext ctx) {
-            long date = (ctx.getRandom().nextInt((int)(to-from)) + from) * 1000;
+            long date = (ctx.getRandom().nextInt((int) (to - from)) + from) * 1000;
             ctx.setDate(date);
-            List<SimpleDateFormat> localizedFormats = formatsDate.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<SimpleDateFormat> localizedFormats = formatsDate.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxF = ctx.getRandom().nextInt(localizedFormats.size());
 
-            List<SimpleDateFormat> localizedFormatsTime = formatsTime.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<SimpleDateFormat> localizedFormatsTime = formatsTime.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxT = ctx.getRandom().nextInt(localizedFormatsTime.size());
 
-
-            List<String> localizedLabels = labels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsOrder = labelsOrder.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsShipping = labelsShipping.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsPayment = labelsPayment.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelsTime = labelsTime.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
-            List<String> localizedLabelPrintedDate = labelsPrintedDate.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> localizedLabels = labels.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelsOrder = labelsOrder.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelsShipping = labelsShipping.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelsPayment = labelsPayment.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelsTime = labelsTime.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            List<String> localizedLabelPrintedDate = labelsPrintedDate.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
             int idxL = ctx.getRandom().nextInt(localizedLabels.size());
             int idxLC = ctx.getRandom().nextInt(localizedLabelsOrder.size());
@@ -162,8 +177,9 @@ public class ReceiptDate {
             Date invoiceDate = calendar.getTime();
 
             calendar.add(Calendar.DAY_OF_WEEK, -4);
-            return new ReceiptDate(localizedLabels.get(idxL),localizedLabelsTime.get(idxLT),localizedLabelPrintedDate.get(idxLPR), localizedFormats.get(idxF).format(invoiceDate),localizedFormatsTime.get(idxT).format(invoiceDate)
-            );
+            return new ReceiptDate(localizedLabels.get(idxL), localizedLabelsTime.get(idxLT),
+                    localizedLabelPrintedDate.get(idxLPR), localizedFormats.get(idxF).format(invoiceDate),
+                    localizedFormatsTime.get(idxT).format(invoiceDate));
         }
 
     }

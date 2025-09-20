@@ -2,7 +2,6 @@ package com.ssdgen.generator.documents.data.model;
 
 public class Product {
 
-
     private String name;
     private String description;
     private String ean;
@@ -30,19 +29,19 @@ public class Product {
     }
 
     public String getName() {
-      return name;
+        return name;
     }
 
     public void setName(String name) {
-      this.name = name;
+        this.name = name;
     }
 
     public String getCode() {
-      return code;
+        return code;
     }
 
     public void setCode(String code) {
-      this.code = code;
+        this.code = code;
     }
 
     public String getDescription() {
@@ -285,16 +284,16 @@ public class Product {
     }
 
     /*
-        "brand": "Samsung",
-        "categories": [
-            "Large household appliances",
-            "Washing machine",
-            "Washing machine with porthole"
-        ],
-        "ean": "8806088499048",
-        "name": "Washing machine with porthole Samsung ADD WASH WW90K4437YW",
-        "price": 399.167,
-        "sku": "000000000001079579"
-    */
+     * "brand": "Samsung",
+     * "categories": [
+     * "Large household appliances",
+     * "Washing machine",
+     * "Washing machine with porthole"
+     * ],
+     * "ean": "8806088499048",
+     * "name": "Washing machine with porthole Samsung ADD WASH WW90K4437YW",
+     * "price": 399.167,
+     * "sku": "000000000001079579"
+     */
 
 }

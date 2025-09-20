@@ -47,7 +47,7 @@ public class WorkspaceManager {
     @PostConstruct
     protected void init() {
         LOGGER.log(Level.INFO, "Initialising Workspace Service");
-        if ( home.startsWith("~") ) {
+        if (home.startsWith("~")) {
             home = home.replaceFirst("\\~", Paths.get(System.getProperty("user.home")).toString());
         }
         root = Paths.get(home, WORKSPACES_HOME);
@@ -62,7 +62,7 @@ public class WorkspaceManager {
     @Transactional
     public Long findIdForConnectedUser() throws WorkspaceManagerException {
         Workspace workspace = Workspace.findByOwner(auth.getConnectedUser());
-        if ( workspace == null ) {
+        if (workspace == null) {
             workspace = this.bootstrap(auth.getConnectedUser());
         }
         return workspace.id;
@@ -72,11 +72,12 @@ public class WorkspaceManager {
     public Workspace load(Long id) throws WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException {
         LOGGER.log(Level.INFO, "Loading workspace for id: " + id);
         Workspace workspace = Workspace.findById(id);
-        if ( workspace == null ) {
+        if (workspace == null) {
             throw new WorkspaceNotFoundException("Unable to find workspace for id: " + id);
         }
-        if ( !auth.isSuperUserConnected() && !auth.getConnectedUser().equals(workspace.owner) ) {
-            throw new AccessDeniedException("Access Denied for user [" + auth.getConnectedUser() + "] on workspace with id: " + id);
+        if (!auth.isSuperUserConnected() && !auth.getConnectedUser().equals(workspace.owner)) {
+            throw new AccessDeniedException(
+                    "Access Denied for user [" + auth.getConnectedUser() + "] on workspace with id: " + id);
         }
         Path wsroot = Paths.get(root.toString(), workspace.owner);
         try {
@@ -87,7 +88,7 @@ public class WorkspaceManager {
             workspace.jobs = jobs.findForOwner(workspace.owner);
             LOGGER.log(Level.INFO, "Workspace: " + workspace);
             return workspace;
-        } catch ( IOException e ) {
+        } catch (IOException e) {
             throw new WorkspaceManagerException("Error while accessing workspace folder", e);
         }
     }
@@ -95,16 +96,17 @@ public class WorkspaceManager {
     public void purge(Long id) throws WorkspaceNotFoundException, WorkspaceManagerException, AccessDeniedException {
         LOGGER.log(Level.INFO, "Purge workspace for id: " + id);
         Workspace workspace = Workspace.findById(id);
-        if ( workspace == null ) {
+        if (workspace == null) {
             throw new WorkspaceNotFoundException("Unable to find workspace for id: " + id);
         }
-        if ( !auth.isSuperUserConnected() && !auth.getConnectedUser().equals(workspace.owner) ) {
-            throw new AccessDeniedException("Access Denied for user [" + auth.getConnectedUser() + "] on workspace with id: " + id);
+        if (!auth.isSuperUserConnected() && !auth.getConnectedUser().equals(workspace.owner)) {
+            throw new AccessDeniedException(
+                    "Access Denied for user [" + auth.getConnectedUser() + "] on workspace with id: " + id);
         }
         Path wsroot = Paths.get(root.toString(), workspace.owner);
         try {
             Files.list(wsroot).forEach(this::deletePath);
-        } catch ( IOException | RuntimeException e ) {
+        } catch (IOException | RuntimeException e) {
             LOGGER.log(Level.SEVERE, "Error while purging workspace", e);
             throw new WorkspaceManagerException("Error while purging workspace folder", e);
         }
@@ -116,13 +118,13 @@ public class WorkspaceManager {
             Path wsroot = Paths.get(root.toString(), owner);
             try {
                 Files.createDirectory(wsroot);
-            } catch ( FileAlreadyExistsException e ) { //
+            } catch (FileAlreadyExistsException e) { //
             }
             Workspace workspace = new Workspace();
             workspace.owner = owner;
             workspace.persist();
             return workspace;
-        } catch ( IOException e ) {
+        } catch (IOException e) {
             throw new WorkspaceManagerException("Error while creating workspace folder", e);
         }
     }
@@ -130,7 +132,7 @@ public class WorkspaceManager {
     private void deletePath(Path p) throws RuntimeException {
         try {
             Files.delete(p);
-        } catch ( IOException e ) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -144,7 +146,7 @@ public class WorkspaceManager {
             item.setCreationDate(new Date(attributes.creationTime().toMillis()));
             item.setModificationDate(new Date(attributes.lastModifiedTime().toMillis()));
             item.setMimeType(new Tika().detect(new File(path.toString())));
-        } catch ( IOException e ) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return item;

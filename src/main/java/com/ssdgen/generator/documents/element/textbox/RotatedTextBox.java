@@ -28,42 +28,51 @@ public class RotatedTextBox extends ElementBox {
     private Color backgroundColor;
 
     /*
-      (posX, posY) represent the top left corner of image
-    */
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float pageWidth, String text) throws Exception {
+     * (posX, posY) represent the top left corner of image
+     */
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float pageWidth, String text)
+            throws Exception {
         this(font, fontSize, posX, posY, 90f, pageWidth, text, Color.BLACK, null, "undefined", true);
     }
 
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float pageWidth, String text, String entityName) throws Exception {
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float pageWidth, String text,
+            String entityName) throws Exception {
         this(font, fontSize, posX, posY, 90f, pageWidth, text, Color.BLACK, null, entityName, true);
     }
 
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth, String text) throws Exception {
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth,
+            String text) throws Exception {
         this(font, fontSize, posX, posY, rotAngle, pageWidth, text, Color.BLACK, null, "undefined", true);
     }
 
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth, String text, String entityName) throws Exception {
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth,
+            String text, String entityName) throws Exception {
         this(font, fontSize, posX, posY, rotAngle, pageWidth, text, Color.BLACK, null, entityName, true);
     }
 
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth, String text, String entityName, Boolean useANSIEncoding) throws Exception {
-      this(font, fontSize, posX, posY, rotAngle, pageWidth, text, Color.BLACK, null, entityName, useANSIEncoding);
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth,
+            String text, String entityName, Boolean useANSIEncoding) throws Exception {
+        this(font, fontSize, posX, posY, rotAngle, pageWidth, text, Color.BLACK, null, entityName, useANSIEncoding);
     }
 
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth, String text, Color textColor, Color backgroundColor) throws Exception {
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth,
+            String text, Color textColor, Color backgroundColor) throws Exception {
         this(font, fontSize, posX, posY, rotAngle, pageWidth, text, textColor, backgroundColor, "undefined", true);
     }
 
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth, String text, Color textColor, Color backgroundColor, String entityName) throws Exception {
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth,
+            String text, Color textColor, Color backgroundColor, String entityName) throws Exception {
         this(font, fontSize, posX, posY, rotAngle, pageWidth, text, textColor, backgroundColor, entityName, true);
     }
 
-    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth, String text, Color textColor, Color backgroundColor, String entityName, Boolean useANSIEncoding) throws Exception {
+    public RotatedTextBox(PDFont font, float fontSize, float posX, float posY, float rotAngle, float pageWidth,
+            String text, Color textColor, Color backgroundColor, String entityName, Boolean useANSIEncoding)
+            throws Exception {
         this.font = font;
         this.fontSize = fontSize;
         this.rotAngle = rotAngle;
         this.pageWidth = pageWidth;
-        if(text == null){
+        if (text == null) {
             text = "";
         }
         this.text = useANSIEncoding ? VerifCharEncoding.remove(text) : text;
@@ -114,9 +123,9 @@ public class RotatedTextBox extends ElementBox {
     }
 
     public void build(PDPageContentStream stream, XMLStreamWriter writer) throws Exception {
-        if ( backgroundColor != null ) {
+        if (backgroundColor != null) {
             stream.setNonStrokingColor(backgroundColor);
-            stream.addRect(box.getPosX(), box.getPosY()-box.getHeight(), box.getWidth(), box.getHeight());
+            stream.addRect(box.getPosX(), box.getPosY() - box.getHeight(), box.getWidth(), box.getHeight());
             stream.fill();
         }
 

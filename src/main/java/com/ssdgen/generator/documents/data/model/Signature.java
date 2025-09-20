@@ -50,7 +50,6 @@ public class Signature {
         this.label = label;
     }
 
-
     @Override
     public String toString() {
         return "Signature{" +
@@ -68,29 +67,31 @@ public class Signature {
         private static final Map<String, String> signatureLabels = new LinkedHashMap<>();
 
         {
-              signatureLabels.put("Signature du service des finances", "fr");
-              signatureLabels.put("Signataire autorisé", "fr");
-              signatureLabels.put("Représentation légale", "fr");
-              signatureLabels.put("Responsable des finances", "fr");
-              signatureLabels.put("Gestionnaire de crédit", "fr");
+            signatureLabels.put("Signature du service des finances", "fr");
+            signatureLabels.put("Signataire autorisé", "fr");
+            signatureLabels.put("Représentation légale", "fr");
+            signatureLabels.put("Responsable des finances", "fr");
+            signatureLabels.put("Gestionnaire de crédit", "fr");
 
-              signatureLabels.put("Finance Dep. Signature", "en");
-              signatureLabels.put("Authorized Signatory", "en");
-              signatureLabels.put("Legal Representation", "en");
-              signatureLabels.put("Finance Manager", "en");
-              signatureLabels.put("Credit Manager", "en");
-              signatureLabels.put("Approved by", "en");
+            signatureLabels.put("Finance Dep. Signature", "en");
+            signatureLabels.put("Authorized Signatory", "en");
+            signatureLabels.put("Legal Representation", "en");
+            signatureLabels.put("Finance Manager", "en");
+            signatureLabels.put("Credit Manager", "en");
+            signatureLabels.put("Approved by", "en");
         }
 
         private static final List<String> signaturesFileList = Arrays.asList(
-            "common/signature/kaggle_real_forged/metadata.json",
-            "common/signature/multi_script_handwritten_signature/metadata.json");
+                "common/signature/kaggle_real_forged/metadata.json",
+                "common/signature/multi_script_handwritten_signature/metadata.json");
         private static final List<Signature> signatures = new ArrayList<Signature>();
         {
             for (String signatureFile : signaturesFileList) {
-                Reader jsonReader = new InputStreamReader(Signature.class.getClassLoader().getResourceAsStream(signatureFile));
+                Reader jsonReader = new InputStreamReader(
+                        Signature.class.getClassLoader().getResourceAsStream(signatureFile));
                 Gson gson = new Gson();
-                Type collectionType = new TypeToken<List<Signature>>(){}.getType();
+                Type collectionType = new TypeToken<List<Signature>>() {
+                }.getType();
                 signatures.addAll(gson.fromJson(jsonReader, collectionType));
             }
         }
@@ -98,7 +99,9 @@ public class Signature {
         @Override
         public Signature generate(GenerationContext ctx) {
             Signature signatureObj = signatures.get(ctx.getRandom().nextInt(signatures.size()));
-            List<String> sigLabels = signatureLabels.entrySet().stream().filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey).collect(Collectors.toList());
+            List<String> sigLabels = signatureLabels.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(ctx.getLanguage())).map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
             int idxS = ctx.getRandom().nextInt(sigLabels.size());
             signatureObj.setLabel(sigLabels.get(idxS));
             return signatureObj;

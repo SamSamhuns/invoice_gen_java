@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class Employee{
+public class Employee {
 
     private static final Logger LOGGER = Logger.getLogger(Employee.class.getName());
 
@@ -26,10 +26,9 @@ public class Employee{
     private String contratType;
     private String civilStatus;
 
-    public  Employee(String name,String arrivalDate, String employment, String position, String email,
-                     Address address, String employeeId, String socialSecurityNumber, String department,
-                     String bankDetail, String contratType, String civilStatus)
-    {
+    public Employee(String name, String arrivalDate, String employment, String position, String email,
+            Address address, String employeeId, String socialSecurityNumber, String department,
+            String bankDetail, String contratType, String civilStatus) {
         this.name = name;
         this.arrivalDate = arrivalDate;
         this.employment = employment;
@@ -51,7 +50,6 @@ public class Employee{
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getArrivalDate() {
         return arrivalDate;
@@ -142,7 +140,7 @@ public class Employee{
     }
 
     @Override
-   public String toString() {
+    public String toString() {
         return "Employee{" +
                 "name='" + name +
                 ", employment=" + employment +
@@ -160,7 +158,7 @@ public class Employee{
     }
 
     public static class Generator implements ModelGenerator<Employee> {
-//TODO HEADS AND CONTENT LISTS
+        // TODO HEADS AND CONTENT LISTS
         private static final Map<String, String> billingHeads = new LinkedHashMap<>();
         private static final Map<String, String> shippingHeads = new LinkedHashMap<>();
 
@@ -201,7 +199,6 @@ public class Employee{
             Faker faker = Faker.instance(Locale.forLanguageTag(ctx.getLanguagePayslip()));
             String name = faker.name().fullName();
             Address address = new Address.Generator().generate(ctx);
-
 
             String arrivalDate = null;
             String employment = null;

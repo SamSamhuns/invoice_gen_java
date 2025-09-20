@@ -33,12 +33,15 @@ public class PayslipGenerator {
     private PayslipGenerator() {
     }
 
-    public void generatePayslip(com.ssdgen.generator.documents.layout.payslip.GenericPayslipLayout layout, PayslipModel model, Path pdf, Path xml, Path img, Path xmlForEvaluation) throws Exception {
+    public void generatePayslip(com.ssdgen.generator.documents.layout.payslip.GenericPayslipLayout layout,
+            PayslipModel model, Path pdf, Path xml, Path img, Path xmlForEvaluation) throws Exception {
 
-        Boolean modeEval= true;
-        if (xmlForEvaluation == null) modeEval = false;
+        Boolean modeEval = true;
+        if (xmlForEvaluation == null)
+            modeEval = false;
         OutputStream xmlos = Files.newOutputStream(xml);
-        XMLStreamWriter xmlout = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
+        XMLStreamWriter xmlout = XMLOutputFactory.newInstance()
+                .createXMLStreamWriter(new OutputStreamWriter(xmlos, StandardCharsets.UTF_8));
         xmlout.writeStartDocument();
         xmlout.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
         xmlout.writeAttribute("GEDI_version", "2.4");
@@ -54,11 +57,12 @@ public class PayslipGenerator {
         xmlout.writeAttribute("docTag", "xml");
 
         ////
-        OutputStream xmlosEval ;
+        OutputStream xmlosEval;
         XMLStreamWriter xmloutEval = null;
         if (modeEval) {
             xmlosEval = Files.newOutputStream(xmlForEvaluation);
-            xmloutEval = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(xmlosEval, StandardCharsets.UTF_8));
+            xmloutEval = XMLOutputFactory.newInstance()
+                    .createXMLStreamWriter(new OutputStreamWriter(xmlosEval, StandardCharsets.UTF_8));
             xmloutEval.writeStartDocument();
             xmloutEval.writeStartElement("", "GEDI", "http://lamp.cfar.umd.edu/media/projects/GEDI/");
             xmloutEval.writeAttribute("GEDI_version", "2.4");
@@ -75,10 +79,10 @@ public class PayslipGenerator {
         }
 
         PDDocument document = new PDDocument();
-        layout.builtSSD(model, document, xmlout,xmloutEval);
+        layout.builtSSD(model, document, xmlout, xmloutEval);
         document.save(pdf.toFile());
 
-        //Export as img
+        // Export as img
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
         ImageIOUtil.writeImage(bim, img.toString(), 300);
@@ -101,23 +105,24 @@ public class PayslipGenerator {
 
     public static void main(String[] args) throws Exception {
 
-
         Path generated = Paths.get("target/generated/" + args[0]);
-        if ( !Files.exists(generated) ) {
+        if (!Files.exists(generated)) {
             Files.createDirectories(generated);
         }
 
         int start = Integer.parseInt(args[1]);
         int stop = Integer.parseInt(args[2]);
-        for ( int i=start; i<stop; i++) {
-            //String ts = "" + System.currentTimeMillis();
-            Path pdf = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".pdf");
-            Path xml = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
-            Path xmlEval = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".xml");
-            Path img = Paths.get("target/generated/" + args[0] + "/basic-"+ i + ".jpg");
+        for (int i = start; i < stop; i++) {
+            // String ts = "" + System.currentTimeMillis();
+            Path pdf = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".pdf");
+            Path xml = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".xml");
+            Path xmlEval = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".xml");
+            Path img = Paths.get("target/generated/" + args[0] + "/basic-" + i + ".jpg");
             GenerationContext ctx = GenerationContext.generate();
             PayslipModel model = new PayslipModel.Generator().generate(ctx);
-            PayslipGenerator.getInstance().generatePayslip(new com.ssdgen.generator.documents.layout.payslip.GenericPayslipLayout(), model, pdf, xml, img,xmlEval);
+            PayslipGenerator.getInstance().generatePayslip(
+                    new com.ssdgen.generator.documents.layout.payslip.GenericPayslipLayout(), model, pdf, xml, img,
+                    xmlEval);
             System.out.println("current: " + i);
         }
     }

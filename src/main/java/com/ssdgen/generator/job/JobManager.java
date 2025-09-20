@@ -50,9 +50,10 @@ public class JobManager {
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public Job submit(Workspace workspace, String type, Map<String, String> params) throws UnsupportedJobException, AlreadyActiveJobException {
+    public Job submit(Workspace workspace, String type, Map<String, String> params)
+            throws UnsupportedJobException, AlreadyActiveJobException {
         LOGGER.log(Level.INFO, "Submitting new job of type : " + type);
-        if ( Job.countActiveForOwner(workspace.owner) > 0 ) {
+        if (Job.countActiveForOwner(workspace.owner) > 0) {
             throw new AlreadyActiveJobException(workspace.owner);
         }
         Job job = new Job();
@@ -63,7 +64,8 @@ public class JobManager {
         job.status = Job.Status.PENDING;
         job.params.putAll(params);
         job.persistAndFlush();
-        JobHandler handler = handlers.stream().filter(h -> h.canHandle(job)).findFirst().orElseThrow(() -> new UnsupportedJobException(job));
+        JobHandler handler = handlers.stream().filter(h -> h.canHandle(job)).findFirst()
+                .orElseThrow(() -> new UnsupportedJobException(job));
         handler.setJobId(job.id);
         handler.setJobRoot(workspace.root);
         handler.setJobParams(params);
@@ -114,11 +116,10 @@ public class JobManager {
 
     private Job load(Long id) throws JobNotFoundException {
         Job job = Job.findById(id);
-        if ( job == null ) {
+        if (job == null) {
             throw new JobNotFoundException("Unable to find a job with id: " + id + " in storage");
         }
         return job;
     }
-
 
 }

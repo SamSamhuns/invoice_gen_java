@@ -72,13 +72,13 @@ public class FileItem {
         @Override
         public int compare(FileItem o1, FileItem o2) {
             /*
-            if ( o1.isFolder() && !o2.isFolder() ) {
-                return -1;
-            }
-            if ( !o1.isFolder() && o2.isFolder() ) {
-                return 1;
-            }
-            */
+             * if ( o1.isFolder() && !o2.isFolder() ) {
+             * return -1;
+             * }
+             * if ( !o1.isFolder() && o2.isFolder() ) {
+             * return 1;
+             * }
+             */
             return o1.getName().compareTo(o2.getName());
         }
     }
@@ -87,13 +87,13 @@ public class FileItem {
         @Override
         public int compare(FileItem o1, FileItem o2) {
             /*
-            if ( o1.isFolder() && !o2.isFolder() ) {
-                return -1;
-            }
-            if ( !o1.isFolder() && o2.isFolder() ) {
-                return 1;
-            }
-            */
+             * if ( o1.isFolder() && !o2.isFolder() ) {
+             * return -1;
+             * }
+             * if ( !o1.isFolder() && o2.isFolder() ) {
+             * return 1;
+             * }
+             */
             return o2.getName().compareTo(o1.getName());
         }
     }

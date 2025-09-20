@@ -15,12 +15,11 @@ import java.util.logging.Logger;
 public class LeaveInformation {
 
     private static final Logger LOGGER = Logger.getLogger(LeaveInformation.class.getName());
-    private final Random random= new Random();
+    private final Random random = new Random();
     private double amount;
     private Date date;
     private int[] cpNMinus1;
     private int[] cpN;
-
 
     public LeaveInformation(double amount, Date date) {
 
@@ -36,30 +35,29 @@ public class LeaveInformation {
     }
 
     public String getMntLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Montant :","Taux : "));
+        List<String> labels = new ArrayList<String>(Arrays.asList("Montant :", "Taux : "));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getDateLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("Date :","période : "));
+        List<String> labels = new ArrayList<String>(Arrays.asList("Date :", "période : "));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getAquisLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("ACQUIS","Dû","Acquis"));
+        List<String> labels = new ArrayList<String>(Arrays.asList("ACQUIS", "Dû", "Acquis"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getPrisLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("PRIS","Pris", "Total pris"));
+        List<String> labels = new ArrayList<String>(Arrays.asList("PRIS", "Pris", "Total pris"));
         return labels.get(this.random.nextInt(labels.size()));
     }
 
     public String getSoldeLabel() {
-        List<String> labels = new ArrayList<String>(Arrays.asList("SOLDE","Resté"));
+        List<String> labels = new ArrayList<String>(Arrays.asList("SOLDE", "Resté"));
         return labels.get(this.random.nextInt(labels.size()));
     }
-
 
     public double getAmount() {
         return amount;
@@ -94,24 +92,26 @@ public class LeaveInformation {
     }
 
     public static class Generator implements ModelGenerator<LeaveInformation> {
-        //TODO LISTS OF HEADS AND CONTENT
+        // TODO LISTS OF HEADS AND CONTENT
 
         @Override
         public LeaveInformation generate(GenerationContext ctx) {
             Faker faker = Faker.instance(Locale.forLanguageTag(ctx.getLanguagePayslip()));
-            Random rand =new Random();
+            Random rand = new Random();
             Date date1 = new Date();
             double mnt = rand.nextDouble();
-            int[] maxes = {34 , 30, 20};
-            int max = maxes[rand.nextInt(maxes.length-1)];
-            int[] acq = {rand.nextInt(max),rand.nextInt(max)};
-            int[] pris = {0, 0};
+            int[] maxes = { 34, 30, 20 };
+            int max = maxes[rand.nextInt(maxes.length - 1)];
+            int[] acq = { rand.nextInt(max), rand.nextInt(max) };
+            int[] pris = { 0, 0 };
 
-            if (acq[0] != 0) pris[0] = rand.nextInt(acq[0]);
-            if (acq[1] != 0) pris[1] = rand.nextInt(acq[1]);
-            int[] cpNN = {acq[0],pris[0],acq[0]-pris[0]} ; //+ min
-            int[] cpN = {acq[1],pris[1],acq[1]-pris[1]} ; //+ min
-            return new LeaveInformation(mnt, date1,cpNN,cpN);
+            if (acq[0] != 0)
+                pris[0] = rand.nextInt(acq[0]);
+            if (acq[1] != 0)
+                pris[1] = rand.nextInt(acq[1]);
+            int[] cpNN = { acq[0], pris[0], acq[0] - pris[0] }; // + min
+            int[] cpN = { acq[1], pris[1], acq[1] - pris[1] }; // + min
+            return new LeaveInformation(mnt, date1, cpNN, cpN);
         }
     }
 }
