@@ -14,4 +14,6 @@ for spath in tqdm(img_paths):
     # img = img.resize(img.size, Image.ANTIALIAS)
     fname = spath.split("/")[-1]
     dpath = os.path.join(ddir, fname)
-    img.save(dpath, optimize=True, quality=80)  # The saved downsized image size is 22.9kb
+    img.save(
+        dpath, optimize=True, quality=80
+    )  # The saved downsized image size is 22.9kb

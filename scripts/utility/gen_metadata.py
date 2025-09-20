@@ -18,11 +18,10 @@ if type == "signature":
     for fpath in tqdm.tqdm(flist):
         fext = os.path.splitext(fpath)[1].lower()
         if fext in ext:
-            name = fpath.split('/')[-1]
+            name = fpath.split("/")[-1]
             # 171_01102011
-            name = name[name.index('_') + 1: name.index('_') + 6]
-            dic = {"fullPath": '/'.join(fpath.split('/')[-2:]),
-                   "name": name}
+            name = name[name.index("_") + 1 : name.index("_") + 6]
+            dic = {"fullPath": "/".join(fpath.split("/")[-2:]), "name": name}
             arr.append(dic)
 # for logos
 if type == "logo":
@@ -41,10 +40,12 @@ if type == "logo":
             except Exception as e:
                 print(f"{e} for {fpath}")
                 dominant_color = (0, 0, 0)  # if errors, use a black color
-            name = fpath.split('/')[-1].split('.')[0]
-            dic = {"fullPath": '/'.join(fpath.split('/')[-2:]),
-                   "name": name,
-                   "color": dominant_color}
+            name = fpath.split("/")[-1].split(".")[0]
+            dic = {
+                "fullPath": "/".join(fpath.split("/")[-2:]),
+                "name": name,
+                "color": dominant_color,
+            }
             arr.append(dic)
 # for stamp
 if type == "stamp":
@@ -54,11 +55,10 @@ if type == "stamp":
     for fpath in tqdm.tqdm(flist):
         fext = os.path.splitext(fpath)[1].lower()
         if fext in ext:
-            name = fpath.split('/')[-1].split('.')[0]
-            dic = {"fullPath": '/'.join(fpath.split('/')[-2:]),
-                   "name": name}
+            name = fpath.split("/")[-1].split(".")[0]
+            dic = {"fullPath": "/".join(fpath.split("/")[-2:]), "name": name}
             arr.append(dic)
 
 
-with open("metadata.json", 'w') as f:
+with open("metadata.json", "w") as f:
     json.dump(arr, f, indent=4)

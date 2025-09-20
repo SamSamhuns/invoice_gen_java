@@ -2,14 +2,17 @@ import cv2
 import time
 import random
 from augraphy import AugraphyPipeline, AugmentationSequence, OneOf
+
 # ink phase
-from augraphy import Dithering, InkBleed, Letterpress, BleedThrough, LowInkPeriodicLines
+from augraphy import Dithering, InkBleed, Letterpress
+
 # paper phase
 from augraphy import PaperFactory, ColorPaper, WaterMark
 from augraphy import NoiseTexturize, BrightnessTexturize
+
 # post phase
 from augraphy import DirtyRollers, DirtyDrum, SubtleNoise, Jpeg, LightingGradient
-from augraphy import Markup, PencilScribbles, BadPhotoCopy, Faxify, BookBinding
+from augraphy import Markup, PencilScribbles, BadPhotoCopy, Faxify
 
 
 ink_phase = [
@@ -113,14 +116,15 @@ post_phase = [
         max_brightness=255,
         min_brightness=0,
         mode="gaussian",
-        transparency=0.3
+        transparency=0.3,
     ),
     Markup(
         num_lines_range=(2, 7),
         markup_length_range=(0.5, 1),
         markup_thickness_range=(1, 2),
         markup_type=random.choice(
-            ["strikethrough", "crossed", "highlight", "underline"]),
+            ["strikethrough", "crossed", "highlight", "underline"]
+        ),
         markup_color="random",
         single_word_mode=False,
         repetitions=1,
@@ -178,5 +182,5 @@ t1 = time.time()
 augmented = data["output"]
 t2 = time.time()
 
-print(f"time {t2-t0}s")
+print(f"time {t2 - t0}s")
 cv2.imwrite("aug.jpg", augmented)

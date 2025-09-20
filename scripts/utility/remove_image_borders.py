@@ -14,14 +14,18 @@ def get_bbox(img_ref, padding=2):
     black_pixels = np.array(np.where(image == 0))
     if bbox_probs <= 0.1:
         first_black_pixel = np.array(
-            [min(black_pixels[0]), min(black_pixels[1])]) - random.randint(5, 35)
+            [min(black_pixels[0]), min(black_pixels[1])]
+        ) - random.randint(5, 35)
         last_black_pixel = np.array(
-            [max(black_pixels[0]), max(black_pixels[1])]) + random.randint(5, 35)
+            [max(black_pixels[0]), max(black_pixels[1])]
+        ) + random.randint(5, 35)
     else:
-        first_black_pixel = np.array(
-            [min(black_pixels[0]), min(black_pixels[1])]) - padding
-        last_black_pixel = np.array(
-            [max(black_pixels[0]), max(black_pixels[1])]) + padding
+        first_black_pixel = (
+            np.array([min(black_pixels[0]), min(black_pixels[1])]) - padding
+        )
+        last_black_pixel = (
+            np.array([max(black_pixels[0]), max(black_pixels[1])]) + padding
+        )
     return first_black_pixel, last_black_pixel
 
 
@@ -32,9 +36,9 @@ spaths = [p for p in spaths if os.path.splitext(p)[1] in ext_set]
 
 
 for spath in tqdm.tqdm(spaths):
-    sdir = "ae_en/" + spath.split('/')[-2]
+    sdir = "ae_en/" + spath.split("/")[-2]
     os.makedirs(sdir, exist_ok=True)
-    tpath = os.path.join(sdir, spath.split('/')[-1])
+    tpath = os.path.join(sdir, spath.split("/")[-1])
 
     img_ref = Image.open(spath)
 
@@ -44,5 +48,11 @@ for spath in tqdm.tqdm(spaths):
         shutil.copy(spath, tpath)
     else:
         img_cropped = img_ref.crop(
-            (first_black_pixel[1], first_black_pixel[0], last_black_pixel[1], last_black_pixel[0]))
+            (
+                first_black_pixel[1],
+                first_black_pixel[0],
+                last_black_pixel[1],
+                last_black_pixel[0],
+            )
+        )
         img_cropped.save(tpath)
