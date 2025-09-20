@@ -4,7 +4,7 @@
 
 Generate semi-structured documents **(invoices, payslips, and receipts)**. This repo is a Java implementation of the two papers mentioned in the acknowledgments.
 
-| Invoice example 1 | Invoice example 2 |
+| Invoice example 1                                                                                                            | Invoice example 2                                                                                                            |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | ![Invoice Screenshot 1](https://github.com/SamSamhuns/invoice_gen_java/assets/13418507/6682c39e-8f89-4ec4-89c6-b6cf1f4a1ef7) | ![Invoice Screenshot 2](https://github.com/SamSamhuns/invoice_gen_java/assets/13418507/e1ad91a1-998d-44fc-a5ea-a4ddcdb79bbd) |
 
